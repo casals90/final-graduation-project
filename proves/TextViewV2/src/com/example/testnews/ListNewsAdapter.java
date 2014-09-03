@@ -62,7 +62,8 @@ public class ListNewsAdapter extends BaseAdapter {
         View vi = convertView;
         
         //Crear classe tipu l'exemple
-         
+        Log.v("news","position"+position); 
+        
         if(convertView == null) {
         	       	
             vi = inflater.inflate(R.layout.new_struct, null);
