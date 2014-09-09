@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.example.prototypetfgv1.model.User;
 import com.example.prototypetfgv1.view.Utils;
-import com.parse.Parse;
 import com.parse.ParseUser;
  
 public class ApplicationClass extends Application {
@@ -15,8 +14,7 @@ public class ApplicationClass extends Application {
     public void onCreate() {
         super.onCreate();
  
-        Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
-         
+        //Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c"); 
        /* ParseUser.enableAutomaticUser();
         ParseACL defaultACL = new ParseACL();
  
@@ -41,5 +39,9 @@ public class ApplicationClass extends Application {
 	
 	public void downloadUser(ParseUser user) {
 		this.user = new User(user.getObjectId(),user.getUsername(),"pass",user.getJSONArray("photos"),Utils.dateToString(user.getUpdatedAt()));
+	}
+	
+	public void deleteUser() {
+		user = null;
 	}
 }

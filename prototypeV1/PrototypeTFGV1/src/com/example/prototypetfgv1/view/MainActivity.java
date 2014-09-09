@@ -22,12 +22,10 @@ public class MainActivity extends FragmentActivity {
 		transaction.replace(R.id.container_main,new FragmentMain());
 		
 		//This line is commented because the first screen of app is this, and can't go to back screen 
-		//transaction.addToBackStack(null);
-
-		// Commit the transaction
-		transaction.commit();
-
+		transaction.addToBackStack(null);
 		
+		// Commit the transaction
+		transaction.commit();	
 	}
 
 	/*

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.prototypetfgv1.R;
+import com.example.prototypetfgv1.model.Photo;
  
 public class ListViewAdapter extends BaseAdapter {
     Context context;

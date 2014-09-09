@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
+import com.example.prototypetfgv1.model.Photo;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;

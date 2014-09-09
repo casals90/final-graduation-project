@@ -16,15 +16,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 public class FragmentMain extends Fragment implements OnClickListener {
 	
@@ -39,6 +33,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	public FragmentMain() {
 		super();
 		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
@@ -89,7 +84,6 @@ public class FragmentMain extends Fragment implements OnClickListener {
 			
 		case R.id.ibTakePhoto:
 			Log.v("take photo","take photo");
-			//goToTakePhoto();
 			dispatchTakePictureIntent();
 			break;
 			
@@ -109,6 +103,23 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		}
 	}
 	
+	/* init transaction variable to change the fragment */
+	public void initTransaction() {
+		transaction = getFragmentManager().beginTransaction();
+	}
+	
+	/* change the fragments */
+	
+	public void goToAlbums() {
+		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
+		changeFragment();
+	}
+	
+	public void goToNews() {
+		transaction.replace(R.id.container_fragment_main,new FragmentNews());
+		changeFragment();
+	}
+	
 	/* functions to do photo */
 	private void dispatchTakePictureIntent() {
 		Context context = getActivity(); 
@@ -117,8 +128,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		//Intent takePictureIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
 	    if (takePictureIntent.resolveActivity(packageManager) != null) {
-	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-	        
+	        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);    
 	    }
 	}
 	
@@ -141,56 +151,6 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	            // Image capture failed, advise user
 	        }
 	    }*/
-	}
-	
-	 //For update photo
-    //Activity param is temporal
-	public void updatePhoto(Bitmap photo,final Activity activity) {
-		// Create the ParseFile
-        ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
-        // Upload the image into Parse Cloud
-        file.saveInBackground();
-        final ParseObject imgupload = new ParseObject("SimpleImage");
-        imgupload.put("image", file);
-        imgupload.put("name", ParseUser.getCurrentUser().getUsername());
-        //Save photo
-        imgupload.saveInBackground(new SaveCallback() {
-			@Override
-			public void done(ParseException e) {
-				// TODO Auto-generated method stub
-				if(e == null) {
-					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
-					// Associate photo with user
-					controller.getUser().addPhoto(imgupload.getObjectId());
-				} else {
-					Toast.makeText(activity.getApplicationContext(), "Error update photo",Toast.LENGTH_LONG).show();
-				}
-			}
-		});
-        //Log.v("prototypev1","surt");
-	}
-	
-	
-	/* init transaction variable to change the fragment */
-	public void initTransaction() {
-		transaction = getFragmentManager().beginTransaction();
-	}
-	
-	/* change the fragments */
-	
-	public void goToAlbums() {
-		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
-		changeFragment();
-	}
-	
-	public void goToNews() {
-		transaction.replace(R.id.container_fragment_main,new FragmentNews());
-		changeFragment();
-	}
-	
-	public void goToTakePhoto() {
-		transaction.replace(R.id.container_fragment_main,new FragmentTakePhoto());
-		changeFragment();
 	}
 	
 	public void goToFriends() {

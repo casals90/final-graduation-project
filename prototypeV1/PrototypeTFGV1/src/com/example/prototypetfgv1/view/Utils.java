@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -107,4 +108,8 @@ public class Utils {
         }
         catch(Exception ex){}
     }
+	
+	public static void cleanBackStack(Intent intent) {
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+	}
 }

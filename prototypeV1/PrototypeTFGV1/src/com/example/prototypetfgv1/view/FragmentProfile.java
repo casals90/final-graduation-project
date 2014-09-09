@@ -12,7 +12,6 @@ import android.widget.Button;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
-import com.parse.ParseUser;
 
 public class FragmentProfile extends Fragment {
 	
@@ -31,6 +30,8 @@ public class FragmentProfile extends Fragment {
 		super.onCreate(savedInstanceState);
 		
 		controller = new Controller(this.getActivity().getApplicationContext());
+		
+		Log.v("prototypev1"," num fotos "+controller.getUser().getPhotos().length());
 	}
 
 	@Override
@@ -52,10 +53,9 @@ public class FragmentProfile extends Fragment {
 	}
 	
 	public void logout() {
-		controller.getParseFunctions().logout();
-		Intent intent = new Intent(getActivity(), LoginActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
-		startActivity(intent);
+		controller.logout();
+		Intent loginScreen = new Intent(getActivity(), LoginActivity.class);
+		Utils.cleanBackStack(loginScreen);
+		startActivity(loginScreen);
 	}
-
 }

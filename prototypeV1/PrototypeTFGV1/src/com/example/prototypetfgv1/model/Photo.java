@@ -1,4 +1,4 @@
-package com.example.prototypetfgv1.view;
+package com.example.prototypetfgv1.model;
 
 public class Photo {
     private String title;

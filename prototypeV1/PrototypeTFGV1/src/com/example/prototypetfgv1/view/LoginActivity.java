@@ -35,6 +35,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 		controller = new Controller(getApplicationContext());
 		
+		controller.getParseFunctions().initParse(getApplicationContext());
+		
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);
 		mIncorrectLoginView = (TextView)findViewById(R.id.incorrect_login);
@@ -101,9 +103,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 	
 	public void logIn() {
-		
 		fetchInputData();
-		
 		mAuthTask = new LogInTask();
 		mAuthTask.execute((Void) null);		
 	}
@@ -150,5 +150,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 			Log.v("prototypev1","log in cancelat 2");
 		}
 	}
-
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.v("prototypev1","destroy login ");
+	}
 }

@@ -85,7 +85,7 @@ public class ParseFunctions {
 					// Add photo of user (local user and ParseUser)
 					String id = imgupload.getObjectId();
 					appClass.getUser().addPhoto(id);
-					//addPhotoInUser(id);
+					addPhotoInUser(id);
 				} else {
 					Toast.makeText(activity.getApplicationContext(), "Error update photo",Toast.LENGTH_LONG).show();
 				}

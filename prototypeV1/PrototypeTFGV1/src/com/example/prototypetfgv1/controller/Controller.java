@@ -1,24 +1,23 @@
 package com.example.prototypetfgv1.controller;
 
-import com.example.prototypetfgv1.model.User;
-import com.parse.ParseUser;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import com.example.prototypetfgv1.model.User;
+import com.parse.ParseUser;
 
 public class Controller {
 	
 	private ParseFunctions parseFunctions;
 	private ApplicationClass appClass;
-	private User user;
 	
 	public Controller(Context context) {
 		super();
 		this.parseFunctions = new ParseFunctions(context);
 		
 		appClass = (ApplicationClass) context.getApplicationContext();
-		user = appClass.getUser();
 	}
 
 	public ParseFunctions getParseFunctions() {
@@ -34,11 +33,7 @@ public class Controller {
 	}
 	
 	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+		return appClass.getUser();
 	}
 
 	public boolean signUp(String username,String password) {
@@ -63,4 +58,9 @@ public class Controller {
 		parseFunctions.updatePhoto(photo,activity);
 	}
 	
+	public void logout() {
+		parseFunctions.logout();
+		appClass.deleteUser();
+		Log.v("prototypev1", "users logout "+ParseUser.getCurrentUser()+" local "+appClass.getUser());
+	}
 }
