@@ -31,6 +31,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	private Controller controller;
 
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
+	//private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	
 	private ImageButton ibAlbums,ibNews,ibTakePhoto,ibFriends,ibProfile;
 	private FragmentTransaction transaction;
@@ -114,6 +115,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		PackageManager packageManager = context.getPackageManager();
 		
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		//Intent takePictureIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
 	    if (takePictureIntent.resolveActivity(packageManager) != null) {
 	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 	        
@@ -128,6 +130,17 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	      
 	        controller.getParseFunctions().updatePhoto(photo,this.getActivity());    
 	    }
+		/*if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+	        if (resultCode == Activity.RESULT_OK) {
+	            // Image captured and saved to fileUri specified in the Intent
+	            //Toast.makeText(this, "Image saved to:\n" +data.getData(), Toast.LENGTH_LONG).show();
+	        	Log.v("prototypev1", "camera "+data.getData());
+	        } else if (resultCode == Activity.RESULT_CANCELED) {
+	            // User cancelled the image capture
+	        } else {
+	            // Image capture failed, advise user
+	        }
+	    }*/
 	}
 	
 	 //For update photo
