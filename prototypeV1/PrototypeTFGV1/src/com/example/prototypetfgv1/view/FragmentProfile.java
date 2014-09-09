@@ -1,23 +1,24 @@
 package com.example.prototypetfgv1.view;
 
-import org.json.JSONException;
-
-import com.example.prototypetfgv1.R;
-import com.example.prototypetfgv1.controller.ApplicationClass;
-import com.example.prototypetfgv1.model.User;
-import com.parse.ParseUser;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
+
+import com.example.prototypetfgv1.R;
+import com.example.prototypetfgv1.controller.Controller;
+import com.parse.ParseUser;
 
 public class FragmentProfile extends Fragment {
 	
-	private TextView tv;
-	private ApplicationClass app;
+	//private TextView tv;
+	private Button buttonLogOut;
+	private Controller controller;
 
 	public FragmentProfile() {
 		super();
@@ -29,7 +30,7 @@ public class FragmentProfile extends Fragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		app = (ApplicationClass)this.getActivity().getApplicationContext();
+		controller = new Controller(this.getActivity().getApplicationContext());
 	}
 
 	@Override
@@ -38,23 +39,23 @@ public class FragmentProfile extends Fragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_profile,container,false);
 		
-		tv = (TextView)view.findViewById(R.id.textView1);
-		User u = app.getUser();
-		
-		String info = "id = "+u.getId()+" username "+u.getUserName()+" pass "+u.getPassword()+" update "+u.getUpdatedAt()+ " id photos ";
-		for(int i = 0; i < u.getPhotos().length();i++) {
-			try {
-				info += u.getPhotos().get(i);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		buttonLogOut = (Button) view.findViewById(R.id.button_logout);
+		buttonLogOut.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				//ParseUser.getCurrentUser();
+				// TODO Auto-generated method stub
+				logout();
 			}
-		}
-		String d = String.valueOf(ParseUser.getCurrentUser().getUpdatedAt());
-		info += " i el update de l'usuari parse es "+d;
-		
-		tv.setText(info);
+		});
 		return view;
+	}
+	
+	public void logout() {
+		controller.getParseFunctions().logout();
+		Intent intent = new Intent(getActivity(), LoginActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); 
+		startActivity(intent);
 	}
 
 }

@@ -127,4 +127,8 @@ public class ParseFunctions {
 			}
 		});
 	}
+	
+	public void logout() {
+		ParseUser.logOut();
+	}
 }
