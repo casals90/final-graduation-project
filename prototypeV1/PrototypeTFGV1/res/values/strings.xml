@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Prototype v1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Strings for Login and Sign up activities -->
+    <string name="app_tittle">Prototype v1</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="repeat_password">repeat password</string>
+    <string name="log_in">Log in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="incorrect_login">Incorrect login</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="incorrent_sign_up">error of input data (maybe two password)</string>
+    
+     <!-- explain images -->
+    <string name="explain">explain</string>
+    
+    <!-- Strings menu -->
+    <string name="albums">Albums</string>
+    <string name="news">news</string>
+    <string name="take_photo">take photo</string>
+    <string name="friends">friends</string>
+    <string name="profile">profile</string>
+    
+     <!-- activities names -->
+    <string name="title_activity_main">MainActivity</string>
+    
+    <!-- albums -->
+    <string name="photo_title">photo title</string>
+    <string name="photo_date">photo date</string>
+    <string name="photo_content">photo content</string>
+    
+
+</resources>
