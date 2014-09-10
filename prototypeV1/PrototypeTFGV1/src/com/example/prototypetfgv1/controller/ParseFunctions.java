@@ -1,5 +1,6 @@
 package com.example.prototypetfgv1.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.prototypetfgv1.model.Photo;
 import com.example.prototypetfgv1.view.Utils;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -130,5 +132,86 @@ public class ParseFunctions {
 	
 	public void logout() {
 		ParseUser.logOut();
+	}
+	
+	public void deletePhoto(final String id) {
+		//First delete from photo object
+		ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery("SimpleImage");
+		photoQuery.whereEqualTo("objectId",id);
+		photoQuery.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> photos, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null) {
+					ParseObject p = photos.get(0);
+					JSONArray usersId = p.getJSONArray("usersId");
+					//only one user, and can delete photo from parse
+					if(usersId.length() == 1) {
+						//Delete object directly
+						p.deleteInBackground();
+					}
+					//More than one user
+					else {
+						usersId = Utils.removeElementToJsonArray(usersId, id);
+						p.put("usersId",usersId);
+						p.saveInBackground();
+					}
+				}
+			}
+		});	
+		//Next delete from ParseUser
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+		userQuery.whereEqualTo("objectId",ParseUser.getCurrentUser().getObjectId());
+		userQuery.findInBackground(new FindCallback<ParseUser>() {
+			@Override
+			public void done(List<ParseUser> users, ParseException e) {
+				if(e == null) {
+					ParseUser user = users.get(0);
+					JSONArray photos = user.getJSONArray("photos");
+					Log.v("prototypev1", "array abans "+photos.length());
+					photos = Utils.removeElementToJsonArray(photos, id);
+					Log.v("prototypev1", "array despres "+photos.length());
+					user.put("photos",photos);
+					user.saveInBackground(new SaveCallback() {
+						@Override
+						public void done(ParseException arg0) {
+							// TODO Auto-generated method stub
+							Log.v("prototypev1", "array user foto borrada");
+						}
+					});
+				} 
+				else {
+					Log.v("prototypev1", "error borrar foto");
+				}
+				
+			}
+		});	
+	}
+	
+	public ArrayList<Photo> downloadPhotos() {
+		ArrayList<Photo> myPhotos = new ArrayList<Photo>();
+		List<ParseObject> ob;
+		
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("SimpleImage");
+        query.whereEqualTo("usersId",appClass.getUser().getId());
+        query.orderByDescending("createdAt");
+        try {
+			ob = query.find();
+			for (ParseObject p : ob) {
+	            ParseFile image = (ParseFile) p.get("image");
+	            Photo photo = new Photo();
+	            photo.setId(p.getObjectId());
+	            photo.setTitle("title");
+	            photo.setPhoto(image.getUrl());
+	            photo.setCreatedAt(String.valueOf(p.getCreatedAt()));
+	            myPhotos.add(photo);
+	        }
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+        return myPhotos;
 	}
 }

@@ -3,7 +3,10 @@ package com.example.prototypetfgv1.view;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
+
+import org.json.JSONArray;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -111,5 +114,28 @@ public class Utils {
 	
 	public static void cleanBackStack(Intent intent) {
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+	}
+	
+	public static JSONArray removeElementToJsonArray(JSONArray array,String id) {
+		int position = getPositionPhoto(array, id);
+		
+		ArrayList<String> list = new ArrayList<String>();     
+		int len = array.length();
+		
+		for (int i=0;i<len;i++){ 
+			list.add(array.optString(i));
+		} 
+		//Remove the element from arraylist
+		list.remove(position);
+		//Recreate JSON Array
+		return new JSONArray(list);
+	}
+	
+	public static int getPositionPhoto(JSONArray array,String id) {
+		for(int i = 0; i < array.length(); i++) {
+			if(id.compareTo(array.optString(i)) == 0)
+				return i;	
+		}
+		return -1;
 	}
 }

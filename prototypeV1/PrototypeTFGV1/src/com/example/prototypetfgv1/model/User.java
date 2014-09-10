@@ -3,6 +3,10 @@ package com.example.prototypetfgv1.model;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.util.Log;
+
+import com.example.prototypetfgv1.view.Utils;
+
 public class User {
 	
 	private String id;
@@ -75,12 +79,9 @@ public class User {
 		photos.put(id);
 	}
 	
-	//Revisar mes endavant
-	public void deletePhoto(String id) {
-		for(int i = 0; i < photos.length(); i++) {
-			if(id.compareTo(photos.optString(i)) == 0)
-				photos.remove(i);
-		}
+	public void deletePhoto(String id)  {
+		photos = Utils.removeElementToJsonArray(photos, id);
+		Log.v("prototypev1", "pos a borrar= "+" size photos "+photos.length());
 	}
 	
 	public String getPhoto(int index) {
@@ -89,7 +90,7 @@ public class User {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "cardus";
+			return null;
 		}
 	}
 } 

@@ -1,10 +1,13 @@
 package com.example.prototypetfgv1.controller;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.example.prototypetfgv1.model.Photo;
 import com.example.prototypetfgv1.model.User;
 import com.parse.ParseUser;
 
@@ -62,5 +65,18 @@ public class Controller {
 		parseFunctions.logout();
 		appClass.deleteUser();
 		Log.v("prototypev1", "users logout "+ParseUser.getCurrentUser()+" local "+appClass.getUser());
+	}
+	
+	public ArrayList<Photo> downloadPhotos() {
+		return parseFunctions.downloadPhotos();
+	}
+	
+	public void deletePhoto(String id) {
+		//Delete from local user
+		appClass.getUser().deletePhoto(id);
+		//Delete from parse user
+		parseFunctions.deletePhoto(id);
+		Log.v("prototypev1", "abans delete parse");
+		//Delete photo object
 	}
 }

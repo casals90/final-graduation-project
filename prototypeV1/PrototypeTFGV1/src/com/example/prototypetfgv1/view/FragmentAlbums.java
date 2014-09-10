@@ -25,8 +25,8 @@ import com.parse.ParseQuery;
 
 public class FragmentAlbums extends Fragment {
 	Controller controller;
+	List<ParseObject> ob;
     ListView listview;
-    List<ParseObject> ob;
     ProgressDialog mProgressDialog;
     ListViewAdapter adapter;
     private List<Photo> myPhotos = null;
@@ -42,10 +42,13 @@ public class FragmentAlbums extends Fragment {
 		super.onCreate(savedInstanceState);
 		controller = new Controller(this.getActivity().getApplicationContext());
 	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.v("prototypev1","onCreateView albums");
+		
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		//Execute new Thread for download photos
@@ -70,17 +73,21 @@ public class FragmentAlbums extends Fragment {
             mProgressDialog.show();
         }
  
+        //Treure aquest mètode i posar-lo a ParseFunctions
         @Override
         protected Void doInBackground(Void... params) {
-            myPhotos = new ArrayList<Photo>();
-            try {
+        	myPhotos = controller.downloadPhotos();
+            //myPhotos = new ArrayList<Photo>();
+            Log.v("prototypev1","myPhotos"+myPhotos.size());
+            /*try {
                 ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("SimpleImage");
                 query.whereEqualTo("usersId",controller.getUser().getId());
-                query.orderByAscending("createdAt");
+                query.orderByDescending("createdAt");
                 ob = query.find();
                 for (ParseObject p : ob) {
                     ParseFile image = (ParseFile) p.get("image");
                     Photo photo = new Photo();
+                    photo.setId(p.getObjectId());
                     photo.setTitle("title");
                     photo.setPhoto(image.getUrl());
                     photo.setCreatedAt(String.valueOf(p.getCreatedAt()));
@@ -89,7 +96,7 @@ public class FragmentAlbums extends Fragment {
             } catch (ParseException e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
-            }
+            }*/
             return null;
         }
  
