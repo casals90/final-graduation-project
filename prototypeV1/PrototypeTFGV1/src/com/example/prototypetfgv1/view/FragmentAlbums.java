@@ -1,7 +1,6 @@
 package com.example.prototypetfgv1.view;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
@@ -17,15 +16,10 @@ import android.widget.ListView;
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
 import com.example.prototypetfgv1.model.Photo;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 
 public class FragmentAlbums extends Fragment {
 	Controller controller;
-	List<ParseObject> ob;
     ListView listview;
     ProgressDialog mProgressDialog;
     ListViewAdapter adapter;
@@ -77,26 +71,7 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
         	myPhotos = controller.downloadPhotos();
-            //myPhotos = new ArrayList<Photo>();
             Log.v("prototypev1","myPhotos"+myPhotos.size());
-            /*try {
-                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("SimpleImage");
-                query.whereEqualTo("usersId",controller.getUser().getId());
-                query.orderByDescending("createdAt");
-                ob = query.find();
-                for (ParseObject p : ob) {
-                    ParseFile image = (ParseFile) p.get("image");
-                    Photo photo = new Photo();
-                    photo.setId(p.getObjectId());
-                    photo.setTitle("title");
-                    photo.setPhoto(image.getUrl());
-                    photo.setCreatedAt(String.valueOf(p.getCreatedAt()));
-                    myPhotos.add(photo);
-                }
-            } catch (ParseException e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }*/
             return null;
         }
  

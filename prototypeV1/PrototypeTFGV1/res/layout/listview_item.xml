@@ -21,10 +21,11 @@
     <ImageView
         android:id="@+id/photo"
         android:src="@drawable/ic_launcher"
-        android:layout_width="match_parent"
+        android:layout_width="300dip"
         android:layout_height="200dip"
         android:layout_below="@+id/b_delete"
         android:contentDescription="@string/photo_content"
+        android:layout_centerInParent="true"
         android:padding="1dp" />
     
     <TextView

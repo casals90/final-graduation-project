@@ -5,7 +5,7 @@ public class Photo {
     private String title;
     private String photo;
     private String createdAt;
-        
+    
 	public String getId() {
 		return id;
 	}
