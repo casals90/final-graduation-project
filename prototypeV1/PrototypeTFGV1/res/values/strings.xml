@@ -36,5 +36,11 @@
     
     <!-- profile -->
     <string name="logout">logout</string>
+    
+    <!-- Delete photo dialog -->
+    <string name="dialog_delete_photo">Delete photo</string>
+    <string name="delete">delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_delete_photo_message">Are you sure?</string>
 
 </resources>

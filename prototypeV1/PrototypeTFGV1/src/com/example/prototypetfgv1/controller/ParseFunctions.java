@@ -85,9 +85,9 @@ public class ParseFunctions {
 					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
 					Log.v("prototypev1", "id photo "+imgupload.getObjectId());
 					// Add photo of user (local user and ParseUser)
-					String id = imgupload.getObjectId();
-					appClass.getUser().addPhoto(id);
-					addPhotoInUser(id);
+					//String id = imgupload.getObjectId();
+					//appClass.getUser().addPhoto(id);
+					//addPhotoInUser(id);
 				} else {
 					Toast.makeText(activity.getApplicationContext(), "Error update photo",Toast.LENGTH_LONG).show();
 				}
@@ -96,6 +96,7 @@ public class ParseFunctions {
 	}
 	
 	//Com que al final guardo l'usuari a la foto no em cal (Demanar al Santi)
+	//Per ara no ho utilitzo
 	public void addPhotoInUser(final String id) {
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereEqualTo("objectId",ParseUser.getCurrentUser().getObjectId());
@@ -139,7 +140,6 @@ public class ParseFunctions {
 		ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery("SimpleImage");
 		photoQuery.whereEqualTo("objectId",id);
 		photoQuery.findInBackground(new FindCallback<ParseObject>() {
-
 			@Override
 			public void done(List<ParseObject> photos, ParseException e) {
 				// TODO Auto-generated method stub
@@ -161,7 +161,7 @@ public class ParseFunctions {
 			}
 		});	
 		//Next delete from ParseUser
-		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+		/*ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
 		userQuery.whereEqualTo("objectId",ParseUser.getCurrentUser().getObjectId());
 		userQuery.findInBackground(new FindCallback<ParseUser>() {
 			@Override
@@ -186,7 +186,7 @@ public class ParseFunctions {
 				}
 				
 			}
-		});	
+		});	*/
 	}
 	
 	public ArrayList<Photo> downloadPhotos() {

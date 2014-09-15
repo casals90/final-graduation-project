@@ -73,10 +73,8 @@ public class Controller {
 	
 	public void deletePhoto(String id) {
 		//Delete from local user
-		appClass.getUser().deletePhoto(id);
+		//appClass.getUser().deletePhoto(id);
 		//Delete from parse user
 		parseFunctions.deletePhoto(id);
-		Log.v("prototypev1", "abans delete parse");
-		//Delete photo object
 	}
 }

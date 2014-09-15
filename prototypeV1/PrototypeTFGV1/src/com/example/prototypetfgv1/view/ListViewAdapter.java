@@ -3,7 +3,10 @@ package com.example.prototypetfgv1.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -85,10 +88,41 @@ public class ListViewAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				//delete photo
 				String id = myPhotos.get(position).getId();
-				controller.deletePhoto(id);
+				//controller.deletePhoto(id);
+				//show confirm dialog
+				confirmDelete(id);
+				Log.v("prototypev1", "dialog");
 			}
 		});
         
         return view;
+    }
+    
+    public void confirmDelete(final String idDeletePhoto) {
+    	// Instantiate an AlertDialog.Builder with its constructor
+    	AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+    	// Chain together various setter methods to set the dialog characteristics
+    	builder.setMessage(R.string.dialog_delete_photo)
+    	       .setTitle(R.string.dialog_delete_photo_message);
+   	
+    	// Add the buttons
+    	builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	               // User clicked OK button
+    	        	   controller.deletePhoto(idDeletePhoto);
+    	        	   //reload 
+    	           }
+    	       });
+    	builder.setNegativeButton(R.string.cancel,null);
+    	/*builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	               // User cancelled the dialog
+    	           }
+    	       });*/
+    	// Set other dialog properties
+    	
+    	// Create the AlertDialog
+    	builder.create().show();
     }
 }
