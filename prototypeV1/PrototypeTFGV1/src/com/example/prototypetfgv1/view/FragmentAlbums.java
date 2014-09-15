@@ -19,11 +19,12 @@ import com.example.prototypetfgv1.model.Photo;
 
 
 public class FragmentAlbums extends Fragment {
-	Controller controller;
-    ListView listview;
-    ProgressDialog mProgressDialog;
-    ListViewAdapter adapter;
+	private Controller controller;
+	private ListView listview;
+	private ProgressDialog mProgressDialog;
+	private ListViewAdapter adapter;
     private List<Photo> myPhotos = null;
+    private RemoteDataTask remoteDataTask = null;
 
 	public FragmentAlbums() {
 		super();
@@ -36,7 +37,6 @@ public class FragmentAlbums extends Fragment {
 		super.onCreate(savedInstanceState);
 		controller = new Controller(this.getActivity().getApplicationContext());
 	}
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,8 +46,15 @@ public class FragmentAlbums extends Fragment {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		//Execute new Thread for download photos
-		new RemoteDataTask().execute();		
+		remoteDataTask = new RemoteDataTask();		
+		remoteDataTask.execute();
 		return view;
+	}
+	
+	public void onRefresh() {
+		remoteDataTask = null;
+		remoteDataTask = new RemoteDataTask();		
+		remoteDataTask.execute();
 	}
 	
 	// RemoteDataTask AsyncTask
@@ -71,7 +78,7 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
         	myPhotos = controller.downloadPhotos();
-            Log.v("prototypev1","myPhotos"+myPhotos.size());
+            //Log.v("prototypev1","myPhotos"+myPhotos.size());
             return null;
         }
  

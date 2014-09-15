@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.prototypetfgv1.R;
@@ -27,6 +29,13 @@ public class ListViewAdapter extends BaseAdapter {
     private List<Photo> myPhotos = null;
     private ArrayList<Photo> arraylist;
     private Controller controller;
+    
+    // variables for refresh
+    RelativeLayout headerRelativeLayout;
+    ImageView arrowImage;
+    ProgressBar progressBar;
+    TextView headerTextView, lastUpdateDateTextView;
+    
  
     public ListViewAdapter(Context context,List<Photo> myPhotos) {
         this.context = context;
@@ -37,8 +46,10 @@ public class ListViewAdapter extends BaseAdapter {
         imageLoader = new ImageLoader(context);
         
         controller = new Controller(context);
+        
+        //init reload
     }
- 
+    
     public class ViewHolder {
         TextView title;
         ImageView photo;
@@ -69,7 +80,7 @@ public class ListViewAdapter extends BaseAdapter {
             // Locate the TextViews in listview_item.xml
             holder.title = (TextView) view.findViewById(R.id.title);
             holder.createdAt = (TextView) view.findViewById(R.id.createdAt);
-            // Locate the ImageView in listview_item.xml
+            // Locate the ImageView in listview_item.xml@string/head_arrowImage
             holder.photo = (ImageView) view.findViewById(R.id.photo);
             holder.dButton = (ImageButton) view.findViewById(R.id.b_delete);		
             view.setTag(holder);
@@ -90,15 +101,20 @@ public class ListViewAdapter extends BaseAdapter {
 				String id = myPhotos.get(position).getId();
 				//controller.deletePhoto(id);
 				//show confirm dialog
-				confirmDelete(id);
-				Log.v("prototypev1", "dialog");
+				confirmDelete(id,position);
+				Log.v("prototypev1", "pos in arraylist "+position);
 			}
 		});
         
         return view;
     }
     
-    public void confirmDelete(final String idDeletePhoto) {
+    public void deletePhotoFromList(int position) {
+    	myPhotos.remove(position);
+    	notifyDataSetChanged();
+    }
+    
+    public void confirmDelete(final String idDeletePhoto,final int position) {
     	// Instantiate an AlertDialog.Builder with its constructor
     	AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -111,7 +127,10 @@ public class ListViewAdapter extends BaseAdapter {
     	           public void onClick(DialogInterface dialog, int id) {
     	               // User clicked OK button
     	        	   controller.deletePhoto(idDeletePhoto);
-    	        	   //reload 
+    	        	   //reload listview
+    	        	   //delete object to arraylist
+    	        	   deletePhotoFromList(position);
+    	        	   //notifyDataSetChanged();
     	           }
     	       });
     	builder.setNegativeButton(R.string.cancel,null);
