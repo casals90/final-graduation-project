@@ -1,6 +1,9 @@
 package com.example.prototypetfgv1.controller;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
 
 import android.app.Activity;
 import android.content.Context;
@@ -81,5 +84,9 @@ public class Controller {
 	
 	public ArrayList<User> getUsers(String username) {
 		return parseFunctions.getUsers(username);
+	}
+	
+	public JSONArray getFriends() {
+		return parseFunctions.getFriends();
 	}
 }

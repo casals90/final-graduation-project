@@ -218,7 +218,7 @@ public class ParseFunctions {
         return myPhotos;
 	}
 	
-	public ArrayList<User> getUsers(String username) {
+	 public ArrayList<User> getUsers(String username) {
 		ArrayList<User> users = new ArrayList<User>();
 		List<ParseUser> parseUsers;
 		
@@ -239,28 +239,10 @@ public class ParseFunctions {
 		}
 		Log.v("prototypev1", "size users search "+users.size());
 		return users;
-		
-		/*ParseQuery<ParseUser> queryNotCurrentUser = ParseUser.getQuery();
-		queryNotCurrentUser.whereNotEqualTo("objectId",ParseUser.getCurrentUser());
-		
-		ParseQuery<ParseUser> queryLikeUsername = ParseUser.getQuery();
-		queryLikeUsername.whereStartsWith("username",username);
-		
-		List<ParseQuery<ParseUser>> queries = new ArrayList<ParseQuery<ParseUser>>();
-		queries.add(queryNotCurrentUser);
-		queries.add(queryLikeUsername);
-		
-		ParseQuery<ParseUser> mainQuery = ParseQuery.or(queries);
-		mainQuery.findInBackground(new FindCallback<ParseUser>() {
-			
-		  public void done(List<ParseUser> results, ParseException e) {
-		    // results has the list of players that win a lot or haven't won much.
-			  for(ParseUser u : results) {
-					users.add(new User(u.getObjectId(),u.getUsername(),null,0));
-			  } 
-		  }
-		});
-		Log.v("prototypev1", "size users search "+users.size());
-		return users;*/
+	} 
+	 
+	public JSONArray getFriends() {
+		JSONArray f = ParseUser.getCurrentUser().getJSONArray("friends");
+		return f;
 	}
 }

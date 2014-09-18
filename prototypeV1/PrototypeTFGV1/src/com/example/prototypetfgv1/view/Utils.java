@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 public class Utils {
@@ -137,5 +142,19 @@ public class Utils {
 				return i;	
 		}
 		return -1;
+	}
+	
+	public static boolean isElementExist(JSONArray array,String id) {
+		for(int i = 0; i < array.length(); i++) {
+			try {
+				if(id.compareTo(array.get(i).toString()) == 0)
+					return true;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return false;
 	}
 }

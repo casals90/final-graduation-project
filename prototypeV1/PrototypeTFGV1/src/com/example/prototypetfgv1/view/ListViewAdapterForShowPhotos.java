@@ -1,6 +1,5 @@
 package com.example.prototypetfgv1.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -14,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.prototypetfgv1.R;
@@ -27,22 +24,15 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
     LayoutInflater inflater;
     ImageLoader imageLoader;
     private List<Photo> myPhotos = null;
-    private ArrayList<Photo> arraylist;
+    //private ArrayList<Photo> arraylist;
     private Controller controller;
     
-    // variables for refresh
-    RelativeLayout headerRelativeLayout;
-    ImageView arrowImage;
-    ProgressBar progressBar;
-    TextView headerTextView, lastUpdateDateTextView;
-    
- 
     public ListViewAdapterForShowPhotos(Context context,List<Photo> myPhotos) {
         this.context = context;
         this.myPhotos = myPhotos;
         inflater = LayoutInflater.from(context);
-        this.arraylist = new ArrayList<Photo>();
-        this.arraylist.addAll(myPhotos);
+        //this.arraylist = new ArrayList<Photo>();
+        //this.arraylist.addAll(myPhotos);
         imageLoader = new ImageLoader(context);
         
         controller = new Controller(context);

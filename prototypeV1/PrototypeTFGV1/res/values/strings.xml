@@ -45,6 +45,8 @@
     
     <!-- Friends -->
     <string name="input_username">input username</string>
+    <string name="search_people">search people</string>
     <string name="commonFriends">common friends</string>
+    <string name="no_results">0 matches</string>
 
 </resources>
