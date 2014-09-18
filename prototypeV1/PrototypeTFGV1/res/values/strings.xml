@@ -34,10 +34,6 @@
     <string name="photo_date">photo date</string>
     <string name="photo_content">photo content</string>
     
-    
-    
-    
-    
     <!-- profile -->
     <string name="logout">logout</string>
     
@@ -46,5 +42,9 @@
     <string name="delete">delete</string>
     <string name="cancel">Cancel</string>
     <string name="dialog_delete_photo_message">Are you sure?</string>
+    
+    <!-- Friends -->
+    <string name="input_username">input username</string>
+    <string name="commonFriends">common friends</string>
 
 </resources>

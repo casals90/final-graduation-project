@@ -3,7 +3,6 @@ package com.example.prototypetfgv1.controller;
 import android.app.Application;
 
 import com.example.prototypetfgv1.model.User;
-import com.example.prototypetfgv1.view.Utils;
 import com.parse.ParseUser;
  
 public class ApplicationClass extends Application {
@@ -32,13 +31,13 @@ public class ApplicationClass extends Application {
 		this.user = user;
 	}
     
-	public void newUser(ParseUser user, String password) {
-    	this.user = new User(user.getObjectId(),user.getUsername(),password,Utils.dateToString(user.getUpdatedAt()));
+	public void newUser(ParseUser user) {
+    	this.user = new User(user.getObjectId(),user.getUsername(),null,0);
 
     }
 	
 	public void downloadUser(ParseUser user) {
-		this.user = new User(user.getObjectId(),user.getUsername(),"pass",user.getJSONArray("photos"),Utils.dateToString(user.getUpdatedAt()));
+		this.user = new User(user.getObjectId(),user.getUsername(),null,0);
 	}
 	
 	public void deleteUser() {

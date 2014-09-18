@@ -43,7 +43,8 @@ public class Controller {
 		ParseUser parseUser = parseFunctions.signUpInParse(username, password);
 		if(parseUser != null) {
 			//if true I create a local user
-			appClass.newUser(parseUser,password);
+			//comprovar si l'usuari vol guardar la contrassenya i guardar-la a sharedPReferences!!
+			appClass.newUser(parseUser);
 			return true;
 		}
 		return false;
@@ -76,5 +77,9 @@ public class Controller {
 		//appClass.getUser().deletePhoto(id);
 		//Delete from parse user
 		parseFunctions.deletePhoto(id);
+	}
+	
+	public ArrayList<User> getUsers(String username) {
+		return parseFunctions.getUsers(username);
 	}
 }

@@ -31,7 +31,7 @@ public class FragmentProfile extends Fragment {
 		
 		controller = new Controller(this.getActivity().getApplicationContext());
 		
-		Log.v("prototypev1"," num fotos "+controller.getUser().getPhotos().length());
+		//Log.v("prototypev1"," num fotos "+controller.getUser().getPhotos().length());
 	}
 
 	@Override

@@ -1,15 +1,57 @@
 package com.example.prototypetfgv1.model;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import android.util.Log;
-
-import com.example.prototypetfgv1.view.Utils;
 
 public class User {
 	
-	private String id;
+	String id;
+	String username;
+	String profilePicture;
+	int commonFriends;
+	
+	public User(String id, String username, String profilePicture,int commonFriends) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.profilePicture = profilePicture;
+		this.commonFriends = commonFriends;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	public int getCommonFriends() {
+		return commonFriends;
+	}
+
+	public void setCommonFriends(int commonFriends) {
+		this.commonFriends = commonFriends;
+	}
+	
+	
+	
+	
+	/*private String id;
 	private String userName;
 	private String password;
 	private JSONArray photos;
@@ -92,5 +134,5 @@ public class User {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 } 

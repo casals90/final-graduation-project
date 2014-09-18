@@ -22,7 +22,7 @@ import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
 import com.example.prototypetfgv1.model.Photo;
  
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapterForShowPhotos extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     ImageLoader imageLoader;
@@ -37,7 +37,7 @@ public class ListViewAdapter extends BaseAdapter {
     TextView headerTextView, lastUpdateDateTextView;
     
  
-    public ListViewAdapter(Context context,List<Photo> myPhotos) {
+    public ListViewAdapterForShowPhotos(Context context,List<Photo> myPhotos) {
         this.context = context;
         this.myPhotos = myPhotos;
         inflater = LayoutInflater.from(context);

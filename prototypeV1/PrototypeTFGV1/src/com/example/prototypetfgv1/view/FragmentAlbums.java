@@ -22,7 +22,7 @@ public class FragmentAlbums extends Fragment {
 	private Controller controller;
 	private ListView listview;
 	private ProgressDialog mProgressDialog;
-	private ListViewAdapter adapter;
+	private ListViewAdapterForShowPhotos adapter;
     private List<Photo> myPhotos = null;
     private RemoteDataTask remoteDataTask = null;
 
@@ -87,7 +87,7 @@ public class FragmentAlbums extends Fragment {
         	// Locate the listview in listview_main.xml
             listview = (ListView) getActivity().findViewById(R.id.listview);
             // Pass the results into ListViewAdapter.java
-            adapter = new ListViewAdapter(getActivity(),myPhotos);
+            adapter = new ListViewAdapterForShowPhotos(getActivity(),myPhotos);
             // Binds the Adapter to the ListView
             listview.setAdapter(adapter);
             // Close the progressdialog

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.prototypetfgv1.model.Photo;
+import com.example.prototypetfgv1.model.User;
 import com.example.prototypetfgv1.view.Utils;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -40,6 +41,8 @@ public class ParseFunctions {
 		parseUser.setUsername(username);
 		parseUser.setPassword(password);
 		parseUser.put("photos",new JSONArray());
+		parseUser.put("friends",new JSONArray());
+		parseUser.put("friendsRequest",new JSONArray());
 		//add more atributes
 		try {
 			parseUser.signUp();
@@ -117,7 +120,7 @@ public class ParseFunctions {
 								Log.v("prototypev1", "foto afegida al usuari i update canviat");
 								//Change date of update
 								//Poder no caldra perquè ho guardare en local
-								appClass.getUser().setUpdatedAt(String.valueOf((ParseUser.getCurrentUser().getUpdatedAt())));							
+								//appClass.getUser().setUpdatedAt(String.valueOf((ParseUser.getCurrentUser().getUpdatedAt())));							
 							}
 							else 
 								Log.v("prototypev1", "error al afegir foto");
@@ -213,5 +216,51 @@ public class ParseFunctions {
 			return null;
 		}
         return myPhotos;
+	}
+	
+	public ArrayList<User> getUsers(String username) {
+		ArrayList<User> users = new ArrayList<User>();
+		List<ParseUser> parseUsers;
+		
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereStartsWith("username",username);
+		query.orderByDescending("username");
+		try {
+			parseUsers = query.find();
+			for(ParseUser u : parseUsers) {
+				users.add(new User(u.getObjectId(),u.getUsername(),null,0));
+			}
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.v("prototypev1", "error download search users");
+			return null;
+		}
+		Log.v("prototypev1", "size users search "+users.size());
+		return users;
+		
+		/*ParseQuery<ParseUser> queryNotCurrentUser = ParseUser.getQuery();
+		queryNotCurrentUser.whereNotEqualTo("objectId",ParseUser.getCurrentUser());
+		
+		ParseQuery<ParseUser> queryLikeUsername = ParseUser.getQuery();
+		queryLikeUsername.whereStartsWith("username",username);
+		
+		List<ParseQuery<ParseUser>> queries = new ArrayList<ParseQuery<ParseUser>>();
+		queries.add(queryNotCurrentUser);
+		queries.add(queryLikeUsername);
+		
+		ParseQuery<ParseUser> mainQuery = ParseQuery.or(queries);
+		mainQuery.findInBackground(new FindCallback<ParseUser>() {
+			
+		  public void done(List<ParseUser> results, ParseException e) {
+		    // results has the list of players that win a lot or haven't won much.
+			  for(ParseUser u : results) {
+					users.add(new User(u.getObjectId(),u.getUsername(),null,0));
+			  } 
+		  }
+		});
+		Log.v("prototypev1", "size users search "+users.size());
+		return users;*/
 	}
 }
