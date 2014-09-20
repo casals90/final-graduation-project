@@ -9,6 +9,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/ic_launcher"
+        android:layout_marginRight="10dp"
         android:contentDescription="@string/explain"/>
 
     <TextView
@@ -27,5 +28,13 @@
         android:layout_below="@+id/username"
         android:layout_toRightOf="@+id/profilePicture"
         android:text="@string/commonFriends"/>
+    
+    <ImageButton 
+        android:id="@+id/button_add_friend"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_action_add_person"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/explain"/>
 
 </RelativeLayout>

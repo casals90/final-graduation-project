@@ -245,4 +245,46 @@ public class ParseFunctions {
 		JSONArray f = ParseUser.getCurrentUser().getJSONArray("friends");
 		return f;
 	}
+	
+	public JSONArray getFriendsRequest() {
+		JSONArray r = ParseUser.getCurrentUser().getJSONArray("friendsRequest");
+		return r;
+	}
+	
+	public void addFriendsRequest(final String idNewFriend) {
+		//Add new friend in request list of current user
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		currentUser.getJSONArray("friendsRequest").put(idNewFriend);
+		currentUser.saveInBackground();
+		
+		//Add request in other user
+		/*ParseQuery<ParseUser> addFriendsRequest = ParseUser.getQuery();
+		addFriendsRequest.whereEqualTo("objectId",idNewFriend);
+		addFriendsRequest.findInBackground(new FindCallback<ParseUser>() {
+			@Override
+			public void done(List<ParseUser> users, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null) {
+					ParseUser newFriend = users.get(0);
+					newFriend.getJSONArray("friendsRequest").put(idNewFriend);
+					newFriend.saveInBackground(new SaveCallback() {
+						
+						@Override
+						public void done(ParseException e) {
+							// TODO Auto-generated method stub
+							if(e == null)
+								Log.v("prototypev1", "save callback");
+							else
+								Log.v("prototypev1", "save callback error"+e);
+						}
+					});
+					Log.v("prototypev1", "save in background new user "+newFriend.getUsername());
+				}
+				else {
+					//error
+					Log.v("prototypev1", "error newFriend");
+				}
+			}
+		});*/
+	}
 }

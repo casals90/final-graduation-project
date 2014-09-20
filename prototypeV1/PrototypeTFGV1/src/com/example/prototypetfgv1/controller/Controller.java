@@ -89,4 +89,12 @@ public class Controller {
 	public JSONArray getFriends() {
 		return parseFunctions.getFriends();
 	}
+	
+	public JSONArray getFriendsRequest() {
+		return parseFunctions.getFriendsRequest();
+	}
+	
+	public void addFriendsRequest(String id) {
+		parseFunctions.addFriendsRequest(id);
+	}
 }
