@@ -150,11 +150,4 @@ public class LoginActivity extends Activity implements OnClickListener {
 			Log.v("prototypev1","log in cancelat 2");
 		}
 	}
-	
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		Log.v("prototypev1","destroy login ");
-	}
 }

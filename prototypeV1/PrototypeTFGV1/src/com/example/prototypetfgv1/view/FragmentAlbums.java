@@ -45,6 +45,8 @@ public class FragmentAlbums extends Fragment {
 		
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
+		
+		listview = (ListView) getActivity().findViewById(R.id.listview);
 		//Execute new Thread for download photos
 		remoteDataTask = new RemoteDataTask();		
 		remoteDataTask.execute();
@@ -84,8 +86,6 @@ public class FragmentAlbums extends Fragment {
  
         @Override
         protected void onPostExecute(Void result) {
-        	// Locate the listview in listview_main.xml
-            listview = (ListView) getActivity().findViewById(R.id.listview);
             // Pass the results into ListViewAdapter.java
             adapter = new ListViewAdapterForShowPhotos(getActivity(),myPhotos);
             // Binds the Adapter to the ListView
