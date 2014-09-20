@@ -80,9 +80,15 @@ public class FragmentFriends extends Fragment {
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
 				input = s.toString();
-				searchTask = null;
-				searchTask = new SearchTask();
-				searchTask.execute();
+				if(input.length() > 0) {
+					searchTask = null;
+					searchTask = new SearchTask();
+					searchTask.execute();
+				}
+				else {
+					clearListView();
+					showNoResults(false);
+				}
 			}
 		});
 		return view;
@@ -93,22 +99,29 @@ public class FragmentFriends extends Fragment {
         // Binds the Adapter to the ListView
         listview.setAdapter(adapter);
 		if(this.users.size() >= 1) {
-			noResults.setVisibility(View.INVISIBLE);
-			listview.setVisibility(View.VISIBLE);
-	        // Pass the results into listview
+			showNoResults(false);
 	        adapter = new ListViewAdapterForSearchUsers(getActivity(),this.users);
-	        // Binds the Adapter to the ListView
 	        listview.setAdapter(adapter);
 		}
 		else {
 			noResults.setVisibility(View.VISIBLE);
-			listview.setVisibility(View.INVISIBLE);
+			showNoResults(true);
+			clearListView();
 		}	
 	}
 	
-	private class SearchTask extends AsyncTask<Void, Void, Void>
-	{
-
+	public void clearListView() {
+		listview.setAdapter(null);
+	}
+	
+	public void showNoResults(boolean show) {
+		if(show)
+			noResults.setVisibility(View.VISIBLE);
+		else
+			noResults.setVisibility(View.INVISIBLE);
+	}
+	
+	private class SearchTask extends AsyncTask<Void, Void, Void> {
 	    @Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
@@ -128,6 +141,5 @@ public class FragmentFriends extends Fragment {
 	        progressBarSearch.setVisibility(View.INVISIBLE);
 	        updateListView(users);     
 	    }
-
 	}
 }
