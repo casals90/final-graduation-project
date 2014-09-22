@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,10 +21,9 @@ import com.example.prototypetfgv1.controller.Controller;
 
 public class FragmentMain extends Fragment implements OnClickListener {
 	
-	private Controller controller;
-
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
-	//private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	
+	private Controller controller;
 	
 	private ImageButton ibAlbums,ibNews,ibTakePhoto,ibFriends,ibProfile;
 	private FragmentTransaction transaction;
@@ -42,6 +40,9 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		
 		controller = new Controller(this.getActivity().getApplicationContext());
+		
+		//PushService.setDefaultPushCallback(getActivity(),MainActivity.class);
+		//ParseAnalytics.trackAppOpened(getActivity().getIntent());
 	}
 
 	@Override
@@ -74,32 +75,27 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		initTransaction();
 		int id = v.getId();
 		switch (id) {
-		case R.id.ibAlbums:
-			goToAlbums();
-			break;
-		case R.id.ibNews:
-			Log.v("news","news");
-			goToNews();
-			break;
-			
-		case R.id.ibTakePhoto:
-			Log.v("take photo","take photo");
-			dispatchTakePictureIntent();
-			break;
-			
-		case R.id.ibFriends:
-			Log.v("friends","friends");
-			goToFriends();
-			break;
-			
-		case R.id.ibProfile:
-			Log.v("profile","profile");
-			goToProfile();
-			break;
-
-		default:
-			
-			break;
+			case R.id.ibAlbums:
+				goToAlbums();
+				break;
+				
+			case R.id.ibNews:
+				goToNews();
+				break;
+				
+			case R.id.ibTakePhoto:
+				takePhoto();
+				break;
+				
+			case R.id.ibFriends:
+				goToFriends();
+				break;
+				
+			case R.id.ibProfile:
+				goToProfile();
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -121,12 +117,11 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	}
 	
 	/* functions to do photo */
-	private void dispatchTakePictureIntent() {
+	private void takePhoto() {
 		Context context = getActivity(); 
 		PackageManager packageManager = context.getPackageManager();
 		
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		//Intent takePictureIntent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
 	    if (takePictureIntent.resolveActivity(packageManager) != null) {
 	        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);    
 	    }
@@ -140,17 +135,6 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	      
 	        controller.getParseFunctions().updatePhoto(photo,this.getActivity());    
 	    }
-		/*if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-	        if (resultCode == Activity.RESULT_OK) {
-	            // Image captured and saved to fileUri specified in the Intent
-	            //Toast.makeText(this, "Image saved to:\n" +data.getData(), Toast.LENGTH_LONG).show();
-	        	Log.v("prototypev1", "camera "+data.getData());
-	        } else if (resultCode == Activity.RESULT_CANCELED) {
-	            // User cancelled the image capture
-	        } else {
-	            // Image capture failed, advise user
-	        }
-	    }*/
 	}
 	
 	public void goToFriends() {

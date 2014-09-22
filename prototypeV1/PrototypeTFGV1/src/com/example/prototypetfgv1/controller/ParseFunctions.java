@@ -25,11 +25,12 @@ import com.parse.SaveCallback;
 
 public class ParseFunctions {
 	
-	private ApplicationClass appClass;
+	//private ApplicationClass appClass;
 	
 	public ParseFunctions(Context context) {
 		super();
-		appClass = (ApplicationClass) context.getApplicationContext();
+		//appClass = (ApplicationClass) context.getApplicationContext();
+		initParse(context);
 	}
 	
 	public void initParse(Context context) {
@@ -43,7 +44,7 @@ public class ParseFunctions {
 		parseUser.put("photos",new JSONArray());
 		parseUser.put("friends",new JSONArray());
 		parseUser.put("friendsRequest",new JSONArray());
-		//add more atributes
+	
 		try {
 			parseUser.signUp();
 			return parseUser;
@@ -87,10 +88,6 @@ public class ParseFunctions {
 				if(e == null) {
 					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
 					Log.v("prototypev1", "id photo "+imgupload.getObjectId());
-					// Add photo of user (local user and ParseUser)
-					//String id = imgupload.getObjectId();
-					//appClass.getUser().addPhoto(id);
-					//addPhotoInUser(id);
 				} else {
 					Toast.makeText(activity.getApplicationContext(), "Error update photo",Toast.LENGTH_LONG).show();
 				}
@@ -117,10 +114,7 @@ public class ParseFunctions {
 						public void done(ParseException e) {
 							// TODO Auto-generated method stub
 							if(e == null) {
-								Log.v("prototypev1", "foto afegida al usuari i update canviat");
-								//Change date of update
-								//Poder no caldra perquè ho guardare en local
-								//appClass.getUser().setUpdatedAt(String.valueOf((ParseUser.getCurrentUser().getUpdatedAt())));							
+								Log.v("prototypev1", "foto afegida al usuari i update canviat");			
 							}
 							else 
 								Log.v("prototypev1", "error al afegir foto");
@@ -163,33 +157,6 @@ public class ParseFunctions {
 				}
 			}
 		});	
-		//Next delete from ParseUser
-		/*ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-		userQuery.whereEqualTo("objectId",ParseUser.getCurrentUser().getObjectId());
-		userQuery.findInBackground(new FindCallback<ParseUser>() {
-			@Override
-			public void done(List<ParseUser> users, ParseException e) {
-				if(e == null) {
-					ParseUser user = users.get(0);
-					JSONArray photos = user.getJSONArray("photos");
-					Log.v("prototypev1", "array abans "+photos.length());
-					photos = Utils.removeElementToJsonArray(photos, id);
-					Log.v("prototypev1", "array despres "+photos.length());
-					user.put("photos",photos);
-					user.saveInBackground(new SaveCallback() {
-						@Override
-						public void done(ParseException arg0) {
-							// TODO Auto-generated method stub
-							Log.v("prototypev1", "array user foto borrada");
-						}
-					});
-				} 
-				else {
-					Log.v("prototypev1", "error borrar foto");
-				}
-				
-			}
-		});	*/
 	}
 	
 	public ArrayList<Photo> downloadPhotos() {
@@ -197,7 +164,7 @@ public class ParseFunctions {
 		List<ParseObject> ob;
 		
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("SimpleImage");
-        query.whereEqualTo("usersId",appClass.getUser().getId());
+        query.whereEqualTo("usersId",ParseUser.getCurrentUser().getObjectId());
         query.orderByDescending("createdAt");
         try {
 			ob = query.find();
@@ -255,36 +222,51 @@ public class ParseFunctions {
 		//Add new friend in request list of current user
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		currentUser.getJSONArray("friendsRequest").put(idNewFriend);
-		currentUser.saveInBackground();
-		
-		//Add request in other user
-		/*ParseQuery<ParseUser> addFriendsRequest = ParseUser.getQuery();
-		addFriendsRequest.whereEqualTo("objectId",idNewFriend);
-		addFriendsRequest.findInBackground(new FindCallback<ParseUser>() {
-			@Override
-			public void done(List<ParseUser> users, ParseException e) {
-				// TODO Auto-generated method stub
-				if(e == null) {
-					ParseUser newFriend = users.get(0);
-					newFriend.getJSONArray("friendsRequest").put(idNewFriend);
-					newFriend.saveInBackground(new SaveCallback() {
-						
-						@Override
-						public void done(ParseException e) {
-							// TODO Auto-generated method stub
-							if(e == null)
-								Log.v("prototypev1", "save callback");
-							else
-								Log.v("prototypev1", "save callback error"+e);
-						}
-					});
-					Log.v("prototypev1", "save in background new user "+newFriend.getUsername());
-				}
-				else {
-					//error
-					Log.v("prototypev1", "error newFriend");
-				}
+		currentUser.saveInBackground();		
+	}
+	
+	public String getUsername() {
+		return ParseUser.getCurrentUser().getUsername();
+	}
+	
+	public Bitmap getProfilePicture() {
+		ParseFile profilePicture = (ParseFile) ParseUser.getCurrentUser().get("profilePicture");
+		if(profilePicture != null) {
+			try {
+				return Utils.byteArrayToBitmap(profilePicture.getData());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});*/
+		}
+		return null;
+	}
+	
+	public boolean setProfilePicture(Bitmap b) {
+		ParseUser user = ParseUser.getCurrentUser();
+		ParseFile img = new ParseFile("profile.jpeg",Utils.bitmapToByteArray(b));
+		img.saveInBackground();
+		user.put("profilePicture",img);
+		try {
+			user.save();
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean removeProfilePicture() {
+		ParseUser user = ParseUser.getCurrentUser();
+		user.remove("profilePicture");
+		try {
+			user.save();
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

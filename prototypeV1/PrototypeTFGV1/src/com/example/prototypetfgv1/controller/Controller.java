@@ -1,7 +1,6 @@
 package com.example.prototypetfgv1.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONArray;
 
@@ -76,9 +75,6 @@ public class Controller {
 	}
 	
 	public void deletePhoto(String id) {
-		//Delete from local user
-		//appClass.getUser().deletePhoto(id);
-		//Delete from parse user
 		parseFunctions.deletePhoto(id);
 	}
 	
@@ -96,5 +92,21 @@ public class Controller {
 	
 	public void addFriendsRequest(String id) {
 		parseFunctions.addFriendsRequest(id);
+	}
+	
+	public String getUsername() {
+		return parseFunctions.getUsername();
+	}
+	
+	public Bitmap getProfilePicture() {
+		return parseFunctions.getProfilePicture();
+	}
+	
+	public boolean setProfilePicture(Bitmap b) {
+		return parseFunctions.setProfilePicture(b);
+	}
+	
+	public boolean removeProfilePicture() {
+		return parseFunctions.removeProfilePicture();
 	}
 }

@@ -35,7 +35,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 		controller = new Controller(getApplicationContext());
 		
-		controller.getParseFunctions().initParse(getApplicationContext());
+		//controller.getParseFunctions().initParse(getApplicationContext());
 		
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);

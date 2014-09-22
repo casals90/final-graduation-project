@@ -23,8 +23,8 @@ public class FragmentAlbums extends Fragment {
 	private ListView listview;
 	private ProgressDialog mProgressDialog;
 	private ListViewAdapterForShowPhotos adapter;
-    private List<Photo> myPhotos = null;
-    private RemoteDataTask remoteDataTask = null;
+    private List<Photo> myPhotos;
+    private RemoteDataTask remoteDataTask;
 
 	public FragmentAlbums() {
 		super();
@@ -41,25 +41,15 @@ public class FragmentAlbums extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.v("prototypev1","onCreateView albums");
-		
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
-		listview = (ListView) getActivity().findViewById(R.id.listview);
+		listview = (ListView) view.findViewById(R.id.listview);
 		//Execute new Thread for download photos
-		remoteDataTask = new RemoteDataTask();		
-		remoteDataTask.execute();
+		new RemoteDataTask().execute();
 		return view;
 	}
 	
-	public void onRefresh() {
-		remoteDataTask = null;
-		remoteDataTask = new RemoteDataTask();		
-		remoteDataTask.execute();
-	}
-	
-	// RemoteDataTask AsyncTask
     private class RemoteDataTask extends AsyncTask<Void, Void, Void> {
     	
         @Override
@@ -76,11 +66,9 @@ public class FragmentAlbums extends Fragment {
             mProgressDialog.show();
         }
  
-        //Treure aquest mètode i posar-lo a ParseFunctions
         @Override
         protected Void doInBackground(Void... params) {
         	myPhotos = controller.downloadPhotos();
-            //Log.v("prototypev1","myPhotos"+myPhotos.size());
             return null;
         }
  
@@ -95,5 +83,4 @@ public class FragmentAlbums extends Fragment {
             Log.v("prototypev1","onPostExecute show photos");  
         }
     }
-
 }

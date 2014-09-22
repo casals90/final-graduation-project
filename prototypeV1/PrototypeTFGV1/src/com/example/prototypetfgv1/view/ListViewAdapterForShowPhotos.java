@@ -23,21 +23,17 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     ImageLoader imageLoader;
-    private List<Photo> myPhotos = null;
-    //private ArrayList<Photo> arraylist;
+    private List<Photo> myPhotos;
     private Controller controller;
     
     public ListViewAdapterForShowPhotos(Context context,List<Photo> myPhotos) {
         this.context = context;
         this.myPhotos = myPhotos;
         inflater = LayoutInflater.from(context);
-        //this.arraylist = new ArrayList<Photo>();
-        //this.arraylist.addAll(myPhotos);
+  
         imageLoader = new ImageLoader(context);
         
         controller = new Controller(context);
-        
-        //init reload
     }
     
     public class ViewHolder {
@@ -70,7 +66,7 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
             // Locate the TextViews in listview_item.xml
             holder.title = (TextView) view.findViewById(R.id.title);
             holder.createdAt = (TextView) view.findViewById(R.id.createdAt);
-            // Locate the ImageView in listview_item.xml@string/head_arrowImage
+            // Locate the ImageView in listview_item.xml
             holder.photo = (ImageView) view.findViewById(R.id.photo);
             holder.dButton = (ImageButton) view.findViewById(R.id.b_delete);		
             view.setTag(holder);
@@ -109,29 +105,19 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
     	AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
     	// Chain together various setter methods to set the dialog characteristics
-    	builder.setMessage(R.string.dialog_delete_photo)
-    	       .setTitle(R.string.dialog_delete_photo_message);
+    	builder.setMessage(R.string.dialog_delete_photo_message)
+    	       .setTitle(R.string.dialog_delete_photo);
    	
     	// Add the buttons
-    	builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+    	builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int id) {
     	               // User clicked OK button
     	        	   controller.deletePhoto(idDeletePhoto);
-    	        	   //reload listview
-    	        	   //delete object to arraylist
     	        	   deletePhotoFromList(position);
-    	        	   //notifyDataSetChanged();
     	           }
     	       });
     	builder.setNegativeButton(R.string.cancel,null);
-    	/*builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-    	           public void onClick(DialogInterface dialog, int id) {
-    	               // User cancelled the dialog
-    	           }
-    	       });*/
     	// Set other dialog properties
-    	
-    	// Create the AlertDialog
     	builder.create().show();
     }
 }

@@ -8,7 +8,7 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
     
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
@@ -35,6 +35,5 @@
             android:name="com.example.prototypetfgv1.view.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
-    </application>
-
+    </application>  
 </manifest>

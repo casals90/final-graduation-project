@@ -22,7 +22,7 @@
     <!-- Strings menu -->
     <string name="albums">Albums</string>
     <string name="news">news</string>
-    <string name="take_photo">take photo</string>
+    <!-- <string name="take_photo">Take photo</string>  -->
     <string name="friends">friends</string>
     <string name="profile">profile</string>
     
@@ -39,8 +39,9 @@
     
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>
-    <string name="delete">delete</string>
+    <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="yes">yes</string>
     <string name="dialog_delete_photo_message">Are you sure?</string>
     
     <!-- Friends -->
@@ -48,5 +49,14 @@
     <string name="search_people">search people</string>
     <string name="commonFriends">common friends</string>
     <string name="no_results">0 matches</string>
+    
+    <!-- Menu set current photo -->
+    <string name="remove_current_photo">Remove current photo</string>
+    <string name="take_photo">Take photo</string>
+    <string name="choose_from_library">Choose from library</string>
+    <string name="import_from_facebook">Import from facebook</string>
+    <string name="import_from_twitter">Import from twitter</string>
+    
+    
 
 </resources>
