@@ -8,10 +8,8 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,7 +44,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
     public class ViewHolder {
         ImageView profilePicture;
         TextView username;
-        ImageButton addFriend;
+        //ImageButton addFriend;
         TextView commonFriends;
     }
  
@@ -72,7 +70,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
             view = inflater.inflate(R.layout.item_user_view, null);
             // Locate the TextViews in listview_item.xml
             holder.username = (TextView) view.findViewById(R.id.username);
-            holder.addFriend = (ImageButton) view.findViewById(R.id.button_add_friend);
+            //holder.addFriend = (ImageButton) view.findViewById(R.id.button_add_friend);
             holder.commonFriends = (TextView) view.findViewById(R.id.commonFriends);
             // Locate the ImageView in listview_item.xml@string/head_arrowImage
             holder.profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
@@ -84,12 +82,10 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         holder.username.setText(users.get(position).getUsername());
         //holder.commonFriends.setText(users.get(position).getCommonFriends());
         //holder.commonFriends.setText("0 common friends");
-        Log.v("prototypev1", "username current user "+users.get(position).getUsername());
-        final String id = users.get(position).getId();
+        /*final String id = users.get(position).getId();
         if((!Utils.isElementExist(friends,id))) {
-        	Log.v("prototypev1", "NO is in friend list ");
         	//Add new friend
-        	holder.addFriend.setOnClickListener(new OnClickListener() {
+        	/*holder.addFriend.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					//add id in request friends
@@ -103,9 +99,9 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         }
         else {
         	//is in friend list
-        	Log.v("prototypev1", "is in friend list");
-        	holder.addFriend.setVisibility(View.INVISIBLE);
-        }
+        	//Log.v("prototypev1", "is in friend list");
+        	//holder.addFriend.setVisibility(View.INVISIBLE);
+        }*/
         // Set the results into ImageView
         imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
         return view;

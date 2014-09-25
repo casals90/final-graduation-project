@@ -205,7 +205,6 @@ public class ParseFunctions {
 			Log.v("prototypev1", "error download search users");
 			return null;
 		}
-		Log.v("prototypev1", "size users search "+users.size());
 		return users;
 	} 
 	 
@@ -219,12 +218,19 @@ public class ParseFunctions {
 		return r;
 	}
 	
-	public void addFriend(final String idNewFriend) {
+	public boolean addFriend(final String idNewFriend) {
 		//Add new friend in request list of current user
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		//currentUser.getJSONArray("friendsRequest").put(idNewFriend);
 		currentUser.getJSONArray("friends").put(idNewFriend);
-		currentUser.saveInBackground();		
+		try {
+			currentUser.save();
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}		
 	}
 	
 	public String getUsername() {
@@ -272,5 +278,23 @@ public class ParseFunctions {
 		}
 	}
 	
-	//function to download profile user download 
+	public boolean isMyFriend(String id) {
+		JSONArray friends = getFriends();
+		return Utils.isElementExist(friends, id);
+	}
+	
+	public boolean deleteFriend(String id) {
+		JSONArray friends = Utils.removeElementToJsonArray(getFriends(),id);
+		ParseUser user = ParseUser.getCurrentUser();
+		user.put("friends",friends);
+		try {
+			user.save();
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 }

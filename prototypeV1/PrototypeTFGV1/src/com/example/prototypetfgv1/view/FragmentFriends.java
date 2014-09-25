@@ -5,6 +5,7 @@ import java.util.List;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -32,11 +33,13 @@ public class FragmentFriends extends Fragment {
 	
 	private ListView listview;
 	private ListViewAdapterForSearchUsers adapter;
-    private List<User> users = null;
+    private List<User> users;
     
     private String input;
     
     private SearchTask searchTask;
+    
+    private FragmentTransaction transaction;
 
 	public FragmentFriends() {
 		super();
@@ -95,7 +98,7 @@ public class FragmentFriends extends Fragment {
 		return view;
 	}
 	
-	public void updateListView(List<User> users) {
+	public void updateListView(final List<User> users) {
 		adapter = new ListViewAdapterForSearchUsers(getActivity(),this.users);
         // Binds the Adapter to the ListView
         listview.setAdapter(adapter);
@@ -112,10 +115,11 @@ public class FragmentFriends extends Fragment {
 		listview.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
+			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
 				// TODO Auto-generated method stub
-				Log.v("prototypev1", "clico ");
+				User user = users.get(position);
+				//pass the user to new fragment and change fragment
+				goToUserProfile(user);
 			}
 		});
 	}
@@ -151,5 +155,17 @@ public class FragmentFriends extends Fragment {
 	        progressBarSearch.setVisibility(View.INVISIBLE);
 	        updateListView(users);     
 	    }
+	}
+	
+	public void goToUserProfile(User user) {
+		Bundle data = new Bundle();
+		data.putParcelable("User",user);
+		FragmentProfileOtherUser fpou = new FragmentProfileOtherUser();
+		fpou.setArguments(data);
+		
+		transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fpou);
+		transaction.addToBackStack(null);
+		transaction.commit();	
 	}
 }

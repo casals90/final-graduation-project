@@ -57,6 +57,9 @@
     <string name="import_from_facebook">Import from facebook</string>
     <string name="import_from_twitter">Import from twitter</string>
     
-    
+    <!-- Profile users to search -->
+    <string name="add_friend">add friend</string>
+    <string name="delete_friend">delete friend</string>
+    <string name="current_friend">Friends</string>
 
 </resources>

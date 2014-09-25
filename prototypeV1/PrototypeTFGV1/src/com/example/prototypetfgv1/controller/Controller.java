@@ -16,37 +16,33 @@ import com.parse.ParseUser;
 public class Controller {
 	
 	private ParseFunctions parseFunctions;
-	private ApplicationClass appClass;
+	//private ApplicationClass appClass;
 	
 	public Controller(Context context) {
 		super();
 		this.parseFunctions = new ParseFunctions(context);
 		
-		appClass = (ApplicationClass) context.getApplicationContext();
+		//appClass = (ApplicationClass) context.getApplicationContext();
 	}
 
 	public ParseFunctions getParseFunctions() {
 		return parseFunctions;
 	}
 
-	public ApplicationClass getAppClass() {
+	/*public ApplicationClass getAppClass() {
 		return appClass;
-	}
-
-	public void setAppClass(ApplicationClass appClass) {
-		this.appClass = appClass;
 	}
 	
 	public User getUser() {
 		return appClass.getUser();
-	}
+	}*/
 
 	public boolean signUp(String username,String password) {
 		ParseUser parseUser = parseFunctions.signUpInParse(username, password);
 		if(parseUser != null) {
 			//if true I create a local user
 			//comprovar si l'usuari vol guardar la contrassenya i guardar-la a sharedPReferences!!
-			appClass.newUser(parseUser);
+			//appClass.newUser(parseUser);
 			return true;
 		}
 		return false;
@@ -54,7 +50,7 @@ public class Controller {
 	
 	public boolean logIn(String username, String password) {
 		if(parseFunctions.logInParse(username, password)) {
-			appClass.downloadUser(ParseUser.getCurrentUser());
+			//appClass.downloadUser(ParseUser.getCurrentUser());
 			return true;
 		}
 		return false;
@@ -66,8 +62,8 @@ public class Controller {
 	
 	public void logout() {
 		parseFunctions.logout();
-		appClass.deleteUser();
-		Log.v("prototypev1", "users logout "+ParseUser.getCurrentUser()+" local "+appClass.getUser());
+		//appClass.deleteUser();
+		//Log.v("prototypev1", "users logout "+ParseUser.getCurrentUser()+" local "+appClass.getUser());
 	}
 	
 	public ArrayList<Photo> downloadPhotos() {
@@ -90,8 +86,8 @@ public class Controller {
 		return parseFunctions.getFriendsRequest();
 	}
 	
-	public void addFriend(String id) {
-		parseFunctions.addFriend(id);
+	public boolean addFriend(String id) {
+		return parseFunctions.addFriend(id);
 	}
 	
 	public String getUsername() {
@@ -108,5 +104,13 @@ public class Controller {
 	
 	public boolean removeProfilePicture() {
 		return parseFunctions.removeProfilePicture();
+	}
+	
+	public boolean isMyFriend(String id) {
+		return parseFunctions.isMyFriend(id);
+	}
+	
+	public boolean deleteFriend(String id) {
+		return parseFunctions.deleteFriend(id);
 	}
 }
