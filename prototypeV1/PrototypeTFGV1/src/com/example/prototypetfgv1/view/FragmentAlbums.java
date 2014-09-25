@@ -1,13 +1,11 @@
 package com.example.prototypetfgv1.view;
 
-
 import java.util.List;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +15,13 @@ import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
 import com.example.prototypetfgv1.model.Photo;
 
-
 public class FragmentAlbums extends Fragment {
 	private Controller controller;
 	private ListView listview;
 	private ProgressDialog mProgressDialog;
 	private ListViewAdapterForShowPhotos adapter;
     private List<Photo> myPhotos;
-    private RemoteDataTask remoteDataTask;
+    //private RemoteDataTask remoteDataTask;
 
 	public FragmentAlbums() {
 		super();
@@ -80,7 +77,6 @@ public class FragmentAlbums extends Fragment {
             listview.setAdapter(adapter);
             // Close the progressdialog
             mProgressDialog.dismiss();
-            Log.v("prototypev1","onPostExecute show photos");  
         }
     }
 }

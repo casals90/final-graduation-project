@@ -28,7 +28,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
     private ImageLoader imageLoader;
     
     private List<User> users;
-    private JSONArray friends, requestFriends;
+    private JSONArray friends; 
     
     public ListViewAdapterForSearchUsers(Context context,List<User> users) {
         this.context = context;
@@ -36,8 +36,6 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         controller = new Controller(this.context);
         //Download friends list
         friends = controller.getFriends();
-        //Downloader requestFriends list
-        requestFriends = controller.getFriendsRequest();
         
         inflater = LayoutInflater.from(context);
         imageLoader = new ImageLoader(context);
@@ -86,16 +84,17 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         holder.username.setText(users.get(position).getUsername());
         //holder.commonFriends.setText(users.get(position).getCommonFriends());
         //holder.commonFriends.setText("0 common friends");
-        //holder.commonFriends.setText("NO is my friend");
+        Log.v("prototypev1", "username current user "+users.get(position).getUsername());
         final String id = users.get(position).getId();
-        if((!Utils.isElementExist(friends,id)) && (!Utils.isElementExist(requestFriends,id))) {
-        	//holder.commonFriends.setText("is my friend");
+        if((!Utils.isElementExist(friends,id))) {
+        	Log.v("prototypev1", "NO is in friend list ");
         	//Add new friend
         	holder.addFriend.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					//add id in request friends
-					controller.addFriendsRequest(id);
+					controller.addFriend(id);
+					Log.v("prototypev1", "new Friend "+id);
 					//destroy image button
 					holder.addFriend.setOnClickListener(null);
 					holder.addFriend.setVisibility(View.INVISIBLE);
@@ -104,16 +103,11 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         }
         else {
         	//is in friend list
+        	Log.v("prototypev1", "is in friend list");
         	holder.addFriend.setVisibility(View.INVISIBLE);
         }
-        /*AQUIIIIholder.commonFriends.setText("NO is my friend");
-        if(controller.isMyFriend(users.get(position).getId())) {
-        	holder.commonFriends.setText("is my friend");
-        }*/
-        
-        
         // Set the results into ImageView
-        //imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);     
+        imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
         return view;
     }
 }

@@ -41,7 +41,7 @@
     <string name="dialog_delete_photo">Delete photo</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
-    <string name="yes">yes</string>
+    <string name="yes">Yes</string>
     <string name="dialog_delete_photo_message">Are you sure?</string>
     
     <!-- Friends -->

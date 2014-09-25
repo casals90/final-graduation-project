@@ -195,7 +195,8 @@ public class ParseFunctions {
 		try {
 			parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
-				users.add(new User(u.getObjectId(),u.getUsername(),null,0));
+				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
 			}
 			
 		} catch (ParseException e) {
@@ -218,10 +219,11 @@ public class ParseFunctions {
 		return r;
 	}
 	
-	public void addFriendsRequest(final String idNewFriend) {
+	public void addFriend(final String idNewFriend) {
 		//Add new friend in request list of current user
 		ParseUser currentUser = ParseUser.getCurrentUser();
-		currentUser.getJSONArray("friendsRequest").put(idNewFriend);
+		//currentUser.getJSONArray("friendsRequest").put(idNewFriend);
+		currentUser.getJSONArray("friends").put(idNewFriend);
 		currentUser.saveInBackground();		
 	}
 	
@@ -269,4 +271,6 @@ public class ParseFunctions {
 			return false;
 		}
 	}
+	
+	//function to download profile user download 
 }

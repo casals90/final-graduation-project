@@ -86,7 +86,7 @@ public class ImageLoader {
             return null;
         }
     }
- 
+    
     // Decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f) {
         try {

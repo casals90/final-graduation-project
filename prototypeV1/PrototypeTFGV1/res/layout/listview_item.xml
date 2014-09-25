@@ -21,8 +21,8 @@
     <ImageView
         android:id="@+id/photo"
         android:src="@drawable/ic_launcher"
-        android:layout_width="300dip"
-        android:layout_height="200dip"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
         android:layout_below="@+id/b_delete"
         android:contentDescription="@string/photo_content"
         android:layout_centerInParent="true"

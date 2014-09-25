@@ -82,16 +82,13 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//delete photo
 				String id = myPhotos.get(position).getId();
-				//controller.deletePhoto(id);
 				//show confirm dialog
 				confirmDelete(id,position);
-				Log.v("prototypev1", "pos in arraylist "+position);
 			}
 		});
-        
+               
         return view;
     }
     
@@ -117,7 +114,6 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
     	           }
     	       });
     	builder.setNegativeButton(R.string.cancel,null);
-    	// Set other dialog properties
     	builder.create().show();
     }
 }

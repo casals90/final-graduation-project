@@ -90,8 +90,8 @@ public class Controller {
 		return parseFunctions.getFriendsRequest();
 	}
 	
-	public void addFriendsRequest(String id) {
-		parseFunctions.addFriendsRequest(id);
+	public void addFriend(String id) {
+		parseFunctions.addFriend(id);
 	}
 	
 	public String getUsername() {
