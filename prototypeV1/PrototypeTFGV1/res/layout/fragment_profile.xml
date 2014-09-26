@@ -22,12 +22,90 @@
         android:layout_toRightOf="@+id/profilePicture"
         android:text="@string/username"/>
 
-     
     <Button
         android:id="@+id/button_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profilePicture"
-        android:text="@string/logout" /> 
-
+        android:layout_alignParentBottom="true"
+        android:text="@string/logout" />
+    
+    <LinearLayout
+        android:id="@+id/profile_information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_toRightOf="@+id/profilePicture"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp">
+    
+	    <LinearLayout
+	        android:id="@+id/photos"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:layout_marginRight="10dp">
+	        
+	        <TextView
+	            android:id="@+id/photos_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/number_x"/>
+	        
+	        <TextView
+	            android:id="@+id/label_photos_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/label_photos"/>      
+		</LinearLayout>
+		
+	    <LinearLayout
+	        android:id="@+id/albums"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:layout_marginRight="10dp">
+	      
+	        <TextView
+	            android:id="@+id/albums_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/number_x"/>
+	        
+	        <TextView
+	            android:id="@+id/label_albums_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/label_albums"/>   
+		</LinearLayout>
+		
+	    <LinearLayout
+	        android:id="@+id/friends"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center">
+	      
+	        <TextView
+	            android:id="@+id/friends_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/number_x"/>
+	        
+	        <TextView
+	            android:id="@+id/label_friends_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/friends"/>     
+		</LinearLayout>
+	</LinearLayout>
+    
 </RelativeLayout>

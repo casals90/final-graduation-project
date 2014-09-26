@@ -38,7 +38,7 @@ public class FragmentProfile extends Fragment {
 	
 	private Button buttonLogOut;
 	private ImageView profilePicture;
-	private TextView username;
+	private TextView username, photosNumber,albumsNumber,friendsNumber;
 	
 	private Bitmap newProfilePicture;
 	
@@ -67,6 +67,13 @@ public class FragmentProfile extends Fragment {
 		//username from current user
 		username = (TextView) view.findViewById(R.id.username);
 		username.setText(controller.getUsername());
+		
+		photosNumber = (TextView) view.findViewById(R.id.photos_number);
+		photosNumber.setText(controller.getPhotosNumber());
+		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
+		albumsNumber.setText(controller.getPhotosNumber());
+		friendsNumber = (TextView) view.findViewById(R.id.friends_number);
+		friendsNumber.setText(controller.getFriendsNumber());
 		
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);

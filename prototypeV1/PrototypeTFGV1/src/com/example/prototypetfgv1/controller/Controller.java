@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.example.prototypetfgv1.model.Photo;
 import com.example.prototypetfgv1.model.User;
@@ -112,5 +111,13 @@ public class Controller {
 	
 	public boolean deleteFriend(String id) {
 		return parseFunctions.deleteFriend(id);
+	}
+	
+	public String getPhotosNumber() {
+		return parseFunctions.getPhotosNumber();
+	}
+	
+	public String getFriendsNumber() {
+		return parseFunctions.getFriendsNumber();
 	}
 }

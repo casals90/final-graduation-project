@@ -37,6 +37,10 @@
 
     <!-- profile -->
     <string name="logout">logout</string>
+    <string name="label_albums">albums</string>
+    <string name="label_friends">friends number</string>
+    <string name="label_photos">photos</string>
+    <string name="number_x">X</string>
 
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>

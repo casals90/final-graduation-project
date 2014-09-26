@@ -44,6 +44,7 @@ public class ParseFunctions {
 		parseUser.put("photos",new JSONArray());
 		parseUser.put("friends",new JSONArray());
 		parseUser.put("friendsRequest",new JSONArray());
+		parseUser.put("photosNumber",0);
 	
 		try {
 			parseUser.signUp();
@@ -77,7 +78,8 @@ public class ParseFunctions {
         imgupload.put("image", file);
         //Add JSONArray with id of users that belong to
         JSONArray userId = new JSONArray();
-        userId.put(ParseUser.getCurrentUser().getObjectId());
+        final ParseUser user = ParseUser.getCurrentUser();
+        userId.put(user.getObjectId());
         imgupload.put("usersId",userId);
         Log.v("prototypev1", "id photo "+imgupload.getObjectId());
         //Save photo
@@ -86,6 +88,11 @@ public class ParseFunctions {
 			public void done(ParseException e) {
 				// TODO Auto-generated method stub
 				if(e == null) {
+					//Increment the number photos column
+					int photosNumber = user.getInt("photosNumber");
+					photosNumber++;
+					user.put("photosNumber", photosNumber);
+					user.saveInBackground();
 					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
 					Log.v("prototypev1", "id photo "+imgupload.getObjectId());
 				} else {
@@ -155,6 +162,15 @@ public class ParseFunctions {
 						p.saveInBackground();
 					}
 				}
+				//Decrement the photos number column
+				ParseUser user = ParseUser.getCurrentUser();
+				int numberPhotos = user.getInt("photosNumber");
+				numberPhotos--;
+				if(numberPhotos <= 0) 
+					user.put("photosNumber", 0);
+				else 
+					user.put("photosNumber", numberPhotos);
+				user.saveInBackground();
 			}
 		});	
 	}
@@ -297,4 +313,11 @@ public class ParseFunctions {
 		}
 	}
 	
+	public String getPhotosNumber() {
+		return String.valueOf(ParseUser.getCurrentUser().getInt("photosNumber"));
+	}
+	
+	public String getFriendsNumber() {
+		return String.valueOf(ParseUser.getCurrentUser().getJSONArray("friends").length());
+	}	
 }
