@@ -1,7 +1,6 @@
 package com.example.prototypetfgv1.view;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +23,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
@@ -39,6 +40,7 @@ public class FragmentProfile extends Fragment {
 	private Button buttonLogOut;
 	private ImageView profilePicture;
 	private TextView username, photosNumber,albumsNumber,friendsNumber;
+	private ProgressBar mProgressBar;
 	
 	private Bitmap newProfilePicture;
 	
@@ -83,6 +85,8 @@ public class FragmentProfile extends Fragment {
 			profilePicture.setImageBitmap(picture);
 		//register the context menu to set profile picture
 		registerForContextMenu(profilePicture);
+		
+		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarChangeProfilePicture);
 		
 		//logout
 		buttonLogOut = (Button) view.findViewById(R.id.button_logout);
@@ -209,11 +213,11 @@ public class FragmentProfile extends Fragment {
 	
 	/* Task to change and upload profile picture */
 	public class SetProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
-		ProgressDialog progressDialog;
 		
 		@Override
 	    protected void onPreExecute() {
-	        progressDialog= ProgressDialog.show(getActivity(), "set your profile picture","waiting", true);       
+			mProgressBar.setVisibility(View.VISIBLE);
+			profilePicture.setVisibility(View.INVISIBLE);
 	    };
 		
 		@Override
@@ -223,7 +227,8 @@ public class FragmentProfile extends Fragment {
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
-			progressDialog.dismiss();
+			mProgressBar.setVisibility(View.INVISIBLE);
+			profilePicture.setVisibility(View.VISIBLE);
 			if (success) {
 				Log.v("prototypev1","correcte set profile picture");
 			} else {
@@ -233,8 +238,9 @@ public class FragmentProfile extends Fragment {
 
 		@Override
 		protected void onCancelled() {
-			progressDialog.dismiss();
-			Log.v("prototypev1","set profile picture cancelat ");
+			mProgressBar.setVisibility(View.VISIBLE);
+			profilePicture.setVisibility(View.INVISIBLE);
+			Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -247,11 +253,11 @@ public class FragmentProfile extends Fragment {
 	
 	/* Task to remove profile picture */
 	public class RemoveProfilePictureFromLibraryTask extends AsyncTask<Void, Void, Boolean> {
-		ProgressDialog progressDialog;
 		
 		@Override
 	    protected void onPreExecute() {
-	        progressDialog= ProgressDialog.show(getActivity(), "set your profile picture","waiting", true);       
+			mProgressBar.setVisibility(View.VISIBLE);
+			profilePicture.setVisibility(View.INVISIBLE);      
 	    };
 		
 		@Override
@@ -261,7 +267,8 @@ public class FragmentProfile extends Fragment {
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
-			progressDialog.dismiss();
+			mProgressBar.setVisibility(View.INVISIBLE);
+			profilePicture.setVisibility(View.VISIBLE);
 			if (success) {
 				Log.v("prototypev1","correcte set profile picture");
 			} else {
@@ -271,8 +278,10 @@ public class FragmentProfile extends Fragment {
 
 		@Override
 		protected void onCancelled() {
-			progressDialog.dismiss();
+			mProgressBar.setVisibility(View.INVISIBLE);
+			profilePicture.setVisibility(View.VISIBLE);
 			Log.v("prototypev1","set profile picture cancelat ");
+			Toast.makeText(getActivity(),"Error remove profile picture",  Toast.LENGTH_LONG).show();
 		}
 	}
 }

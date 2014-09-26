@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
@@ -20,7 +22,8 @@ public class FragmentAlbums extends Fragment {
 	private Controller controller;
 	
 	private ListView listview;
-	private ProgressDialog mProgressDialog;
+	//private ProgressDialog mProgressDialog;
+	private ProgressBar mProgressBar;
 	
 	private ListViewAdapterForShowPhotos adapter;
     private List<Photo> myPhotos;
@@ -41,6 +44,7 @@ public class FragmentAlbums extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
 		listview = (ListView) view.findViewById(R.id.listview);
+		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarDownloadPhotos);
 		//Execute new Thread for download photos
 		new RemoteDataTask().execute();
 		
@@ -53,14 +57,15 @@ public class FragmentAlbums extends Fragment {
         protected void onPreExecute() {
         	super.onPreExecute();
             // Create a progressdialog
-            mProgressDialog = new ProgressDialog(getActivity());
+            //mProgressDialog = new ProgressDialog(getActivity());
             // Set progressdialog title
-            mProgressDialog.setTitle("Downloading photos");
+            //mProgressDialog.setTitle("Downloading photos");
             // Set progressdialog message
-            mProgressDialog.setMessage("Loading...");
-            mProgressDialog.setIndeterminate(false);
+            //mProgressDialog.setMessage("Loading...");
+            //mProgressDialog.setIndeterminate(false);
             // Show progressdialog
-            mProgressDialog.show();
+            //mProgressDialog.show();
+        	mProgressBar.setVisibility(View.VISIBLE);
         }
  
         @Override
@@ -76,7 +81,14 @@ public class FragmentAlbums extends Fragment {
             // Binds the Adapter to the ListView
             listview.setAdapter(adapter);
             // Close the progressdialog
-            mProgressDialog.dismiss();
+            //mProgressDialog.dismiss();
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}
     }
 }

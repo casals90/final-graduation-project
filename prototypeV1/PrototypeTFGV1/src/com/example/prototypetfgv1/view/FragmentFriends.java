@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
@@ -163,5 +164,12 @@ public class FragmentFriends extends Fragment {
 	        progressBarSearch.setVisibility(View.INVISIBLE);
 	        updateListView(users);     
 	    }
+	    
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			progressBarSearch.setVisibility(View.INVISIBLE);
+			Toast.makeText(getActivity(),"Error search people",  Toast.LENGTH_LONG).show();
+		}
 	}
 }

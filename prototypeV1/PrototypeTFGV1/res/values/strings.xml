@@ -34,6 +34,7 @@
     <string name="photo_title">photo title</string>
     <string name="photo_date">photo date</string>
     <string name="photo_content">photo content</string>
+    <string name="title_my_photos">My photos</string>
 
     <!-- profile -->
     <string name="logout">logout</string>
