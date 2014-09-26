@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,20 +42,18 @@ public class FragmentFriends extends Fragment {
 
 	public FragmentFriends() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
 		controller = new Controller(getActivity().getApplicationContext());
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_friends,container,false);
 		
 		noResults = (TextView) view.findViewById(R.id.no_results);
@@ -65,7 +62,7 @@ public class FragmentFriends extends Fragment {
 		progressBarSearch = (ProgressBar) view.findViewById(R.id.progressBarSearch);
 		
 		inputUsername = (EditText) view.findViewById(R.id.inputName);
-		//listener in edit text for text change
+		//listener in edit when text change
 		inputUsername.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -82,7 +79,6 @@ public class FragmentFriends extends Fragment {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				input = s.toString();
 				if(input.length() > 0) {
 					searchTask = null;
@@ -135,6 +131,18 @@ public class FragmentFriends extends Fragment {
 			noResults.setVisibility(View.INVISIBLE);
 	}
 	
+	public void goToUserProfile(User user) {
+		Bundle data = new Bundle();
+		data.putParcelable("User",user);
+		FragmentProfileOtherUser fpou = new FragmentProfileOtherUser();
+		fpou.setArguments(data);
+		
+		transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fpou);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
+	
 	private class SearchTask extends AsyncTask<Void, Void, Void> {
 	    @Override
 	    protected void onPreExecute() {
@@ -155,17 +163,5 @@ public class FragmentFriends extends Fragment {
 	        progressBarSearch.setVisibility(View.INVISIBLE);
 	        updateListView(users);     
 	    }
-	}
-	
-	public void goToUserProfile(User user) {
-		Bundle data = new Bundle();
-		data.putParcelable("User",user);
-		FragmentProfileOtherUser fpou = new FragmentProfileOtherUser();
-		fpou.setArguments(data);
-		
-		transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.container_fragment_main,fpou);
-		transaction.addToBackStack(null);
-		transaction.commit();	
 	}
 }

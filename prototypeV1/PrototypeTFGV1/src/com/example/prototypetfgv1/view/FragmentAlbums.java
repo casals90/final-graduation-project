@@ -16,21 +16,21 @@ import com.example.prototypetfgv1.controller.Controller;
 import com.example.prototypetfgv1.model.Photo;
 
 public class FragmentAlbums extends Fragment {
+	
 	private Controller controller;
+	
 	private ListView listview;
 	private ProgressDialog mProgressDialog;
+	
 	private ListViewAdapterForShowPhotos adapter;
     private List<Photo> myPhotos;
-    //private RemoteDataTask remoteDataTask;
-
+    
 	public FragmentAlbums() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		controller = new Controller(this.getActivity().getApplicationContext());
 	}
@@ -38,12 +38,12 @@ public class FragmentAlbums extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
 		listview = (ListView) view.findViewById(R.id.listview);
 		//Execute new Thread for download photos
 		new RemoteDataTask().execute();
+		
 		return view;
 	}
 	

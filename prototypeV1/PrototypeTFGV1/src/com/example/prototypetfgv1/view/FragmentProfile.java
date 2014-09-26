@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -30,6 +31,8 @@ import com.example.prototypetfgv1.controller.Controller;
 
 public class FragmentProfile extends Fragment {
 	
+	private static final String MyPREFERENCES = "PrototypeTFGV1";
+	
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final int REQUEST_PICK_IMAGE = 2;
 	
@@ -40,18 +43,20 @@ public class FragmentProfile extends Fragment {
 	private Bitmap newProfilePicture;
 	
 	private Controller controller;
-
+	
+	private SharedPreferences sharedPreferences;
+	
 	public FragmentProfile() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		controller = new Controller(this.getActivity().getApplicationContext());	
+		controller = new Controller(this.getActivity().getApplicationContext());
+		
+		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 	}
 
 	@Override
@@ -84,9 +89,19 @@ public class FragmentProfile extends Fragment {
 	
 	public void logout() {
 		controller.logout();
-		Intent loginScreen = new Intent(getActivity(), LoginActivity.class);
-		Utils.cleanBackStack(loginScreen);
-		startActivity(loginScreen);
+		deleteSharedPReferences();
+		Intent login = new Intent(getActivity(), LoginActivity.class);
+		Utils.cleanBackStack(login);
+		startActivity(login);
+	}
+	
+	public void deleteSharedPReferences() {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		
+		editor.putBoolean("rememberLogin",false);
+		editor.remove("username");
+		editor.remove("password");
+		editor.commit();
 	}
 
 	@Override
@@ -190,8 +205,7 @@ public class FragmentProfile extends Fragment {
 		ProgressDialog progressDialog;
 		
 		@Override
-	    protected void onPreExecute()
-	    {
+	    protected void onPreExecute() {
 	        progressDialog= ProgressDialog.show(getActivity(), "set your profile picture","waiting", true);       
 	    };
 		
@@ -229,8 +243,7 @@ public class FragmentProfile extends Fragment {
 		ProgressDialog progressDialog;
 		
 		@Override
-	    protected void onPreExecute()
-	    {
+	    protected void onPreExecute() {
 	        progressDialog= ProgressDialog.show(getActivity(), "set your profile picture","waiting", true);       
 	    };
 		

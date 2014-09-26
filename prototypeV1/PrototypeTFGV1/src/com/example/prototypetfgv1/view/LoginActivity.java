@@ -2,7 +2,9 @@ package com.example.prototypetfgv1.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,14 +22,21 @@ import com.example.prototypetfgv1.controller.Controller;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
+	private static final String MyPREFERENCES = "PrototypeTFGV1";
+	
 	private Controller controller;
 	
 	private EditText mUsernameView,mPasswordView;
 	private TextView mIncorrectLoginView;
 	private Button mLogin,mSignup;
-	private String mUsername,mPassword;
+	private CheckBox mRememberLogin;
 	
-	private LogInTask mAuthTask = null;
+	private String username,password;
+	private boolean rememberLogin;
+	
+	private LogInTask mAuthTask;
+	
+	SharedPreferences sharedpreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +45,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 		controller = new Controller(getApplicationContext());
 		
-		//controller.getParseFunctions().initParse(getApplicationContext());
-		
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);
 		mIncorrectLoginView = (TextView)findViewById(R.id.incorrect_login);
@@ -44,6 +52,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 		mLogin.setOnClickListener(this);
 		mSignup=(Button)findViewById(R.id.sign_up);
 		mSignup.setOnClickListener(this);
+		mRememberLogin = (CheckBox) findViewById(R.id.remember_login);
+		
 	}
 
 	@Override
@@ -64,14 +74,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	/* Listener of buttons */
+	// Listener of buttons
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
 		switch (id) {
 		case R.id.log_in:
-			Log.v("prototypev1", "inside switch username = "+mUsername+" pass = "+mPassword);
-			showIncorrectLoginMessage(false);
+			showIncorrectLoginMessage(false);			
 			logIn();
 			break;
 			
@@ -86,8 +95,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 	
 	public void fetchInputData() {
-		mUsername = mUsernameView.getText().toString();
-		mPassword = mPasswordView.getText().toString();
+		username = mUsernameView.getText().toString();
+		password = mPasswordView.getText().toString();
 	}
 	
 	public void showIncorrectLoginMessage(boolean show) {
@@ -113,7 +122,27 @@ public class LoginActivity extends Activity implements OnClickListener {
         startActivity(main);
 	}
 	
-	/* class to do log in in Parse in background*/
+	public void rememberLogin() {
+		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedpreferences.edit();
+		
+		editor.putBoolean("rememberLogin",true);
+		editor.putString("username",username);
+		editor.putString("password",password);
+		editor.commit();
+	}
+	
+	public void deleteRememberLogin() {
+		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedpreferences.edit();
+		
+		editor.putBoolean("rememberLogin",false);
+		editor.remove("username");
+		editor.remove("password");
+		editor.commit();
+	}
+	
+	//class to do log in in Parse in background
 	public class LogInTask extends AsyncTask<Void, Void, Boolean> {
 		ProgressDialog progressDialog;
 		
@@ -125,8 +154,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			//return ParseFunctions.logInParse(mUsername, mPassword,controller);
-			return controller.logIn(mUsername, mPassword);
+			return controller.logIn(username, password);
 		}
 
 		@Override
@@ -135,9 +163,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 			progressDialog.dismiss();
 			if (success) {
 				Log.v("prototypev1","correcte onPostExecute");
-				//Go to main
+				
+				rememberLogin = mRememberLogin.isChecked();
+				Log.v("prototypev1","remember login "+rememberLogin);
+				if(rememberLogin)
+					rememberLogin();
+				else 
+					deleteRememberLogin();
 				goToMainActivity();
-			} else {
+			} 
+			else {
 				Log.v("prototypev1","log in cancelat");
 				showIncorrectLoginMessage(true);
 			}

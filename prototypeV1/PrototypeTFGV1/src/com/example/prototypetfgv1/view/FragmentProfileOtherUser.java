@@ -32,12 +32,10 @@ public class FragmentProfileOtherUser extends Fragment {
 	
 	public FragmentProfileOtherUser() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		Context context = getActivity().getApplicationContext();
@@ -52,7 +50,6 @@ public class FragmentProfileOtherUser extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_profile_other_user,container,false);
 		
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
@@ -65,9 +62,7 @@ public class FragmentProfileOtherUser extends Fragment {
 		bAddFriend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//add in friend list
-				//controller.addFriend(user.getId());
 				new AddFriendTask().execute();
 				
 				bAddFriend.setVisibility(View.INVISIBLE);
@@ -80,9 +75,7 @@ public class FragmentProfileOtherUser extends Fragment {
 		bDeleteFriend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//Delete from friend list
-				//controller.deleteFriend(user.getId());
 				new DeleteFriendTask().execute();
 				
 				bAddFriend.setVisibility(View.VISIBLE);
@@ -102,8 +95,7 @@ public class FragmentProfileOtherUser extends Fragment {
 			bAddFriend.setVisibility(View.VISIBLE);
 			bDeleteFriend.setVisibility(View.INVISIBLE);
 			Log.v("prototypev1", "NO is my friend");
-		}
-				
+		}		
 		return view;
 	}
 	

@@ -8,9 +8,6 @@ import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,12 +16,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.Toast;
 
 public class Utils {
 	
-	/* Function that convert bitmap to byte array */
+	//Function that convert bitmap to byte array
 	public static byte[] bitmapToByteArray(Bitmap b) {
 		// Convert it to byte
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -33,12 +29,12 @@ public class Utils {
         return stream.toByteArray();
 	}
 	
-	/* Function that convert byte array to bitmap */
+	//Function that convert byte array to bitmap 
 	public static Bitmap byteArrayToBitmap(byte[] data) {
 		return BitmapFactory.decodeByteArray(data, 0,data.length);
 	}
 	
-	/* returns the bytesize of the give bitmap */
+	//returns the bytesize of the give bitmap
 	public static int byteSizeOf(Bitmap bitmap) {
 	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 	        return bitmap.getAllocationByteCount();
@@ -49,13 +45,13 @@ public class Utils {
 	    }
 	}
 	
-	/* function that create a date */
+	//function that create a date 
 	public static String getNowDate() {
 		Date date = new Date(new Date().getTime());
 		return String.valueOf(date);
 	}
 	
-	/* Convert date to string */
+	//Convert date to string 
 	public static String dateToString(Date date) {
 		return String.valueOf(date);
 	}

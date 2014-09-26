@@ -15,51 +15,53 @@
     <string name="incorrect_login">Incorrect login</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="incorrent_sign_up">error of input data (maybe two password)</string>
-    
-     <!-- explain images -->
+    <string name="remember_login">Remember login</string>
+
+    <!-- explain images -->
     <string name="explain">explain</string>
-    
+
     <!-- Strings menu -->
     <string name="albums">Albums</string>
     <string name="news">news</string>
-    <!-- <string name="take_photo">Take photo</string>  -->
+    <!-- <string name="take_photo">Take photo</string> -->
     <string name="friends">friends</string>
     <string name="profile">profile</string>
-    
-     <!-- activities names -->
+
+    <!-- activities names -->
     <string name="title_activity_main">MainActivity</string>
-    
+
     <!-- albums -->
     <string name="photo_title">photo title</string>
     <string name="photo_date">photo date</string>
     <string name="photo_content">photo content</string>
-    
+
     <!-- profile -->
     <string name="logout">logout</string>
-    
+
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="dialog_delete_photo_message">Are you sure?</string>
-    
+
     <!-- Friends -->
     <string name="input_username">input username</string>
     <string name="search_people">search people</string>
     <string name="commonFriends">common friends</string>
     <string name="no_results">0 matches</string>
-    
+
     <!-- Menu set current photo -->
     <string name="remove_current_photo">Remove current photo</string>
     <string name="take_photo">Take photo</string>
     <string name="choose_from_library">Choose from library</string>
     <string name="import_from_facebook">Import from facebook</string>
     <string name="import_from_twitter">Import from twitter</string>
-    
+
     <!-- Profile users to search -->
     <string name="add_friend">add friend</string>
     <string name="delete_friend">delete friend</string>
     <string name="current_friend">Friends</string>
+    <string name="title_activity_init">InitActivity</string>
 
 </resources>

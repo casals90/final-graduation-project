@@ -1,6 +1,5 @@
 package com.example.prototypetfgv1.view;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,25 +29,18 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	
 	public FragmentMain() {
 		super();
-		// TODO Auto-generated constructor stub
-		
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		controller = new Controller(this.getActivity().getApplicationContext());
-		
-		//PushService.setDefaultPushCallback(getActivity(),MainActivity.class);
-		//ParseAnalytics.trackAppOpened(getActivity().getIntent());
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_main_app,container, false);
 		
 		ibAlbums = (ImageButton) view.findViewById(R.id.ibAlbums);
@@ -63,7 +55,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		ibFriends.setOnClickListener(this);
 		ibProfile.setOnClickListener(this);
 		
-		/* put the fragment news in init */
+		// put the fragment news first
 		initTransaction();
 		goToNews();
 		
@@ -99,13 +91,12 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		}
 	}
 	
-	/* init transaction variable to change the fragment */
+	// init transaction variable to change the fragment 
 	public void initTransaction() {
 		transaction = getFragmentManager().beginTransaction();
 	}
 	
-	/* change the fragments */
-	
+	// change the fragments 
 	public void goToAlbums() {
 		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
 		changeFragment();
@@ -116,7 +107,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		changeFragment();
 	}
 	
-	/* functions to do photo */
+	// functions to do photo 
 	private void takePhoto() {
 		Context context = getActivity(); 
 		PackageManager packageManager = context.getPackageManager();
@@ -147,7 +138,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		changeFragment();
 	}
 	
-	/* accept the change fragment */
+	// accept the change fragment
 	public void changeFragment() {
 		transaction.addToBackStack(null);
 		transaction.commit();

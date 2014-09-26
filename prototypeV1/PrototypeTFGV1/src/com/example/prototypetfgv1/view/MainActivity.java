@@ -16,26 +16,14 @@ public class MainActivity extends FragmentActivity {
 		
 		//Load new Fragment
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		
 		// Replace whatever is in the fragment_container view with this fragment,
 		// and add the transaction to the back stack so the user can navigate back
 		transaction.replace(R.id.container_main,new FragmentMain());
-		
 		//This line is commented because the first screen of app is this, and can't go to back screen 
 		transaction.addToBackStack(null);
-		
 		// Commit the transaction
 		transaction.commit();	
 	}
-
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}**/
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

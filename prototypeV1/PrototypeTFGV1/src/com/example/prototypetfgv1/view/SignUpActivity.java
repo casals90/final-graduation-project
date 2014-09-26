@@ -53,7 +53,6 @@ public class SignUpActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.sign_up, menu);
 		return true;
@@ -85,10 +84,9 @@ public class SignUpActivity extends Activity {
 	
 	public void signUp() {
 		
-		if (mAuthTask != null) {
+		if (mAuthTask != null) 
 			return;
-		}
-		
+				
 		fetchInputData();
 		
 		if(areTwoPasswordsEquals()) {
@@ -119,13 +117,12 @@ public class SignUpActivity extends Activity {
         startActivity(main);
 	}
 	
-	/* class to do sign up in Parse in background*/
+	// class to do sign up in Parse in background
 	public class SignUpTask extends AsyncTask<Void, Void, Boolean> {
 		ProgressDialog progressDialog;
 		
 		@Override
-	    protected void onPreExecute()
-	    {
+	    protected void onPreExecute() {
 	        progressDialog= ProgressDialog.show(SignUpActivity.this, "Sign up","waiting", true);       
 	    };
 		
