@@ -55,10 +55,9 @@ public class FragmentProfile extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		controller = new Controller(this.getActivity().getApplicationContext());
-		
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		getActivity().setTitle(R.string.profile);
 	}
 
 	@Override
@@ -108,7 +107,6 @@ public class FragmentProfile extends Fragment {
 	
 	public void deleteSharedPReferences() {
 		SharedPreferences.Editor editor = sharedPreferences.edit();
-		
 		editor.putBoolean("rememberLogin",false);
 		editor.remove("username");
 		editor.remove("password");
@@ -155,7 +153,7 @@ public class FragmentProfile extends Fragment {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PICK_IMAGE);
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_PICK_IMAGE);
 	}
 	
 	public Bitmap searchPhotoSelect(Intent data) {
@@ -211,7 +209,7 @@ public class FragmentProfile extends Fragment {
 	        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);	        
 	}	
 	
-	/* Task to change and upload profile picture */
+	// Task to change and upload profile picture
 	public class SetProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
 		
 		@Override
@@ -232,7 +230,7 @@ public class FragmentProfile extends Fragment {
 			if (success) {
 				Log.v("prototypev1","correcte set profile picture");
 			} else {
-				Log.v("prototypev1","set profile picture cancelat");
+				Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -251,7 +249,7 @@ public class FragmentProfile extends Fragment {
 		new RemoveProfilePictureFromLibraryTask().execute();
 	}
 	
-	/* Task to remove profile picture */
+	// Task to remove profile picture
 	public class RemoveProfilePictureFromLibraryTask extends AsyncTask<Void, Void, Boolean> {
 		
 		@Override

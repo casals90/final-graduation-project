@@ -28,14 +28,14 @@
         android:layout_below="@+id/username"
         android:layout_toRightOf="@+id/profilePicture"
         android:text="@string/commonFriends"/>
-       
-<!--<ImageButton 
-        android:id="@+id/button_add_friend"
+
+    <ImageView
+        android:id="@+id/image_is_friend"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_action_add_person"
         android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_accept_dark"
         android:contentDescription="@string/explain"
-        android:focusable="false"/>-->
+        android:layout_marginRight="10dp"/>
 
 </RelativeLayout>

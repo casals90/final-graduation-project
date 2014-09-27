@@ -22,10 +22,10 @@
 
     <!-- Strings menu -->
     <string name="albums">Albums</string>
-    <string name="news">news</string>
+    <string name="news">News</string>
     <!-- <string name="take_photo">Take photo</string> -->
-    <string name="friends">friends</string>
-    <string name="profile">profile</string>
+    <string name="friends">Friends</string>
+    <string name="profile">Profile</string>
 
     <!-- activities names -->
     <string name="title_activity_main">MainActivity</string>

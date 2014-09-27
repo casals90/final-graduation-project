@@ -2,7 +2,6 @@ package com.example.prototypetfgv1.view;
 
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,6 @@ public class FragmentAlbums extends Fragment {
 	private Controller controller;
 	
 	private ListView listview;
-	//private ProgressDialog mProgressDialog;
 	private ProgressBar mProgressBar;
 	
 	private ListViewAdapterForShowPhotos adapter;
@@ -36,6 +34,7 @@ public class FragmentAlbums extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		controller = new Controller(this.getActivity().getApplicationContext());
+		getActivity().setTitle(R.string.albums);
 	}
 
 	@Override
@@ -47,7 +46,6 @@ public class FragmentAlbums extends Fragment {
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarDownloadPhotos);
 		//Execute new Thread for download photos
 		new RemoteDataTask().execute();
-		
 		return view;
 	}
 	
@@ -56,15 +54,6 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
-            // Create a progressdialog
-            //mProgressDialog = new ProgressDialog(getActivity());
-            // Set progressdialog title
-            //mProgressDialog.setTitle("Downloading photos");
-            // Set progressdialog message
-            //mProgressDialog.setMessage("Loading...");
-            //mProgressDialog.setIndeterminate(false);
-            // Show progressdialog
-            //mProgressDialog.show();
         	mProgressBar.setVisibility(View.VISIBLE);
         }
  
@@ -81,7 +70,6 @@ public class FragmentAlbums extends Fragment {
             // Binds the Adapter to the ListView
             listview.setAdapter(adapter);
             // Close the progressdialog
-            //mProgressDialog.dismiss();
             mProgressBar.setVisibility(View.INVISIBLE);
         }
 

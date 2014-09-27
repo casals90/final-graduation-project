@@ -2,6 +2,8 @@ package com.example.prototypetfgv1.view;
 
 import java.util.List;
 
+import org.json.JSONArray;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.prototypetfgv1.R;
+import com.example.prototypetfgv1.controller.Controller;
 import com.example.prototypetfgv1.model.User;
  
 public class ListViewAdapterForSearchUsers extends BaseAdapter {
@@ -19,18 +22,24 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
     private ImageLoader imageLoader;
     
     private List<User> users;
+    private JSONArray friends;
+    
+    private Controller controller;
     
     public ListViewAdapterForSearchUsers(Context context,List<User> users) {      
         inflater = LayoutInflater.from(context);
         imageLoader = new ImageLoader(context);
+        controller = new Controller(context);
                
         this.users = users;
+        friends = controller.getFriends();
     }
     
     public class ViewHolder {
         ImageView profilePicture;
         TextView username;
         TextView commonFriends;
+        ImageView imageFriend;
     }
  
     @Override
@@ -59,6 +68,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
             holder.commonFriends = (TextView) view.findViewById(R.id.commonFriends);
             // Locate the ImageView in listview_item.xml@string/head_arrowImage
             holder.profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
+            holder.imageFriend = (ImageView) view.findViewById(R.id.image_is_friend);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -67,6 +77,9 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         holder.username.setText(users.get(position).getUsername());
         // Set the results into ImageView
         imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+        //Show image when user is in friend list
+        if(!Utils.isElementExist(friends,users.get(position).getId()))
+        	holder.imageFriend.setVisibility(View.INVISIBLE);
         return view;
     }
 }

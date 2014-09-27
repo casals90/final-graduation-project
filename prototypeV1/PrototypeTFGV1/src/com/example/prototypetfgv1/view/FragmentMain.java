@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	
 	private ImageButton ibAlbums,ibNews,ibTakePhoto,ibFriends,ibProfile;
 	private FragmentTransaction transaction;
+	private FragmentManager manager;
 	
 	public FragmentMain() {
 		super();
@@ -58,7 +60,6 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		// put the fragment news first
 		initTransaction();
 		goToNews();
-		
 		return view;
 	}
 	
@@ -93,7 +94,9 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	
 	// init transaction variable to change the fragment 
 	public void initTransaction() {
-		transaction = getFragmentManager().beginTransaction();
+		manager = getActivity().getSupportFragmentManager();
+		transaction = manager.beginTransaction();
+		//transaction = getFragmentManager().beginTransaction();
 	}
 	
 	// change the fragments 

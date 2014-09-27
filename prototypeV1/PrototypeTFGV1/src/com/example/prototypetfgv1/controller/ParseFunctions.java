@@ -239,6 +239,10 @@ public class ParseFunctions {
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		//currentUser.getJSONArray("friendsRequest").put(idNewFriend);
 		currentUser.getJSONArray("friends").put(idNewFriend);
+		//Increment the friendsNumber column
+		int friendsNumber = currentUser.getInt("friendsNumber");
+		friendsNumber++;
+		currentUser.put("friendsNumber",friendsNumber);
 		try {
 			currentUser.save();
 			return true;
@@ -303,6 +307,13 @@ public class ParseFunctions {
 		JSONArray friends = Utils.removeElementToJsonArray(getFriends(),id);
 		ParseUser user = ParseUser.getCurrentUser();
 		user.put("friends",friends);
+		//Decrement friendsNumber column
+		int friendsNumber = user.getInt("friendsNumber");
+		friendsNumber--;
+		if(friendsNumber <= 0)
+			user.put("friendsNumber",0);
+		else
+			user.put("friendsNumber",friendsNumber);
 		try {
 			user.save();
 			return true;
@@ -318,6 +329,6 @@ public class ParseFunctions {
 	}
 	
 	public String getFriendsNumber() {
-		return String.valueOf(ParseUser.getCurrentUser().getJSONArray("friends").length());
+		return String.valueOf(ParseUser.getCurrentUser().getInt("friendsNumber"));
 	}	
 }

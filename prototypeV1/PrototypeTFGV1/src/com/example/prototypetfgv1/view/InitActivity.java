@@ -38,7 +38,7 @@ public class InitActivity extends Activity {
 			username = sharedPreferences.getString("username","");
 			password = sharedPreferences.getString("password","");
 			
-			if(controller.logIn(username, password))
+			if(controller.logIn(username, password)) 
 				goToMainActivity();
 			else
 				goToLoginActivity();
