@@ -3,6 +3,8 @@ package com.example.prototypetfgv1.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.callback.Callback;
+
 import org.json.JSONArray;
 
 import android.app.Activity;
@@ -15,8 +17,10 @@ import com.example.prototypetfgv1.model.Photo;
 import com.example.prototypetfgv1.model.User;
 import com.example.prototypetfgv1.view.Utils;
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -35,10 +39,11 @@ public class ParseFunctions {
 	
 	public void initParse(Context context) {
 		Parse.initialize(context, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
+		//ParseFacebookUtils.initialize("1511204742471022");
 	}
 
     public ParseUser signUpInParse(String username,String password) {
-		ParseUser parseUser = new ParseUser();
+		final ParseUser parseUser = new ParseUser();
 		parseUser.setUsername(username);
 		parseUser.setPassword(password);
 		parseUser.put("photos",new JSONArray());
@@ -330,5 +335,39 @@ public class ParseFunctions {
 	
 	public String getFriendsNumber() {
 		return String.valueOf(ParseUser.getCurrentUser().getInt("friendsNumber"));
-	}	
+	}
+	
+	
+	//Login facebook test
+	public void link(Activity activity) {
+		if (!ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
+			  ParseFacebookUtils.link(ParseUser.getCurrentUser(), activity, new SaveCallback() {
+			    @Override
+			    public void done(ParseException ex) {
+			      if (ParseFacebookUtils.isLinked(ParseUser.getCurrentUser())) {
+			        Log.d("MyApp", "Woohoo, user logged in with Facebook!");
+			      }
+			    }
+			  });
+			}
+	}
+	
+	public void facebookLogin(Activity activity) {
+		
+		ParseFacebookUtils.logIn(activity, new LogInCallback() {
+			
+			@Override
+			public void done(ParseUser user, ParseException e) {
+				// TODO Auto-generated method stub
+				if(user != null) {
+					Log.v("prototypev1","login with facebook ok");
+				}
+			}
+		});
+			
+	}
+	
+	
+	
+	
 }

@@ -1,10 +1,14 @@
 package com.example.prototypetfgv1.view;
 
+import java.util.Arrays;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +23,9 @@ import android.widget.TextView;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
+import com.parse.LogInCallback;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
@@ -74,6 +81,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	/*@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  Log.v("prototypev1","onactivity result facebook ");
+	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+	}*/
+	
 	// Listener of buttons
 	@Override
 	public void onClick(View v) {
@@ -82,6 +97,25 @@ public class LoginActivity extends Activity implements OnClickListener {
 		case R.id.log_in:
 			showIncorrectLoginMessage(false);			
 			logIn();
+			/*List<String> permissions = Arrays.asList("basic_info", "user_about_me",
+                    "user_relationships", "user_birthday", "user_location","email");
+			
+			ParseFacebookUtils.logIn(permissions,this, new LogInCallback() {
+				
+				@Override
+				public void done(ParseUser user, com.parse.ParseException e) {
+					// TODO Auto-generated method stub
+					Log.v("prototypev1","inside done facebook login ");
+					 if (user == null) {
+					      Log.d("prototypev1", "Uh oh. The user cancelled the Facebook login.");
+					    } else if (user.isNew()) {
+					      Log.d("prototypev1", "User signed up and logged in through Facebook!");
+					    } else {
+					      Log.d("prototypev1", "User logged in through Facebook!");
+					    }
+				}
+			});*/
+			
 			break;
 			
 		case R.id.sign_up:

@@ -3,6 +3,8 @@ package com.example.prototypetfgv1.controller;
 import android.app.Application;
 
 import com.example.prototypetfgv1.model.User;
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
  
 public class ApplicationClass extends Application {
@@ -13,14 +15,9 @@ public class ApplicationClass extends Application {
     public void onCreate() {
         super.onCreate();
  
-        //Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c"); 
-       /* ParseUser.enableAutomaticUser();
-        ParseACL defaultACL = new ParseACL();
- 
-        // If you would like all objects to be private by default, remove this line.
-        defaultACL.setPublicReadAccess(true);
- 
-        ParseACL.setDefaultACL(defaultACL, true);*/
+        Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c"); 
+       
+        //ParseFacebookUtils.initialize("826968380688405");
     }
 
 	public User getUser() {

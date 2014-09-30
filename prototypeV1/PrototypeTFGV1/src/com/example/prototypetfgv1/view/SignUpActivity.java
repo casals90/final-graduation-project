@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.prototypetfgv1.R;
 import com.example.prototypetfgv1.controller.Controller;
+import com.parse.ParseFacebookUtils;
 
 public class SignUpActivity extends Activity {
 	
@@ -25,6 +26,8 @@ public class SignUpActivity extends Activity {
 	private TextView mIncorrectSignUpView;
 	private Button mSignup;
 	private String mUsername,mPassword,mRepeatPassword;
+	
+	private Activity activity = this;
 	
 	private SignUpTask mAuthTask = null;
 
