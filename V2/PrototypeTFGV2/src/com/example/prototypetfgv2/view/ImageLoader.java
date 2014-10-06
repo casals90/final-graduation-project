@@ -87,6 +87,10 @@ public class ImageLoader {
         }
     }
     
+    public Bitmap getBitmapFromURL(String url) {
+    	return getBitmap(url);
+    }
+    
     // Decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f) {
         try {

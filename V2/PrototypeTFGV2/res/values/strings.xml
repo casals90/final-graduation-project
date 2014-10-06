@@ -16,6 +16,10 @@
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="incorrent_sign_up">error of input data (maybe two password)</string>
     <string name="remember_login">Remember login</string>
+    <string name="log_in_twitter">Log in Twitter</string>
+    <string name="log_in_facebook">Log in Facebook</string>
+    <string name="facebook_app_id">1486929811568304</string>
+    
 
     <!-- explain images -->
     <string name="explain">explain</string>

@@ -155,6 +155,8 @@ public class FragmentProfileOtherUser extends Fragment {
 			if(result) {
 				mProgressBar.setVisibility(INVISIBLE);
 				bDeleteFriend.setVisibility(VISIBLE);
+				
+				//controller.getParseFunctions().sendPush(user.getId());
 			}
 		}
  

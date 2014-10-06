@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +17,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.facebook.Session;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
@@ -28,7 +35,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 	
 	private EditText mUsernameView,mPasswordView;
 	private TextView mIncorrectLoginView;
-	private Button mLogin,mSignup;
+	private Button mLogin,mSignup,mLoginTwitter,mLoginFacebook;
 	private CheckBox mRememberLogin;
 	
 	private String username,password;
@@ -48,14 +55,18 @@ public class LoginActivity extends Activity implements OnClickListener {
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);
 		mIncorrectLoginView = (TextView)findViewById(R.id.incorrect_login);
+		mRememberLogin = (CheckBox) findViewById(R.id.remember_login);
 		mLogin = (Button)findViewById(R.id.log_in);
 		mLogin.setOnClickListener(this);
 		mSignup=(Button)findViewById(R.id.sign_up);
 		mSignup.setOnClickListener(this);
-		mRememberLogin = (CheckBox) findViewById(R.id.remember_login);
+		mLoginTwitter = (Button)findViewById(R.id.log_in_twitter);
+		mLoginTwitter.setOnClickListener(this);
+		mLoginFacebook = (Button)findViewById(R.id.log_in_facebook);
+		mLoginFacebook.setOnClickListener(this);
 		
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -81,12 +92,35 @@ public class LoginActivity extends Activity implements OnClickListener {
 		switch (id) {
 		case R.id.log_in:
 			showIncorrectLoginMessage(false);			
-			logIn();
+			logIn(); 
+			
 			break;
 			
 		case R.id.sign_up:
-			Intent signUp = new Intent(this,SignUpActivity.class);
-			startActivity(signUp);
+			goToSignUp();
+			break;
+			
+		case R.id.log_in_twitter:
+			controller.logInTwitter(this);
+			break;
+		
+		case R.id.log_in_facebook:
+			
+			/*ParseFacebookUtils.logIn(this, new LogInCallback() {
+
+				@Override
+				public void done(ParseUser user, ParseException e) {
+					// TODO Auto-generated method stub
+					if (user == null) {
+					      Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+					    } else if (user.isNew()) {
+					      Log.d("MyApp", "User signed up and logged in through Facebook!");
+					    } else {
+					      Log.d("MyApp", "User logged in through Facebook!");
+					    }
+				}
+			});*/
+			
 			break;
 		
 		default:
@@ -94,6 +128,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	}
 	
+
 	public void fetchInputData() {
 		username = mUsernameView.getText().toString();
 		password = mPasswordView.getText().toString();
@@ -120,6 +155,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 	public void goToMainActivity() {
 		Intent main = new Intent(this, MainActivity.class);
         startActivity(main);
+	}
+	
+	public void goToSignUp() {
+		Intent signUp = new Intent(this,SignUpActivity.class);
+		startActivity(signUp);
 	}
 	
 	public void rememberLogin() {
@@ -183,6 +223,39 @@ public class LoginActivity extends Activity implements OnClickListener {
 			progressDialog.dismiss();
 			mAuthTask = null;
 			Log.v("prototypev1","log in cancelat 2");
+		}
+		
+		public class ImportProfilePictureFromTwitterTask extends AsyncTask<Void, Void, Boolean> {
+			
+			@Override
+		    protected void onPreExecute() {
+				
+		    };
+			
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				Bitmap b = controller.getProfilePictureTwitterURL();
+				if(b == null)
+					return false;
+				return true;
+			}
+
+			@Override
+			protected void onPostExecute(final Boolean success) {
+				
+				if (success) {
+					Log.v("prototypev1","correcte set profile picture twitter");
+					//Change photo in a view
+					
+				} else {
+					Toast.makeText(getApplicationContext(),"Error set profile picture twitter",  Toast.LENGTH_LONG).show();
+				}
+			}
+
+			@Override
+			protected void onCancelled() {
+				Toast.makeText(getApplicationContext(),"Error set profile picture",  Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 }

@@ -58,6 +58,7 @@ public class FragmentProfile extends Fragment {
 		controller = new Controller(this.getActivity().getApplicationContext());
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		getActivity().setTitle(R.string.profile);
+		//controller.getParseFunctions().getUsernameForAuthUser();
 	}
 
 	@Override
@@ -139,6 +140,7 @@ public class FragmentProfile extends Fragment {
 			Log.v("prototypev1","face");
 			break;
 		case R.id.import_from_twitter:
+			importPhotoFromTwitter();
 			Log.v("prototypev1","twitter");
 			break;
 
@@ -146,6 +148,10 @@ public class FragmentProfile extends Fragment {
 			break;
 		}
 		return true;
+	}
+	
+	public void importPhotoFromTwitter() {
+		new ImportProfilePictureFromTwitterTask().execute();
 	}
 
 	//Choose from gallery
@@ -179,7 +185,7 @@ public class FragmentProfile extends Fragment {
 				Log.v("prototypev1","he entrat a capturar fto");
 				Bundle extras = data.getExtras();
 		        Bitmap photo = (Bitmap)extras.get("data");
-		        newProfilePicture = Bitmap.createScaledBitmap(photo,80,80, true);
+		        newProfilePicture = Bitmap.createScaledBitmap(photo,80,80,true);
 		        new SetProfilePictureTask().execute();
 			}
 			break;
@@ -187,7 +193,7 @@ public class FragmentProfile extends Fragment {
 			Log.v("prototypev1","he entrat a triar foto");
 			if(resultCode == Activity.RESULT_OK && data != null) {
 				Bitmap yourSelectedImage = searchPhotoSelect(data);
-		        newProfilePicture = Bitmap.createScaledBitmap(yourSelectedImage,80,80, true);
+		        newProfilePicture = Bitmap.createScaledBitmap(yourSelectedImage,80,80,true);
 		        //upload to parse
 		        new SetProfilePictureTask().execute();
 			}
@@ -280,6 +286,43 @@ public class FragmentProfile extends Fragment {
 			profilePicture.setVisibility(View.VISIBLE);
 			Log.v("prototypev1","set profile picture cancelat ");
 			Toast.makeText(getActivity(),"Error remove profile picture",  Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	public class ImportProfilePictureFromTwitterTask extends AsyncTask<Void, Void, Boolean> {
+		
+		@Override
+	    protected void onPreExecute() {
+			mProgressBar.setVisibility(View.VISIBLE);
+			profilePicture.setVisibility(View.INVISIBLE);
+	    };
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			newProfilePicture = controller.getProfilePictureTwitterURL();
+			if(newProfilePicture == null)
+				return false;
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			mProgressBar.setVisibility(View.INVISIBLE);
+			profilePicture.setVisibility(View.VISIBLE);
+			if (success) {
+				Log.v("prototypev1","correcte set profile picture twitter");
+				//Change photo in a view
+				profilePicture.setImageBitmap(newProfilePicture);
+			} else {
+				Toast.makeText(getActivity(),"Error set profile picture twitter",  Toast.LENGTH_LONG).show();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			mProgressBar.setVisibility(View.VISIBLE);
+			profilePicture.setVisibility(View.INVISIBLE);
+			Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 		}
 	}
 }
