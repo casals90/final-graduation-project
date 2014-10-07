@@ -59,7 +59,9 @@ public class FragmentProfileOtherUser extends Fragment {
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
 		username = (TextView) view.findViewById(R.id.username);
 		
-		imageLoader.DisplayImage(user.getProfilePicture(),profilePicture);
+		if(user.getProfilePicture() != null)
+			imageLoader.DisplayImage(user.getProfilePicture(),profilePicture);
+		
 		username.setText(user.getUsername());
 		
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarOtherProfile);

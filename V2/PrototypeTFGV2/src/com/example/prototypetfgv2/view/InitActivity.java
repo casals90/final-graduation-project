@@ -10,7 +10,6 @@ import android.view.MenuItem;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.parse.ParseAnalytics;
 
 public class InitActivity extends Activity {
 	

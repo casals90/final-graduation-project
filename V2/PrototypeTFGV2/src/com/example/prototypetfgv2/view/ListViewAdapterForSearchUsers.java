@@ -5,6 +5,8 @@ import java.util.List;
 import org.json.JSONArray;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +61,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
  
     public View getView(final int position, View view, ViewGroup parent) {
         final ViewHolder holder;
-        if (view == null) {
+        if (view == null) { 
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.item_user_view, null);
             // Locate the TextViews in listview_item.xml
@@ -75,8 +77,11 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         }
         // Set the results into TextViews
         holder.username.setText(users.get(position).getUsername());
-        // Set the results into ImageView
         imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+        //Default profile photo
+        if(users.get(position).getProfilePicture() == null)
+        	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
+        
         //Show image when user is in friend list
         if(!Utils.isElementExist(friends,users.get(position).getId()))
         	holder.imageFriend.setVisibility(View.INVISIBLE);

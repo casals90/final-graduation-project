@@ -63,9 +63,12 @@ public class ParseFunctions {
 		parseUser.put("friendsRequest",new JSONArray());
 		parseUser.put("photosNumber",0);
 		parseUser.put("friendsNumber",0);
+		//Add default profile picture
+		//parseUser.put("profilePicture",new ParseFile(null));
 	
 		try {
 			parseUser.signUp();
+			Log.v("prototypev1","error signup "+parseUser.getParseFile("profilePicture"));
 			return parseUser;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -229,8 +232,14 @@ public class ParseFunctions {
 		try {
 			parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
-				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
-				users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
+				Log.v("prototypev1", "getUsers profile picture "+u.getParseFile("profilePicture"));
+				if(u.getParseFile("profilePicture") != null) {
+					ParseFile profilePicture = (ParseFile)u.get("profilePicture");
+					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
+				}
+				//Not have a profile picture (default)
+				else 
+					users.add(new User(u.getObjectId(),u.getUsername(),null,0));	
 			}
 			
 		} catch (ParseException e) {
@@ -263,7 +272,7 @@ public class ParseFunctions {
 		currentUser.put("friendsNumber",friendsNumber);
 		try {
 			currentUser.save();
-			sendPush(idNewFriend);
+			//sendPush(idNewFriend);
 			return true;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -273,14 +282,17 @@ public class ParseFunctions {
 	}
 	
 	public void sendPush(String id) {
-		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+		Log.v("prototypev1", "send push "+id);
+		/*ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 		installation.put("userId",id);
+		//ParseInstallation installation = new ParseInstallation();
+		//installation.put("userId",id);
 		try {
 			installation.save();
 			
 			
 			// Create our Installation query
-			ParseQuery pushQuery = ParseInstallation.getQuery();
+			ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
 			pushQuery.whereEqualTo("userId",ParseUser.getCurrentUser().getObjectId());
 			 
 			// Send push notification to query
@@ -293,7 +305,31 @@ public class ParseFunctions {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.v("prototypev1", "error push "+e);
-		}
+		}*/
+		
+		// Find users near a given location
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+		userQuery.whereEqualTo("objectId",id);
+		
+		try {
+			ParseUser u = userQuery.getFirst();
+			Log.v("prototypev1", "send push "+u.getUsername());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		// Find devices associated with these users
+		ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
+		pushQuery.whereMatchesQuery("user", userQuery);
+		
+		
+		 
+		// Send push notification to query
+		ParsePush push = new ParsePush();
+		push.setQuery(pushQuery); // Set our Installation query
+		push.setMessage("Free hotdogs at the Parse concession stand!");
+		push.sendInBackground();
 		
 	}
 	

@@ -6,7 +6,6 @@ import android.app.Application;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.InitActivity;
 import com.parse.Parse;
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;

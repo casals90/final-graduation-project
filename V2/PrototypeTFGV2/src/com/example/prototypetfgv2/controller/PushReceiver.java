@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.view.FragmentProfile;
 import com.example.prototypetfgv2.view.MainActivity;
 
 public class PushReceiver extends BroadcastReceiver {
@@ -23,7 +24,7 @@ public class PushReceiver extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		  
 		//Serveix per anar a una activity al clicar la notificacio
-		Intent resultIntent = new Intent(context,MainActivity.class);
+		Intent resultIntent = new Intent(context,FragmentProfile.class);
 		PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         context,
@@ -50,7 +51,7 @@ public class PushReceiver extends BroadcastReceiver {
                             .setSound(Uri.parse("uri://sadfasdfasdf.mp3"))
                             .setContentTitle(json.getString("titulo"))
                             .setContentText(json.getString("texto"))
-                            .setContentIntent(resultPendingIntent) // <- Atencion aqui!
+                            .setContentIntent(resultPendingIntent)
                             .setAutoCancel(true);
             NotificationManager mNotificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

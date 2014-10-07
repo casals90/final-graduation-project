@@ -21,11 +21,6 @@ import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.facebook.Session;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseUser;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
