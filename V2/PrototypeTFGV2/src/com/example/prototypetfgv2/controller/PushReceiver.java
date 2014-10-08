@@ -15,14 +15,15 @@ import android.util.Log;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.view.FragmentProfile;
-import com.example.prototypetfgv2.view.MainActivity;
 
 public class PushReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
-		  
+		
+		Log.d("prototypev1", "on receive ");
+		
 		//Serveix per anar a una activity al clicar la notificacio
 		Intent resultIntent = new Intent(context,FragmentProfile.class);
 		PendingIntent resultPendingIntent =

@@ -1,12 +1,10 @@
 package com.example.prototypetfgv2.view;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,13 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.controller.Controller;
 
 public class LoginActivity extends Activity implements OnClickListener {
@@ -33,10 +28,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private EditText mUsernameView,mPasswordView;
 	private TextView mIncorrectLoginView;
 	private Button mLogin,mSignup,mLoginTwitter,mLoginFacebook;
-	private CheckBox mRememberLogin;
 	
 	private String username,password;
-	private boolean rememberLogin;
 	
 	private LogInTask mAuthTask;
 	
@@ -53,7 +46,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);
 		mIncorrectLoginView = (TextView)findViewById(R.id.incorrect_login);
-		mRememberLogin = (CheckBox) findViewById(R.id.remember_login);
 		mLogin = (Button)findViewById(R.id.log_in);
 		mLogin.setOnClickListener(this);
 		mSignup=(Button)findViewById(R.id.sign_up);
@@ -100,25 +92,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 			
 		case R.id.log_in_twitter:
 			controller.logInTwitter(this);
-			
+			//go to new activity
 			break;
 		
 		case R.id.log_in_facebook:
-			
-			/*ParseFacebookUtils.logIn(this, new LogInCallback() {
-
-				@Override
-				public void done(ParseUser user, ParseException e) {
-					// TODO Auto-generated method stub
-					if (user == null) {
-					      Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-					    } else if (user.isNew()) {
-					      Log.d("MyApp", "User signed up and logged in through Facebook!");
-					    } else {
-					      Log.d("MyApp", "User logged in through Facebook!");
-					    }
-				}
-			});*/
 			
 			break;
 		
@@ -127,7 +104,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-
 	public void fetchInputData() {
 		username = mUsernameView.getText().toString();
 		password = mPasswordView.getText().toString();
@@ -202,13 +178,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			progressDialog.dismiss();
 			if (success) {
 				Log.v("prototypev1","correcte onPostExecute");
-				
-				rememberLogin = mRememberLogin.isChecked();
-				Log.v("prototypev1","remember login "+rememberLogin);
-				if(rememberLogin)
-					rememberLogin();
-				else 
-					deleteRememberLogin();
+				rememberLogin();
 				goToMainActivity();
 			} 
 			else {
@@ -222,39 +192,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 			progressDialog.dismiss();
 			mAuthTask = null;
 			Log.v("prototypev1","log in cancelat 2");
-		}
-		
-		public class ImportProfilePictureFromTwitterTask extends AsyncTask<Void, Void, Boolean> {
-			
-			@Override
-		    protected void onPreExecute() {
-				
-		    };
-			
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				Bitmap b = controller.getProfilePictureTwitterURL();
-				if(b == null)
-					return false;
-				return true;
-			}
-
-			@Override
-			protected void onPostExecute(final Boolean success) {
-				
-				if (success) {
-					Log.v("prototypev1","correcte set profile picture twitter");
-					//Change photo in a view
-					
-				} else {
-					Toast.makeText(getApplicationContext(),"Error set profile picture twitter",  Toast.LENGTH_LONG).show();
-				}
-			}
-
-			@Override
-			protected void onCancelled() {
-				Toast.makeText(getApplicationContext(),"Error set profile picture",  Toast.LENGTH_LONG).show();
-			}
 		}
 	}
 }

@@ -11,6 +11,7 @@ import org.json.JSONArray;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.ImageLoader;
 import com.example.prototypetfgv2.view.InitActivity;
+import com.example.prototypetfgv2.view.SignUpActivity;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
@@ -28,17 +30,16 @@ import com.parse.PushService;
 public class Controller extends Application {
 	
 	private ParseFunctions parseFunctions;
-
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		
 		Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
         ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
-        //ParseFacebookUtils.initialize("key");
+        
         PushService.setDefaultPushCallback(this, InitActivity.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
+        
         
         parseFunctions = new ParseFunctions(getApplicationContext());
 	}
@@ -50,9 +51,6 @@ public class Controller extends Application {
 	public boolean signUp(String username,String password) {
 		ParseUser parseUser = parseFunctions.signUpInParse(username, password);
 		if(parseUser != null) {
-			//if true I create a local user
-			//comprovar si l'usuari vol guardar la contrassenya i guardar-la a sharedPReferences!!
-			//appClass.newUser(parseUser);
 			return true;
 		}
 		return false;
@@ -60,7 +58,6 @@ public class Controller extends Application {
 	
 	public boolean logIn(String username, String password) {
 		if(parseFunctions.logInParse(username, password)) {
-			//appClass.downloadUser(ParseUser.getCurrentUser());
 			return true;
 		}
 		return false;
@@ -72,7 +69,6 @@ public class Controller extends Application {
 	
 	public void logout() {
 		parseFunctions.logout();
-		//appClass.deleteUser();
 		//Log.v("prototypev1", "users logout "+ParseUser.getCurrentUser()+" local "+appClass.getUser());
 	}
 	
@@ -169,6 +165,12 @@ public class Controller extends Application {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	// Functions to change activity
+	public void goToSignUp() {
+		Intent signUp = new Intent(Controller.this,SignUpActivity.class);
+		startActivity(signUp);
 	}
 	
 }

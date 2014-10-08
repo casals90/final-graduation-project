@@ -63,16 +63,13 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+        
         <receiver android:name=".controller.PushReceiver" >
             <intent-filter>
                 <action android:name="com.example.prototypetfgv2.controller.UPDATE_STATUS" />
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name="com.example.prototypetfgv2.view.LoadingTwitterInformationActivity"
-            android:label="@string/title_activity_loading_twitter_information" >
-        </activity>
     </application>
 
 </manifest>

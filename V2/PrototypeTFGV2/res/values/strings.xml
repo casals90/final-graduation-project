@@ -5,6 +5,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- keys -->
+    <string name="parse_app_id">Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35</string>
+    <string name="parse_client_key">ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c</string>
+
     <!-- Strings for Login and Sign up activities -->
     <string name="app_tittle">Prototype v1</string>
     <string name="username">username</string>
@@ -19,6 +23,13 @@
     <string name="log_in_twitter">Log in Twitter</string>
     <string name="log_in_facebook">Log in Facebook</string>
     <string name="facebook_app_id">1486929811568304</string>
+    <string name="accept">Accept</string>
+    
+    <string name="import_profile_picture_from_facebook">Import profile picture from Facebook</string>
+    <string name="import_profile_picture_from_twitter">Import profile picture from Twitter</string>
+    <string name="import_profile_picture_from_library">Import profile picture from Twitter</string>
+    <string name="import_profile_picture_from_camera">Take photo to profile picture</string>
+    <string name="no_import_profile_picture">No import profile picture</string>
 
     <!-- explain images -->
     <string name="explain">explain</string>
@@ -72,5 +83,6 @@
     <string name="current_friend">Friends</string>
     <string name="title_activity_init">InitActivity</string>
     <string name="title_activity_loading_twitter_information">LoadingTwitterInformationActivity</string>
+    <string name="title_activity_configure_new_profil_from_social_network">ConfigureNewProfilFromSocialNetwork</string>
 
 </resources>

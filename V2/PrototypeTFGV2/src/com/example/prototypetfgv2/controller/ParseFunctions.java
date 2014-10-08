@@ -42,7 +42,6 @@ import com.parse.SaveCallback;
 
 public class ParseFunctions {
 	
-	
 	public ParseFunctions(Context context) {
 		super();
 	}
@@ -65,7 +64,7 @@ public class ParseFunctions {
 	
 		try {
 			parseUser.signUp();
-			Log.v("prototypev1","error signup "+parseUser.getParseFile("profilePicture"));
+			
 			return parseUser;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -269,13 +268,30 @@ public class ParseFunctions {
 		currentUser.put("friendsNumber",friendsNumber);
 		try {
 			currentUser.save();
-			//sendPush(idNewFriend);
+			sendPush2(idNewFriend);
 			return true;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}		
+	}
+	
+	public void sendPush2(String id) {
+		// Find users near a given location
+		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+		userQuery.whereEqualTo("objectId",id);
+		 
+		// Find devices associated with these users
+		ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
+		pushQuery.whereMatchesQuery("user",userQuery);
+		 
+		// Send push notification to query
+		ParsePush push = new ParsePush();
+		push.setQuery(pushQuery); // Set our Installation query
+		push.setMessage("Hiii cardus");
+		push.sendInBackground();
+			
 	}
 	
 	public void sendPush(String id) {
@@ -515,9 +531,6 @@ public class ParseFunctions {
 			return null;
 		}	
 	}
-	
-	
-	
 	public void goToMainActivity(Activity activity) {
 		Intent main = new Intent(activity, MainActivity.class);
         activity.startActivity(main);
