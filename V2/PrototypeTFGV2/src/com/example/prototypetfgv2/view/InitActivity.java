@@ -27,7 +27,7 @@ public class InitActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_init);
 		
-		controller = new Controller(getApplicationContext());
+		controller = (Controller) getApplicationContext();
 		
 		sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		

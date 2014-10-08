@@ -32,7 +32,7 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
   
         imageLoader = new ImageLoader(context);
         
-        controller = new Controller(context);
+        controller = (Controller) context.getApplicationContext();
     }
     
     public class ViewHolder {

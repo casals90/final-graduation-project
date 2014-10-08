@@ -1,5 +1,8 @@
 package com.example.prototypetfgv2.view;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +32,8 @@ import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 public class FragmentProfile extends Fragment {
 	
@@ -55,10 +60,18 @@ public class FragmentProfile extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		controller = new Controller(this.getActivity().getApplicationContext());
+		controller = (Controller) this.getActivity().getApplicationContext();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		getActivity().setTitle(R.string.profile);
 		//controller.getParseFunctions().getUsernameForAuthUser();
+		
+		ParseUser user = ParseUser.getCurrentUser();
+		
+		
+		ParseObject o = user.getParseObject("authData");
+		JSONObject ob = user.getJSONObject("authData");
+		Log.v("prototypev1","authData "+o+" ds "+ob);
+		
 	}
 
 	@Override

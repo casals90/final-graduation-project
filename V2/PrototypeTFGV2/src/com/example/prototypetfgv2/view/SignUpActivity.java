@@ -33,7 +33,7 @@ public class SignUpActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_up);
 		
-		controller = new Controller(getApplicationContext());
+		controller = (Controller) getApplicationContext();
 		
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);

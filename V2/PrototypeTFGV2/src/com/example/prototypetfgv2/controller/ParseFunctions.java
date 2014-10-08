@@ -42,12 +42,9 @@ import com.parse.SaveCallback;
 
 public class ParseFunctions {
 	
-	//private ApplicationClass appClass;
 	
 	public ParseFunctions(Context context) {
 		super();
-		//appClass = (ApplicationClass) context.getApplicationContext();
-		//initParse(context);
 	}
 	
 	public void initParse(Context context) {
@@ -188,9 +185,9 @@ public class ParseFunctions {
 				int numberPhotos = user.getInt("photosNumber");
 				numberPhotos--;
 				if(numberPhotos <= 0) 
-					user.put("photosNumber", 0);
+					user.put("photosNumber",0);
 				else 
-					user.put("photosNumber", numberPhotos);
+					user.put("photosNumber",numberPhotos);
 				user.saveInBackground();
 			}
 		});	
@@ -441,9 +438,44 @@ public class ParseFunctions {
 		});
 	}
 	
+	public JSONObject getTwitterData() {
+		String twitterURL = "https://api.twitter.com/1.1/users/show.json?screen_name=#screen_name#";
+		twitterURL = twitterURL.replace("#screen_name#",ParseTwitterUtils.getTwitter().getScreenName());
+		
+		HttpClient client = new DefaultHttpClient();
+		HttpGet show = new HttpGet(twitterURL);
+		ParseTwitterUtils.getTwitter().signRequest(show);
+		try {
+			HttpResponse response = client.execute(show);
+			if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				Log.v("prototypev1", "OK http");
+				String result = EntityUtils.toString(response.getEntity());
+				JSONObject root = new JSONObject(result);
+				return root;
+			}
+						
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			Log.v("prototypev1", "error "+e);
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.v("prototypev1", "error "+e);
+			return null;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.v("prototypev1", "error "+e);
+			return null;
+		}
+		return null; 	
+	}
+	
 	public String getProfilePictureTwitterURL() {
 		
-		String twitterURL = "https://api.twitter.com/1.1/users/show.json?screen_name=#screen_name#";
+		/*String twitterURL = "https://api.twitter.com/1.1/users/show.json?screen_name=#screen_name#";
 		twitterURL = twitterURL.replace("#screen_name#",ParseTwitterUtils.getTwitter().getScreenName());
 		
 		HttpClient client = new DefaultHttpClient();
@@ -474,9 +506,17 @@ public class ParseFunctions {
 			Log.v("prototypev1", "error "+e);
 			return null;
 		}
-		return null; 
-		
+		return null;*/ 
+		try {
+			return getTwitterData().getString("profile_image_url");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}	
 	}
+	
+	
 	
 	public void goToMainActivity(Activity activity) {
 		Intent main = new Intent(activity, MainActivity.class);

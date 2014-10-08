@@ -7,71 +7,72 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
-    
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-  	<uses-permission android:name="android.permission.VIBRATE" />
-    
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
-        android:name="com.example.prototypetfgv2.controller.ApplicationClass"
+        android:name=".controller.Controller"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
         <activity
-            android:name="com.example.prototypetfgv2.view.InitActivity"
-            android:label="@string/title_activity_init" 
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:noHistory="true">
+            android:name=".view.InitActivity"
+            android:label="@string/title_activity_init"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
-            android:name="com.example.prototypetfgv2.view.LoginActivity"
+            android:name=".view.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar">   
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
-        
         <activity
-            android:name="com.example.prototypetfgv2.view.SignUpActivity"
-            android:label="@string/title_activity_sign_up" 
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+            android:name=".view.SignUpActivity"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
-        
         <activity
-            android:name="com.example.prototypetfgv2.view.MainActivity"
-            android:label="@string/title_activity_main">
+            android:name=".view.MainActivity"
+            android:label="@string/title_activity_main" >
         </activity>
-        
         <activity
-		    android:name="com.facebook.LoginActivity"
-		    android:label="@string/log_in_facebook">
-		</activity>
-        
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        
+            android:name="com.facebook.LoginActivity"
+            android:label="@string/log_in_facebook" >
+        </activity>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <service android:name="com.parse.PushService" />
-	    <receiver android:name="com.parse.ParseBroadcastReceiver">
-	      <intent-filter>
-	        <action android:name="android.intent.action.BOOT_COMPLETED" />
-	        <action android:name="android.intent.action.USER_PRESENT" />
-	      </intent-filter>
-	    </receiver>
-	    
-	    <receiver android:name="com.example.prototypetfgv2.controller.PushReceiver">
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".controller.PushReceiver" >
             <intent-filter>
                 <action android:name="com.example.prototypetfgv2.controller.UPDATE_STATUS" />
             </intent-filter>
         </receiver>
-        
+
+        <activity
+            android:name="com.example.prototypetfgv2.view.LoadingTwitterInformationActivity"
+            android:label="@string/title_activity_loading_twitter_information" >
+        </activity>
     </application>
 
 </manifest>

@@ -48,7 +48,7 @@ public class FragmentFriends extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		controller = new Controller(getActivity().getApplicationContext());
+		controller = (Controller) this.getActivity().getApplicationContext();
 		getActivity().setTitle(R.string.friends);
 	}
 

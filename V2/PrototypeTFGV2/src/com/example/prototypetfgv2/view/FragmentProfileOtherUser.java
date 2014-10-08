@@ -45,7 +45,7 @@ public class FragmentProfileOtherUser extends Fragment {
 		Context context = getActivity().getApplicationContext();
 		
 		imageLoader = new ImageLoader(context);
-		controller = new Controller(context);
+		controller = (Controller) this.getActivity().getApplicationContext();
 		
 		Bundle data = this.getArguments();
 		user = data.getParcelable("User");

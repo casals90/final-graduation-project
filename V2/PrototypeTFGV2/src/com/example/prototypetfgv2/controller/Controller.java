@@ -1,34 +1,48 @@
 package com.example.prototypetfgv2.controller;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
 import org.json.JSONArray;
+
 import android.app.Activity;
-import android.content.Context;
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.ImageLoader;
+import com.example.prototypetfgv2.view.InitActivity;
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
-
-public class Controller {
+import com.parse.PushService;
+ 
+public class Controller extends Application {
 	
 	private ParseFunctions parseFunctions;
-	private Context context;
-	//private ApplicationClass appClass;
-	
-	public Controller(Context context) {
-		super();
-		this.parseFunctions = new ParseFunctions(context);
-		this.context = context;
-		//appClass = (ApplicationClass) context.getApplicationContext();
-	}
 
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+		
+		Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
+        ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
+        //ParseFacebookUtils.initialize("key");
+        PushService.setDefaultPushCallback(this, InitActivity.class);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+        
+        parseFunctions = new ParseFunctions(getApplicationContext());
+	}
+	
 	public ParseFunctions getParseFunctions() {
 		return parseFunctions;
 	}
@@ -126,7 +140,7 @@ public class Controller {
 	}
 	
 	public Bitmap downloadBitmap(String url) {
-		ImageLoader imgLoader = new ImageLoader(context);
+		ImageLoader imgLoader = new ImageLoader(getApplicationContext());
 		return imgLoader.getBitmapFromURL(url);
 	}
 	
@@ -156,4 +170,5 @@ public class Controller {
 			return null;
 		}
 	}
+	
 }

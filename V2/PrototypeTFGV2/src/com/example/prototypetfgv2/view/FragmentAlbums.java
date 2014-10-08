@@ -33,7 +33,7 @@ public class FragmentAlbums extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		controller = new Controller(this.getActivity().getApplicationContext());
+		controller = (Controller) this.getActivity().getApplicationContext();
 		getActivity().setTitle(R.string.albums);
 	}
 

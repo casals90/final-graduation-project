@@ -37,7 +37,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		controller = new Controller(this.getActivity().getApplicationContext());
+		controller = (Controller) this.getActivity().getApplicationContext();
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.example.prototypetfgv2.view;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.controller.Controller;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
@@ -39,13 +41,14 @@ public class LoginActivity extends Activity implements OnClickListener {
 	private LogInTask mAuthTask;
 	
 	SharedPreferences sharedpreferences;
+	Controller app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
-		controller = new Controller(getApplicationContext());
+		app = (Controller) getApplicationContext();
+		controller = (Controller) getApplicationContext();
 		
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);
@@ -97,6 +100,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			
 		case R.id.log_in_twitter:
 			controller.logInTwitter(this);
+			
 			break;
 		
 		case R.id.log_in_facebook:

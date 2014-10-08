@@ -19,7 +19,6 @@
     <string name="log_in_twitter">Log in Twitter</string>
     <string name="log_in_facebook">Log in Facebook</string>
     <string name="facebook_app_id">1486929811568304</string>
-    
 
     <!-- explain images -->
     <string name="explain">explain</string>
@@ -72,5 +71,6 @@
     <string name="delete_friend">delete friend</string>
     <string name="current_friend">Friends</string>
     <string name="title_activity_init">InitActivity</string>
+    <string name="title_activity_loading_twitter_information">LoadingTwitterInformationActivity</string>
 
 </resources>
