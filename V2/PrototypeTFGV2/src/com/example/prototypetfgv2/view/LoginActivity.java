@@ -137,6 +137,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 		startActivity(signUp);
 	}
 	
+	public void goToInputUsername() {
+		Intent inputUsername = new Intent(this,InputUsernameActivity.class);
+		startActivity(inputUsername);
+	}
+	
 	public void rememberLogin() {
 		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedpreferences.edit();

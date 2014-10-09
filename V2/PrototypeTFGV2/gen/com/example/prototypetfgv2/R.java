@@ -389,144 +389,146 @@ containing a value of this type.
         public static final int temp_img=0x7f02003c;
     }
     public static final class id {
-        public static final int action_settings=0x7f04004d;
-        public static final int albums=0x7f04003f;
-        public static final int albums_number=0x7f040040;
-        public static final int b_delete=0x7f04004a;
-        public static final int button_add_friend=0x7f040045;
-        public static final int button_delete_friend=0x7f040046;
-        public static final int button_logout=0x7f04003a;
-        public static final int choose_from_library=0x7f040050;
-        public static final int com_facebook_body_frame=0x7f040022;
-        public static final int com_facebook_button_xout=0x7f040024;
-        public static final int com_facebook_login_activity_progress_bar=0x7f040012;
-        public static final int com_facebook_picker_activity_circle=0x7f040011;
-        public static final int com_facebook_picker_checkbox=0x7f040014;
-        public static final int com_facebook_picker_checkbox_stub=0x7f040018;
-        public static final int com_facebook_picker_divider=0x7f04001c;
-        public static final int com_facebook_picker_done_button=0x7f04001b;
-        public static final int com_facebook_picker_image=0x7f040015;
-        public static final int com_facebook_picker_list_section_header=0x7f040019;
-        public static final int com_facebook_picker_list_view=0x7f040010;
-        public static final int com_facebook_picker_profile_pic_stub=0x7f040016;
-        public static final int com_facebook_picker_row_activity_circle=0x7f040013;
-        public static final int com_facebook_picker_search_text=0x7f040021;
-        public static final int com_facebook_picker_title=0x7f040017;
-        public static final int com_facebook_picker_title_bar=0x7f04001e;
-        public static final int com_facebook_picker_title_bar_stub=0x7f04001d;
-        public static final int com_facebook_picker_top_bar=0x7f04001a;
-        public static final int com_facebook_search_bar_view=0x7f040020;
-        public static final int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f040026;
-        public static final int com_facebook_tooltip_bubble_view_text_body=0x7f040025;
-        public static final int com_facebook_tooltip_bubble_view_top_pointer=0x7f040023;
-        public static final int com_facebook_usersettingsfragment_login_button=0x7f040029;
-        public static final int com_facebook_usersettingsfragment_logo_image=0x7f040027;
-        public static final int com_facebook_usersettingsfragment_profile_name=0x7f040028;
-        public static final int commonFriends=0x7f040048;
-        public static final int containerMain=0x7f040031;
-        public static final int container_fragment_main=0x7f040030;
-        public static final int container_main=0x7f04000c;
-        public static final int createdAt=0x7f04004c;
-        public static final int friends=0x7f040042;
-        public static final int friends_number=0x7f040043;
-        public static final int ibAlbums=0x7f040032;
-        public static final int ibFriends=0x7f040035;
-        public static final int ibNews=0x7f040033;
-        public static final int ibProfile=0x7f040036;
-        public static final int ibTakePhoto=0x7f040034;
-        public static final int image_is_friend=0x7f040049;
-        public static final int import_from_facebook=0x7f040051;
-        public static final int import_from_twitter=0x7f040052;
-        public static final int incorrect_login=0x7f040007;
-        public static final int incorrect_sign_up=0x7f04000f;
-        public static final int inputName=0x7f04002c;
-        public static final int label_albums_number=0x7f040041;
-        public static final int label_friends_number=0x7f040044;
-        public static final int label_photos_number=0x7f04003e;
+        public static final int action_settings=0x7f04004f;
+        public static final int albums=0x7f040041;
+        public static final int albums_number=0x7f040042;
+        public static final int b_accept=0x7f040006;
+        public static final int b_delete=0x7f04004c;
+        public static final int button_add_friend=0x7f040047;
+        public static final int button_delete_friend=0x7f040048;
+        public static final int button_logout=0x7f04003c;
+        public static final int choose_from_library=0x7f040052;
+        public static final int com_facebook_body_frame=0x7f040024;
+        public static final int com_facebook_button_xout=0x7f040026;
+        public static final int com_facebook_login_activity_progress_bar=0x7f040014;
+        public static final int com_facebook_picker_activity_circle=0x7f040013;
+        public static final int com_facebook_picker_checkbox=0x7f040016;
+        public static final int com_facebook_picker_checkbox_stub=0x7f04001a;
+        public static final int com_facebook_picker_divider=0x7f04001e;
+        public static final int com_facebook_picker_done_button=0x7f04001d;
+        public static final int com_facebook_picker_image=0x7f040017;
+        public static final int com_facebook_picker_list_section_header=0x7f04001b;
+        public static final int com_facebook_picker_list_view=0x7f040012;
+        public static final int com_facebook_picker_profile_pic_stub=0x7f040018;
+        public static final int com_facebook_picker_row_activity_circle=0x7f040015;
+        public static final int com_facebook_picker_search_text=0x7f040023;
+        public static final int com_facebook_picker_title=0x7f040019;
+        public static final int com_facebook_picker_title_bar=0x7f040020;
+        public static final int com_facebook_picker_title_bar_stub=0x7f04001f;
+        public static final int com_facebook_picker_top_bar=0x7f04001c;
+        public static final int com_facebook_search_bar_view=0x7f040022;
+        public static final int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f040028;
+        public static final int com_facebook_tooltip_bubble_view_text_body=0x7f040027;
+        public static final int com_facebook_tooltip_bubble_view_top_pointer=0x7f040025;
+        public static final int com_facebook_usersettingsfragment_login_button=0x7f04002b;
+        public static final int com_facebook_usersettingsfragment_logo_image=0x7f040029;
+        public static final int com_facebook_usersettingsfragment_profile_name=0x7f04002a;
+        public static final int commonFriends=0x7f04004a;
+        public static final int containerMain=0x7f040033;
+        public static final int container_fragment_main=0x7f040032;
+        public static final int container_main=0x7f04000e;
+        public static final int createdAt=0x7f04004e;
+        public static final int friends=0x7f040044;
+        public static final int friends_number=0x7f040045;
+        public static final int ibAlbums=0x7f040034;
+        public static final int ibFriends=0x7f040037;
+        public static final int ibNews=0x7f040035;
+        public static final int ibProfile=0x7f040038;
+        public static final int ibTakePhoto=0x7f040036;
+        public static final int image_is_friend=0x7f04004b;
+        public static final int import_from_facebook=0x7f040053;
+        public static final int import_from_twitter=0x7f040054;
+        public static final int incorrect_login=0x7f040009;
+        public static final int incorrect_sign_up=0x7f040011;
+        public static final int incorrect_username=0x7f040005;
+        public static final int inputName=0x7f04002e;
+        public static final int label_albums_number=0x7f040043;
+        public static final int label_friends_number=0x7f040046;
+        public static final int label_photos_number=0x7f040040;
         public static final int large=0x7f040002;
-        public static final int listview=0x7f04002a;
-        public static final int log_in=0x7f040008;
-        public static final int log_in_facebook=0x7f04000b;
-        public static final int log_in_twitter=0x7f04000a;
-        public static final int no_results=0x7f04002e;
+        public static final int listview=0x7f04002c;
+        public static final int log_in=0x7f04000a;
+        public static final int log_in_facebook=0x7f04000d;
+        public static final int log_in_twitter=0x7f04000c;
+        public static final int no_results=0x7f040030;
         public static final int normal=0x7f040001;
-        public static final int password=0x7f040006;
-        public static final int photo=0x7f04004b;
-        public static final int photos=0x7f04003c;
-        public static final int photos_number=0x7f04003d;
-        public static final int picker_subtitle=0x7f04001f;
-        public static final int profilePicture=0x7f040038;
-        public static final int profile_information=0x7f04003b;
+        public static final int password=0x7f040008;
+        public static final int photo=0x7f04004d;
+        public static final int photos=0x7f04003e;
+        public static final int photos_number=0x7f04003f;
+        public static final int picker_subtitle=0x7f040021;
+        public static final int profilePicture=0x7f04003a;
+        public static final int profile_information=0x7f04003d;
         public static final int progressBar1=0x7f040003;
-        public static final int progressBarChangeProfilePicture=0x7f040039;
-        public static final int progressBarDownloadPhotos=0x7f04002b;
-        public static final int progressBarOtherProfile=0x7f040047;
-        public static final int progressBarSearch=0x7f04002d;
-        public static final int remove_current_photo=0x7f04004e;
-        public static final int repeat_password=0x7f04000e;
-        public static final int sign_up=0x7f040009;
+        public static final int progressBarChangeProfilePicture=0x7f04003b;
+        public static final int progressBarDownloadPhotos=0x7f04002d;
+        public static final int progressBarOtherProfile=0x7f040049;
+        public static final int progressBarSearch=0x7f04002f;
+        public static final int remove_current_photo=0x7f040050;
+        public static final int repeat_password=0x7f040010;
+        public static final int sign_up=0x7f04000b;
         public static final int small=0x7f040000;
-        public static final int take_photo=0x7f04004f;
-        public static final int textView1=0x7f040037;
-        public static final int title=0x7f040004;
-        public static final int tittle=0x7f04000d;
-        public static final int username=0x7f040005;
-        public static final int usersList=0x7f04002f;
+        public static final int take_photo=0x7f040051;
+        public static final int textView1=0x7f040039;
+        public static final int title=0x7f040007;
+        public static final int tittle=0x7f04000f;
+        public static final int username=0x7f040004;
+        public static final int usersList=0x7f040031;
     }
     public static final class layout {
         public static final int activity_init=0x7f030000;
-        public static final int activity_login=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int activity_sign_up=0x7f030003;
-        public static final int com_facebook_friendpickerfragment=0x7f030004;
-        public static final int com_facebook_login_activity_layout=0x7f030005;
-        public static final int com_facebook_picker_activity_circle_row=0x7f030006;
-        public static final int com_facebook_picker_checkbox=0x7f030007;
-        public static final int com_facebook_picker_image=0x7f030008;
-        public static final int com_facebook_picker_list_row=0x7f030009;
-        public static final int com_facebook_picker_list_section_header=0x7f03000a;
-        public static final int com_facebook_picker_search_box=0x7f03000b;
-        public static final int com_facebook_picker_title_bar=0x7f03000c;
-        public static final int com_facebook_picker_title_bar_stub=0x7f03000d;
-        public static final int com_facebook_placepickerfragment=0x7f03000e;
-        public static final int com_facebook_placepickerfragment_list_row=0x7f03000f;
-        public static final int com_facebook_search_bar_layout=0x7f030010;
-        public static final int com_facebook_tooltip_bubble=0x7f030011;
-        public static final int com_facebook_usersettingsfragment=0x7f030012;
-        public static final int fragment_albums=0x7f030013;
-        public static final int fragment_friends=0x7f030014;
-        public static final int fragment_main_app=0x7f030015;
-        public static final int fragment_news=0x7f030016;
-        public static final int fragment_profile=0x7f030017;
-        public static final int fragment_profile_other_user=0x7f030018;
-        public static final int fragment_takephoto=0x7f030019;
-        public static final int item_user_view=0x7f03001a;
-        public static final int listview_item=0x7f03001b;
+        public static final int activity_input_username=0x7f030001;
+        public static final int activity_login=0x7f030002;
+        public static final int activity_main=0x7f030003;
+        public static final int activity_sign_up=0x7f030004;
+        public static final int com_facebook_friendpickerfragment=0x7f030005;
+        public static final int com_facebook_login_activity_layout=0x7f030006;
+        public static final int com_facebook_picker_activity_circle_row=0x7f030007;
+        public static final int com_facebook_picker_checkbox=0x7f030008;
+        public static final int com_facebook_picker_image=0x7f030009;
+        public static final int com_facebook_picker_list_row=0x7f03000a;
+        public static final int com_facebook_picker_list_section_header=0x7f03000b;
+        public static final int com_facebook_picker_search_box=0x7f03000c;
+        public static final int com_facebook_picker_title_bar=0x7f03000d;
+        public static final int com_facebook_picker_title_bar_stub=0x7f03000e;
+        public static final int com_facebook_placepickerfragment=0x7f03000f;
+        public static final int com_facebook_placepickerfragment_list_row=0x7f030010;
+        public static final int com_facebook_search_bar_layout=0x7f030011;
+        public static final int com_facebook_tooltip_bubble=0x7f030012;
+        public static final int com_facebook_usersettingsfragment=0x7f030013;
+        public static final int fragment_albums=0x7f030014;
+        public static final int fragment_friends=0x7f030015;
+        public static final int fragment_main_app=0x7f030016;
+        public static final int fragment_news=0x7f030017;
+        public static final int fragment_profile=0x7f030018;
+        public static final int fragment_profile_other_user=0x7f030019;
+        public static final int fragment_takephoto=0x7f03001a;
+        public static final int item_user_view=0x7f03001b;
+        public static final int listview_item=0x7f03001c;
     }
     public static final class menu {
-        public static final int configure_new_profil_from_social_network=0x7f090000;
-        public static final int init=0x7f090001;
-        public static final int loading_twitter_information=0x7f090002;
-        public static final int login=0x7f090003;
-        public static final int main=0x7f090004;
-        public static final int set_profile_picture=0x7f090005;
-        public static final int sign_up=0x7f090006;
+        public static final int init=0x7f090000;
+        public static final int input_username=0x7f090001;
+        public static final int login=0x7f090002;
+        public static final int main=0x7f090003;
+        public static final int set_profile_picture=0x7f090004;
+        public static final int sign_up=0x7f090005;
     }
     public static final class string {
         public static final int accept=0x7f07002c;
         public static final int action_settings=0x7f07001c;
         /**  Profile users to search 
          */
-        public static final int add_friend=0x7f07004f;
+        public static final int add_friend=0x7f070050;
         /**  Strings menu 
          */
-        public static final int albums=0x7f070033;
+        public static final int albums=0x7f070034;
         public static final int app_name=0x7f07001a;
         /**  Strings for Login and Sign up activities 
          */
         public static final int app_tittle=0x7f07001f;
-        public static final int cancel=0x7f070043;
-        public static final int choose_from_library=0x7f07004c;
+        public static final int cancel=0x7f070044;
+        public static final int choose_from_library=0x7f07004d;
         public static final int com_facebook_choose_friends=0x7f07000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070000;
         public static final int com_facebook_internet_permission_error_message=0x7f070013;
@@ -553,24 +555,24 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_log_in_button=0x7f070008;
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f070009;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f07000a;
-        public static final int commonFriends=0x7f070048;
-        public static final int current_friend=0x7f070051;
-        public static final int delete=0x7f070042;
-        public static final int delete_friend=0x7f070050;
+        public static final int commonFriends=0x7f070049;
+        public static final int current_friend=0x7f070052;
+        public static final int delete=0x7f070043;
+        public static final int delete_friend=0x7f070051;
         /**  Delete photo dialog 
          */
-        public static final int dialog_delete_photo=0x7f070041;
-        public static final int dialog_delete_photo_message=0x7f070045;
+        public static final int dialog_delete_photo=0x7f070042;
+        public static final int dialog_delete_photo_message=0x7f070046;
         /**  explain images 
          */
-        public static final int explain=0x7f070032;
+        public static final int explain=0x7f070033;
         public static final int facebook_app_id=0x7f07002b;
         /**  <string name="take_photo">Take photo</string> 
          */
-        public static final int friends=0x7f070035;
+        public static final int friends=0x7f070036;
         public static final int hello_world=0x7f07001b;
-        public static final int import_from_facebook=0x7f07004d;
-        public static final int import_from_twitter=0x7f07004e;
+        public static final int import_from_facebook=0x7f07004e;
+        public static final int import_from_twitter=0x7f07004f;
         public static final int import_profile_picture_from_camera=0x7f070030;
         public static final int import_profile_picture_from_facebook=0x7f07002d;
         public static final int import_profile_picture_from_library=0x7f07002f;
@@ -579,49 +581,51 @@ containing a value of this type.
         public static final int incorrent_sign_up=0x7f070027;
         /**  Friends 
          */
-        public static final int input_username=0x7f070046;
-        public static final int label_albums=0x7f07003d;
-        public static final int label_friends=0x7f07003e;
-        public static final int label_photos=0x7f07003f;
+        public static final int input_username=0x7f070047;
+        public static final int label_albums=0x7f07003e;
+        public static final int label_friends=0x7f07003f;
+        public static final int label_photos=0x7f070040;
         public static final int log_in=0x7f070023;
         public static final int log_in_facebook=0x7f07002a;
         public static final int log_in_twitter=0x7f070029;
         /**  profile 
          */
-        public static final int logout=0x7f07003c;
-        public static final int news=0x7f070034;
+        public static final int logout=0x7f07003d;
+        public static final int news=0x7f070035;
         public static final int no_import_profile_picture=0x7f070031;
-        public static final int no_results=0x7f070049;
-        public static final int number_x=0x7f070040;
+        public static final int no_results=0x7f07004a;
+        public static final int number_x=0x7f070041;
         /**  keys 
          */
         public static final int parse_app_id=0x7f07001d;
         public static final int parse_client_key=0x7f07001e;
         public static final int password=0x7f070021;
-        public static final int photo_content=0x7f07003a;
-        public static final int photo_date=0x7f070039;
+        public static final int photo_content=0x7f07003b;
+        public static final int photo_date=0x7f07003a;
         /**  albums 
          */
-        public static final int photo_title=0x7f070038;
-        public static final int profile=0x7f070036;
+        public static final int photo_title=0x7f070039;
+        public static final int profile=0x7f070037;
         public static final int remember_login=0x7f070028;
         /**  Menu set current photo 
          */
-        public static final int remove_current_photo=0x7f07004a;
+        public static final int remove_current_photo=0x7f07004b;
         public static final int repeat_password=0x7f070022;
-        public static final int search_people=0x7f070047;
+        public static final int search_people=0x7f070048;
         public static final int sign_up=0x7f070024;
-        public static final int take_photo=0x7f07004b;
-        public static final int title_activity_configure_new_profil_from_social_network=0x7f070054;
-        public static final int title_activity_init=0x7f070052;
-        public static final int title_activity_loading_twitter_information=0x7f070053;
+        public static final int take_photo=0x7f07004c;
+        public static final int title_activity_configure_new_profil_from_social_network=0x7f070055;
+        public static final int title_activity_init=0x7f070053;
+        public static final int title_activity_input_username=0x7f070056;
+        public static final int title_activity_loading_twitter_information=0x7f070054;
         /**  activities names 
          */
-        public static final int title_activity_main=0x7f070037;
+        public static final int title_activity_main=0x7f070038;
         public static final int title_activity_sign_up=0x7f070026;
-        public static final int title_my_photos=0x7f07003b;
+        public static final int title_my_photos=0x7f07003c;
         public static final int username=0x7f070020;
-        public static final int yes=0x7f070044;
+        public static final int username_already_exist=0x7f070032;
+        public static final int yes=0x7f070045;
     }
     public static final class style {
         /** 

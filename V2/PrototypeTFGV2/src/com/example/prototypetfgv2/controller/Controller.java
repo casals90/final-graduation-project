@@ -37,11 +37,34 @@ public class Controller extends Application {
 		Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
         ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
         
-        PushService.setDefaultPushCallback(this, InitActivity.class);
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-        
+        //PushService.setDefaultPushCallback(this, InitActivity.class);
+        //ParseInstallation.getCurrentInstallation().saveInBackground();
         
         parseFunctions = new ParseFunctions(getApplicationContext());
+	}
+	
+	public boolean setUsername(String username) {
+		return parseFunctions.setUsername(username);
+	}
+	
+	public void importProfilePictureFromSocialNetwork() {
+		Log.v("prototypev1", "isLinked  ");
+		if(isLinkedWithTwitter(ParseUser.getCurrentUser())) {
+			//set profile picture from twitter
+			Log.v("prototypev1", "isLinked yes twitter");
+			setProfilePictureFromTwitter();
+		}
+		else if(isLinkedWithFacebook(ParseUser.getCurrentUser())) {
+			//set profile picture from facebook
+		}
+	}
+	
+	public boolean isLinkedWithTwitter(ParseUser user) {
+		return parseFunctions.isLinkedWithTwitter(user);
+	}
+	
+	public boolean isLinkedWithFacebook(ParseUser user) {
+		return parseFunctions.isLinkedWithFacebook(user);
 	}
 	
 	public ParseFunctions getParseFunctions() {
@@ -165,6 +188,11 @@ public class Controller extends Application {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public void setProfilePictureFromTwitter() {
+		Bitmap b = getProfilePictureTwitterURL();
+		setProfilePicture(b);
 	}
 	
 	// Functions to change activity

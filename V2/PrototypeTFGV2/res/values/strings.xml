@@ -24,12 +24,12 @@
     <string name="log_in_facebook">Log in Facebook</string>
     <string name="facebook_app_id">1486929811568304</string>
     <string name="accept">Accept</string>
-    
     <string name="import_profile_picture_from_facebook">Import profile picture from Facebook</string>
     <string name="import_profile_picture_from_twitter">Import profile picture from Twitter</string>
     <string name="import_profile_picture_from_library">Import profile picture from Twitter</string>
     <string name="import_profile_picture_from_camera">Take photo to profile picture</string>
     <string name="no_import_profile_picture">No import profile picture</string>
+    <string name="username_already_exist">This username already exist</string>
 
     <!-- explain images -->
     <string name="explain">explain</string>
@@ -84,5 +84,6 @@
     <string name="title_activity_init">InitActivity</string>
     <string name="title_activity_loading_twitter_information">LoadingTwitterInformationActivity</string>
     <string name="title_activity_configure_new_profil_from_social_network">ConfigureNewProfilFromSocialNetwork</string>
+    <string name="title_activity_input_username">InputUsernameActivity</string>
 
 </resources>

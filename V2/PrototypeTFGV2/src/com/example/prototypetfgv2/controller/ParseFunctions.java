@@ -24,12 +24,14 @@ import android.widget.Toast;
 
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
+import com.example.prototypetfgv2.view.InputUsernameActivity;
 import com.example.prototypetfgv2.view.MainActivity;
 import com.example.prototypetfgv2.view.Utils;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -84,6 +86,23 @@ public class ParseFunctions {
 		}
 		return true;
 	}
+    
+    public boolean isUsernameExist(String username) {
+    	ParseQuery<ParseUser> query = ParseUser.getQuery();
+    	query.whereEqualTo("username",username);
+        try {
+			List<ParseUser> users = query.find();
+			Log.v("prototypev1", "usernameexists count return "+users.size());
+			if(users.size() > 0)
+				return true;	
+			else 
+				return false;		
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return true;
+    }
 	
     //Activity param is temporal
 	public void updatePhoto(Bitmap photo,final Activity activity) {
@@ -117,6 +136,34 @@ public class ParseFunctions {
 				}
 			}
 		});
+	}
+	
+	public boolean isLinkedWithTwitter(ParseUser user) {
+		return ParseTwitterUtils.isLinked(user);
+		
+	}
+	
+	public boolean isLinkedWithFacebook(ParseUser user) {
+		return ParseFacebookUtils.isLinked(user);
+	}
+	
+	public boolean setUsername(String username) {
+		if(isUsernameExist(username)) {
+			return false;
+		}
+		else {
+			ParseUser currentUser = ParseUser.getCurrentUser();
+			currentUser.setUsername(username);
+			try {
+				currentUser.save();
+				return true;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+		}
+		
 	}
 	
 	//Com que al final guardo l'usuari a la foto no em cal (Demanar al Santi)
@@ -427,30 +474,32 @@ public class ParseFunctions {
 	
 	public void logInTwitter(final Activity activity) {
 		ParseTwitterUtils.logIn(activity, new LogInCallback() {
-			  @Override
-			  public void done(ParseUser user, ParseException err) {
-			    if (user == null) {
-			    	Log.v("prototypev1", "logintwitter user cancelled");
-			    } else if (user.isNew()) { 
-			    	Log.v("prototypev1", "signup twitter new user");
-			    	user.put("photos",new JSONArray());
-			    	user.put("friends",new JSONArray());
-			    	user.put("friendsRequest",new JSONArray());
-			    	user.put("photosNumber",0);
-			    	user.put("friendsNumber",0);
-			    	try {
-						user.save();
-						goToMainActivity(activity);
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						user = null; 
-					}   
-			    } else {
-			    	Log.v("prototypev1", "log in correct");
-			    	goToMainActivity(activity);
-			    }
-			  }
+			@Override
+			public void done(ParseUser user, ParseException err) {
+					if (user == null) {
+						Log.v("prototypev1", "logintwitter user cancelled");
+					} 
+					else if (user.isNew()) { 
+						Log.v("prototypev1", "signup twitter new user");
+						user.put("photos",new JSONArray());
+						user.put("friends",new JSONArray());
+						user.put("friendsRequest",new JSONArray());
+						user.put("photosNumber",0);
+						user.put("friendsNumber",0);
+						try {
+							user.save();
+							//goToMainActivity(activity);
+							goToInputUsername(activity);
+						} 
+						catch (ParseException e) {
+							// TODO Auto-generated catch block
+								e.printStackTrace();
+								user = null; 
+						}   
+					} 
+					else 
+					    goToMainActivity(activity);
+			}
 		});
 	}
 	
@@ -490,39 +539,6 @@ public class ParseFunctions {
 	}
 	
 	public String getProfilePictureTwitterURL() {
-		
-		/*String twitterURL = "https://api.twitter.com/1.1/users/show.json?screen_name=#screen_name#";
-		twitterURL = twitterURL.replace("#screen_name#",ParseTwitterUtils.getTwitter().getScreenName());
-		
-		HttpClient client = new DefaultHttpClient();
-		HttpGet show = new HttpGet(twitterURL);
-		ParseTwitterUtils.getTwitter().signRequest(show);
-		try {
-			HttpResponse response = client.execute(show);
-			if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Log.v("prototypev1", "OK http");
-				String result = EntityUtils.toString(response.getEntity());
-				JSONObject root = new JSONObject(result);
-				return root.getString("profile_image_url");
-			}
-						
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			Log.v("prototypev1", "error "+e);
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.v("prototypev1", "error "+e);
-			return null;
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Log.v("prototypev1", "error "+e);
-			return null;
-		}
-		return null;*/ 
 		try {
 			return getTwitterData().getString("profile_image_url");
 		} catch (JSONException e) {
@@ -531,11 +547,7 @@ public class ParseFunctions {
 			return null;
 		}	
 	}
-	public void goToMainActivity(Activity activity) {
-		Intent main = new Intent(activity, MainActivity.class);
-        activity.startActivity(main);
-	}
-	
+		
 	public boolean isParseUserExist() {
 		if(ParseUser.getCurrentUser() != null)
 			return true;
@@ -547,6 +559,17 @@ public class ParseFunctions {
 		JSONObject auth = user.getJSONObject("authData");
 		
 		Log.v("prototypev1", "username auth "+auth);	
+	}
+	
+	//Functions to change activities
+	public void goToMainActivity(Activity activity) {
+		Intent main = new Intent(activity, MainActivity.class);
+        activity.startActivity(main);
+	}
+	
+	public void goToInputUsername(Activity activity) {
+		Intent inputUsername = new Intent(activity,InputUsernameActivity.class);
+		activity.startActivity(inputUsername);
 	}
 	
 }

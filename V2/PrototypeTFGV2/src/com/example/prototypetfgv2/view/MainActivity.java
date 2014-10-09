@@ -31,10 +31,7 @@ public class MainActivity extends FragmentActivity {
 		transaction.commit();
 		// Track app opens.
 		
-		ParseAnalytics.trackAppOpened(getIntent());
-		
-		Log.v("prototypev1", "parse installation"+ParseInstallation.getCurrentInstallation());
-		
+		//ParseAnalytics.trackAppOpened(getIntent());
 	}
 
 	@Override
