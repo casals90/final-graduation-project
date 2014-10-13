@@ -19,13 +19,10 @@ import android.util.Log;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.ImageLoader;
-import com.example.prototypetfgv2.view.InitActivity;
 import com.example.prototypetfgv2.view.SignUpActivity;
 import com.parse.Parse;
-import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
-import com.parse.PushService;
  
 public class Controller extends Application {
 	
@@ -105,6 +102,10 @@ public class Controller extends Application {
 	
 	public ArrayList<User> getUsers(String username) {
 		return parseFunctions.getUsers(username);
+	}
+	
+	public ArrayList<User> downloadFriends() {
+		return parseFunctions.downloadFriends();
 	}
 	
 	public JSONArray getFriends() {

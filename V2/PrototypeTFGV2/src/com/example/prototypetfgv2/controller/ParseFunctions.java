@@ -92,7 +92,6 @@ public class ParseFunctions {
     	query.whereEqualTo("username",username);
         try {
 			List<ParseUser> users = query.find();
-			Log.v("prototypev1", "usernameexists count return "+users.size());
 			if(users.size() > 0)
 				return true;	
 			else 
@@ -163,7 +162,6 @@ public class ParseFunctions {
 				return false;
 			}
 		}
-		
 	}
 	
 	//Com que al final guardo l'usuari a la foto no em cal (Demanar al Santi)
@@ -265,6 +263,36 @@ public class ParseFunctions {
         return myPhotos;
 	}
 	
+	public ArrayList<User> downloadFriends() {
+		ArrayList<User> users = new ArrayList<User>();
+		JSONArray idFriends = getFriends();
+		List<ParseUser> parseUsers;
+		
+		for(int i = 0; i < idFriends.length(); i ++) {
+			ParseQuery<ParseUser> query = ParseUser.getQuery();
+			try {
+				query.whereEqualTo("objectId",idFriends.get(i));
+				query.orderByDescending("username");
+				parseUsers = query.find();
+				ParseUser u = parseUsers.get(0);
+				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
+				if(profilePicture == null)
+					users.add(new User(u.getObjectId(),u.getUsername(), null,0));
+				else
+					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.v("prototypev1", "error getFriends users "+e);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.v("prototypev1", "error getFriends users "+e);
+			}
+		}
+		return users;
+	 }
+	
 	 public ArrayList<User> getUsers(String username) {
 		ArrayList<User> users = new ArrayList<User>();
 		List<ParseUser> parseUsers;
@@ -275,7 +303,6 @@ public class ParseFunctions {
 		try {
 			parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
-				Log.v("prototypev1", "getUsers profile picture "+u.getParseFile("profilePicture"));
 				if(u.getParseFile("profilePicture") != null) {
 					ParseFile profilePicture = (ParseFile)u.get("profilePicture");
 					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
@@ -571,5 +598,4 @@ public class ParseFunctions {
 		Intent inputUsername = new Intent(activity,InputUsernameActivity.class);
 		activity.startActivity(inputUsername);
 	}
-	
 }

@@ -62,7 +62,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         final ViewHolder holder;
         if (view == null) { 
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.item_user_view, null);
+            view = inflater.inflate(R.layout.item_user_view,null);
             // Locate the TextViews in listview_item.xml
             holder.username = (TextView) view.findViewById(R.id.username);
             //holder.addFriend = (ImageButton) view.findViewById(R.id.button_add_friend);

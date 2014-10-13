@@ -117,7 +117,7 @@ public class Utils {
 	}
 	
 	public static JSONArray removeElementToJsonArray(JSONArray array,String id) {
-		int position = getPositionPhoto(array, id);
+		int position = getElementPosition(array, id);
 		
 		ArrayList<String> list = new ArrayList<String>();     
 		int len = array.length();
@@ -131,12 +131,20 @@ public class Utils {
 		return new JSONArray(list);
 	}
 	
-	public static int getPositionPhoto(JSONArray array,String id) {
+	public static int getElementPosition(JSONArray array,String id) {
 		for(int i = 0; i < array.length(); i++) {
 			if(id.compareTo(array.optString(i)) == 0)
 				return i;	
 		}
 		return -1;
+	}
+	
+	public static JSONArray arrayListStringToJsonArray(ArrayList<String> array) {
+		JSONArray jArray = new JSONArray();
+		for(int i = 0; i < array.size(); i++) {
+			jArray.put(array.get(i));
+		}
+		return jArray;
 	}
 	
 	public static boolean isElementExist(JSONArray array,String id) {

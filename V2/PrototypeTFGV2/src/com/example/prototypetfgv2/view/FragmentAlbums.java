@@ -5,9 +5,13 @@ import java.util.List;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -15,6 +19,7 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.model.User;
 
 public class FragmentAlbums extends Fragment {
 	
@@ -22,10 +27,14 @@ public class FragmentAlbums extends Fragment {
 	
 	private ListView listview;
 	private ProgressBar mProgressBar;
+	private Button newAlbum;
 	
 	private ListViewAdapterForShowPhotos adapter;
     private List<Photo> myPhotos;
     
+    private FragmentTransaction transaction;
+	private FragmentManager manager;
+	
 	public FragmentAlbums() {
 		super();
 	}
@@ -42,11 +51,29 @@ public class FragmentAlbums extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
+		newAlbum = (Button) view.findViewById(R.id.add_album);
+		newAlbum.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				//change Fragment
+				goToNewAlbum();
+			}
+		});
+		
 		listview = (ListView) view.findViewById(R.id.listview);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarDownloadPhotos);
 		//Execute new Thread for download photos
 		new RemoteDataTask().execute();
 		return view;
+	}
+	
+	public void goToNewAlbum() {
+		manager = getActivity().getSupportFragmentManager();
+		transaction = manager.beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentNewAlbum());
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 	
     private class RemoteDataTask extends AsyncTask<Void, Void, Void> {

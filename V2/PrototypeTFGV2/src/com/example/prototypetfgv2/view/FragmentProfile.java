@@ -1,6 +1,5 @@
 package com.example.prototypetfgv2.view;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;

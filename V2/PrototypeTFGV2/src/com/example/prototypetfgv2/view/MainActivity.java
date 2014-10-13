@@ -4,14 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.prototypetfgv2.R;
-import com.parse.ParseAnalytics;
-import com.parse.ParseException;
-import com.parse.ParseInstallation;
-import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity {
 

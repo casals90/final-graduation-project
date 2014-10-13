@@ -49,6 +49,9 @@
     <string name="photo_date">photo date</string>
     <string name="photo_content">photo content</string>
     <string name="title_my_photos">My photos</string>
+    <string name="add_new_album">New album</string>
+    <string name="album_title">input album title</string>
+    <string name="add_members">Add members in album</string>
 
     <!-- profile -->
     <string name="logout">logout</string>
