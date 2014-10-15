@@ -78,9 +78,9 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
                         
             view.setTag(holder);
 		}
-		else {
+		else
 			holder = (ViewHolder) view.getTag();
-		}
+		
 		holder.username.setText(users.get(position).getUsername());
 		imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
         //Default profile photo
@@ -88,16 +88,15 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
         holder.checkbox.setOnClickListener(new View.OnClickListener() { 
             @Override  
-            public void onClick(View v)  
-            {  
+            public void onClick(View v) {  
             	String id = users.get(position).getId();
                 if(((CheckBox)v).isChecked()) {  
-                    // Add to checkbox array
+                    //Add to checkbox array
                 	Log.v("prototypev1", "clico la de"+id);
                 	members.add(id);
                 }  
                 else { 
-                    // Remove from checkbox array
+                    //Remove from checkbox array
                 	members.remove(id);
                 }  
             }  

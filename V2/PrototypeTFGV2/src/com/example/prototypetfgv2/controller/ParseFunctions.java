@@ -44,6 +44,13 @@ import com.parse.SaveCallback;
 
 public class ParseFunctions {
 	
+	// All customs ParseObjects TODO
+	//Album
+	private final String ALBUM = "Album";
+	//Photo
+	private final String PHOTO = "SimpleImage";
+	
+	
 	public ParseFunctions(Context context) {
 		super();
 	}
@@ -59,6 +66,7 @@ public class ParseFunctions {
 		parseUser.put("photos",new JSONArray());
 		parseUser.put("friends",new JSONArray());
 		parseUser.put("friendsRequest",new JSONArray());
+		parseUser.put("albums",new JSONArray());
 		parseUser.put("photosNumber",0);
 		parseUser.put("friendsNumber",0);
 		//Add default profile picture
@@ -109,7 +117,8 @@ public class ParseFunctions {
         ParseFile file = new ParseFile("photo2.jpeg",Utils.bitmapToByteArray(photo));
         // Upload the image into Parse Cloud
         file.saveInBackground();
-        final ParseObject imgupload = new ParseObject("SimpleImage");
+        //final ParseObject imgupload = new ParseObject("SimpleImage");
+        final ParseObject imgupload = new ParseObject(PHOTO);
         imgupload.put("image", file);
         //Add JSONArray with id of users that belong to
         JSONArray userId = new JSONArray();
@@ -203,7 +212,8 @@ public class ParseFunctions {
 	
 	public void deletePhoto(final String id) {
 		//First delete from photo object
-		ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery("SimpleImage");
+		//ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery("SimpleImage");
+		ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery(PHOTO);
 		photoQuery.whereEqualTo("objectId",id);
 		photoQuery.findInBackground(new FindCallback<ParseObject>() {
 			@Override
@@ -241,7 +251,8 @@ public class ParseFunctions {
 		ArrayList<Photo> myPhotos = new ArrayList<Photo>();
 		List<ParseObject> ob;
 		
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("SimpleImage");
+		//ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("SimpleImage");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(PHOTO);
         query.whereEqualTo("usersId",ParseUser.getCurrentUser().getObjectId());
         query.orderByDescending("createdAt");
         try {
@@ -363,7 +374,7 @@ public class ParseFunctions {
 		// Send push notification to query
 		ParsePush push = new ParsePush();
 		push.setQuery(pushQuery); // Set our Installation query
-		push.setMessage("Hiii cardus");
+		push.setMessage("Hellow world");
 		push.sendInBackground();
 			
 	}
@@ -511,6 +522,7 @@ public class ParseFunctions {
 						user.put("photos",new JSONArray());
 						user.put("friends",new JSONArray());
 						user.put("friendsRequest",new JSONArray());
+						user.put("albums",new JSONArray());
 						user.put("photosNumber",0);
 						user.put("friendsNumber",0);
 						try {
@@ -586,6 +598,26 @@ public class ParseFunctions {
 		JSONObject auth = user.getJSONObject("authData");
 		
 		Log.v("prototypev1", "username auth "+auth);	
+	}
+	
+	public boolean newAlbum(JSONArray members,String albumName) {
+		ParseObject newAlbum = new ParseObject(ALBUM);
+		//Admin is current user
+		newAlbum.put("idAdmin",ParseUser.getCurrentUser().getObjectId());
+		newAlbum.put("albumName",albumName);
+		if(members == null) 
+			newAlbum.put("idMembers",new JSONArray());
+		else
+			newAlbum.put("idMembers",members);
+		newAlbum.put("idPhotos",new JSONArray());
+		try {
+			newAlbum.save();
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	//Functions to change activities

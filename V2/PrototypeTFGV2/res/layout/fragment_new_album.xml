@@ -5,7 +5,6 @@
     android:layout_marginTop="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp">
-
     
     <EditText
         android:id="@+id/album_name"
@@ -34,12 +33,4 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="invisible"/> 
-        
-   <Button 
-       android:id="@+id/createAlbum"
-       android:layout_height="wrap_content"
-       android:layout_width="wrap_content"
-       android:layout_below="@+id/list_friends"
-       android:text="create"/>
-
-    </RelativeLayout>
+</RelativeLayout>

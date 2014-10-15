@@ -202,4 +202,8 @@ public class Controller extends Application {
 		startActivity(signUp);
 	}
 	
+	public boolean newAlbum(JSONArray members,String albumName) {
+		return parseFunctions.newAlbum(members,albumName);
+	}
+	
 }

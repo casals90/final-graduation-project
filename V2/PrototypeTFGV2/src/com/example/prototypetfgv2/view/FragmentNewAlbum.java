@@ -1,20 +1,21 @@
 package com.example.prototypetfgv2.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -26,13 +27,15 @@ import com.example.prototypetfgv2.model.User;
 public class FragmentNewAlbum extends Fragment {
 
 	private ListView list_friends;
+	private EditText inputAlbumName;
 	private ProgressBar progressBar;
-	private Button create;
 	
 	private ListViewAdapterChooseUsersNewAlbum adapter;
     private List<User> users;
 	private Controller controller;
     private JSONArray members;
+    
+    private String albumName;
     
 	public FragmentNewAlbum() {
 		super();
@@ -45,35 +48,55 @@ public class FragmentNewAlbum extends Fragment {
 		getActivity().setTitle(R.string.add_new_album);
 		
 		controller = (Controller) getActivity().getApplicationContext();
+		//For show menu in action bar
+		setHasOptionsMenu(true);
 	}
 	
+	@Override
+	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		inflater.inflate(R.menu.menu_new_album, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+			case R.id.create_album:
+				//Add album name
+				if(adapter != null) {
+					albumName = inputAlbumName.getText().toString();
+					//revisar
+					if(albumName.length() > 0) {
+						members = adapter.getMembers();
+						// update in parse and create album
+						if(members != null && members.length() > 0) {
+							controller.newAlbum(members,albumName);
+							//go to albums
+							goToAlbums();
+						}
+						else
+							//comunicate error with toast
+							Toast.makeText(getActivity(),"Minimum adding one friend",  Toast.LENGTH_LONG).show();
+					}
+					else
+						Toast.makeText(getActivity(),"Input album name",  Toast.LENGTH_LONG).show();		
+				}
+				break;
+				
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_new_album,container,false);
-		
 		list_friends = (ListView) view.findViewById(R.id.list_friends);
 		progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-		create = (Button) view.findViewById(R.id.createAlbum);
-		create.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if(adapter != null) {
-					members = adapter.getMembers();
-					// update in parse and create album
-					/*Log.v("prototypev1", "checkbox "+members.length());
-					for(int i = 0; i < members.length(); i++) {
-						try {
-							Log.v("prototypev1", "id "+members.getString(i));
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}*/
-				}	
-			}
-		});
+		inputAlbumName = (EditText) view.findViewById(R.id.album_name);
 		
 		new DownloadFriendsTask().execute();
 		return view;
@@ -114,5 +137,12 @@ public class FragmentNewAlbum extends Fragment {
 			Toast.makeText(getActivity(),"Error search people",  Toast.LENGTH_LONG).show();
 		}
 	}
-
+	
+	public void goToAlbums() {
+		FragmentManager manager = getActivity().getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
 }

@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 
+//implements OnBackStackChangedListener
 public class FragmentMain extends Fragment implements OnClickListener {
 	
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -146,4 +147,12 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
+
+	/*
+	//Per mostrar la icona d'anar enrera
+	@Override
+	public void onBackStackChanged() {
+		// TODO Auto-generated method stub
+		
+	}*/
 }

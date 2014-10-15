@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
-import com.example.prototypetfgv2.model.User;
 
 public class FragmentAlbums extends Fragment {
 	
@@ -32,9 +31,6 @@ public class FragmentAlbums extends Fragment {
 	private ListViewAdapterForShowPhotos adapter;
     private List<Photo> myPhotos;
     
-    private FragmentTransaction transaction;
-	private FragmentManager manager;
-	
 	public FragmentAlbums() {
 		super();
 	}
@@ -69,8 +65,8 @@ public class FragmentAlbums extends Fragment {
 	}
 	
 	public void goToNewAlbum() {
-		manager = getActivity().getSupportFragmentManager();
-		transaction = manager.beginTransaction();
+		FragmentManager manager = getActivity().getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentNewAlbum());
 		transaction.addToBackStack(null);
 		transaction.commit();
