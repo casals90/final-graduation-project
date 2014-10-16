@@ -1,42 +1,32 @@
 package com.example.prototypetfgv2.view;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import org.json.JSONArray;
-
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.User;
+
 
 public class FragmentNewAlbum extends Fragment {
 
-	private ListView list_friends;
-	private EditText inputAlbumName;
-	private ProgressBar progressBar;
-	
-	private ListViewAdapterChooseUsersNewAlbum adapter;
-    private List<User> users;
 	private Controller controller;
-    private JSONArray members;
-    
-    private String albumName;
-    
+	private ImageButton add;
+	
+	private ArrayList<String> members;
+	
 	public FragmentNewAlbum() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -45,11 +35,44 @@ public class FragmentNewAlbum extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.add_new_album);
+		getActivity().setTitle(R.string.friends);
+		
+		Log.v("prototypev1", "FragmentNewAlbum ");
 		
 		controller = (Controller) getActivity().getApplicationContext();
+		
+		Bundle b = this.getArguments();
+		if(b != null) {
+			members = b.getStringArrayList("members");
+			if(members == null && members.size() <= 0)
+				members = new ArrayList<String>();
+			Log.v("prototypev1", "members != null and size "+members.size());
+		}
+		else {
+			members = new ArrayList<String>();
+			Log.v("prototypev1", "members == null");
+		}
+		
 		//For show menu in action bar
 		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_new_album,container,false);
+		
+		add = (ImageButton) view.findViewById(R.id.add_members);
+		add.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//go to add members
+				goToAddUsersNewAlbum();
+			}
+		});
+		
+		return view;
 	}
 	
 	@Override
@@ -63,25 +86,10 @@ public class FragmentNewAlbum extends Fragment {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 			case R.id.create_album:
-				//Add album name
-				if(adapter != null) {
-					albumName = inputAlbumName.getText().toString();
-					//revisar
-					if(albumName.length() > 0) {
-						members = adapter.getMembers();
-						// update in parse and create album
-						if(members != null && members.length() > 0) {
-							controller.newAlbum(members,albumName);
-							//go to albums
-							goToAlbums();
-						}
-						else
-							//comunicate error with toast
-							Toast.makeText(getActivity(),"Minimum adding one friend",  Toast.LENGTH_LONG).show();
-					}
-					else
-						Toast.makeText(getActivity(),"Input album name",  Toast.LENGTH_LONG).show();		
-				}
+				//create album in parse
+				
+				//go to albums
+				goToAddUsersNewAlbum();
 				break;
 				
 			default:
@@ -89,60 +97,41 @@ public class FragmentNewAlbum extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_new_album,container,false);
-		list_friends = (ListView) view.findViewById(R.id.list_friends);
-		progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-		inputAlbumName = (EditText) view.findViewById(R.id.album_name);
-		
-		new DownloadFriendsTask().execute();
-		return view;
-	}
-	 
-	private class DownloadFriendsTask extends AsyncTask<Void, Void, Boolean> { 
-		@Override
-	    protected void onPreExecute() {
-	        super.onPreExecute();
-	        //this method will be running on UI thread
-	        list_friends.setVisibility(View.INVISIBLE);
-	        progressBar.setVisibility(View.VISIBLE);
-	    }
-	    @Override
-	    protected Boolean doInBackground(Void... params) {
-	    	users = controller.downloadFriends();
-	        if(users.size() > 0)
-	        	return true;
-	        return false;
-	    }
-
-	    @Override
-	    protected void onPostExecute(final Boolean success) {
-	        if(success) {
-	        	adapter = new ListViewAdapterChooseUsersNewAlbum(getActivity(),users);
-		        // Binds the Adapter to the ListView
-		        list_friends.setAdapter(adapter);
-	        }
-	        //this method will be running on UI thread
-	        progressBar.setVisibility(View.INVISIBLE);
-	        list_friends.setVisibility(View.VISIBLE); 
-	    }
-	    
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			progressBar.setVisibility(View.INVISIBLE);
-			Toast.makeText(getActivity(),"Error search people",  Toast.LENGTH_LONG).show();
-		}
-	}
 	
-	public void goToAlbums() {
+	public void goToAddUsersNewAlbum() {
 		FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
+		FragmentAddUsersNewAlbum addUsers = new FragmentAddUsersNewAlbum();
+		Bundle b = new Bundle();
+		Log.v("prototypev1", "members size before put "+members.size());
+		Log.v("prototypev1", "------------------------------------------");
+		b.putStringArrayList("members",members);
+		addUsers.setArguments(b);
+		transaction.replace(R.id.container_fragment_main,new FragmentAddUsersNewAlbum());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
+	
+	public void createAlbum() {
+		
+		/*if(adapter != null) {
+			albumName = inputAlbumName.getText().toString();
+			//revisar
+			if(albumName.length() > 0) {
+				members = adapter.getMembers();
+				// update in parse and create album
+				if(members != null && members.length() > 0) {
+					controller.newAlbum(members,albumName);
+					//go to albums
+					goToAlbums();
+				}
+				else
+					//comunicate error with toast
+					Toast.makeText(getActivity(),"Minimum adding one friend",  Toast.LENGTH_LONG).show();
+			}
+			else
+				Toast.makeText(getActivity(),"Input album name",  Toast.LENGTH_LONG).show();		
+		}*/
+	}
+
 }

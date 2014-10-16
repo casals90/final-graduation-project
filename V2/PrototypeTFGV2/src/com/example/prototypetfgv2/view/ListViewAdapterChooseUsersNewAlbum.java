@@ -3,8 +3,6 @@ package com.example.prototypetfgv2.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,21 +22,27 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
     private ImageLoader imageLoader;
     
     private List<User> users;
-    //private JSONArray members;
-    //private Controller controller;
     private ArrayList<String> members;
     
-	public ListViewAdapterChooseUsersNewAlbum(Context context,List<User> users) {
+	public ListViewAdapterChooseUsersNewAlbum(Context context,List<User> users,ArrayList<String> members) {
 		super();
 		this.inflater = LayoutInflater.from(context);
         this.imageLoader = new ImageLoader(context);
         //this.controller = (Controller) context.getApplicationContext();       
         this.users = users;
-        this.members = new ArrayList<String>();
+        
+        Log.v("prototypev1", "Constructor ListViewAdapterChooseUsersNewAlbum");
+        
+        if(members != null)
+        	this.members = members;
+        else
+        	this.members = new ArrayList<String>();
+        
+        Log.v("prototypev1", "members size = "+members.size()); 
 	}
 
-	public JSONArray getMembers() {
-		return Utils.arrayListStringToJsonArray(members);
+	public ArrayList<String> getMembers() {
+		return members;
 	}
 
 	@Override
@@ -86,6 +90,10 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
         //Default profile photo
         if(users.get(position).getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
+        
+        //Log.v("prototypev1", "comprovar si esta selecionat "+Utils.stringIsInArrayList(members,users.get(position).getId()));
+        if(Utils.stringIsInArrayList(members,users.get(position).getId()))
+        	holder.checkbox.setChecked(true);
         holder.checkbox.setOnClickListener(new View.OnClickListener() { 
             @Override  
             public void onClick(View v) {  
@@ -103,5 +111,8 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
         });  
 		return view;
 	}
-
+	
+	public boolean isUserCheck(String id) {
+		return members.contains(id);
+	}
 }

@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays; 
 import java.util.Date;
 
 import org.json.JSONArray;
@@ -15,6 +16,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 public class Utils {
@@ -160,4 +162,34 @@ public class Utils {
 		}
 		return false;
 	}
+	
+	public static String[] arrayListStringToStringArray(ArrayList<String> arr) {
+		String[] newArray = new String[arr.size()];
+		newArray = arr.toArray(newArray);
+		return newArray;
+	}
+	
+	public static ArrayList<String> arrayStringToArrayList(String[] arr) {
+		ArrayList<String> newArray = new ArrayList<String>( Arrays.asList(arr));
+		return newArray;
+	}
+	
+	public static boolean stringIsInArrayList(ArrayList<String> arr,String s) {
+		//Log.v("prototypev1","id  "+s);
+		for(int i = 0; i < arr.size(); i++) {
+			//Log.v("prototypev1","array values "+arr.get(i));
+			if(arr.get(i).compareTo(s) == 0)
+				return true;
+		}
+		//Log.v("prototypev1","false exuist");
+		return false;
+	}
 }
+
+	
+	
+	
+	
+	
+	
+	

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="RtlHardcoded">
+        <ignore path="res/layout/fragment_new_album.xml" />
         <ignore path="res/layout/item_user_add_album.xml" />
     </issue>
 </lint>
