@@ -31,8 +31,8 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	private ListViewAdapterChooseUsersNewAlbum adapter;
     private List<User> users;
 	private Controller controller;
-    //private JSONArray members;
 	private ArrayList<String> members;
+	private String albumName;
     
 	public FragmentAddUsersNewAlbum() {
 		super();
@@ -48,16 +48,14 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 		
 		controller = (Controller) getActivity().getApplicationContext();
 		
-		Bundle b = this.getArguments();
-		if(b != null) {
-			members = b.getStringArrayList("members");
-			if(members == null && members.size() <= 0)
-				members = new ArrayList<String>();
-			Log.v("prototypev1", "members != and size "+members.size());
+		final Bundle args = this.getArguments();
+		if(args == null) {
+			Log.v("prototypev1", "args = null");
+			members = new ArrayList<String>();
 		}
 		else {
-			members = new ArrayList<String>();
-			Log.v("prototypev1", "members == null");
+			members = args.getStringArrayList("members");
+			Log.v("prototypev1", "args != null "+members.size());
 		}
 		
 		//For show menu in action bar
@@ -118,21 +116,7 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 
 	    @Override
 	    protected void onPostExecute(final Boolean success) {
-	        if(success) {
-	        	
-	        	//falla aqui
-	        	/*Bundle b =  getArguments();
-	    		if(b != null) {
-	    			members = b.getStringArrayList("members");
-	    			if(members == null && members.size() <= 0)
-	    				members = new ArrayList<String>();
-	    			Log.v("prototypev1", "diferent de null download task "+members.size());
-	    		}
-	    		else {
-	    			members = new ArrayList<String>();
-	    			Log.v("prototypev1", "On postexecute new album null ");
-	    		}*/
-	        	
+	        if(success) {	        	
 	        	adapter = new ListViewAdapterChooseUsersNewAlbum(getActivity(),users,members);
 		        // Binds the Adapter to the ListView
 		        list_friends.setAdapter(adapter);
@@ -155,11 +139,24 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 		FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 		FragmentNewAlbum newAlbum = new FragmentNewAlbum();
-		final Bundle bundle = new Bundle();
-		bundle.putStringArrayList("members",members);
-		newAlbum.setArguments(bundle);
+		//put data
+		final Bundle data = new Bundle();
+		if(members != null && members.size() > 0) {
+			Log.v("prototypev1", " members != null to send "+members);
+			data.putStringArrayList("members",members);
+			newAlbum.setArguments(data);
+		}
 		transaction.replace(R.id.container_fragment_main,newAlbum);
-		transaction.addToBackStack(null);
+		//transaction.addToBackStack(null);
 		transaction.commit();
 	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Log.v("prototypev1", "on destroy addusers");
+	}
+	
+	
 }

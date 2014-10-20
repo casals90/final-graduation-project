@@ -196,6 +196,10 @@ public class Controller extends Application {
 		setProfilePicture(b);
 	}
 	
+	public ArrayList<User> downloadUsersList(ArrayList<String> users) {
+		return parseFunctions.downloadUsersList(users);
+	}
+	
 	// Functions to change activity
 	public void goToSignUp() {
 		Intent signUp = new Intent(Controller.this,SignUpActivity.class);

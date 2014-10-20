@@ -33,8 +33,18 @@
         
     </LinearLayout>
     
-    
-   
-    
+    <ListView
+        android:id="@+id/list_members"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/add_new_user"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_new_user"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"/>
+    
 </RelativeLayout>

@@ -620,6 +620,30 @@ public class ParseFunctions {
 		}
 	}
 	
+	public ArrayList<User> downloadUsersList(ArrayList<String> users) {
+		ArrayList<User> downloads = new ArrayList<User>();
+		List<ParseUser> parseUsers;
+		
+		for(int i = 0; i < users.size(); i ++) {
+			ParseQuery<ParseUser> query = ParseUser.getQuery();
+			query.whereEqualTo("objectId",users.get(i));
+			try {
+				parseUsers = query.find();
+				ParseUser u = parseUsers.get(0);
+				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
+				if(profilePicture == null)
+					downloads.add(new User(u.getObjectId(),u.getUsername(), null,0));
+				else
+					downloads.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return downloads;
+	}
+	
 	//Functions to change activities
 	public void goToMainActivity(Activity activity) {
 		Intent main = new Intent(activity, MainActivity.class);
