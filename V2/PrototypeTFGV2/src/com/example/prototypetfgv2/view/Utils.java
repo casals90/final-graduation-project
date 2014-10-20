@@ -150,9 +150,11 @@ public class Utils {
 	}
 	
 	public static boolean isElementExist(JSONArray array,String id) {
+		//Log.v("prototypev1","isElementExist id= "+id);
 		for(int i = 0; i < array.length(); i++) {
 			try {
-				if(id.compareTo(array.get(i).toString()) == 0)
+				//Log.v("prototypev1","elemetns array "+array.getString(i));
+				if(id.compareTo(array.getString(i)) == 0)
 					return true;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -183,6 +185,20 @@ public class Utils {
 		}
 		//Log.v("prototypev1","false exuist");
 		return false;
+	}
+	
+	public static ArrayList<String> jsonArrayToArrayListString(JSONArray arr) {
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 0; i < arr.length(); i++) {
+			try {
+				list.add(arr.getString(i));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return list;
 	}
 }
 

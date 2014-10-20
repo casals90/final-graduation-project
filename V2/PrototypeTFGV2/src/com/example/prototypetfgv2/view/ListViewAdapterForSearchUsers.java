@@ -80,10 +80,11 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         //Default profile photo
         if(users.get(position).getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
-        
         //Show image when user is in friend list
         if(!Utils.isElementExist(friends,users.get(position).getId()))
         	holder.imageFriend.setVisibility(View.INVISIBLE);
+        else
+        	holder.imageFriend.setVisibility(View.VISIBLE);
         return view;
     }
 }

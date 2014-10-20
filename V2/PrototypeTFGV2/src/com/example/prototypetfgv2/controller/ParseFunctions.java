@@ -49,7 +49,12 @@ public class ParseFunctions {
 	private final String ALBUM = "Album";
 	//Photo
 	private final String PHOTO = "SimpleImage";
-	
+	//User
+	private final String PHOTOS = "photos";
+	private final String FRIENDS = "friends";
+	private final String ALBUMS = "albums";
+	private final String PHOTOSNUMBER = "photosNumber";
+	private final String FRIENDSNUMBER = "friendsNumber";
 	
 	public ParseFunctions(Context context) {
 		super();
@@ -57,6 +62,7 @@ public class ParseFunctions {
 	
 	public void initParse(Context context) {
 		Parse.initialize(context, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
+		ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
 	}
 
     public ParseUser signUpInParse(String username,String password) {
@@ -303,6 +309,34 @@ public class ParseFunctions {
 		}
 		return users;
 	 }
+	
+	public ArrayList<User> downloadFriendsInputSearch(String input) {
+		ArrayList<User> users = new ArrayList<User>();
+		JSONArray f = ParseUser.getCurrentUser().getJSONArray("friends");
+		ArrayList<String> friends = Utils.jsonArrayToArrayListString(f);
+		Log.v("prototypev1", "download friends "+friends);
+		
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereStartsWith("username",input);
+		query.whereContainedIn("objectId",friends);
+		query.orderByAscending("username");
+		try {
+			List<ParseUser> parseUsers = query.find();
+			for(ParseUser u : parseUsers) {
+				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
+				if(profilePicture == null)
+					users.add(new User(u.getObjectId(),u.getUsername(), null,0));
+				else
+					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
+			}
+			Log.v("prototypev1", "result query "+users.size());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.v("prototypev1", "error query ");
+		}
+		return users;
+	}
 	
 	 public ArrayList<User> getUsers(String username) {
 		ArrayList<User> users = new ArrayList<User>();
@@ -593,18 +627,21 @@ public class ParseFunctions {
 		return false;
 	}
 	
-	public void getUsernameForAuthUser() {
+	/*public void getUsernameForAuthUser() {
 		ParseUser user = ParseUser.getCurrentUser();
 		JSONObject auth = user.getJSONObject("authData");
 		
 		Log.v("prototypev1", "username auth "+auth);	
-	}
+	}*/
 	
 	public boolean newAlbum(JSONArray members,String albumName) {
 		ParseObject newAlbum = new ParseObject(ALBUM);
 		//Admin is current user
 		newAlbum.put("idAdmin",ParseUser.getCurrentUser().getObjectId());
-		newAlbum.put("albumName",albumName);
+		if(albumName == null)
+			newAlbum.put("albumName","Default name");
+		else
+			newAlbum.put("albumName",albumName);
 		if(members == null) 
 			newAlbum.put("idMembers",new JSONArray());
 		else
@@ -627,6 +664,7 @@ public class ParseFunctions {
 		for(int i = 0; i < users.size(); i ++) {
 			ParseQuery<ParseUser> query = ParseUser.getQuery();
 			query.whereEqualTo("objectId",users.get(i));
+			query.orderByDescending("username");
 			try {
 				parseUsers = query.find();
 				ParseUser u = parseUsers.get(0);

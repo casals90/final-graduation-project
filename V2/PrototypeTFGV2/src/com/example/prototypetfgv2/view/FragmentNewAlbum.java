@@ -51,20 +51,18 @@ public class FragmentNewAlbum extends Fragment {
 		super.onCreate(savedInstanceState);
 		getActivity().setTitle(R.string.friends);
 		
-		Log.v("prototypev1", "FragmentNewAlbum ");
-		
 		controller = (Controller) getActivity().getApplicationContext();
 		
 		final Bundle args = this.getArguments();
 		if(args == null) {
-			Log.v("prototypev1", "args = null");
+			//Log.v("prototypev1", "args = null");
 			members = new ArrayList<String>();
 		}
 		else {
 			members = args.getStringArrayList("members");
-			Log.v("prototypev1", "args != null "+members.size());
+			albumName = args.getString("albumName");
 		}
-				
+		Log.v("prototypev1", "albumName ="+albumName);		
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -88,6 +86,9 @@ public class FragmentNewAlbum extends Fragment {
 		progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 		listMembers = (ListView) view.findViewById(R.id.list_members);
 		
+		if(albumName != null)
+			inputAlbum.setText(albumName);
+		
 		new ShowMembersTask().execute();
 		
 		return view;
@@ -104,12 +105,11 @@ public class FragmentNewAlbum extends Fragment {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 			case R.id.create_album:
+				albumName = inputAlbum.getText().toString();
 				//create album in parse
-				
-				//go to albums
-				goToAddUsersNewAlbum();
+				if(createAlbum())
+					goToAlbums();
 				break;
-				
 			default:
 				break;
 		}
@@ -123,9 +123,12 @@ public class FragmentNewAlbum extends Fragment {
 		//put data
 		final Bundle data = new Bundle();
 		if(members != null && members.size() > 0 && adapter != null) {
-			Log.v("prototypev1", " members != null to send "+members);
+			//Log.v("prototypev1", " members != null to send "+members);
 			members = adapter.getMembers();
 			data.putStringArrayList("members",members);
+			albumName = inputAlbum.getText().toString();
+			if(albumName != null)
+				data.putString("albumName",albumName);
 			addUsers.setArguments(data);
 		}
 		transaction.replace(R.id.container_fragment_main,addUsers);
@@ -133,26 +136,28 @@ public class FragmentNewAlbum extends Fragment {
 		transaction.commit();
 	}
 	
-	public void createAlbum() {
-		//tambe fer el getMembers del adapter
-		/*if(adapter != null) {
-			albumName = inputAlbumName.getText().toString();
-			//revisar
-			if(albumName.length() > 0) {
-				members = adapter.getMembers();
-				// update in parse and create album
-				if(members != null && members.length() > 0) {
-					controller.newAlbum(members,albumName);
-					//go to albums
-					goToAlbums();
-				}
-				else
-					//comunicate error with toast
-					Toast.makeText(getActivity(),"Minimum adding one friend",  Toast.LENGTH_LONG).show();
-			}
-			else
-				Toast.makeText(getActivity(),"Input album name",  Toast.LENGTH_LONG).show();		
-		}*/
+	public void goToAlbums() {
+		FragmentManager manager = getActivity().getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		FragmentAlbums albums = new FragmentAlbums();
+		transaction.replace(R.id.container_fragment_main,albums);
+		//transaction.addToBackStack(null);
+		transaction.commit();
+	}
+	
+	public boolean createAlbum() {
+		if(members == null || members.size() <= 0) {
+			Toast.makeText(getActivity(),"Minimum adding 1 member",  Toast.LENGTH_LONG).show();
+			return false;
+		}	
+		else if(albumName == null || albumName.length() <= 0) {
+			Toast.makeText(getActivity(),"Input album name",  Toast.LENGTH_LONG).show();
+			return false;
+		}
+		else {
+			controller.newAlbum(members, albumName);
+			return true;
+		}
 	}
 	
 	private class ShowMembersTask extends AsyncTask<Void, Void, Boolean> { 
@@ -174,15 +179,17 @@ public class FragmentNewAlbum extends Fragment {
 	    @Override
 	    protected void onPostExecute(final Boolean success) {
 	        if(success) {
+	        	//this method will be running on UI thread
+		        progressBar.setVisibility(View.INVISIBLE);
+		        listMembers.setVisibility(View.VISIBLE); 
 	        	//List all friends
 	 	        //Delete members that not in album
 	        	adapter = new ListViewAdapterForAddMembers(getActivity(),users);
 		        // Binds the Adapter to the ListView
 	        	listMembers.setAdapter(adapter);
 	        }
-	        //this method will be running on UI thread
-	        progressBar.setVisibility(View.INVISIBLE);
-	        listMembers.setVisibility(View.VISIBLE); 
+	        else
+	        	progressBar.setVisibility(View.INVISIBLE);
 	    }
 	    
 		@Override

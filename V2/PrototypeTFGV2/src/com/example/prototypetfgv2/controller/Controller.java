@@ -20,6 +20,7 @@ import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.ImageLoader;
 import com.example.prototypetfgv2.view.SignUpActivity;
+import com.example.prototypetfgv2.view.Utils;
 import com.parse.Parse;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
@@ -31,13 +32,14 @@ public class Controller extends Application {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
-        ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
+		//Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
+        //ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
         
         //PushService.setDefaultPushCallback(this, InitActivity.class);
         //ParseInstallation.getCurrentInstallation().saveInBackground();
         
         parseFunctions = new ParseFunctions(getApplicationContext());
+        parseFunctions.initParse(getApplicationContext());
 	}
 	
 	public boolean setUsername(String username) {
@@ -206,8 +208,12 @@ public class Controller extends Application {
 		startActivity(signUp);
 	}
 	
-	public boolean newAlbum(JSONArray members,String albumName) {
-		return parseFunctions.newAlbum(members,albumName);
+	public boolean newAlbum(ArrayList<String> members,String albumName) {
+		JSONArray m = Utils.arrayListStringToJsonArray(members);
+		return parseFunctions.newAlbum(m,albumName);
 	}
 	
+	public ArrayList<User> downloadFriendsInputSearch(String input){
+		return parseFunctions.downloadFriendsInputSearch(input);
+	}
 }

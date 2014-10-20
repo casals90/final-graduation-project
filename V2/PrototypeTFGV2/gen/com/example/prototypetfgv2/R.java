@@ -341,7 +341,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f02000d;
         public static final int com_facebook_loginbutton_silver=0x7f02000e;
         public static final int com_facebook_logo=0x7f02000f;
-        public static final int com_facebook_picker_default_separator_color=0x7f02003f;
+        public static final int com_facebook_picker_default_separator_color=0x7f020040;
         public static final int com_facebook_picker_item_background=0x7f020010;
         public static final int com_facebook_picker_list_focused=0x7f020011;
         public static final int com_facebook_picker_list_longpressed=0x7f020012;
@@ -381,19 +381,19 @@ containing a value of this type.
         public static final int ic_action_picture_dark=0x7f020034;
         public static final int ic_action_remove=0x7f020035;
         public static final int ic_action_search=0x7f020036;
-        public static final int ic_action_web_site=0x7f020037;
-        public static final int ic_action_web_site_dark=0x7f020038;
-        public static final int ic_add_pressed=0x7f020039;
-        public static final int ic_launcher=0x7f02003a;
-        public static final int login_button_focused=0x7f02003b;
-        public static final int login_button_normal=0x7f02003c;
-        public static final int login_button_pressed=0x7f02003d;
-        public static final int temp_img=0x7f02003e;
+        public static final int ic_action_search_dark=0x7f020037;
+        public static final int ic_action_web_site=0x7f020038;
+        public static final int ic_action_web_site_dark=0x7f020039;
+        public static final int ic_add_pressed=0x7f02003a;
+        public static final int ic_launcher=0x7f02003b;
+        public static final int login_button_focused=0x7f02003c;
+        public static final int login_button_normal=0x7f02003d;
+        public static final int login_button_pressed=0x7f02003e;
+        public static final int temp_img=0x7f02003f;
     }
     public static final class id {
         public static final int action_settings=0x7f040059;
         public static final int add_album=0x7f04002f;
-        public static final int add_member=0x7f04002c;
         public static final int add_members=0x7f04003f;
         public static final int add_new_user=0x7f04003e;
         public static final int album_name=0x7f04003d;
@@ -479,6 +479,7 @@ containing a value of this type.
         public static final int progress_bar=0x7f04002e;
         public static final int remove_current_photo=0x7f04005b;
         public static final int repeat_password=0x7f040010;
+        public static final int search=0x7f04002c;
         public static final int sign_up=0x7f04000b;
         public static final int small=0x7f040000;
         public static final int take_photo=0x7f04005c;

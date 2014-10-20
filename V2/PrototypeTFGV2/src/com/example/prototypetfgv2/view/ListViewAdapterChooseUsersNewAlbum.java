@@ -28,15 +28,14 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
 		super();
 		this.inflater = LayoutInflater.from(context);
         this.imageLoader = new ImageLoader(context);
-        //this.controller = (Controller) context.getApplicationContext();       
         this.users = users;
-        
-        Log.v("prototypev1", "Constructor ListViewAdapterChooseUsersNewAlbum");
         
         if(members != null)
         	this.members = members;
         else
         	this.members = new ArrayList<String>();
+        
+        Log.v("prototypev1", "Constructor ListViewAdapterChooseUsersNewAlbum "+members);
 	}
 
 	public ArrayList<String> getMembers() {
@@ -89,16 +88,18 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
         if(users.get(position).getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
         
-        Log.v("prototypev1", "comprovar si esta selecionat "+Utils.stringIsInArrayList(members,users.get(position).getId()));
         if(Utils.stringIsInArrayList(members,users.get(position).getId()))
         	holder.checkbox.setChecked(true);
+        else
+        	holder.checkbox.setChecked(false);
+        
         holder.checkbox.setOnClickListener(new View.OnClickListener() { 
             @Override  
             public void onClick(View v) {  
             	String id = users.get(position).getId();
                 if(((CheckBox)v).isChecked()) {  
                     //Add to checkbox array
-                	Log.v("prototypev1", "clico la de"+id);
+                	//Log.v("prototypev1", "clico la de"+id);
                 	members.add(id);
                 }  
                 else { 
