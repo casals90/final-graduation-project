@@ -131,7 +131,7 @@ public class ParseFunctions {
         final ParseUser user = ParseUser.getCurrentUser();
         userId.put(user.getObjectId());
         imgupload.put("usersId",userId);
-        Log.v("prototypev1", "id photo "+imgupload.getObjectId());
+        //Log.v("prototypev1", "id photo "+imgupload.getObjectId());
         //Save photo
         imgupload.saveInBackground(new SaveCallback() {
 			@Override
@@ -144,7 +144,7 @@ public class ParseFunctions {
 					user.put("photosNumber", photosNumber);
 					user.saveInBackground();
 					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
-					Log.v("prototypev1", "id photo "+imgupload.getObjectId());
+					//Log.v("prototypev1", "id photo "+imgupload.getObjectId());
 				} else {
 					Toast.makeText(activity.getApplicationContext(), "Error update photo",Toast.LENGTH_LONG).show();
 				}
@@ -218,7 +218,6 @@ public class ParseFunctions {
 	
 	public void deletePhoto(final String id) {
 		//First delete from photo object
-		//ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery("SimpleImage");
 		ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery(PHOTO);
 		photoQuery.whereEqualTo("objectId",id);
 		photoQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -626,13 +625,6 @@ public class ParseFunctions {
 			return true;
 		return false;
 	}
-	
-	/*public void getUsernameForAuthUser() {
-		ParseUser user = ParseUser.getCurrentUser();
-		JSONObject auth = user.getJSONObject("authData");
-		
-		Log.v("prototypev1", "username auth "+auth);	
-	}*/
 	
 	public boolean newAlbum(JSONArray members,String albumName) {
 		ParseObject newAlbum = new ParseObject(ALBUM);

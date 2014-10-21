@@ -6,9 +6,12 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays; 
 import java.util.Date;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import com.example.prototypetfgv2.model.User;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -199,6 +202,16 @@ public class Utils {
 			}
 		}
 		return list;
+	}
+	
+	public static List<User> deleteUsersInList(List<User> users,ArrayList<String> ids) {
+		for(int i = 0; i < ids.size();i ++) {
+			for(User u : users) {
+				if(u.getId().compareTo(ids.get(i))== 0)
+					users.remove(u);
+			}
+		}
+		return users;
 	}
 }
 

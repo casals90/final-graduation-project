@@ -39,6 +39,7 @@ public class FragmentNewAlbum extends Fragment {
 	private List<User> users;
 	private ArrayList<String> members;
 	private String albumName;
+	
 	private ListViewAdapterForAddMembers adapter;
 	
 	public FragmentNewAlbum() {
@@ -73,6 +74,7 @@ public class FragmentNewAlbum extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_new_album,container,false);
 		
 		inputAlbum = (EditText) view.findViewById(R.id.album_name);
+		
 		add = (ImageButton) view.findViewById(R.id.add_members);
 		add.setOnClickListener(new OnClickListener() {
 			@Override
@@ -199,5 +201,4 @@ public class FragmentNewAlbum extends Fragment {
 			Toast.makeText(getActivity(),"Error search people",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
 }

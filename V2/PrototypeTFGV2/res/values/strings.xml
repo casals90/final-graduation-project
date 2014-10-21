@@ -53,6 +53,7 @@
     <string name="album_title">input album title</string>
     <string name="add_members">Add members in album</string>
     <string name="input_username_members">input username members</string>
+    <string name="members_of_album">members of album</string>
 
     <!-- profile -->
     <string name="logout">logout</string>
