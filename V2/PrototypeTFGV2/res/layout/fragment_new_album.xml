@@ -7,7 +7,7 @@
         android:id="@+id/album_name"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:hint="@string/album_title"
+        android:hint="@string/input_album_title"
         android:maxLength="25"
         android:layout_marginBottom="10dp"/>
     

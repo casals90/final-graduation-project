@@ -213,6 +213,24 @@ public class Utils {
 		}
 		return users;
 	}
+	
+	public static List<String> jsonArrayToListString(JSONArray arr) {
+		if(arr != null) {
+			ArrayList<String> list = new ArrayList<String>();
+			try {
+				for(int i = 0; i < arr.length(); i++) {
+					list.add(arr.getString(i));
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			return list;
+		}
+		return null;
+		
+	}
 }
 
 	

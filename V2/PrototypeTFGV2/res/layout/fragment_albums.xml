@@ -10,7 +10,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/title_my_photos"
+        android:text="@string/my_albums"
         android:textSize="30sp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"/>
@@ -24,13 +24,13 @@
         android:text="@string/add_new_album" />
     
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/list_albums"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/add_album"/>
 
     <ProgressBar
-        android:id="@+id/progressBarDownloadPhotos"
+        android:id="@+id/progressBar_albums"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

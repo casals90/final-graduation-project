@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.InputUsernameActivity;
@@ -47,6 +48,7 @@ public class ParseFunctions {
 	// All customs ParseObjects TODO
 	//Album
 	private final String ALBUM = "Album";
+	private final String ALBUMPHOTO = "idPhotos";
 	//Photo
 	private final String PHOTO = "SimpleImage";
 	//User
@@ -55,6 +57,7 @@ public class ParseFunctions {
 	private final String ALBUMS = "albums";
 	private final String PHOTOSNUMBER = "photosNumber";
 	private final String FRIENDSNUMBER = "friendsNumber";
+	
 	
 	public ParseFunctions(Context context) {
 		super();
@@ -277,6 +280,37 @@ public class ParseFunctions {
 			return null;
 		}
         return myPhotos;
+	}
+	
+	public ArrayList<Album> getAlbums() {
+		ArrayList<Album> albums = new ArrayList<Album>();
+		List<ParseObject> ob;
+		
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ALBUM);
+		query.whereEqualTo("idMembers",ParseUser.getCurrentUser().getObjectId());
+		query.orderByDescending("createdAt");
+		try {
+			ob = query.find();
+			if(ob.size() == 0) {
+				return null;
+			}
+			for(ParseObject a : ob) {
+				ParseFile cover = a.getParseFile("albumCover");
+				
+				List<String> photos = Utils.jsonArrayToListString(a.getJSONArray("idPhotos"));
+				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
+				
+				if(cover == null)
+					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"), photos, members));
+				else
+					albums.add(new Album(a.getObjectId(),cover.getUrl(),a.getString("albumTitle"), photos, members));
+			}	
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		Log.v("prototypev1", "download albums "+albums.size());
+		return albums;
 	}
 	
 	public ArrayList<User> downloadFriends() {
@@ -630,13 +664,15 @@ public class ParseFunctions {
 		ParseObject newAlbum = new ParseObject(ALBUM);
 		//Admin is current user
 		newAlbum.put("idAdmin",ParseUser.getCurrentUser().getObjectId());
+		//Put current user in members
+		members.put(ParseUser.getCurrentUser().getObjectId());
 		if(albumName == null)
-			newAlbum.put("albumName","Default name");
+			newAlbum.put("albumTitle","Default name");
 		else
-			newAlbum.put("albumName",albumName);
+			newAlbum.put("albumTitle",albumName);
 		if(members == null) 
 			newAlbum.put("idMembers",new JSONArray());
-		else
+		else 
 			newAlbum.put("idMembers",members);
 		newAlbum.put("idPhotos",new JSONArray());
 		try {

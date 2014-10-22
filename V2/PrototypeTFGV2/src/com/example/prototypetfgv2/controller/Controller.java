@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.ImageLoader;
@@ -215,5 +216,9 @@ public class Controller extends Application {
 	
 	public ArrayList<User> downloadFriendsInputSearch(String input){
 		return parseFunctions.downloadFriendsInputSearch(input);
+	}
+	
+	public ArrayList<Album> getAlbums() {
+		return parseFunctions.getAlbums();
 	}
 }
