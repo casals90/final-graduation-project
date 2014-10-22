@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,25 +114,25 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	
 	// functions to do photo 
 	private void takePhoto() {
-		Context context = getActivity(); 
+		Context context = getActivity().getApplicationContext(); 
 		PackageManager packageManager = context.getPackageManager();
-		
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    if (takePictureIntent.resolveActivity(packageManager) != null) {
 	        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);    
 	    }
 	}
-	
+		
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.v("prototypev1", "onacivityResult ");
 	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
 	        Bundle extras = data.getExtras();
 	        Bitmap photo = (Bitmap)extras.get("data");
-	      
-	        controller.getParseFunctions().updatePhoto(photo,this.getActivity());    
+	        //controller.getParseFunctions().updatePhoto(photo,this.getActivity());
+	        controller.updatePhoto(photo,this.getActivity());
 	    }
 	}
-	
+			
 	public void goToFriends() {
 		transaction.replace(R.id.container_fragment_main,new FragmentFriends());
 		changeFragment();

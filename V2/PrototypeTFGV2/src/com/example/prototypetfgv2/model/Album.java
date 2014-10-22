@@ -10,15 +10,13 @@ public class Album implements Parcelable {
 	private String id;
 	private String albumCover;
 	private String albumTitle;
-	private List<String> photos;
 	private List<String> members;
 		
-	public Album(String id,String albumCover, String albumTitle,List<String> photos, List<String> members) {
+	public Album(String id,String albumCover, String albumTitle, List<String> members) {
 		super();
 		this.id = id;
 		this.albumCover = albumCover;
 		this.albumTitle = albumTitle;
-		this.photos = photos;
 		this.members = members;
 	}
 	
@@ -52,14 +50,6 @@ public class Album implements Parcelable {
 		this.albumTitle = albumTitle;
 	}
 
-	public List<String> getPhotos() {
-		return photos;
-	}
-
-	public void setPhotos(List<String> photos) {
-		this.photos = photos;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -85,7 +75,6 @@ public class Album implements Parcelable {
 		dest.writeString(id);
 		dest.writeString(albumCover);
 		dest.writeString(albumTitle);
-		dest.writeStringList(photos);
 		dest.writeStringList(members);
 	}
 	
@@ -93,7 +82,6 @@ public class Album implements Parcelable {
 		id = in.readString();
 		albumCover = in.readString();
 		albumTitle = in.readString();
-		in.readStringList(photos);
 		in.readStringList(members);
 	}
 	

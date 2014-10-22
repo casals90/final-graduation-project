@@ -121,8 +121,34 @@ public class ParseFunctions {
     	return true;
     }
 	
+    public void updatePhoto(Bitmap photo,final Activity activity) {
+    	// Create the ParseFile
+        ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
+        // Upload the image into Parse Cloud
+        file.saveInBackground();
+        final ParseObject photoUpload = new ParseObject("Photo");
+        photoUpload.put("photo", file);
+        String album;
+		try {
+			album = ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id");
+			photoUpload.put("ownerAlbum",album);
+			//add more atributes
+			photoUpload.saveInBackground(new SaveCallback() {
+				@Override
+				public void done(ParseException arg0) {
+					// TODO Auto-generated method stub
+					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
+				}
+			});
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     //Activity param is temporal
-	public void updatePhoto(Bitmap photo,final Activity activity) {
+	/*public void updatePhoto(Bitmap photo,final Activity activity) {
 		// Create the ParseFile
         ParseFile file = new ParseFile("photo2.jpeg",Utils.bitmapToByteArray(photo));
         // Upload the image into Parse Cloud
@@ -154,7 +180,7 @@ public class ParseFunctions {
 				}
 			}
 		});
-	}
+	}*/
 	
 	public boolean isLinkedWithTwitter(ParseUser user) {
 		return ParseTwitterUtils.isLinked(user);
@@ -297,19 +323,17 @@ public class ParseFunctions {
 			}
 			for(ParseObject a : ob) {
 				ParseFile cover = a.getParseFile("albumCover");
-				
-				List<String> photos = Utils.jsonArrayToListString(a.getJSONArray("idPhotos"));
 				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
 				
 				if(cover == null)
-					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"), photos, members));
+					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"), members));
 				else
-					albums.add(new Album(a.getObjectId(),cover.getUrl(),a.getString("albumTitle"), photos, members));
+					albums.add(new Album(a.getObjectId(),cover.getUrl(),a.getString("albumTitle"), members));
 			}	
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Log.v("prototypev1", "download albums "+albums.size());
 		return albums;
 	}
@@ -675,7 +699,7 @@ public class ParseFunctions {
 			newAlbum.put("idMembers",new JSONArray());
 		else 
 			newAlbum.put("idMembers",members);
-		newAlbum.put("idPhotos",new JSONArray());
+		//newAlbum.put("idPhotos",new JSONArray());
 		try {
 			newAlbum.save();
 			return true;

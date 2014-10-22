@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -30,8 +32,6 @@ public class FragmentAlbums extends Fragment {
 	
 	private ListViewAdapterForAlbums adapter;
 	private List<Album> albums;
-	//private ListViewAdapterForShowPhotos adapter;
-    //private List<Photo> myPhotos;
     
 	public FragmentAlbums() {
 		super();
@@ -50,6 +50,16 @@ public class FragmentAlbums extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
 		listviewAlbums = (ListView) view.findViewById(R.id.list_albums);
+		listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+				// TODO Auto-generated method stub
+				Album album = albums.get(position);
+				//Go to activity to show all photos
+			}
+		});
+		
 		newAlbum = (Button) view.findViewById(R.id.add_album);
 		newAlbum.setOnClickListener(new OnClickListener() {
 			@Override

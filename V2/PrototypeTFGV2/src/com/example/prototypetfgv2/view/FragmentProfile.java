@@ -71,11 +71,7 @@ public class FragmentProfile extends Fragment {
 		controller = (Controller) this.getActivity().getApplicationContext();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		getActivity().setTitle(R.string.profile);
-		//controller.getParseFunctions().getUsernameForAuthUser();
-		
-		//Download all albums
-		//current albums
-		
+				
 	}
 
 	@Override
@@ -121,8 +117,7 @@ public class FragmentProfile extends Fragment {
 			public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
 				Log.v("prototypev1", "download albums "+currentAlbums.get(position).getTitle());
 				currentAlbum = currentAlbums.get(position);
-				//controller.getParseFunctions().setCurrentAlbum(currentAlbums.get(position));
-				//new Task
+				
 				new SetCurrentAlbumTask().execute();
 			}
 
@@ -216,7 +211,6 @@ public class FragmentProfile extends Fragment {
 	//Result from choose image from gallery and take photo
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
 		switch (requestCode) {
 		case REQUEST_IMAGE_CAPTURE:
 			if(resultCode == Activity.RESULT_OK && data != null) {
