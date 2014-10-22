@@ -10,8 +10,11 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.User;
+import com.parse.ParseUser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -230,6 +233,24 @@ public class Utils {
 		}
 		return null;
 		
+	}
+	
+	public static int getPositionCurrentAlbum(ArrayList<CurrentAlbum> albums) {
+		JSONObject currentAlbum = ParseUser.getCurrentUser().getJSONObject("currentAlbum");
+		if(currentAlbum != null) {
+			try {
+				String id = currentAlbum.getString("id");
+				for(int i = 0; i < albums.size(); i++) {
+					if(albums.get(i).getId().compareTo(id) == 0)
+						return i;
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -1;
+			}
+		}
+		return -1;
 	}
 }
 

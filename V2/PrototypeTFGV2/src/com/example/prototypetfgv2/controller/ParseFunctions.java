@@ -23,6 +23,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.model.Album;
+import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.InputUsernameActivity;
@@ -708,6 +709,25 @@ public class ParseFunctions {
 			}
 		}
 		return downloads;
+	}
+	
+	public CurrentAlbum getCurrentAlbum() {
+		return new CurrentAlbum(ParseUser.getCurrentUser().getJSONObject("currentAlbum"));
+		
+	}
+	
+	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
+		//TODO 
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		currentUser.put("currentAlbum",currentAlbum.getCurrentAlbum());
+		try {
+			currentUser.save();
+			return true;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	//Functions to change activities

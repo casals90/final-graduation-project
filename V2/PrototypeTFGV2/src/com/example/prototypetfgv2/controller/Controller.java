@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
+import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.ImageLoader;
@@ -220,5 +221,9 @@ public class Controller extends Application {
 	
 	public ArrayList<Album> getAlbums() {
 		return parseFunctions.getAlbums();
+	}
+	
+	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
+		return parseFunctions.setCurrentAlbum(currentAlbum);
 	}
 }

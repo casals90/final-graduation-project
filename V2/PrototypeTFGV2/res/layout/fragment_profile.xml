@@ -115,5 +115,28 @@
 	            android:text="@string/friends"/>     
 		</LinearLayout>
 	</LinearLayout>
+	
+    <TextView 
+        android:id="@+id/currentAlbum"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/current_album"
+        android:layout_below="@+id/button_logout"
+        android:layout_marginTop="10dp"/>
+    
+    <Spinner
+	    android:id="@+id/albums_spinner"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_toRightOf="@+id/currentAlbum"
+	    android:layout_below="@+id/button_logout"/>
+    
+    <ProgressBar 
+        android:id="@+id/progressbar_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_below="@+id/button_logout"
+        android:layout_toRightOf="@+id/currentAlbum"/>
     
 </RelativeLayout>

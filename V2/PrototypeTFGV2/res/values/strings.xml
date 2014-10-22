@@ -63,6 +63,7 @@
     <string name="label_friends">friends number</string>
     <string name="label_photos">photos</string>
     <string name="number_x">X</string>
+    <string name="current_album">current album</string>
 
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>

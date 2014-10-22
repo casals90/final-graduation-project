@@ -1,6 +1,7 @@
 package com.example.prototypetfgv2.view;
 
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,16 +24,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
+import com.example.prototypetfgv2.model.Album;
+import com.example.prototypetfgv2.model.CurrentAlbum;
 
 public class FragmentProfile extends Fragment {
 	
@@ -44,7 +48,12 @@ public class FragmentProfile extends Fragment {
 	private Button buttonLogOut;
 	private ImageView profilePicture;
 	private TextView username, photosNumber,albumsNumber,friendsNumber;
-	private ProgressBar mProgressBar;
+	private ProgressBar mProgressBar,mProgressBarCurrentAlbum;
+	private Spinner chooseAlbum;
+	
+	private List<Album> albums;
+	private ArrayList<CurrentAlbum> currentAlbums;
+	private CurrentAlbum currentAlbum;
 	
 	private Bitmap newProfilePicture;
 	
@@ -64,12 +73,8 @@ public class FragmentProfile extends Fragment {
 		getActivity().setTitle(R.string.profile);
 		//controller.getParseFunctions().getUsernameForAuthUser();
 		
-		ParseUser user = ParseUser.getCurrentUser();
-		
-		
-		ParseObject o = user.getParseObject("authData");
-		JSONObject ob = user.getJSONObject("authData");
-		Log.v("prototypev1","authData "+o+" ds "+ob);
+		//Download all albums
+		//current albums
 		
 	}
 
@@ -99,7 +104,7 @@ public class FragmentProfile extends Fragment {
 		registerForContextMenu(profilePicture);
 		
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarChangeProfilePicture);
-		
+		mProgressBarCurrentAlbum = (ProgressBar) view.findViewById(R.id.progressbar_spinner);
 		//logout
 		buttonLogOut = (Button) view.findViewById(R.id.button_logout);
 		buttonLogOut.setOnClickListener(new OnClickListener() {			
@@ -107,6 +112,27 @@ public class FragmentProfile extends Fragment {
 				logout();
 			}
 		});
+		
+		//Put progressbar to wait
+		chooseAlbum = (Spinner) view.findViewById(R.id.albums_spinner);
+		chooseAlbum.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+				Log.v("prototypev1", "download albums "+currentAlbums.get(position).getTitle());
+				currentAlbum = currentAlbums.get(position);
+				//controller.getParseFunctions().setCurrentAlbum(currentAlbums.get(position));
+				//new Task
+				new SetCurrentAlbumTask().execute();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub	
+			}
+		});
+		
+		new DownloadCurrentAlbumTask().execute();
 		return view;
 	}
 	
@@ -337,4 +363,85 @@ public class FragmentProfile extends Fragment {
 			Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 		}
 	}
+	
+	private class DownloadCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
+    	
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	chooseAlbum.setVisibility(View.INVISIBLE);
+        	mProgressBarCurrentAlbum.setVisibility(View.VISIBLE);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(Void... params) {
+        	//albums = controller.getParseFunctions().getAlbums();
+        	albums = controller.getAlbums();
+            if(albums != null && albums.size() > 0)
+            	return true;
+            return false;
+            		
+        }
+ 
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        	if(success) {
+                currentAlbums = new ArrayList<CurrentAlbum>();
+                for(Album a: albums) {
+                	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle(),a.getAlbumCover()));
+                }
+                
+                chooseAlbum.setAdapter(new SpinnerAdapterForCurrentAlbum(getActivity().getApplicationContext(),currentAlbums));
+                int currentAlbumPosition = Utils.getPositionCurrentAlbum(currentAlbums);
+                if(currentAlbumPosition != -1) {
+                	chooseAlbum.setSelection(currentAlbumPosition);
+                }
+                //Default
+                else
+                	chooseAlbum.setSelection(0);
+                
+                chooseAlbum.setVisibility(View.VISIBLE);
+            	mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
+        	}
+        	else
+        		Toast.makeText(getActivity(),"0 albums",  Toast.LENGTH_LONG).show();
+        }
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
+		}
+    }
+	
+	private class SetCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
+    	
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	chooseAlbum.setVisibility(View.INVISIBLE);
+        	mProgressBarCurrentAlbum.setVisibility(View.VISIBLE);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(Void... params) {
+        	return controller.setCurrentAlbum(currentAlbum);		
+        }
+ 
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        	if(success) {
+        		chooseAlbum.setVisibility(View.VISIBLE);
+            	mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
+        	}
+        	else
+        		Toast.makeText(getActivity(),"0 albums",  Toast.LENGTH_LONG).show();
+        }
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
+		}
+    }
 }
