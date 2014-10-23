@@ -282,7 +282,7 @@ public class ParseFunctions {
 		});	
 	}
 	
-	public ArrayList<Photo> downloadPhotos() {
+	/*public ArrayList<Photo> downloadPhotos() {
 		ArrayList<Photo> myPhotos = new ArrayList<Photo>();
 		List<ParseObject> ob;
 		
@@ -307,6 +307,35 @@ public class ParseFunctions {
 			return null;
 		}
         return myPhotos;
+	}*/
+	
+	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
+		ArrayList<Photo> photos = new ArrayList<Photo>();
+		List<ParseObject> ob;
+		Log.v("prototypev1", "download photos parse funtions");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+		query.whereEqualTo("ownerAlbum",albumId);
+		query.orderByDescending("createdAt");
+		try {
+			ob = query.find();
+			Log.v("prototypev1", "download photos controller ob size "+ob.size());
+			for(ParseObject o : ob) {
+				ParseFile image = o.getParseFile("photo");
+	            Photo photo = new Photo();
+	            photo.setId(o.getObjectId());
+	            photo.setTitle("title");
+	            photo.setPhoto(image.getUrl());
+	            photo.setCreatedAt(String.valueOf(o.getCreatedAt()));
+	            photos.add(photo);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.v("prototypev1", "download photos controller return null");
+			return null;
+		}
+		Log.v("prototypev1", "download photos controller return true");
+		return photos;
 	}
 	
 	public ArrayList<Album> getAlbums() {

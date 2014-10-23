@@ -77,7 +77,7 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
         holder.createdAt.setText(myPhotos.get(position).getCreatedAt());
         // Set the results into ImageView
         imageLoader.DisplayImage(myPhotos.get(position).getPhoto(),holder.photo);
-        holder.dButton.setOnClickListener(new OnClickListener() {
+      /*  holder.dButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -86,7 +86,7 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
 				//show confirm dialog
 				confirmDelete(id,position);
 			}
-		});     
+		});     */
         return view;
     }
     
@@ -95,7 +95,7 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
     	notifyDataSetChanged();
     }
     
-    public void confirmDelete(final String idDeletePhoto,final int position) {
+    /*public void confirmDelete(final String idDeletePhoto,final int position) {
     	// Instantiate an AlertDialog.Builder with its constructor
     	AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -113,5 +113,5 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
     	       });
     	builder.setNegativeButton(R.string.cancel,null);
     	builder.create().show();
-    }
+    }*/
 }

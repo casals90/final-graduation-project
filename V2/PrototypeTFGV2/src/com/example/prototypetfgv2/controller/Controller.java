@@ -96,13 +96,14 @@ public class Controller extends Application {
 		//Log.v("prototypev1", "users logout "+ParseUser.getCurrentUser()+" local "+appClass.getUser());
 	}
 	
-	public ArrayList<Photo> downloadPhotos() {
-		return parseFunctions.downloadPhotos();
+	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
+		Log.v("prototypev1", "download photos controller ");
+		return parseFunctions.downloadPhotosFromAlbum(albumId);
 	}
 	
-	public void deletePhoto(String id) {
+	/*public void deletePhoto(String id) {
 		parseFunctions.deletePhoto(id);
-	}
+	}*/
 	
 	public ArrayList<User> getUsers(String username) {
 		return parseFunctions.getUsers(username);

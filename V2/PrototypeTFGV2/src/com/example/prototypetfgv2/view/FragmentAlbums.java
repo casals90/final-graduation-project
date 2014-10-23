@@ -113,6 +113,19 @@ public class FragmentAlbums extends Fragment {
 	            listviewAlbums.setAdapter(adapter);
 	            // Close the progressdialog
 	            mProgressBar.setVisibility(View.INVISIBLE);	
+	            
+	            //Create listener
+	            listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
+
+	    			@Override
+	    			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+	    				// TODO Auto-generated method stub
+	    				Album album = albums.get(position);
+	    				//pass the user to new fragment and change fragment
+	    				goToShowAlbum(album);
+	    			}
+	    		});
+	            
         	}
         	else
         		Toast.makeText(getActivity(),"0 albums",  Toast.LENGTH_LONG).show();
@@ -124,4 +137,16 @@ public class FragmentAlbums extends Fragment {
 			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
 		}
     }
+   
+   public void goToShowAlbum(Album album) {
+		Bundle data = new Bundle();
+		data.putParcelable("Album",album);
+		FragmentShowAlbum showAlbum = new FragmentShowAlbum();
+		showAlbum.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,showAlbum);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
 }
