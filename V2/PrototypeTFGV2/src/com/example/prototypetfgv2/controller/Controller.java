@@ -227,4 +227,25 @@ public class Controller extends Application {
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
 		return parseFunctions.setCurrentAlbum(currentAlbum);
 	}
+	
+	public String getRandomPhotoFromAlbum(String idAlbum) {
+		int position = 0;
+		
+		ArrayList<Photo> photos = downloadPhotosFromAlbum(idAlbum);
+		if(photos.size() > 0) {
+			position = Utils.getRandomInt(photos.size());
+			Log.v("prototypev1", "random n = "+photos.size()+"random "+position);
+			return photos.get(position).getId();
+		}
+		//No photos
+		return null;
+	}
+	
+	public void setCoverPhotoAlbum(String idAlbum,String idPhoto) {
+		parseFunctions.setCoverPhotoFromAlbum(idAlbum, idPhoto);
+	}
+	
+	public String getUsername(String id) {
+		return parseFunctions.getUsername(id);
+	}
 }

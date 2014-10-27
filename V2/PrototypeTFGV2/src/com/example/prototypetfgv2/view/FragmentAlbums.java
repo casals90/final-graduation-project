@@ -53,7 +53,7 @@ public class FragmentAlbums extends Fragment {
 		
 		noAlbums = (TextView) view.findViewById(R.id.label_no_albums);
 		listviewAlbums = (ListView) view.findViewById(R.id.list_albums);
-		listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
+		/*listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
@@ -61,7 +61,7 @@ public class FragmentAlbums extends Fragment {
 				Album album = albums.get(position);
 				//Go to activity to show all photos
 			}
-		});
+		});*/
 		
 		newAlbum = (Button) view.findViewById(R.id.add_album);
 		newAlbum.setOnClickListener(new OnClickListener() {

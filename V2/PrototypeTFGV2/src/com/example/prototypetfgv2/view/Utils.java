@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays; 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -251,6 +252,11 @@ public class Utils {
 			}
 		}
 		return -1;
+	}
+	
+	public static int getRandomInt(int n) {
+		Random r = new Random();
+		return r.nextInt(n);
 	}
 }
 

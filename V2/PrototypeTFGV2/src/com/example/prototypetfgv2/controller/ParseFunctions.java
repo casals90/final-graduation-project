@@ -128,6 +128,8 @@ public class ParseFunctions {
         file.saveInBackground();
         final ParseObject photoUpload = new ParseObject("Photo");
         photoUpload.put("photo", file);
+        //Save the owner of the photo
+        photoUpload.put("ownerUser",ParseUser.getCurrentUser().getObjectId());
         String album;
 		try {
 			album = ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id");
@@ -146,41 +148,6 @@ public class ParseFunctions {
 			e.printStackTrace();
 		}
     }
-    
-    //Activity param is temporal
-	/*public void updatePhoto(Bitmap photo,final Activity activity) {
-		// Create the ParseFile
-        ParseFile file = new ParseFile("photo2.jpeg",Utils.bitmapToByteArray(photo));
-        // Upload the image into Parse Cloud
-        file.saveInBackground();
-        //final ParseObject imgupload = new ParseObject("SimpleImage");
-        final ParseObject imgupload = new ParseObject(PHOTO);
-        imgupload.put("image", file);
-        //Add JSONArray with id of users that belong to
-        JSONArray userId = new JSONArray();
-        final ParseUser user = ParseUser.getCurrentUser();
-        userId.put(user.getObjectId());
-        imgupload.put("usersId",userId);
-        //Log.v("prototypev1", "id photo "+imgupload.getObjectId());
-        //Save photo
-        imgupload.saveInBackground(new SaveCallback() {
-			@Override
-			public void done(ParseException e) {
-				// TODO Auto-generated method stub
-				if(e == null) {
-					//Increment the number photos column
-					int photosNumber = user.getInt("photosNumber");
-					photosNumber++;
-					user.put("photosNumber", photosNumber);
-					user.saveInBackground();
-					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
-					//Log.v("prototypev1", "id photo "+imgupload.getObjectId());
-				} else {
-					Toast.makeText(activity.getApplicationContext(), "Error update photo",Toast.LENGTH_LONG).show();
-				}
-			}
-		});
-	}*/
 	
 	public boolean isLinkedWithTwitter(ParseUser user) {
 		return ParseTwitterUtils.isLinked(user);
@@ -207,39 +174,6 @@ public class ParseFunctions {
 				return false;
 			}
 		}
-	}
-	
-	//Com que al final guardo l'usuari a la foto no em cal (Demanar al Santi)
-	//Per ara no ho utilitzo
-	public void addPhotoInUser(final String id) {
-		ParseQuery<ParseUser> query = ParseUser.getQuery();
-		query.whereEqualTo("objectId",ParseUser.getCurrentUser().getObjectId());
-		query.findInBackground(new FindCallback<ParseUser>() {
-			@Override
-			public void done(List<ParseUser> users, ParseException e) {
-				// TODO Auto-generated method stub
-				if (e == null) {
-			        // The query was successful.
-					//Always is 0 because the objectId is unique for all ParseUsers
-					ParseUser user = users.get(0);
-					user.getJSONArray("photos").put(id);
-					user.saveInBackground(new SaveCallback() {
-						@Override
-						public void done(ParseException e) {
-							// TODO Auto-generated method stub
-							if(e == null) {
-								Log.v("prototypev1", "foto afegida al usuari i update canviat");			
-							}
-							else 
-								Log.v("prototypev1", "error al afegir foto");
-						}
-					});
-			    } else {
-			        // Something went wrong.
-			    	Log.v("prototypev1", "error al afegir foto");
-			    }
-			}
-		});
 	}
 	
 	public void logout() {
@@ -282,33 +216,6 @@ public class ParseFunctions {
 		});	
 	}
 	
-	/*public ArrayList<Photo> downloadPhotos() {
-		ArrayList<Photo> myPhotos = new ArrayList<Photo>();
-		List<ParseObject> ob;
-		
-		//ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("SimpleImage");
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(PHOTO);
-        query.whereEqualTo("usersId",ParseUser.getCurrentUser().getObjectId());
-        query.orderByDescending("createdAt");
-        try {
-			ob = query.find();
-			for (ParseObject p : ob) {
-	            ParseFile image = (ParseFile) p.get("image");
-	            Photo photo = new Photo();
-	            photo.setId(p.getObjectId());
-	            photo.setTitle("title");
-	            photo.setPhoto(image.getUrl());
-	            photo.setCreatedAt(String.valueOf(p.getCreatedAt()));
-	            myPhotos.add(photo);
-	        }
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-        return myPhotos;
-	}*/
-	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		List<ParseObject> ob;
@@ -321,11 +228,7 @@ public class ParseFunctions {
 			Log.v("prototypev1", "download photos controller ob size "+ob.size());
 			for(ParseObject o : ob) {
 				ParseFile image = o.getParseFile("photo");
-	            Photo photo = new Photo();
-	            photo.setId(o.getObjectId());
-	            photo.setTitle("title");
-	            photo.setPhoto(image.getUrl());
-	            photo.setCreatedAt(String.valueOf(o.getCreatedAt()));
+	            Photo photo = new Photo(o.getObjectId(),o.getString("title"),image.getUrl(),String.valueOf(o.getCreatedAt()),o.getJSONArray("comments"),o.getJSONArray("likes"));
 	            photos.add(photo);
 			}
 		} catch (ParseException e) {
@@ -351,13 +254,16 @@ public class ParseFunctions {
 				return null;
 			}
 			for(ParseObject a : ob) {
-				ParseFile cover = a.getParseFile("albumCover");
+				//ParseFile cover = a.getParseFile("albumCover");
 				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
 				
-				if(cover == null)
-					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"), members));
+				ArrayList<Photo> photos = downloadPhotosFromAlbum(a.getObjectId());
+				if(photos.size() > 0) {
+					int random = Utils.getRandomInt(photos.size());
+					albums.add(new Album(a.getObjectId(),photos.get(random).getPhoto(),a.getString("albumTitle"), members));
+				}
 				else
-					albums.add(new Album(a.getObjectId(),cover.getUrl(),a.getString("albumTitle"), members));
+					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"), members));
 			}	
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -724,11 +630,11 @@ public class ParseFunctions {
 			newAlbum.put("albumTitle","Default name");
 		else
 			newAlbum.put("albumTitle",albumName);
-		if(members == null) 
-			newAlbum.put("idMembers",new JSONArray());
-		else 
-			newAlbum.put("idMembers",members);
-		//newAlbum.put("idPhotos",new JSONArray());
+		newAlbum.put("idMembers",members);
+		//Increment number of albums
+		ParseUser user = ParseUser.getCurrentUser();
+		user.increment("albumsNumber");
+		user.saveInBackground();
 		try {
 			newAlbum.save();
 			return true;
@@ -783,6 +689,37 @@ public class ParseFunctions {
 		}
 	}
 	
+	public void setCoverPhotoFromAlbum(String idAlbum,final String idPhoto) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Album");
+		query.whereEqualTo("objectId",idAlbum);
+		//Canviar a find
+		query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> albums, ParseException e) {
+				// TODO Auto-generated method stub
+				if(e == null) {
+					ParseObject album = albums.get(0);
+					album.put("albumCover",idPhoto);
+					album.saveInBackground();
+				}
+			}
+		});
+	}
+	
+	public String getUsername(String id) {
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereEqualTo("objectId",id);
+		try {
+			List<ParseUser> users = query.find();
+			return users.get(0).getUsername();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	//Functions to change activities
 	public void goToMainActivity(Activity activity) {
 		Intent main = new Intent(activity, MainActivity.class);

@@ -5,12 +5,16 @@ import java.util.List;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
@@ -22,10 +26,13 @@ public class FragmentShowAlbum extends Fragment {
 	
 	private GridView gridView;
 	private ProgressBar mProgressBar;
+	private TextView noPhotos;
 	
 	private Controller controller;
 	private Album album;
 	private List<Photo> photos;
+	//Photo that user selected
+	private Photo photo;
 	
 	private GridViewAdapterForShowPhotos adapter;
 	
@@ -54,7 +61,7 @@ public class FragmentShowAlbum extends Fragment {
 		
 		gridView = (GridView) view.findViewById(R.id.gridView_photos);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_download_albums);
-		
+		noPhotos = (TextView) view.findViewById(R.id.no_photos);
 		//New task
 		new DownloadPhotosTask().execute();
 		return view;
@@ -83,6 +90,7 @@ private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if(result) {
+				noPhotos.setVisibility(View.INVISIBLE);
 				mProgressBar.setVisibility(View.INVISIBLE);
 				gridView.setVisibility(View.VISIBLE);
 				//adapter
@@ -90,11 +98,23 @@ private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
 	            adapter = new GridViewAdapterForShowPhotos(getActivity(),photos);
 	            // Binds the Adapter to the ListView
 	            gridView.setAdapter(adapter);
+	            gridView.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						Log.v("prototypev1","photos position "+position);
+						photo = photos.get(position);
+						goToShowPhoto(photo);
+					}
+				});
+				
 	            //Create listener
 	           
 			}
 			else {
 				//Show message no photos
+				noPhotos.setVisibility(View.VISIBLE);
+				mProgressBar.setVisibility(View.INVISIBLE);
+				gridView.setVisibility(View.INVISIBLE);
 			}
 		}
 
@@ -105,4 +125,16 @@ private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
 			Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
+
+	public void goToShowPhoto(Photo photo) {
+		Bundle data = new Bundle();
+		data.putParcelable("Photo",photo);
+		FragmentShowPhoto fshowPhoto = new FragmentShowPhoto();
+		fshowPhoto.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fshowPhoto);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
 }
