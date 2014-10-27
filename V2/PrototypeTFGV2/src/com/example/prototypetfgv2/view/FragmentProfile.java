@@ -47,7 +47,7 @@ public class FragmentProfile extends Fragment {
 	
 	private Button buttonLogOut;
 	private ImageView profilePicture;
-	private TextView username, photosNumber,albumsNumber,friendsNumber;
+	private TextView username, photosNumber,albumsNumber,friendsNumber,noAlbums;
 	private ProgressBar mProgressBar,mProgressBarCurrentAlbum;
 	private Spinner chooseAlbum;
 	
@@ -109,6 +109,7 @@ public class FragmentProfile extends Fragment {
 			}
 		});
 		
+		noAlbums = (TextView) view.findViewById(R.id.no_album);
 		//Put progressbar to wait
 		chooseAlbum = (Spinner) view.findViewById(R.id.albums_spinner);
 		chooseAlbum.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -397,8 +398,12 @@ public class FragmentProfile extends Fragment {
                 chooseAlbum.setVisibility(View.VISIBLE);
             	mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
         	}
-        	else
-        		Toast.makeText(getActivity(),"0 albums",  Toast.LENGTH_LONG).show();
+        	else {
+        		noAlbums.setVisibility(View.VISIBLE);
+        		chooseAlbum.setVisibility(View.INVISIBLE);
+        		mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
+        	}
+        		
         }
 
 		@Override

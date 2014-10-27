@@ -42,6 +42,9 @@ public class FragmentShowAlbum extends Fragment {
 		//Fetch data album
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
+		
+		//Put album title in action bar
+		getActivity().setTitle((album.getAlbumTitle()));
 	}
 
 	@Override

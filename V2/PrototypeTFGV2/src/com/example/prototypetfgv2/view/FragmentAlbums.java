@@ -16,6 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
@@ -29,6 +30,7 @@ public class FragmentAlbums extends Fragment {
 	private ListView listviewAlbums;
 	private ProgressBar mProgressBar;
 	private Button newAlbum;
+	private TextView noAlbums;
 	
 	private ListViewAdapterForAlbums adapter;
 	private List<Album> albums;
@@ -49,6 +51,7 @@ public class FragmentAlbums extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
+		noAlbums = (TextView) view.findViewById(R.id.label_no_albums);
 		listviewAlbums = (ListView) view.findViewById(R.id.list_albums);
 		listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
 
@@ -107,13 +110,14 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
+        		//hidden label no albums 
+        		noAlbums.setVisibility(View.INVISIBLE);
 				// Pass the results into ListViewAdapter.java
 	            adapter = new ListViewAdapterForAlbums(getActivity(),albums);
 	            // Binds the Adapter to the ListView
 	            listviewAlbums.setAdapter(adapter);
 	            // Close the progressdialog
-	            mProgressBar.setVisibility(View.INVISIBLE);	
-	            
+	            mProgressBar.setVisibility(View.INVISIBLE);
 	            //Create listener
 	            listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
 
@@ -127,8 +131,12 @@ public class FragmentAlbums extends Fragment {
 	    		});
 	            
         	}
-        	else
-        		Toast.makeText(getActivity(),"0 albums",  Toast.LENGTH_LONG).show();
+        	else {
+        		noAlbums.setVisibility(View.VISIBLE);
+        		listviewAlbums.setVisibility(View.INVISIBLE);
+        		mProgressBar.setVisibility(View.INVISIBLE);
+        	}
+        		
         }
 
 		@Override

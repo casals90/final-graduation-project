@@ -5,8 +5,8 @@
 
     <ImageView
         android:id="@+id/photo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:src="@drawable/ic_launcher"
         android:contentDescription="@string/explain"/>
 

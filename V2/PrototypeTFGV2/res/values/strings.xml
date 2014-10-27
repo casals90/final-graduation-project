@@ -56,6 +56,7 @@
     <string name="members_of_album">members of album</string>
     <string name="album_title">album title</string>
     <string name="my_albums">My albums</string>
+    <string name="no_album">You dont have any album</string>
 
     <!-- profile -->
     <string name="logout">logout</string>
