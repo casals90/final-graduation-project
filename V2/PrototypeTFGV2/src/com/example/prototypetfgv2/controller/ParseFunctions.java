@@ -79,6 +79,7 @@ public class ParseFunctions {
 		parseUser.put("albums",new JSONArray());
 		parseUser.put("photosNumber",0);
 		parseUser.put("friendsNumber",0);
+		parseUser.put("albumNumber",0);
 		//Add default profile picture
 		//parseUser.put("profilePicture",new ParseFile(null));
 	
@@ -254,7 +255,6 @@ public class ParseFunctions {
 				return null;
 			}
 			for(ParseObject a : ob) {
-				//ParseFile cover = a.getParseFile("albumCover");
 				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
 				
 				ArrayList<Photo> photos = downloadPhotosFromAlbum(a.getObjectId());
@@ -552,6 +552,7 @@ public class ParseFunctions {
 						user.put("albums",new JSONArray());
 						user.put("photosNumber",0);
 						user.put("friendsNumber",0);
+						user.put("albumNumber",0);
 						try {
 							user.save();
 							//goToMainActivity(activity);

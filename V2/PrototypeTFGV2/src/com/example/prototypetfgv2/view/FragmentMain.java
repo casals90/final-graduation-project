@@ -79,7 +79,13 @@ public class FragmentMain extends Fragment implements OnClickListener {
 				break;
 				
 			case R.id.ibTakePhoto:
-				takePhoto();
+				//Check if user have a current album
+				//if(controller.getCurrentAlbum() != null)
+				//takePhoto();
+				//else
+				//show information dialog
+				showDialog();
+				
 				break;
 				
 			case R.id.ibFriends:
@@ -93,6 +99,13 @@ public class FragmentMain extends Fragment implements OnClickListener {
 				break;
 		}
 	}
+	
+	public void showDialog() {
+        FragmentManager manager = getFragmentManager();
+        FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
+        dialog.show(manager, "dialog");
+
+    }
 	
 	// init transaction variable to change the fragment 
 	public void initTransaction() {

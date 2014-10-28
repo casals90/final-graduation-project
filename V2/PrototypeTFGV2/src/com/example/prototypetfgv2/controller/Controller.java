@@ -248,4 +248,8 @@ public class Controller extends Application {
 	public String getUsername(String id) {
 		return parseFunctions.getUsername(id);
 	}
+	
+	public CurrentAlbum getCurrentAlbum() {
+		return parseFunctions.getCurrentAlbum();
+	}
 }

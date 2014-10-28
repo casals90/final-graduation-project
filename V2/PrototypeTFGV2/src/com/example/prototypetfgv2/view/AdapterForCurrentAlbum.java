@@ -17,16 +17,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SpinnerAdapterForCurrentAlbum extends BaseAdapter {
+public class AdapterForCurrentAlbum extends BaseAdapter {
 
 	private LayoutInflater inflater;
     private ImageLoader imageLoader;
 	
 	List<CurrentAlbum> currentAlbums;
 	
-	
-
-	public SpinnerAdapterForCurrentAlbum(Context context,List<CurrentAlbum> currentAlbums) {
+	public AdapterForCurrentAlbum(Context context,List<CurrentAlbum> currentAlbums) {
 		super();
 		this.inflater = LayoutInflater.from(context);
         this.imageLoader = new ImageLoader(context);

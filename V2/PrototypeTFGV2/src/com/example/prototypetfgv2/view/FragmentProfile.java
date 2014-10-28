@@ -386,7 +386,7 @@ public class FragmentProfile extends Fragment {
                 	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle(),a.getAlbumCover()));
                 }
                 
-                chooseAlbum.setAdapter(new SpinnerAdapterForCurrentAlbum(getActivity().getApplicationContext(),currentAlbums));
+                chooseAlbum.setAdapter(new AdapterForCurrentAlbum(getActivity().getApplicationContext(),currentAlbums));
                 int currentAlbumPosition = Utils.getPositionCurrentAlbum(currentAlbums);
                 if(currentAlbumPosition != -1) {
                 	chooseAlbum.setSelection(currentAlbumPosition);
