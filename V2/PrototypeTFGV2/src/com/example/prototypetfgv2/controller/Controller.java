@@ -252,4 +252,8 @@ public class Controller extends Application {
 	public CurrentAlbum getCurrentAlbum() {
 		return parseFunctions.getCurrentAlbum();
 	}
+	
+	public int getAlbumsNumber() {
+		return parseFunctions.getAlbumsNumber();
+	}
 }

@@ -1,10 +1,16 @@
 package com.example.prototypetfgv2.view;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -16,14 +22,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.Album;
+import com.example.prototypetfgv2.model.CurrentAlbum;
 
 //implements OnBackStackChangedListener
 public class FragmentMain extends Fragment implements OnClickListener {
 	
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
+	private static final int REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM = 2;
 	
 	private Controller controller;
 	
@@ -79,13 +89,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 				break;
 				
 			case R.id.ibTakePhoto:
-				//Check if user have a current album
-				//if(controller.getCurrentAlbum() != null)
-				//takePhoto();
-				//else
-				//show information dialog
-				showDialog();
-				
+				new DownloadCurrentAlbumTask().execute();
 				break;
 				
 			case R.id.ibFriends:
@@ -100,12 +104,33 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		}
 	}
 	
-	public void showDialog() {
+	public void showFragmentDialog(ArrayList<CurrentAlbum> listCurrentAlbums) {
         FragmentManager manager = getFragmentManager();
         FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
-        dialog.show(manager, "dialog");
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("listCurrentAlbums",listCurrentAlbums);
+        dialog.setArguments(bundle);
+        dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
+        dialog.show(manager,"dialog");
 
     }
+	
+	public void showConfirmDialog() {
+		//AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity().getApplicationContext());
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		builder.setMessage(getString(R.string.no_album))
+		       .setCancelable(false)
+		       .setTitle(getString(R.string.title_info_dialog))
+		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                //do things
+		        	    goToAlbums();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+		
+	}
 	
 	// init transaction variable to change the fragment 
 	public void initTransaction() {
@@ -137,12 +162,18 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.v("prototypev1", "onacivityResult ");
+		Log.v("prototypev1", "onacivityResult resultcode "+resultCode);
 	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
 	        Bundle extras = data.getExtras();
 	        Bitmap photo = (Bitmap)extras.get("data");
 	        //controller.getParseFunctions().updatePhoto(photo,this.getActivity());
 	        controller.updatePhoto(photo,this.getActivity());
+	    }
+	    //else if(requestCode == REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM && resultCode ==  Activity.RESULT_OK) {
+	    else if(requestCode == REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM && resultCode ==  Activity.RESULT_OK) {
+	    	Bundle extras = data.getExtras();
+	    	int p = extras.getInt("selectedItem");
+	    	//takePhoto();
 	    }
 	}
 			
@@ -169,4 +200,73 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		// TODO Auto-generated method stub
 		
 	}*/
+	
+	private class DownloadCurrentAlbumTask extends AsyncTask<Void, Void, Integer> {
+    	
+		ProgressDialog mProgressDialog;
+    	ArrayList<CurrentAlbum> currentAlbums;
+    	CurrentAlbum currentAlbum;
+    	ArrayList<Album> albums;
+    	
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	mProgressDialog= ProgressDialog.show(getActivity(), "Check your albums","waiting", true);   
+        }
+ 
+        @Override
+        protected Integer doInBackground(Void... params) {
+        	currentAlbum = controller.getCurrentAlbum();
+        	Log.v("prototypev1", "getCurrentalbum  "+currentAlbum);
+        	if(currentAlbum == null) {
+        		albums = controller.getAlbums();
+        		Log.v("prototypev1", "getAlbums  "+albums);
+        		if(albums == null)
+        			return -1;
+        		else {
+        			currentAlbums = new ArrayList<CurrentAlbum>();
+                	for(Album a: albums) {
+                    	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle(),a.getAlbumCover()));
+                    }
+        			return 0;
+        		}
+        	}
+        	else
+        		return 1;
+        }
+ 
+        @Override
+        protected void onPostExecute(final Integer check) {
+        	mProgressDialog.dismiss();
+        	switch (check) {
+				case -1:
+					Log.v("prototypev1", "case -1");
+					//All null
+					//showinformation dialog
+					showConfirmDialog();
+					break;
+				case 0:
+					Log.v("prototypev1", "case 0");
+					//pass current albums to fragmentDialog
+					showFragmentDialog(currentAlbums);
+					Log.v("prototypev1", "despres showfragmentdialog  ");
+					//takePhoto();
+					break;
+				case 1:
+					Log.v("prototypev1", "case 1");
+					//nothing null take photo
+					takePhoto();
+					break;
+	
+				default:
+					break;
+				}
+        }
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
+		}
+    }
 }

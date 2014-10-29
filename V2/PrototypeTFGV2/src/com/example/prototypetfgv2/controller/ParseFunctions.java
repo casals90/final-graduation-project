@@ -121,6 +121,16 @@ public class ParseFunctions {
 		}
     	return true;
     }
+    //En el futur al rebre el push afegir +1 al album numbers, mentrestant
+    public int getAlbumsNumber() {
+    	ArrayList<Album> albums = getAlbums();
+    	if(albums != null) {
+    		Log.v("prototypev1", "getAlbumsnumber "+albums.size());
+    		return albums.size();
+    	}
+    	Log.v("prototypev1", "getAlbumsnumber  size 0(null)");
+    	return 0;
+    }
 	
     public void updatePhoto(Bitmap photo,final Activity activity) {
     	// Create the ParseFile
@@ -220,13 +230,13 @@ public class ParseFunctions {
 	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		List<ParseObject> ob;
-		Log.v("prototypev1", "download photos parse funtions");
+		//Log.v("prototypev1", "download photos parse funtions");
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
 		query.whereEqualTo("ownerAlbum",albumId);
 		query.orderByDescending("createdAt");
 		try {
 			ob = query.find();
-			Log.v("prototypev1", "download photos controller ob size "+ob.size());
+			//Log.v("prototypev1", "download photos controller ob size "+ob.size());
 			for(ParseObject o : ob) {
 				ParseFile image = o.getParseFile("photo");
 	            Photo photo = new Photo(o.getObjectId(),o.getString("title"),image.getUrl(),String.valueOf(o.getCreatedAt()),o.getJSONArray("comments"),o.getJSONArray("likes"));
@@ -238,7 +248,7 @@ public class ParseFunctions {
 			Log.v("prototypev1", "download photos controller return null");
 			return null;
 		}
-		Log.v("prototypev1", "download photos controller return true");
+		//Log.v("prototypev1", "download photos controller return true");
 		return photos;
 	}
 	
@@ -269,7 +279,7 @@ public class ParseFunctions {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Log.v("prototypev1", "download albums "+albums.size());
+		//Log.v("prototypev1", "download albums "+albums.size());
 		return albums;
 	}
 	
@@ -351,7 +361,6 @@ public class ParseFunctions {
 			}
 			
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.v("prototypev1", "error download search users");
 			return null;
@@ -383,7 +392,6 @@ public class ParseFunctions {
 			sendPush2(idNewFriend);
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}		
@@ -672,7 +680,10 @@ public class ParseFunctions {
 	}
 	
 	public CurrentAlbum getCurrentAlbum() {
-		return new CurrentAlbum(ParseUser.getCurrentUser().getJSONObject("currentAlbum"));
+		JSONObject currentAlbum = ParseUser.getCurrentUser().getJSONObject("currentAlbum");
+		if(currentAlbum != null)
+			return new CurrentAlbum(currentAlbum);
+		return null;
 		
 	}
 	

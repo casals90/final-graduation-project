@@ -3,7 +3,10 @@ package com.example.prototypetfgv2.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CurrentAlbum {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class CurrentAlbum implements Parcelable {
 	
 	private String id;
 	private String title;
@@ -15,6 +18,23 @@ public class CurrentAlbum {
 		this.title = title;
 		this.coverPhoto = coverPhoto;
 	}
+	
+	public CurrentAlbum(Parcel in) {
+		this.id = in.readString();
+		this.title = in.readString();
+		this.coverPhoto = in.readString();
+	}
+	
+	public static final Parcelable.Creator<CurrentAlbum> CREATOR = new Parcelable.Creator<CurrentAlbum>() {
+		public CurrentAlbum createFromParcel(Parcel in) {
+		    return new CurrentAlbum(in);
+		}
+		
+		public CurrentAlbum[] newArray(int size) {
+		    return new CurrentAlbum[size];
+		}
+	};
+
 	
 	public CurrentAlbum(JSONObject currentAlbum) {
 		try {
@@ -56,12 +76,24 @@ public class CurrentAlbum {
 		try {
 			currentAlbum.put("id",id);
 			currentAlbum.put("title",title);
-			currentAlbum.put("coverPhoto",coverPhoto);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 		return currentAlbum;
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.id);
+		dest.writeString(this.title);
+		dest.writeString(this.coverPhoto);
 	}
 }

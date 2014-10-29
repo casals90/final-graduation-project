@@ -65,6 +65,7 @@
 	<string name="zero">0</string>
 	<string name="no_photos">This album dont have any photos</string>
 	<string name="upload_by">Uploat by</string>
+	<string name="title_info_dialog">Information</string>
     
     <!-- profile -->
     <string name="logout">logout</string>

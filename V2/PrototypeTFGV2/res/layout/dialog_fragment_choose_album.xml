@@ -7,18 +7,12 @@
         android:id="@+id/list_choose_album"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
-    
-    <TextView 
-        android:id="@+id/no_albums"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/no_album"
-        android:layout_marginTop="10dp"/>
 
     <ProgressBar
         android:id="@+id/progressBarDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:visibility="invisible"/>
     
 </RelativeLayout>
