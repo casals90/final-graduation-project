@@ -162,19 +162,36 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.v("prototypev1", "onacivityResult resultcode "+resultCode);
-	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+		switch (requestCode) {
+			case REQUEST_IMAGE_CAPTURE:
+				if(resultCode == Activity.RESULT_OK) {
+					Bundle extras = data.getExtras();
+			        Bitmap photo = (Bitmap)extras.get("data");
+			        controller.updatePhoto(photo,this.getActivity());
+				}
+				break;
+			case REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM:
+				if(resultCode == Activity.RESULT_OK) {
+			    	takePhoto();
+				}
+				break;
+			default:
+				break;
+		}
+	    /*if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
 	        Bundle extras = data.getExtras();
 	        Bitmap photo = (Bitmap)extras.get("data");
 	        //controller.getParseFunctions().updatePhoto(photo,this.getActivity());
 	        controller.updatePhoto(photo,this.getActivity());
 	    }
 	    //else if(requestCode == REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM && resultCode ==  Activity.RESULT_OK) {
-	    else if(requestCode == REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM && resultCode ==  Activity.RESULT_OK) {
+	    else if(requestCode == REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM) {
+	    	Log.v("prototypev1", "onacivityResult return dialog resultcode "+resultCode+" == "+Activity.RESULT_OK);
+	    	if(resultCode == Activity.RESULT_OK)
 	    	Bundle extras = data.getExtras();
 	    	int p = extras.getInt("selectedItem");
 	    	//takePhoto();
-	    }
+	    }*/
 	}
 			
 	public void goToFriends() {
@@ -197,7 +214,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	//Per mostrar la icona d'anar enrera
 	@Override
 	public void onBackStackChanged() {
-		// TODO Auto-generated method stub
+		
 		
 	}*/
 	
@@ -240,20 +257,13 @@ public class FragmentMain extends Fragment implements OnClickListener {
         	mProgressDialog.dismiss();
         	switch (check) {
 				case -1:
-					Log.v("prototypev1", "case -1");
 					//All null
-					//showinformation dialog
 					showConfirmDialog();
 					break;
 				case 0:
-					Log.v("prototypev1", "case 0");
-					//pass current albums to fragmentDialog
 					showFragmentDialog(currentAlbums);
-					Log.v("prototypev1", "despres showfragmentdialog  ");
-					//takePhoto();
 					break;
 				case 1:
-					Log.v("prototypev1", "case 1");
 					//nothing null take photo
 					takePhoto();
 					break;

@@ -43,8 +43,11 @@ public class ImageLoader {
     public void DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
-        if (bitmap != null)
+        if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
+        	//Bitmap.createScaledBitmap(bitmap,200,200, false);
+        	//imageView.setImageBitmap(Bitmap.createScaledBitmap(bitmap,500,500, false));
+        }
         else {
             queuePhoto(url, imageView);
             imageView.setImageResource(stub_id);

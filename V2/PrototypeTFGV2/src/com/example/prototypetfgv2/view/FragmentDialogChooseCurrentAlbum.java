@@ -28,9 +28,7 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 	private Controller controller;
 	private ArrayList<CurrentAlbum> currentAlbums;
 	private ProgressBar mProgressBarDialog;
-	//private CurrentAlbum currentAlbum;
-	
-	private int selectedItem;
+	private CurrentAlbum currentAlbum;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +53,7 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				//Put the selected album like a current album
 				//controller.setCurrentAlbum(currentAlbums.get(position));
-				//currentAlbum = currentAlbums.get(position);
-				selectedItem = position;
+				currentAlbum = currentAlbums.get(position);
 				new SetCurrentAlbumTask().execute();
 			}
 		});
@@ -78,15 +75,14 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			//return controller.setCurrentAlbum(currentAlbum);
-			return true;
+			return controller.setCurrentAlbum(currentAlbum);
 		}
 		
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			if(success) {
 				mProgressBarDialog.setVisibility(View.INVISIBLE);
-				getTargetFragment().onActivityResult(getTargetRequestCode(),-1, getActivity().getIntent().putExtra("selectedItem",selectedItem));
+				getTargetFragment().onActivityResult(getTargetRequestCode(),Activity.RESULT_OK, getActivity().getIntent());
 				//finish dialog
 				getDialog().dismiss();
 			}

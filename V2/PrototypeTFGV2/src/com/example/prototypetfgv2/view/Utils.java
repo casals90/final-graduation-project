@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays; 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -13,18 +13,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.prototypetfgv2.model.CurrentAlbum;
-import com.example.prototypetfgv2.model.User;
-import com.parse.ParseUser;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.Toast;
+
+import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.example.prototypetfgv2.model.User;
+import com.parse.ParseUser;
 
 public class Utils {
 	

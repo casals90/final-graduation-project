@@ -135,6 +135,7 @@ public class ParseFunctions {
     public void updatePhoto(Bitmap photo,final Activity activity) {
     	// Create the ParseFile
         ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
+        
         // Upload the image into Parse Cloud
         file.saveInBackground();
         final ParseObject photoUpload = new ParseObject("Photo");
