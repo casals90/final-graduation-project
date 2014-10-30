@@ -8,6 +8,7 @@ import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.ListViewAdapterForSearchUsers.ViewHolder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,18 +22,21 @@ public class ListViewAdapterForAlbums extends BaseAdapter {
 
 	private LayoutInflater inflater;
     private ImageLoader imageLoader;
+    //private ImageThreadLoader it;
 	
 	private List<Album> albums;
 	
 	private Controller controller;
+	Activity activity;
 	
 	public ListViewAdapterForAlbums(Context context,List<Album> albums) { 
 		
         inflater = LayoutInflater.from(context);
         imageLoader = new ImageLoader(context);
-        
+        //it = new ImageThreadLoader(context);
+        //this.activity = activity;
         controller = (Controller) context.getApplicationContext();
-               
+          
         this.albums = albums;
         //friends = controller.getFriends();
     }
@@ -76,7 +80,8 @@ public class ListViewAdapterForAlbums extends BaseAdapter {
 		holder.albumTitle.setText(albums.get(position).getAlbumTitle());
 		
 		imageLoader.DisplayImage(albums.get(position).getAlbumCover(),holder.albumCover);
-		
+		//holder.albumCover.setTag(albums.get(position).getAlbumCover());
+		//it.displayImage(albums.get(position).getAlbumCover(),activity,holder.albumCover);
 		if(albums.get(position).getAlbumCover() == null)
 			holder.albumCover.setImageResource(R.drawable.ic_launcher);
 		

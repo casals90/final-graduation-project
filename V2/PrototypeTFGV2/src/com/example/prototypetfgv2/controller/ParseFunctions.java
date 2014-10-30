@@ -23,6 +23,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.model.Album;
+import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
@@ -135,22 +136,27 @@ public class ParseFunctions {
     public void updatePhoto(Bitmap photo,final Activity activity) {
     	// Create the ParseFile
         ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
-        
+        Log.v("prototypev1", "upload photo ");
         // Upload the image into Parse Cloud
         file.saveInBackground();
         final ParseObject photoUpload = new ParseObject("Photo");
         photoUpload.put("photo", file);
+        photoUpload.put("likesNumber",0);
+        photoUpload.put("commentsNumber",0);
         //Save the owner of the photo
         photoUpload.put("ownerUser",ParseUser.getCurrentUser().getObjectId());
+        Log.v("prototypev1", "upload photo put current album ");
         String album;
 		try {
 			album = ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id");
+			Log.v("prototypev1", "upload photo put current album id "+ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id"));
 			photoUpload.put("ownerAlbum",album);
 			//add more atributes
 			photoUpload.saveInBackground(new SaveCallback() {
 				@Override
-				public void done(ParseException arg0) {
-					// TODO Auto-generated method stub
+				public void done(ParseException e) {
+					Log.v("prototypev1", "upload photo put current album id object "+photoUpload.getObjectId());
+					Log.v("prototypev1", "upload photo put current album error "+e);
 					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
 				}
 			});
@@ -237,10 +243,11 @@ public class ParseFunctions {
 		query.orderByDescending("createdAt");
 		try {
 			ob = query.find();
-			//Log.v("prototypev1", "download photos controller ob size "+ob.size());
+			Log.v("prototypev1", "download photos controller ob size "+ob.size());
 			for(ParseObject o : ob) {
 				ParseFile image = o.getParseFile("photo");
-	            Photo photo = new Photo(o.getObjectId(),o.getString("title"),image.getUrl(),String.valueOf(o.getCreatedAt()),o.getJSONArray("comments"),o.getJSONArray("likes"));
+				//Null because I don't want download comments
+	            Photo photo = new Photo(o.getObjectId(),o.getString("title"),image.getUrl(),String.valueOf(o.getCreatedAt()),o.getInt("commentsNumber"),o.getInt("likesNumber"),null,o.getJSONArray("likes"));
 	            photos.add(photo);
 			}
 		} catch (ParseException e) {
@@ -251,6 +258,49 @@ public class ParseFunctions {
 		}
 		//Log.v("prototypev1", "download photos controller return true");
 		return photos;
+	}
+	
+	public ArrayList<Comment> getCommentsFromPhoto(String idPhoto) {
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		List<ParseObject> c;
+		
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Comment");
+		query.whereEqualTo("idPhoto",idPhoto);
+		try {
+			c = query.find();
+			for(ParseObject o : c) {
+				String idUser = o.getString("idUser");
+				//Download user
+				User user = getUser(idUser);
+				String comment = o.getString("comment");
+				String date = o.getUpdatedAt().toString();
+				comments.add(new Comment(user, comment, date));
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return comments;
+	}
+	
+	public User getUser(String id) {
+		User user;
+		List<ParseUser> users;
+		
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereEqualTo("objectId",id);
+		try {
+			users = query.find();
+			ParseUser u = users.get(0);
+			ParseFile profilePicture = (ParseFile)u.get("profilePicture");
+			user = new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return user;
 	}
 	
 	public ArrayList<Album> getAlbums() {

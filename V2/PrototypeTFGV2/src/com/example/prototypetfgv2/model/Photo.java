@@ -4,27 +4,31 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Photo implements Parcelable {
+	
 	private String id;
     private String title;
     private String photo;
     private String createdAt;
+    private int commentsNumber;
+    private int likesNumber;
     private ArrayList<Comment> comments;
     private ArrayList<String> likes;
     
-	public Photo(String id, String title, String photo, String createdAt,JSONArray comments, JSONArray likes) {
+	public Photo(String id, String title, String photo, String createdAt,int commentsNumber, int likesNumber,ArrayList<Comment> comments, JSONArray likes) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.photo = photo;
 		this.createdAt = createdAt;
+		this.commentsNumber = commentsNumber;
+		this.likesNumber = likesNumber;
 		if(comments != null)
-			this.comments = jsonArrayToArrayListComment(comments);
+			this.comments = comments;
 		else
 			this.comments = null;
 		if(likes != null)
@@ -95,21 +99,22 @@ public class Photo implements Parcelable {
 		this.likes = likes;
 	}
 	
-	public ArrayList<Comment> jsonArrayToArrayListComment(JSONArray comments) {
-		ArrayList<Comment> c = new ArrayList<Comment>();
-		for(int i = 0; i < comments.length(); i++) {
-			try {
-				JSONObject comment = comments.getJSONObject(i);
-				c.add(new Comment(comment.getString("idUser"), comment.getString("comment")));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-		}
-		return c;
+	public int getCommentsNumber() {
+		return commentsNumber;
 	}
-	
+
+	public void setCommentsNumber(int commentsNumber) {
+		this.commentsNumber = commentsNumber;
+	}
+
+	public int getLikesNumber() {
+		return likesNumber;
+	}
+
+	public void setLikesNumber(int likesNumber) {
+		this.likesNumber = likesNumber;
+	}
+
 	public ArrayList<String>  jsonArrayToArrayListLike(JSONArray likes) {
 		ArrayList<String> l = new ArrayList<String>();
 		for(int i = 0; i < likes.length(); i++) {
@@ -136,6 +141,8 @@ public class Photo implements Parcelable {
 		dest.writeString(title);
 		dest.writeString(photo);
 		dest.writeString(createdAt);
+		dest.writeInt(commentsNumber);
+		dest.writeInt(likesNumber);
 		dest.writeTypedList(comments);
 		dest.writeSerializable(likes);
 	}
@@ -146,6 +153,8 @@ public class Photo implements Parcelable {
 		title = in.readString();
 		photo = in.readString();
 		createdAt = in.readString();
+		commentsNumber = in.readInt();
+		likesNumber = in.readInt();
 		in.readTypedList(comments, Comment.CREATOR);
 		likes = (ArrayList<String>) in.readSerializable();
 	}

@@ -62,7 +62,7 @@ public class ImageLoader {
     private Bitmap getBitmap(String url) {
         File f = fileCache.getFile(url);
  
-        Bitmap b = decodeFile(f);
+        Bitmap b = decodeFile(f,480);
         if (b != null)
             return b;
  
@@ -80,7 +80,7 @@ public class ImageLoader {
             Utils.CopyStream(is, os);
             os.close();
             conn.disconnect();
-            bitmap = decodeFile(f);
+            bitmap = decodeFile(f,480);
             return bitmap;
         } catch (Throwable ex) {
             ex.printStackTrace();
@@ -95,7 +95,7 @@ public class ImageLoader {
     }
     
     // Decodes image and scales it to reduce memory consumption
-    private Bitmap decodeFile(File f) {
+    /*private Bitmap decodeFile(File f) {
         try {
             // Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -105,7 +105,7 @@ public class ImageLoader {
             stream1.close();
  
             // Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE = 70;
+            final int REQUIRED_SIZE = 320;
             int width_tmp = o.outWidth, height_tmp = o.outHeight;
             int scale = 1;
             while (true) {
@@ -128,6 +128,33 @@ public class ImageLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }*/
+    
+    private Bitmap decodeFile(File f,int size){
+        try {
+            //decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+
+            //Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE=size;
+            int width_tmp=o.outWidth, height_tmp=o.outHeight;
+            int scale=1;
+            while(true){
+                if(width_tmp/2<REQUIRED_SIZE || height_tmp/2<REQUIRED_SIZE)
+                    break;
+                width_tmp/=2;
+                height_tmp/=2;
+                scale*=2;
+            }
+
+            //decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize=scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {}
         return null;
     }
  

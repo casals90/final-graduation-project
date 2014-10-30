@@ -3,19 +3,22 @@ package com.example.prototypetfgv2.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
 public class Comment implements Parcelable {
 	
-	private String idUser;
+	private User user;
 	private String comment;
+	private String date;
 	
-	public Comment(String idUser, String comment) {
+	public Comment(User user, String comment, String date) {
 		super();
-		this.idUser = idUser;
+		this.user = user;
 		this.comment = comment;
+		this.date = date;
 	}
 	
 	public Comment(Parcel in) {
-		readParcel(in);
+		readToParcel(in);
 	}
 	
 	public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
@@ -28,12 +31,12 @@ public class Comment implements Parcelable {
 		}
 	};
 
-	public String getIdUser() {
-		return idUser;
+	public User getUser() {
+		return user;
 	}
 
-	public void setIdUser(String idUser) {
-		this.idUser = idUser;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getComment() {
@@ -44,22 +47,31 @@ public class Comment implements Parcelable {
 		this.comment = comment;
 	}
 
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	public void readToParcel(Parcel in) {
+		user = in.readParcelable(User.class.getClassLoader());
+		comment = in.readString();
+		date = in.readString();
+	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		dest.writeString(idUser);
+		dest.writeParcelable(user,flags);
 		dest.writeString(comment);
-	}
-	
-	private void readParcel(Parcel in) {
-		// TODO Auto-generated method stub
-		idUser = in.readString();
-		comment = in.readString();
-	}
+		dest.writeString(date);
+		
+	}	
 }

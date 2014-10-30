@@ -40,7 +40,7 @@ public class CurrentAlbum implements Parcelable {
 		try {
 			this.id = currentAlbum.getString("id");
 			this.title = currentAlbum.getString("title");
-			this.coverPhoto = currentAlbum.getString("coverPhoto");
+			//this.coverPhoto = currentAlbum.getString("coverPhoto");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,6 +94,6 @@ public class CurrentAlbum implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(this.id);
 		dest.writeString(this.title);
-		dest.writeString(this.coverPhoto);
+		//dest.writeString(this.coverPhoto);
 	}
 }
