@@ -156,14 +156,11 @@ public class Utils {
 	}
 	
 	public static boolean isElementExist(JSONArray array,String id) {
-		//Log.v("prototypev1","isElementExist id= "+id);
 		for(int i = 0; i < array.length(); i++) {
 			try {
-				//Log.v("prototypev1","elemetns array "+array.getString(i));
 				if(id.compareTo(array.getString(i)) == 0)
 					return true;
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return false;
 			}

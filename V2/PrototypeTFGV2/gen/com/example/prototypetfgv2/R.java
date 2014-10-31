@@ -158,9 +158,9 @@ containing a value of this type.
         public static final int Azure=0x7f060031;
         public static final int Beige=0x7f06002e;
         public static final int Bisque=0x7f060014;
-        public static final int Black=0x7f060092;
+        public static final int Black=0x7f060093;
         public static final int BlanchedAlmond=0x7f060012;
-        public static final int Blue=0x7f06008e;
+        public static final int Blue=0x7f06008f;
         public static final int BlueViolet=0x7f060061;
         public static final int Brown=0x7f060055;
         public static final int BurlyWood=0x7f06003b;
@@ -172,11 +172,11 @@ containing a value of this type.
         public static final int Cornsilk=0x7f06000e;
         public static final int Crimson=0x7f06003e;
         public static final int Cyan=0x7f060084;
-        public static final int DarkBlue=0x7f060090;
-        public static final int DarkCyan=0x7f06008a;
+        public static final int DarkBlue=0x7f060091;
+        public static final int DarkCyan=0x7f06008b;
         public static final int DarkGoldenrod=0x7f06004d;
         public static final int DarkGray=0x7f060054;
-        public static final int DarkGreen=0x7f06008d;
+        public static final int DarkGreen=0x7f06008e;
         public static final int DarkKhaki=0x7f06004a;
         public static final int DarkMagenta=0x7f06005f;
         public static final int DarkOliveGreen=0x7f060074;
@@ -187,10 +187,10 @@ containing a value of this type.
         public static final int DarkSeaGreen=0x7f06005d;
         public static final int DarkSlateBlue=0x7f060077;
         public static final int DarkSlateGray=0x7f06007d;
-        public static final int DarkTurquoise=0x7f060088;
+        public static final int DarkTurquoise=0x7f060089;
         public static final int DarkViolet=0x7f06005a;
         public static final int DeepPink=0x7f060022;
-        public static final int DeepSkyBlue=0x7f060089;
+        public static final int DeepSkyBlue=0x7f06008a;
         public static final int DimGray=0x7f060070;
         public static final int DodgerBlue=0x7f060081;
         public static final int FireBrick=0x7f06004e;
@@ -202,7 +202,7 @@ containing a value of this type.
         public static final int Gold=0x7f060018;
         public static final int Goldenrod=0x7f060040;
         public static final int Gray=0x7f060064;
-        public static final int Green=0x7f06008c;
+        public static final int Green=0x7f06008d;
         public static final int GreenYellow=0x7f060052;
         public static final int Honeydew=0x7f060032;
         public static final int HotPink=0x7f06001f;
@@ -227,18 +227,18 @@ containing a value of this type.
         public static final int LightSlateGray=0x7f06006c;
         public static final int LightSteelBlue=0x7f060050;
         public static final int LightYellow=0x7f060009;
-        public static final int Lime=0x7f060086;
+        public static final int Lime=0x7f060087;
         public static final int LimeGreen=0x7f06007c;
         public static final int Linen=0x7f060028;
         public static final int Magenta=0x7f060024;
         public static final int Maroon=0x7f060067;
         public static final int MediumAquamarine=0x7f060071;
-        public static final int MediumBlue=0x7f06008f;
+        public static final int MediumBlue=0x7f060090;
         public static final int MediumOrchid=0x7f06004c;
         public static final int MediumPurple=0x7f06005b;
         public static final int MediumSeaGreen=0x7f06007b;
         public static final int MediumSlateBlue=0x7f06006b;
-        public static final int MediumSpringGreen=0x7f060087;
+        public static final int MediumSpringGreen=0x7f060088;
         public static final int MediumTurquoise=0x7f060076;
         public static final int MediumVioletRed=0x7f060048;
         public static final int MidnightBlue=0x7f060082;
@@ -246,7 +246,7 @@ containing a value of this type.
         public static final int MistyRose=0x7f060013;
         public static final int Moccasin=0x7f060015;
         public static final int NavajoWhite=0x7f060016;
-        public static final int Navy=0x7f060091;
+        public static final int Navy=0x7f060092;
         public static final int OldLace=0x7f060026;
         public static final int Olive=0x7f060065;
         public static final int OliveDrab=0x7f06006e;
@@ -278,10 +278,10 @@ containing a value of this type.
         public static final int SlateBlue=0x7f06006f;
         public static final int SlateGray=0x7f06006d;
         public static final int Snow=0x7f06000b;
-        public static final int SpringGreen=0x7f060085;
+        public static final int SpringGreen=0x7f060086;
         public static final int SteelBlue=0x7f060078;
         public static final int Tan=0x7f060044;
-        public static final int Teal=0x7f06008b;
+        public static final int Teal=0x7f06008c;
         public static final int Thistle=0x7f060042;
         public static final int Tomato=0x7f060020;
         public static final int Turquoise=0x7f06007a;
@@ -298,6 +298,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_connected_shadow_color=0x7f060004;
         public static final int com_facebook_usersettingsfragment_connected_text_color=0x7f060003;
         public static final int com_facebook_usersettingsfragment_not_connected_text_color=0x7f060005;
+        public static final int cyan=0x7f060085;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -341,7 +342,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f02000d;
         public static final int com_facebook_loginbutton_silver=0x7f02000e;
         public static final int com_facebook_logo=0x7f02000f;
-        public static final int com_facebook_picker_default_separator_color=0x7f020043;
+        public static final int com_facebook_picker_default_separator_color=0x7f020044;
         public static final int com_facebook_picker_item_background=0x7f020010;
         public static final int com_facebook_picker_list_focused=0x7f020011;
         public static final int com_facebook_picker_list_longpressed=0x7f020012;
@@ -392,7 +393,8 @@ containing a value of this type.
         public static final int login_button_focused=0x7f02003f;
         public static final int login_button_normal=0x7f020040;
         public static final int login_button_pressed=0x7f020041;
-        public static final int temp_img=0x7f020042;
+        public static final int selector_icons=0x7f020042;
+        public static final int temp_img=0x7f020043;
     }
     public static final class id {
         public static final int action_settings=0x7f040075;

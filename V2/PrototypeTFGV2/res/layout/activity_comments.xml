@@ -34,6 +34,7 @@
         android:src="@drawable/ic_action_send_now"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/new_comment"
+        android:background="@drawable/selector_icons"
         android:contentDescription="@string/explain"/>
 
 </RelativeLayout>

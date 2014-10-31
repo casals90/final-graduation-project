@@ -39,6 +39,7 @@ public class CommentsActivity extends Activity {
 	private Controller controller;
 
 	private ArrayList<Comment> comments;
+	private ArrayList<String> likes;
 	private Photo currentPhoto;
 	
 	@Override
@@ -52,6 +53,7 @@ public class CommentsActivity extends Activity {
 		Intent intent = getIntent();
 		if(intent != null) {
 			currentPhoto = intent.getParcelableExtra("photo");
+			Log.v("prototypev1", "show photo "+currentPhoto.getId());
 		}
 		
 		listComments = (ListView) findViewById(R.id.like_comments);
@@ -62,8 +64,7 @@ public class CommentsActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// Send comment
-				
+				// Send comment	
 			}
 		});
 	}
@@ -98,13 +99,16 @@ public class CommentsActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
         	comments = controller.getParseFunctions().getCommentsFromPhoto(currentPhoto.getId());
+        	likes = controller.getParseFunctions().getLikes(currentPhoto.getId());
         	//TODO fer el mateix pels likes
         	//return true;
-        	if(comments == null)
-        		return false;
-        	else {
+        	if(comments != null && likes != null) {
         		currentPhoto.setComments(comments);
+        		currentPhoto.setLikes(likes);
         		return true;
+        	}
+        	else {
+        		return false;
         	}		
         }
  

@@ -243,7 +243,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
         		else {
         			currentAlbums = new ArrayList<CurrentAlbum>();
                 	for(Album a: albums) {
-                    	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle(),a.getAlbumCover()));
+                    	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle()));
                     }
         			return 0;
         		}

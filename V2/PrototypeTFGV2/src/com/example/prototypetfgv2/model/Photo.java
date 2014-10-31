@@ -18,8 +18,9 @@ public class Photo implements Parcelable {
     private int likesNumber;
     private ArrayList<Comment> comments;
     private ArrayList<String> likes;
+    private User ownerUser;
     
-	public Photo(String id, String title, String photo, String createdAt,int commentsNumber, int likesNumber,ArrayList<Comment> comments, JSONArray likes) {
+	public Photo(String id, String title, String photo, String createdAt,int commentsNumber, int likesNumber,ArrayList<Comment> comments, JSONArray likes,User ownerUser) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -35,6 +36,7 @@ public class Photo implements Parcelable {
 			this.likes = jsonArrayToArrayListLike(likes);
 		else
 			this.likes = null;
+		this.ownerUser = ownerUser;
 	}
 	
 	public Photo(Parcel in) {
@@ -114,6 +116,14 @@ public class Photo implements Parcelable {
 	public void setLikesNumber(int likesNumber) {
 		this.likesNumber = likesNumber;
 	}
+	
+	public User getOwnerUser() {
+		return ownerUser;
+	}
+
+	public void setOwnerUser(User ownerUser) {
+		this.ownerUser = ownerUser;
+	}
 
 	public ArrayList<String>  jsonArrayToArrayListLike(JSONArray likes) {
 		ArrayList<String> l = new ArrayList<String>();
@@ -144,7 +154,8 @@ public class Photo implements Parcelable {
 		dest.writeInt(commentsNumber);
 		dest.writeInt(likesNumber);
 		dest.writeTypedList(comments);
-		dest.writeSerializable(likes);
+		dest.writeStringList(likes);
+		dest.writeParcelable(ownerUser,flags);
 	}
 	
 	private void readParcel(Parcel in) {
@@ -155,7 +166,9 @@ public class Photo implements Parcelable {
 		createdAt = in.readString();
 		commentsNumber = in.readInt();
 		likesNumber = in.readInt();
-		in.readTypedList(comments, Comment.CREATOR);
-		likes = (ArrayList<String>) in.readSerializable();
+		in.readParcelableArray(Comment.class.getClassLoader());
+		in.readTypedList(comments,Comment.CREATOR);
+		in.readStringList(likes);
+		ownerUser = in.readParcelable(User.class.getClassLoader());
 	}
 }

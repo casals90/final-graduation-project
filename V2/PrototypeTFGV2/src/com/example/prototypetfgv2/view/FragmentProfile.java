@@ -383,7 +383,7 @@ public class FragmentProfile extends Fragment {
         	if(success) {
                 currentAlbums = new ArrayList<CurrentAlbum>();
                 for(Album a: albums) {
-                	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle(),a.getAlbumCover()));
+                	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle()));
                 }
                 
                 chooseAlbum.setAdapter(new AdapterForCurrentAlbum(getActivity().getApplicationContext(),currentAlbums));

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 
@@ -16,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.example.prototypetfgv2.R.id;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
@@ -24,6 +26,9 @@ import com.example.prototypetfgv2.view.ImageLoader;
 import com.example.prototypetfgv2.view.SignUpActivity;
 import com.example.prototypetfgv2.view.Utils;
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
  
@@ -255,5 +260,30 @@ public class Controller extends Application {
 	
 	public int getAlbumsNumber() {
 		return parseFunctions.getAlbumsNumber();
+	}
+
+	//Social Network module
+	public boolean likePhoto(String id) {
+		return parseFunctions.likePhoto(id);
+	}
+	
+	public boolean unlikePhoto(String id) {
+		return parseFunctions.unlikePhoto(id);
+	}
+	
+	public boolean isPhotoLiked(String id) {
+		return parseFunctions.isPhotoLiked(id);
+	}
+	
+	public boolean newComment(String idPhoto,String text) {
+		return parseFunctions.newComment(idPhoto, text);
+	}
+	
+	public int countPhotoLikes(String id) {
+		return parseFunctions.countPhotoLikes(id);
+	}
+	
+	public int countPhotoComments(String id) {
+		return parseFunctions.countPhotoComments(id);
 	}
 }

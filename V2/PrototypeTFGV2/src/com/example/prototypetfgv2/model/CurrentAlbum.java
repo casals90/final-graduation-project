@@ -12,17 +12,15 @@ public class CurrentAlbum implements Parcelable {
 	private String title;
 	private String coverPhoto;
 	
-	public CurrentAlbum(String id, String title,String coverPhoto) {
+	public CurrentAlbum(String id, String title) {
 		super();
 		this.id = id;
 		this.title = title;
-		this.coverPhoto = coverPhoto;
 	}
 	
 	public CurrentAlbum(Parcel in) {
 		this.id = in.readString();
 		this.title = in.readString();
-		this.coverPhoto = in.readString();
 	}
 	
 	public static final Parcelable.Creator<CurrentAlbum> CREATOR = new Parcelable.Creator<CurrentAlbum>() {
@@ -40,9 +38,7 @@ public class CurrentAlbum implements Parcelable {
 		try {
 			this.id = currentAlbum.getString("id");
 			this.title = currentAlbum.getString("title");
-			//this.coverPhoto = currentAlbum.getString("coverPhoto");
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -77,7 +73,6 @@ public class CurrentAlbum implements Parcelable {
 			currentAlbum.put("id",id);
 			currentAlbum.put("title",title);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -86,7 +81,6 @@ public class CurrentAlbum implements Parcelable {
 
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -94,6 +88,5 @@ public class CurrentAlbum implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(this.id);
 		dest.writeString(this.title);
-		//dest.writeString(this.coverPhoto);
 	}
 }

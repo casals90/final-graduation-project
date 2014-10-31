@@ -72,6 +72,5 @@ public class Comment implements Parcelable {
 		dest.writeParcelable(user,flags);
 		dest.writeString(comment);
 		dest.writeString(date);
-		
 	}	
 }

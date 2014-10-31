@@ -33,29 +33,23 @@ public class ListViewAdapterForAlbums extends BaseAdapter {
 		
         inflater = LayoutInflater.from(context);
         imageLoader = new ImageLoader(context);
-        //it = new ImageThreadLoader(context);
-        //this.activity = activity;
         controller = (Controller) context.getApplicationContext();
           
         this.albums = albums;
-        //friends = controller.getFriends();
     }
 	
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return albums.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return albums.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -80,8 +74,6 @@ public class ListViewAdapterForAlbums extends BaseAdapter {
 		holder.albumTitle.setText(albums.get(position).getAlbumTitle());
 		
 		imageLoader.DisplayImage(albums.get(position).getAlbumCover(),holder.albumCover);
-		//holder.albumCover.setTag(albums.get(position).getAlbumCover());
-		//it.displayImage(albums.get(position).getAlbumCover(),activity,holder.albumCover);
 		if(albums.get(position).getAlbumCover() == null)
 			holder.albumCover.setImageResource(R.drawable.ic_launcher);
 		

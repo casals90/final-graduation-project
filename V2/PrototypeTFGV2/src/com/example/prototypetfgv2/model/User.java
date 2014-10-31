@@ -3,7 +3,7 @@ package com.example.prototypetfgv2.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class User implements Parcelable{
+public class User implements Parcelable {
 	
 	String id;
 	String username;
