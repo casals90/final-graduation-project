@@ -2,12 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import java.util.List;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.Album;
-import com.example.prototypetfgv2.model.User;
-import com.example.prototypetfgv2.view.ListViewAdapterForSearchUsers.ViewHolder;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.Album;
 
 
 public class ListViewAdapterForAlbums extends BaseAdapter {

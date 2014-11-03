@@ -106,9 +106,6 @@ private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
 						goToShowPhoto(photo);
 					}
 				});
-				
-	            //Create listener
-	           
 			}
 			else {
 				//Show message no photos

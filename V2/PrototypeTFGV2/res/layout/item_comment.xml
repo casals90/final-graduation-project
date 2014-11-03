@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/profilePicture"
+        android:textColor="@color/Black"
         android:text="@string/username"/>
     
     <TextView 
@@ -25,6 +26,7 @@
         android:layout_height="wrap_content"
         android:text="@string/comment"
         android:layout_below="@+id/username"
+        android:textColor="@color/Black"
         android:layout_toRightOf="@+id/profilePicture"
         android:textSize="15sp"/>
     
@@ -36,6 +38,7 @@
        	android:layout_below="@+id/comment"
        	android:layout_toRightOf="@+id/profilePicture"
        	android:textSize="12sp"
+       	android:textColor="@color/Black"
        	android:layout_marginTop="5dp"/>
     
 

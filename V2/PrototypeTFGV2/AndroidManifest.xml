@@ -85,8 +85,12 @@
             android:label="@string/title_activity_input_username" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.CommentsActivity"
+            android:name=".view.CommentsActivity"
             android:label="@string/title_activity_comments" >
+        </activity>
+        <activity
+            android:name=".UploadPhotoActivity"
+            android:label="@string/title_activity_upload_photo" >
         </activity>
     </application>
 

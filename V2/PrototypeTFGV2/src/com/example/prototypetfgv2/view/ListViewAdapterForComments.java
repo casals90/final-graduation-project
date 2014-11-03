@@ -2,11 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.Comment;
-import com.example.prototypetfgv2.view.ListViewAdapterForAlbums.ViewHolder;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,39 +10,38 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.model.Comment;
+
 public class ListViewAdapterForComments extends BaseAdapter {
 
 	private ArrayList<Comment> comments;
 	private LayoutInflater inflater;
     private ImageLoader imageLoader;
     
-    private Controller controller;
+    //private Controller controller;
     
-    
-
 	public ListViewAdapterForComments(Context context,ArrayList<Comment> comments) {
 		super();
 		inflater = LayoutInflater.from(context);
         imageLoader = new ImageLoader(context);
 		this.comments = comments;
-		controller = (Controller) context.getApplicationContext();
+		//Log.v("prototypev1", "on adapter comments"+comments.size()+" text "+comments.get(0).getUser().getUsername()+" text "+comments.get(0).getComment()+" date "+comments.get(0).getDate());
+		//controller = (Controller) context.getApplicationContext();
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return comments.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return comments.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 	
@@ -68,9 +62,11 @@ public class ListViewAdapterForComments extends BaseAdapter {
 			holder.username = (TextView) view.findViewById(R.id.username);
 			holder.comment = (TextView) view.findViewById(R.id.comment);
 			holder.date = (TextView) view.findViewById(R.id.date_of_comment);
+			view.setTag(holder);
 		}
 		else
 			 holder = (ViewHolder) view.getTag();
+		
 		holder.username.setText(comments.get(position).getUser().getUsername());
 		holder.comment.setText(comments.get(position).getComment());
 		holder.date.setText(comments.get(position).getDate());
@@ -78,7 +74,6 @@ public class ListViewAdapterForComments extends BaseAdapter {
 		imageLoader.DisplayImage(comments.get(position).getUser().getProfilePicture(),holder.profilePicture);
 		if(comments.get(position).getUser().getProfilePicture() == null)
 			holder.profilePicture.setImageResource(R.drawable.ic_launcher);
-		
 		return view;
 	}
 

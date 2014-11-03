@@ -2,12 +2,9 @@ package com.example.prototypetfgv2.view;
 
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
@@ -15,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
  
 public class ListViewAdapterForShowPhotos extends BaseAdapter {
@@ -23,7 +19,7 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
     LayoutInflater inflater;
     ImageLoader imageLoader;
     private List<Photo> myPhotos;
-    private Controller controller;
+    //private Controller controller;
     
     public ListViewAdapterForShowPhotos(Context context,List<Photo> myPhotos) {
         this.context = context;
@@ -31,8 +27,6 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
         inflater = LayoutInflater.from(context);
   
         imageLoader = new ImageLoader(context);
-        
-        controller = (Controller) context.getApplicationContext();
     }
     
     public class ViewHolder {

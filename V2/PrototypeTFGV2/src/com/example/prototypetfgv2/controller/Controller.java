@@ -1,6 +1,7 @@
 package com.example.prototypetfgv2.controller;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -12,6 +13,7 @@ import org.json.JSONArray;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,9 +24,12 @@ import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
-import com.example.prototypetfgv2.view.ImageLoader;
+
 import com.example.prototypetfgv2.view.SignUpActivity;
 import com.example.prototypetfgv2.view.Utils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -47,6 +52,15 @@ public class Controller extends Application {
         
         parseFunctions = new ParseFunctions(getApplicationContext());
         parseFunctions.initParse(getApplicationContext());
+        
+        //configureDefaultImageLoader(getApplicationContext());
+        
+	}
+	
+	public void configureDefaultImageLoader(Context context) {
+		// Create global configuration and initialize ImageLoader with this config
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        ImageLoader.getInstance().init(config);
 	}
 	
 	public boolean setUsername(String username) {
@@ -169,11 +183,6 @@ public class Controller extends Application {
 		return false;
 	}
 	
-	public Bitmap downloadBitmap(String url) {
-		ImageLoader imgLoader = new ImageLoader(getApplicationContext());
-		return imgLoader.getBitmapFromURL(url);
-	}
-	
 	public Bitmap getProfilePictureTwitterURL() {
 		String url = parseFunctions.getProfilePictureTwitterURL();
 		Log.v("prototypev1", "url "+url);
@@ -271,8 +280,8 @@ public class Controller extends Application {
 		return parseFunctions.unlikePhoto(id);
 	}
 	
-	public boolean isPhotoLiked(String id) {
-		return parseFunctions.isPhotoLiked(id);
+	public boolean currentUserLikesCurrentPhoto(String id) {
+		return parseFunctions.currentUserLikesCurrentPhoto(id);
 	}
 	
 	public boolean newComment(String idPhoto,String text) {

@@ -1,6 +1,10 @@
 package com.example.prototypetfgv2.view;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,8 +14,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.UploadPhotoActivity;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
@@ -41,6 +48,9 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	private FragmentTransaction transaction;
 	private FragmentManager manager;
 	
+	//new variable
+	private String mCurrentPhotoPath;
+	
 	public FragmentMain() {
 		super();
 	}
@@ -51,7 +61,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		
 		controller = (Controller) this.getActivity().getApplicationContext();
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -167,12 +177,16 @@ public class FragmentMain extends Fragment implements OnClickListener {
 				if(resultCode == Activity.RESULT_OK) {
 					Bundle extras = data.getExtras();
 			        Bitmap photo = (Bitmap)extras.get("data");
-			        controller.updatePhoto(photo,this.getActivity());
+			        //controller.updatePhoto(photo,this.getActivity());
+			        newTakePhoto();
+			        //goToUploadPhoto(photo);
+			        //go to upload photo
 				}
 				break;
 			case REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM:
 				if(resultCode == Activity.RESULT_OK) {
-			    	takePhoto();
+			    	//takePhoto();
+					newTakePhoto();
 				}
 				break;
 			default:
@@ -209,14 +223,53 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
+	
+	public void goToUploadPhoto(Bitmap photo) {
+		Intent uploadPhoto = new Intent(getActivity().getApplicationContext(),UploadPhotoActivity.class);
+		uploadPhoto.putExtra("newPhoto",photo);
+		startActivity(uploadPhoto);
+	}
 
-	/*
-	//Per mostrar la icona d'anar enrera
-	@Override
-	public void onBackStackChanged() {
+	//To take photo new version
+	private File createImageFile() throws IOException {
+	    // Create an image file name
+	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	    String imageFileName = "JPEG_" + timeStamp + "_";
+	    File storageDir = Environment.getExternalStoragePublicDirectory(
+	            Environment.DIRECTORY_PICTURES);
+	    File image = File.createTempFile(
+	        imageFileName,  /* prefix */
+	        ".jpg",         /* suffix */
+	        storageDir      /* directory */
+	    );
+
+	    // Save a file: path for use with ACTION_VIEW intents
+	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+	    return image;
+	}
+	
+	private void newTakePhoto() {
+	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    // Ensure that there's a camera activity to handle the intent
+	    Context context = getActivity().getApplicationContext(); 
+	    PackageManager packageManager = context.getPackageManager();
+	    if (takePictureIntent.resolveActivity(packageManager) != null) {
+	        // Create the File where the photo should go
+	        File photoFile = null;
+	        try {
+	            photoFile = createImageFile();
+	        } catch (IOException ex) {
+	            // Error occurred while creating the File
+	        }
+	        // Continue only if the File was successfully created
+	        if (photoFile != null) {
+	            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+	                    Uri.fromFile(photoFile));
+	            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+	        }
+	    }
 		
-		
-	}*/
+	}
 	
 	private class DownloadCurrentAlbumTask extends AsyncTask<Void, Void, Integer> {
     	

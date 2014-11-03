@@ -53,30 +53,16 @@ public class FragmentAlbums extends Fragment {
 		
 		noAlbums = (TextView) view.findViewById(R.id.label_no_albums);
 		listviewAlbums = (ListView) view.findViewById(R.id.list_albums);
-		/*listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-				// TODO Auto-generated method stub
-				Album album = albums.get(position);
-				//Go to activity to show all photos
-			}
-		});*/
 		
 		newAlbum = (Button) view.findViewById(R.id.add_album);
 		newAlbum.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				//change Fragment
 				goToNewAlbum();
 			}
 		});
 		
-		//listview = (ListView) view.findViewById(R.id.listview);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_albums);
-		//Execute new Thread for download photos
-		//new RemoteDataTask().execute();
 		new DownloadAlbumsTask().execute();
 		return view;
 	}
@@ -112,7 +98,6 @@ public class FragmentAlbums extends Fragment {
         	if(success) {
         		//hidden label no albums 
         		noAlbums.setVisibility(View.INVISIBLE);
-				// Pass the results into ListViewAdapter.java
 	            adapter = new ListViewAdapterForAlbums(getActivity(),albums);
 	            // Binds the Adapter to the ListView
 	            listviewAlbums.setAdapter(adapter);
@@ -123,9 +108,7 @@ public class FragmentAlbums extends Fragment {
 
 	    			@Override
 	    			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-	    				// TODO Auto-generated method stub
 	    				Album album = albums.get(position);
-	    				//pass the user to new fragment and change fragment
 	    				goToShowAlbum(album);
 	    			}
 	    		});

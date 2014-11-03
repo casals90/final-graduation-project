@@ -755,30 +755,14 @@ public class ParseFunctions {
 	}
 	
 	public boolean unlikePhoto(String id) {
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Like");
 		query.whereEqualTo("idPhoto",id);
 		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
 		try {
-			ParseObject  ob = query.getFirst();
-			if(ob != null)
-				ob.delete();
+			ParseObject  like = query.getFirst();
+			if(like != null)
+				like.delete();
 			return true;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	public boolean isPhotoLiked(String id) {
-		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
-		query.whereEqualTo("idPhoto",id);
-		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
-		try {
-			List<ParseObject> obs = query.find();
-			if(obs != null)
-				return false;
-			else
-				return true;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return false;
@@ -804,7 +788,7 @@ public class ParseFunctions {
 		query.whereEqualTo("idPhoto",id);
 		try {
 			int i = query.count();
-			Log.v("prototypev1", "likes count =  "+i);
+			//Log.v("prototypev1", "likes count =  "+i);
 			return i;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -862,14 +846,16 @@ public class ParseFunctions {
 		}
 	}
 	
-	public boolean currentUserLikedCurrentPhoto(String id) {
+	public boolean currentUserLikesCurrentPhoto(String id) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Like");
 		query.whereEqualTo("idPhoto",id);
 		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
 		try {
-			int i = query.count();
-			Log.v("prototypev1", "likes count =  "+i);
-			return true;
+			int c = query.count();
+			//Log.v("prototypev1", "user likes current photo =  "+c);
+			if(c > 0)
+				return true;
+			return false;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return false;

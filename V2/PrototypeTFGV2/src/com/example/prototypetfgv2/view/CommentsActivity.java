@@ -2,15 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.R.id;
-import com.example.prototypetfgv2.R.layout;
-import com.example.prototypetfgv2.R.menu;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.Album;
-import com.example.prototypetfgv2.model.Comment;
-import com.example.prototypetfgv2.model.Photo;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,13 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.Comment;
+import com.example.prototypetfgv2.model.Photo;
 
 public class CommentsActivity extends Activity {
 	
@@ -36,10 +29,9 @@ public class CommentsActivity extends Activity {
 	private ProgressBar mProgressBar;
 	
 	private ListViewAdapterForComments adapter;
-	private Controller controller;
-
 	private ArrayList<Comment> comments;
 	private ArrayList<String> likes;
+	private Controller controller;
 	private Photo currentPhoto;
 	
 	private String text;
@@ -57,7 +49,7 @@ public class CommentsActivity extends Activity {
 		if(intent != null)
 			currentPhoto = intent.getParcelableExtra("photo");
 		
-		listComments = (ListView) findViewById(R.id.like_comments);
+		listComments = (ListView) findViewById(R.id.list_comments);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 		newComment = (EditText) findViewById(R.id.new_comment);
 		send = (ImageButton) findViewById(R.id.button_send_comment);
@@ -104,23 +96,21 @@ public class CommentsActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
         	comments = controller.getParseFunctions().getCommentsFromPhoto(currentPhoto.getId());
-        	Log.v("prototypev1", "comments "+comments);
         	likes = controller.getParseFunctions().getLikes(currentPhoto.getId());
-        	//TODO fer el mateix pels likes
-        	//return true;
+        	Log.v("prototypev1", "do in background comments "+comments.size()+" likes "+likes.size());
         	if(comments != null && likes != null) {
         		return true;
         	}
-        	else {
-        		return false;
-        	}		
+        	return false;		
         }
- 
+  
         @Override
         protected void onPostExecute(final Boolean success) {
+        	Log.v("prototypev1", "onPostExecute success=  "+success);
         	if(success) {
         		mProgressBar.setVisibility(View.INVISIBLE);
 	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments);
+	            Log.v("prototypev1", "success ");
 	            listComments.setAdapter(adapter);	            
         	}
         	else {
@@ -133,6 +123,8 @@ public class CommentsActivity extends Activity {
 		protected void onCancelled() {
 			super.onCancelled();
 			//Toast.makeText(this,"Error download albums",  Toast.LENGTH_LONG).show();
+			Log.v("prototypev1", "cancel ");
+			mProgressBar.setVisibility(View.INVISIBLE);
 		}
     }
 	

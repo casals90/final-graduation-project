@@ -70,6 +70,9 @@ public class FragmentShowPhoto extends Fragment {
 				//hidden like button
 				like.setVisibility(View.INVISIBLE);
 				unlike.setVisibility(View.VISIBLE);
+				//increment numbers of likes in list view
+				countLikes++;
+				numberOfLikes.setText(String.valueOf(countLikes));
 			}
 		});
 		unlike.setOnClickListener(new OnClickListener() {
@@ -80,11 +83,14 @@ public class FragmentShowPhoto extends Fragment {
 				//hidden unlike button
 				like.setVisibility(View.VISIBLE);
 				unlike.setVisibility(View.INVISIBLE);
+				//decrement numbers of likes in list view
+				countLikes--;
+				numberOfLikes.setText(String.valueOf(countLikes));
 			}
 		});
 		//Check if currentUser likes photo
-		Log.v("prototypev1", "Users likes this photo "+controller.isPhotoLiked(currentPhoto.getId()));
-		if(controller.isPhotoLiked(currentPhoto.getId())) {
+		Log.v("prototypev1", "Users likes this photo "+controller.currentUserLikesCurrentPhoto(currentPhoto.getId()));
+		if(controller.currentUserLikesCurrentPhoto(currentPhoto.getId())) {
 			like.setVisibility(View.INVISIBLE);
 			unlike.setVisibility(View.VISIBLE);
 		}
@@ -128,7 +134,7 @@ public class FragmentShowPhoto extends Fragment {
         protected Boolean doInBackground(Void... params) {
         	countLikes = controller.countPhotoLikes(currentPhoto.getId());
         	countComments = controller.countPhotoComments(currentPhoto.getId());
-        	currentUserLikesThisPhoto = controller.getParseFunctions().currentUserLikedCurrentPhoto(currentPhoto.getId());
+        	currentUserLikesThisPhoto = controller.getParseFunctions().currentUserLikesCurrentPhoto(currentPhoto.getId());
         	//Check correct values
         	if(countComments > -1 && countLikes > -1)
         		return true;
