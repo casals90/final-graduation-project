@@ -14,28 +14,14 @@ public class Photo implements Parcelable {
     private String title;
     private String photo;
     private String createdAt;
-    private int commentsNumber;
-    private int likesNumber;
-    private ArrayList<Comment> comments;
-    private ArrayList<String> likes;
     private User ownerUser;
     
-	public Photo(String id, String title, String photo, String createdAt,int commentsNumber, int likesNumber,ArrayList<Comment> comments, JSONArray likes,User ownerUser) {
+	public Photo(String id, String title, String photo, String createdAt,User ownerUser) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.photo = photo;
 		this.createdAt = createdAt;
-		this.commentsNumber = commentsNumber;
-		this.likesNumber = likesNumber;
-		if(comments != null)
-			this.comments = comments;
-		else
-			this.comments = null;
-		if(likes != null)
-			this.likes = jsonArrayToArrayListLike(likes);
-		else
-			this.likes = null;
 		this.ownerUser = ownerUser;
 	}
 	
@@ -84,38 +70,6 @@ public class Photo implements Parcelable {
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
-
-	public ArrayList<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(ArrayList<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public ArrayList<String> getLikes() {
-		return likes;
-	}
-
-	public void setLikes(ArrayList<String> likes) {
-		this.likes = likes;
-	}
-	
-	public int getCommentsNumber() {
-		return commentsNumber;
-	}
-
-	public void setCommentsNumber(int commentsNumber) {
-		this.commentsNumber = commentsNumber;
-	}
-
-	public int getLikesNumber() {
-		return likesNumber;
-	}
-
-	public void setLikesNumber(int likesNumber) {
-		this.likesNumber = likesNumber;
-	}
 	
 	public User getOwnerUser() {
 		return ownerUser;
@@ -151,10 +105,6 @@ public class Photo implements Parcelable {
 		dest.writeString(title);
 		dest.writeString(photo);
 		dest.writeString(createdAt);
-		dest.writeInt(commentsNumber);
-		dest.writeInt(likesNumber);
-		dest.writeTypedList(comments);
-		dest.writeStringList(likes);
 		dest.writeParcelable(ownerUser,flags);
 	}
 	
@@ -164,11 +114,6 @@ public class Photo implements Parcelable {
 		title = in.readString();
 		photo = in.readString();
 		createdAt = in.readString();
-		commentsNumber = in.readInt();
-		likesNumber = in.readInt();
-		in.readParcelableArray(Comment.class.getClassLoader());
-		in.readTypedList(comments,Comment.CREATOR);
-		in.readStringList(likes);
 		ownerUser = in.readParcelable(User.class.getClassLoader());
 	}
 }

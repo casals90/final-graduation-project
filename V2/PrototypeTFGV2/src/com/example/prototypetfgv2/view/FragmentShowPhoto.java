@@ -30,8 +30,9 @@ public class FragmentShowPhoto extends Fragment {
 	private Controller controller;
 	
 	private Photo currentPhoto;
-	int countLikes = 0;
-	int countComments = 0;
+	private int countLikes = 0;
+	private int countComments = 0;
+	private boolean currentUserLikesThisPhoto;
 	
 	public FragmentShowPhoto() {
 		super();
@@ -102,9 +103,7 @@ public class FragmentShowPhoto extends Fragment {
 			}
 		});
 		numberOfLikes = (TextView) view.findViewById(R.id.number_of_likes);
-		numberOfLikes.setText(String.valueOf(currentPhoto.getLikesNumber()));
 		numberOfComments = (TextView) view.findViewById(R.id.number_of_comments);
-		numberOfComments.setText(String.valueOf(currentPhoto.getCommentsNumber()));
 		
 		new  DownloadNumberLikesAndCommentsTask().execute();
 		
@@ -129,8 +128,9 @@ public class FragmentShowPhoto extends Fragment {
         protected Boolean doInBackground(Void... params) {
         	countLikes = controller.countPhotoLikes(currentPhoto.getId());
         	countComments = controller.countPhotoComments(currentPhoto.getId());
+        	currentUserLikesThisPhoto = controller.getParseFunctions().currentUserLikedCurrentPhoto(currentPhoto.getId());
         	//Check correct values
-        	if(countComments > 0 && countLikes > 0)
+        	if(countComments > -1 && countLikes > -1)
         		return true;
         	return false;		
         }
@@ -140,6 +140,14 @@ public class FragmentShowPhoto extends Fragment {
         	if(success) {
         		numberOfLikes.setText(String.valueOf(countLikes));
         		numberOfComments.setText(String.valueOf(countComments));
+        		if(currentUserLikesThisPhoto) {
+        			like.setVisibility(View.INVISIBLE);
+        			unlike.setVisibility(View.VISIBLE);
+        		}
+        		else {
+        			like.setVisibility(View.VISIBLE);
+        			unlike.setVisibility(View.INVISIBLE);
+        		}
         	}
         	else {
         		

@@ -42,19 +42,20 @@ public class CommentsActivity extends Activity {
 	private ArrayList<String> likes;
 	private Photo currentPhoto;
 	
+	private String text;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_comments);
 		
 		controller = (Controller) getApplication().getApplicationContext();
+		comments = new ArrayList<Comment>();
 		
 		//Catch data
 		Intent intent = getIntent();
-		if(intent != null) {
+		if(intent != null)
 			currentPhoto = intent.getParcelableExtra("photo");
-			Log.v("prototypev1", "show photo "+currentPhoto.getId());
-		}
 		
 		listComments = (ListView) findViewById(R.id.like_comments);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -65,8 +66,12 @@ public class CommentsActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// Send comment	
+				text = newComment.getText().toString();
+				new SendCommentTask().execute();
 			}
 		});
+		
+		new DownloadCommentsTask().execute();
 	}
 
 	@Override
@@ -99,12 +104,11 @@ public class CommentsActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
         	comments = controller.getParseFunctions().getCommentsFromPhoto(currentPhoto.getId());
+        	Log.v("prototypev1", "comments "+comments);
         	likes = controller.getParseFunctions().getLikes(currentPhoto.getId());
         	//TODO fer el mateix pels likes
         	//return true;
         	if(comments != null && likes != null) {
-        		currentPhoto.setComments(comments);
-        		currentPhoto.setLikes(likes);
         		return true;
         	}
         	else {
@@ -115,6 +119,7 @@ public class CommentsActivity extends Activity {
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
+        		mProgressBar.setVisibility(View.INVISIBLE);
 	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments);
 	            listComments.setAdapter(adapter);	            
         	}
@@ -131,4 +136,37 @@ public class CommentsActivity extends Activity {
 		}
     }
 	
+	private class SendCommentTask extends AsyncTask<Void, Void, Boolean> {
+    	
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	mProgressBar.setVisibility(View.VISIBLE);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(Void... params) {
+        	return controller.newComment(currentPhoto.getId(), text);
+        }
+ 
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        	if(success) {
+        		//Adding new comment in a arrayList and send to adapter
+        		comments.add(new Comment(currentPhoto.getOwnerUser(),text,currentPhoto.getCreatedAt()));
+        		mProgressBar.setVisibility(View.INVISIBLE);
+	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments);
+	            listComments.setAdapter(adapter);	            
+        	}
+        	else {
+        		mProgressBar.setVisibility(View.INVISIBLE);
+        	}	
+        }
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(this,"Error download albums",  Toast.LENGTH_LONG).show();
+		}
+    }
 }

@@ -111,17 +111,17 @@ public class ParseFunctions {
     	ParseQuery<ParseUser> query = ParseUser.getQuery();
     	query.whereEqualTo("username",username);
         try {
-			List<ParseUser> users = query.find();
-			if(users.size() > 0)
+			ParseUser user = query.getFirst();
+			if(user != null)
 				return true;	
 			else 
 				return false;		
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	return true;
     }
+    
     // No testejada
     public int getAlbumsNumber() {
     	ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Album");
@@ -129,7 +129,6 @@ public class ParseFunctions {
     	try {
 			return query.count();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return -1;
 		}
@@ -147,18 +146,18 @@ public class ParseFunctions {
         photoUpload.put("commentsNumber",0);
         //Save the owner of the photo
         photoUpload.put("ownerUser",ParseUser.getCurrentUser().getObjectId());
-        Log.v("prototypev1", "upload photo put current album ");
+        //Log.v("prototypev1", "upload photo put current album ");
         String album;
 		try {
 			album = ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id");
-			Log.v("prototypev1", "upload photo put current album id "+ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id"));
+			//Log.v("prototypev1", "upload photo put current album id "+ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id"));
 			photoUpload.put("ownerAlbum",album);
 			//add more atributes
 			photoUpload.saveInBackground(new SaveCallback() {
 				@Override
 				public void done(ParseException e) {
-					Log.v("prototypev1", "upload photo put current album id object "+photoUpload.getObjectId());
-					Log.v("prototypev1", "upload photo put current album error "+e);
+					//Log.v("prototypev1", "upload photo put current album id object "+photoUpload.getObjectId());
+					//Log.v("prototypev1", "upload photo put current album error "+e);
 					Toast.makeText(activity.getApplicationContext(), "Correct update photo",Toast.LENGTH_LONG).show();
 				}
 			});
@@ -201,7 +200,7 @@ public class ParseFunctions {
 	}
 	
 	//Obsolet
-	public void deletePhoto(final String id) {
+	/*public void deletePhoto(final String id) {
 		//First delete from photo object
 		ParseQuery<ParseObject> photoQuery = ParseQuery.getQuery(PHOTO);
 		photoQuery.whereEqualTo("objectId",id);
@@ -235,7 +234,7 @@ public class ParseFunctions {
 				user.saveInBackground();
 			}
 		});	
-	}
+	}*/
 	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
 		ArrayList<Photo> photos = new ArrayList<Photo>();
@@ -249,12 +248,11 @@ public class ParseFunctions {
 				ParseFile image = o.getParseFile("photo");
 				User ownerUser = getUser(o.getString("ownerUser"));
 				//Null because I don't want download comments
-	            Photo photo = new Photo(o.getObjectId(),o.getString("title"),image.getUrl(),String.valueOf(o.getCreatedAt()),o.getInt("commentsNumber"),o.getInt("likesNumber"),null,o.getJSONArray("likes"),ownerUser);
+	            Photo photo = new Photo(o.getObjectId(),o.getString("title"),image.getUrl(),String.valueOf(o.getCreatedAt()),ownerUser);
 	            photos.add(photo);
 			}
 			return photos;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -262,12 +260,10 @@ public class ParseFunctions {
 	
 	public User getUser(String id) {
 		User user;
-		
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereEqualTo("objectId",id);
 		try {
-			List<ParseUser> users = query.find();
-			ParseUser u = users.get(0);
+			ParseUser u = query.getFirst();
 			ParseFile profilePicture = (ParseFile)u.get("profilePicture");
 			if(profilePicture == null)
 				user = new User(u.getObjectId(),u.getUsername(),null,0);
@@ -275,7 +271,6 @@ public class ParseFunctions {
 				user = new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0);
 			return user;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -313,28 +308,25 @@ public class ParseFunctions {
 	public ArrayList<User> downloadFriends() {
 		ArrayList<User> users = new ArrayList<User>();
 		JSONArray idFriends = getFriends();
-		List<ParseUser> parseUsers;
 		
 		for(int i = 0; i < idFriends.length(); i ++) {
 			ParseQuery<ParseUser> query = ParseUser.getQuery();
 			try {
 				query.whereEqualTo("objectId",idFriends.get(i));
 				query.orderByDescending("username");
-				parseUsers = query.find();
-				ParseUser u = parseUsers.get(0);
+				ParseUser u = query.getFirst();
+				//ParseUser u = parseUsers.get(0);
 				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
 				if(profilePicture == null)
 					users.add(new User(u.getObjectId(),u.getUsername(), null,0));
 				else
 					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Log.v("prototypev1", "error getFriends users "+e);
+				//Log.v("prototypev1", "error getFriends users "+e);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Log.v("prototypev1", "error getFriends users "+e);
+				//Log.v("prototypev1", "error getFriends users "+e);
 			}
 		}
 		return users;
@@ -344,7 +336,6 @@ public class ParseFunctions {
 		ArrayList<User> users = new ArrayList<User>();
 		JSONArray f = ParseUser.getCurrentUser().getJSONArray("friends");
 		ArrayList<String> friends = Utils.jsonArrayToArrayListString(f);
-		//Log.v("prototypev1", "download friends "+friends);
 		
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereStartsWith("username",input);
@@ -359,10 +350,10 @@ public class ParseFunctions {
 				else
 					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),0));
 			}
-			Log.v("prototypev1", "result query "+users.size());
+			//Log.v("prototypev1", "result query "+users.size());
 		} catch (ParseException e) {
 			e.printStackTrace();
-			Log.v("prototypev1", "error query ");
+			//Log.v("prototypev1", "error query ");
 		}
 		return users;
 	}
@@ -388,7 +379,7 @@ public class ParseFunctions {
 			
 		} catch (ParseException e) {
 			e.printStackTrace();
-			Log.v("prototypev1", "error download search users");
+			//Log.v("prototypev1", "error download search users");
 			return null;
 		}
 		return users;
@@ -461,7 +452,6 @@ public class ParseFunctions {
 			push.sendInBackground();
 					
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.v("prototypev1", "error push "+e);
 		}*/
@@ -474,7 +464,6 @@ public class ParseFunctions {
 			ParseUser u = userQuery.getFirst();
 			Log.v("prototypev1", "send push "+u.getUsername());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		
@@ -502,7 +491,6 @@ public class ParseFunctions {
 			try {
 				return Utils.byteArrayToBitmap(profilePicture.getData());
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -518,7 +506,6 @@ public class ParseFunctions {
 			user.save();
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -531,7 +518,6 @@ public class ParseFunctions {
 			user.save();
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -542,6 +528,7 @@ public class ParseFunctions {
 		return Utils.isElementExist(friends, id);
 	}
 	
+	//Revisar
 	public boolean deleteFriend(String id) {
 		JSONArray friends = Utils.removeElementToJsonArray(getFriends(),id);
 		ParseUser user = ParseUser.getCurrentUser();
@@ -557,7 +544,6 @@ public class ParseFunctions {
 			user.save();
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -592,7 +578,6 @@ public class ParseFunctions {
 							goToInputUsername(activity);
 						} 
 						catch (ParseException e) {
-							// TODO Auto-generated catch block
 								e.printStackTrace();
 								user = null; 
 						}   
@@ -619,17 +604,14 @@ public class ParseFunctions {
 			}
 						
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			Log.v("prototypev1", "error "+e);
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.v("prototypev1", "error "+e);
 			return null;
 		} catch (JSONException e) {
-			e.printStackTrace();
 			Log.v("prototypev1", "error "+e);
 			return null;
 		}
@@ -670,7 +652,6 @@ public class ParseFunctions {
 			newAlbum.save();
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -709,7 +690,6 @@ public class ParseFunctions {
 	}
 	
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
-		//TODO 
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		currentUser.put("currentAlbum",currentAlbum.getCurrentAlbum());
 		try {
@@ -729,7 +709,6 @@ public class ParseFunctions {
 			
 			@Override
 			public void done(List<ParseObject> albums, ParseException e) {
-				// TODO Auto-generated method stub
 				if(e == null) {
 					ParseObject album = albums.get(0);
 					album.put("albumCover",idPhoto);
@@ -770,7 +749,6 @@ public class ParseFunctions {
 			like.save();
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -781,12 +759,11 @@ public class ParseFunctions {
 		query.whereEqualTo("idPhoto",id);
 		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
 		try {
-			List<ParseObject> obs = query.find();
-			if(obs != null)
-				obs.get(0).delete();
+			ParseObject  ob = query.getFirst();
+			if(ob != null)
+				ob.delete();
 			return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -803,7 +780,6 @@ public class ParseFunctions {
 			else
 				return true;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -827,7 +803,9 @@ public class ParseFunctions {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Like");
 		query.whereEqualTo("idPhoto",id);
 		try {
-			return query.count();
+			int i = query.count();
+			Log.v("prototypev1", "likes count =  "+i);
+			return i;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return -1;
@@ -861,7 +839,6 @@ public class ParseFunctions {
 				comments.add(new Comment(user, comment, date));
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -880,11 +857,23 @@ public class ParseFunctions {
 			}
 			return likes;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 	}
+	
+	public boolean currentUserLikedCurrentPhoto(String id) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Like");
+		query.whereEqualTo("idPhoto",id);
+		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
+		try {
+			int i = query.count();
+			Log.v("prototypev1", "likes count =  "+i);
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
-
 // Canviar lu de friends i albums memebers!!!!! Enlloc de tenir una arrayList fer una classe per cada un al parse i baxar-los (Friends (idUser1 idUser2...) Members (idUser - idAlbum))
