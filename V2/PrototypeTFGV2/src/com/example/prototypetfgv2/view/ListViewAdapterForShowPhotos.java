@@ -13,20 +13,20 @@ import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.Photo;
+import com.nostra13.universalimageloader.core.ImageLoader;
  
 public class ListViewAdapterForShowPhotos extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
-    ImageLoader imageLoader;
+    private ImageLoader imageLoader;
     private List<Photo> myPhotos;
-    //private Controller controller;
     
     public ListViewAdapterForShowPhotos(Context context,List<Photo> myPhotos) {
         this.context = context;
         this.myPhotos = myPhotos;
         inflater = LayoutInflater.from(context);
   
-        imageLoader = new ImageLoader(context);
+        imageLoader = ImageLoader.getInstance();
     }
     
     public class ViewHolder {
@@ -70,7 +70,8 @@ public class ListViewAdapterForShowPhotos extends BaseAdapter {
         holder.title.setText(myPhotos.get(position).getTitle());
         holder.createdAt.setText(myPhotos.get(position).getCreatedAt());
         // Set the results into ImageView
-        imageLoader.DisplayImage(myPhotos.get(position).getPhoto(),holder.photo);
+        //imageLoader.DisplayImage(myPhotos.get(position).getPhoto(),holder.photo);
+        imageLoader.displayImage(myPhotos.get(position).getPhoto(),holder.photo);
       /*  holder.dButton.setOnClickListener(new OnClickListener() {
 			
 			@Override

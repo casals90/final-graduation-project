@@ -12,19 +12,20 @@ import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.Comment;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ListViewAdapterForComments extends BaseAdapter {
 
 	private ArrayList<Comment> comments;
 	private LayoutInflater inflater;
-    private ImageLoader imageLoader;
+	private ImageLoader imageLoader;
     
     //private Controller controller;
     
 	public ListViewAdapterForComments(Context context,ArrayList<Comment> comments) {
 		super();
 		inflater = LayoutInflater.from(context);
-        imageLoader = new ImageLoader(context);
+        imageLoader = ImageLoader.getInstance();
 		this.comments = comments;
 		//Log.v("prototypev1", "on adapter comments"+comments.size()+" text "+comments.get(0).getUser().getUsername()+" text "+comments.get(0).getComment()+" date "+comments.get(0).getDate());
 		//controller = (Controller) context.getApplicationContext();
@@ -71,7 +72,7 @@ public class ListViewAdapterForComments extends BaseAdapter {
 		holder.comment.setText(comments.get(position).getComment());
 		holder.date.setText(comments.get(position).getDate());
 		
-		imageLoader.DisplayImage(comments.get(position).getUser().getProfilePicture(),holder.profilePicture);
+		imageLoader.displayImage(comments.get(position).getUser().getProfilePicture(),holder.profilePicture);
 		if(comments.get(position).getUser().getProfilePicture() == null)
 			holder.profilePicture.setImageResource(R.drawable.ic_launcher);
 		return view;

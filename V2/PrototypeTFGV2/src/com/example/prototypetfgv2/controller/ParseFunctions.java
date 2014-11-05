@@ -134,16 +134,16 @@ public class ParseFunctions {
 		}
     }
 	
-    public void updatePhoto(Bitmap photo,final Activity activity) {
+    
+    public void updatePhoto(Bitmap photo,String title,final Activity activity) {
     	// Create the ParseFile
         ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
         Log.v("prototypev1", "upload photo ");
         // Upload the image into Parse Cloud
         file.saveInBackground();
         final ParseObject photoUpload = new ParseObject("Photo");
-        photoUpload.put("photo", file);
-        photoUpload.put("likesNumber",0);
-        photoUpload.put("commentsNumber",0);
+        photoUpload.put("photo",file);
+        photoUpload.put("title",title);
         //Save the owner of the photo
         photoUpload.put("ownerUser",ParseUser.getCurrentUser().getObjectId());
         //Log.v("prototypev1", "upload photo put current album ");
@@ -237,6 +237,7 @@ public class ParseFunctions {
 	}*/
 	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
+		Log.v("prototypev1", "start download photo");
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		List<ParseObject> ob;
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Photo");
@@ -244,16 +245,21 @@ public class ParseFunctions {
 		query.orderByDescending("createdAt");
 		try {
 			ob = query.find();
+			int i = 0;
 			for(ParseObject o : ob) {
+				Log.v("prototypev1", "photo "+i);
+				i++;
 				ParseFile image = o.getParseFile("photo");
 				User ownerUser = getUser(o.getString("ownerUser"));
 				//Null because I don't want download comments
 	            Photo photo = new Photo(o.getObjectId(),o.getString("title"),image.getUrl(),String.valueOf(o.getCreatedAt()),ownerUser);
 	            photos.add(photo);
 			}
+			Log.v("prototypev1", "end download photo");
 			return photos;
 		} catch (ParseException e) {
 			e.printStackTrace();
+			Log.v("prototypev1", "error download photo");
 			return null;
 		}
 	}

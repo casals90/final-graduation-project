@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
+import com.nostra13.universalimageloader.core.ImageLoader;
  
 public class ListViewAdapterForSearchUsers extends BaseAdapter {
 	
@@ -28,7 +29,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
     
     public ListViewAdapterForSearchUsers(Context context,List<User> users) {      
         inflater = LayoutInflater.from(context);
-        imageLoader = new ImageLoader(context);
+        imageLoader = ImageLoader.getInstance();
         
         controller = (Controller) context.getApplicationContext();
                
@@ -76,7 +77,8 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         }
         // Set the results into TextViews
         holder.username.setText(users.get(position).getUsername());
-        imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+        
+        imageLoader.displayImage(users.get(position).getProfilePicture(),holder.profilePicture);
         //Default profile photo
         if(users.get(position).getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);

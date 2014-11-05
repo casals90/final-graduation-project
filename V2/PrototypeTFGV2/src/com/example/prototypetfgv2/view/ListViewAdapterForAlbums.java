@@ -12,27 +12,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 public class ListViewAdapterForAlbums extends BaseAdapter {
 
 	private LayoutInflater inflater;
-    private ImageLoader imageLoader;
-    //private ImageThreadLoader it;
-	
+	private ImageLoader imageLoader;
+	//private com.example.prototypetfgv2.view.ImageLoader imageOld;
 	private List<Album> albums;
-	
-	private Controller controller;
 	Activity activity;
 	
 	public ListViewAdapterForAlbums(Context context,List<Album> albums) { 
 		
         inflater = LayoutInflater.from(context);
-        imageLoader = new ImageLoader(context);
-        controller = (Controller) context.getApplicationContext();
-          
+        imageLoader = ImageLoader.getInstance();
+        //imageOld = new com.example.prototypetfgv2.view.ImageLoader(context);
         this.albums = albums;
     }
 	
@@ -71,10 +67,10 @@ public class ListViewAdapterForAlbums extends BaseAdapter {
         }
 		holder.albumTitle.setText(albums.get(position).getAlbumTitle());
 		
-		imageLoader.DisplayImage(albums.get(position).getAlbumCover(),holder.albumCover);
+		imageLoader.displayImage(albums.get(position).getAlbumCover(), holder.albumCover);
 		if(albums.get(position).getAlbumCover() == null)
 			holder.albumCover.setImageResource(R.drawable.ic_launcher);
-		
+		//imageOld.DisplayImage(albums.get(position).getAlbumCover(), holder.albumCover);
 		return view;
 	}
 

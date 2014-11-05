@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.view.ListViewAdapterChooseUsersNewAlbum.ViewHolder;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
 	public AdapterForCurrentAlbum(Context context,List<CurrentAlbum> currentAlbums) {
 		super();
 		this.inflater = LayoutInflater.from(context);
-        this.imageLoader = new ImageLoader(context);
+        this.imageLoader = ImageLoader.getInstance();
         
 		this.currentAlbums = currentAlbums;
 	}
@@ -69,7 +70,7 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
 		else
 			holder = (ViewHolder) view.getTag();
 		holder.albumTitle.setText(currentAlbums.get(position).getTitle());
-		imageLoader.DisplayImage(currentAlbums.get(position).getCoverPhoto(),holder.albumCover);
+		imageLoader.displayImage(currentAlbums.get(position).getCoverPhoto(),holder.albumCover);
         //Default profile photo
         if(currentAlbums.get(position).getCoverPhoto() == null)
         	holder.albumCover.setImageResource(R.drawable.ic_launcher);

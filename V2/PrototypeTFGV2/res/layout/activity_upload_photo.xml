@@ -1,12 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.prototypetfgv2.UploadPhotoActivity" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.example.prototypetfgv2.view.UploadPhotoActivity" >
 
     <TextView
         android:id="@+id/textView1"
@@ -15,13 +11,28 @@
         android:text="@string/hello_world" />
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+        android:id="@+id/img"
+        android:layout_width="200dp"
+		android:layout_height="200dp"
+		android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher" />
+    
+    <EditText 
+        android:id="@+id/photo_title"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="96dp"
-        android:src="@drawable/ic_launcher_test" />
+        android:layout_width="200dp"
+        android:layout_alignParentBottom="true"
+        android:hint="Enter photo title"/>
+    
+    <ImageButton 
+        android:id="@+id/send_title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/photo_title"
+        android:src="@drawable/ic_action_send_now"
+        />
+    
+    
 
 </RelativeLayout>

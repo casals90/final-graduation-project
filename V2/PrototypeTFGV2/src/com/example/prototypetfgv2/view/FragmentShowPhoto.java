@@ -19,12 +19,13 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FragmentShowPhoto extends Fragment {
 
 	private ImageView photo;
 	private Button like,unlike,comment;
-	private TextView numberOfLikes,numberOfComments,username;
+	private TextView numberOfLikes,numberOfComments,username,date;
 	
 	private ImageLoader imageLoader;
 	private Controller controller;
@@ -43,11 +44,10 @@ public class FragmentShowPhoto extends Fragment {
 		super.onCreate(savedInstanceState);
 		//getActivity().setTitle(R.string.news);
 		Bundle data = this.getArguments();
-		currentPhoto = data.getParcelable("Photo");
-		//Baixo likes i comments i faig l set a photo
-		//Log.v("prototypev1", "show photo "+p.getId()+" c "+p.getCommentsNumber());
-		//Log.v("prototypev1", "show photo "+p.getId()+" l "+p.getLikesNumber());
-		imageLoader = new ImageLoader(getActivity().getApplicationContext());
+		if(data != null)
+			currentPhoto = data.getParcelable("Photo");
+		
+		imageLoader = ImageLoader.getInstance();
 		controller = (Controller) getActivity().getApplicationContext();
 	}
 
@@ -57,7 +57,7 @@ public class FragmentShowPhoto extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_show_photo,container,false);
 		
 		photo = (ImageView) view.findViewById(R.id.photo);
-		imageLoader.DisplayImage(currentPhoto.getPhoto(),photo);
+		imageLoader.displayImage(currentPhoto.getPhoto(),photo);
 		username = (TextView) view.findViewById(R.id.username);
 		username.setText(currentPhoto.getOwnerUser().getUsername());
 		like = (Button) view.findViewById(R.id.like);
@@ -111,7 +111,10 @@ public class FragmentShowPhoto extends Fragment {
 		numberOfLikes = (TextView) view.findViewById(R.id.number_of_likes);
 		numberOfComments = (TextView) view.findViewById(R.id.number_of_comments);
 		
-		new  DownloadNumberLikesAndCommentsTask().execute();
+		date = (TextView) view.findViewById(R.id.date);
+		date.setText(currentPhoto.getCreatedAt());
+		
+		new DownloadNumberLikesAndCommentsTask().execute();
 		
 		return view;
 	}

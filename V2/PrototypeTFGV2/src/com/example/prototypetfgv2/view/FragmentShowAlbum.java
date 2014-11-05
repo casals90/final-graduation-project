@@ -46,6 +46,7 @@ public class FragmentShowAlbum extends Fragment {
 		super.onCreate(savedInstanceState);
 		getActivity().setTitle(R.string.news);
 		controller = (Controller) this.getActivity().getApplicationContext();
+		controller.clearImageLoader();
 		//Fetch data album
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");

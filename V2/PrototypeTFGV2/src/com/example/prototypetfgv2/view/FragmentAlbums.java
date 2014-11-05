@@ -43,6 +43,7 @@ public class FragmentAlbums extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		controller = (Controller) this.getActivity().getApplicationContext();
+		controller.clearImageLoader();
 		getActivity().setTitle(R.string.albums);
 	}
 

@@ -34,7 +34,7 @@
         android:id="@+id/date_of_comment"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/data_of_comment"
+        android:text="@string/date_of_comment"
        	android:layout_below="@+id/comment"
        	android:layout_toRightOf="@+id/profilePicture"
        	android:textSize="12sp"

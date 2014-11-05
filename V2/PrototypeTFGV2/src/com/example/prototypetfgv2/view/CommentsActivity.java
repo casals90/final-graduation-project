@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
@@ -59,7 +60,12 @@ public class CommentsActivity extends Activity {
 			public void onClick(View v) {
 				// Send comment	
 				text = newComment.getText().toString();
-				new SendCommentTask().execute();
+				if(text.length() > 0) {
+					newComment.setText("");
+					new SendCommentTask().execute();
+				}
+				else
+					Toast.makeText(getApplicationContext(), "Input comment",Toast.LENGTH_LONG).show();
 			}
 		});
 		

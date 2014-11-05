@@ -89,7 +89,8 @@
             android:label="@string/title_activity_comments" >
         </activity>
         <activity
-            android:name=".UploadPhotoActivity"
+            android:name="com.example.prototypetfgv2.view.UploadPhotoActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" 
             android:label="@string/title_activity_upload_photo" >
         </activity>
     </application>

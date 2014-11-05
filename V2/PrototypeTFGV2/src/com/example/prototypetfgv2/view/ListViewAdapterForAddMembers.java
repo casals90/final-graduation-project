@@ -15,11 +15,12 @@ import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.User;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ListViewAdapterForAddMembers extends BaseAdapter {
 
 	private LayoutInflater inflater;
-    private ImageLoader imageLoader;
+	private ImageLoader imageLoader;
 	
 	private List<User> users;
 		
@@ -27,7 +28,7 @@ public class ListViewAdapterForAddMembers extends BaseAdapter {
 		super();
 		
 		this.inflater = LayoutInflater.from(context);
-        this.imageLoader = new ImageLoader(context);
+		imageLoader = ImageLoader.getInstance();
 		this.users = users;
 	}
 	
@@ -79,7 +80,8 @@ public class ListViewAdapterForAddMembers extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		
 		holder.username.setText(users.get(position).getUsername());
-		imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+		//imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+		imageLoader.displayImage(users.get(position).getProfilePicture(),holder.profilePicture);
 		//Default profile photo
         if(users.get(position).getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);

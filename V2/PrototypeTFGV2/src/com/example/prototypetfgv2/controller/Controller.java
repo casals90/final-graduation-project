@@ -1,13 +1,11 @@
 package com.example.prototypetfgv2.controller;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONArray;
 
@@ -19,22 +17,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.example.prototypetfgv2.R.id;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
-
 import com.example.prototypetfgv2.view.SignUpActivity;
 import com.example.prototypetfgv2.view.Utils;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
  
 public class Controller extends Application {
@@ -53,8 +45,23 @@ public class Controller extends Application {
         parseFunctions = new ParseFunctions(getApplicationContext());
         parseFunctions.initParse(getApplicationContext());
         
-        //configureDefaultImageLoader(getApplicationContext());
         
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+        .denyCacheImageMultipleSizesInMemory()
+        .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+        .memoryCacheSize(2 * 1024 * 1024)
+        .diskCacheSize(50 * 1024 * 1024)
+        .diskCacheFileCount(100)
+        .writeDebugLogs()
+        .build();        
+        
+        ImageLoader.getInstance().init(config);
+        
+	}
+	
+	public void clearImageLoader() {
+		ImageLoader.getInstance().clearDiskCache();
+		ImageLoader.getInstance().clearMemoryCache();
 	}
 	
 	public void configureDefaultImageLoader(Context context) {
@@ -106,8 +113,8 @@ public class Controller extends Application {
 		return false;
 	}
 	
-	public void updatePhoto(Bitmap photo,Activity activity) {
-		parseFunctions.updatePhoto(photo,activity);
+	public void updatePhoto(Bitmap photo,String title,Activity activity) {
+		parseFunctions.updatePhoto(photo,title,activity);
 	}
 	
 	public void logout() {

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FragmentProfileOtherUser extends Fragment {
 	
@@ -44,7 +45,7 @@ public class FragmentProfileOtherUser extends Fragment {
 		
 		Context context = getActivity().getApplicationContext();
 		
-		imageLoader = new ImageLoader(context);
+		imageLoader = ImageLoader.getInstance();
 		controller = (Controller) this.getActivity().getApplicationContext();
 		
 		Bundle data = this.getArguments();
@@ -60,7 +61,8 @@ public class FragmentProfileOtherUser extends Fragment {
 		username = (TextView) view.findViewById(R.id.username);
 		
 		if(user.getProfilePicture() != null)
-			imageLoader.DisplayImage(user.getProfilePicture(),profilePicture);
+			//imageLoader.DisplayImage(user.getProfilePicture(),profilePicture);/
+			imageLoader.displayImage(user.getProfilePicture(),profilePicture);
 		
 		username.setText(user.getUsername());
 		

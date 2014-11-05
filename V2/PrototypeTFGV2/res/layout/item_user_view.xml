@@ -10,6 +10,7 @@
         android:layout_height="50dp"
         android:src="@drawable/ic_launcher"
         android:layout_marginRight="10dp"
+        android:visibility="visible"
         android:contentDescription="@string/explain"/>
 
     <TextView
