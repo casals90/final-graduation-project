@@ -68,8 +68,8 @@ public class FragmentShowAlbum extends Fragment {
 		return view;
 	}
 	
-//Class to download photos
-private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
+	//Class to download photos
+	private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
 		
         @Override
         protected void onPreExecute() {
@@ -80,7 +80,6 @@ private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
  
         @Override
         protected Boolean doInBackground(Void... params) {
-        	//return controller.deleteFriend(user.getId());
         	photos = controller.downloadPhotosFromAlbum(album.getId());
         	if(photos != null && photos.size() > 0)
         		return true;
@@ -107,6 +106,7 @@ private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
 						goToShowPhoto(photo);
 					}
 				});
+	            Log.v("prototypev1", "final onpostexecute download photos grid");
 			}
 			else {
 				//Show message no photos

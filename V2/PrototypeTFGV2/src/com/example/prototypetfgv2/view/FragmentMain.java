@@ -190,7 +190,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	            Environment.DIRECTORY_PICTURES);
 	    File image = File.createTempFile(
 	        imageFileName,  /* prefix */
-	        ".jpg",         /* suffix */
+	        ".jpeg",         /* suffix */
 	        storageDir      /* directory */
 	    );
 

@@ -24,7 +24,6 @@ import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.SignUpActivity;
 import com.example.prototypetfgv2.view.Utils;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.parse.ParseUser;
@@ -123,7 +122,6 @@ public class Controller extends Application {
 	}
 	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
-		Log.v("prototypev1", "download photos controller ");
 		return parseFunctions.downloadPhotosFromAlbum(albumId);
 	}
 	

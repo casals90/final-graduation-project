@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,11 +63,20 @@ public class FragmentAlbums extends Fragment {
 				goToNewAlbum();
 			}
 		});
-		
+		Log.v("prototypev1", "on Create view");
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_albums);
 		new DownloadAlbumsTask().execute();
 		return view;
 	}
+	
+	/*@Override
+	public void onStart() {
+		super.onStart();
+		Log.v("prototypev1", "on Start");
+		new DownloadAlbumsTask().execute();
+	}*/
+
+	
 	
 	public void goToNewAlbum() {
 		FragmentManager manager = getActivity().getSupportFragmentManager();
@@ -76,7 +86,9 @@ public class FragmentAlbums extends Fragment {
 		transaction.commit();
 	}
 	
-   private class DownloadAlbumsTask extends AsyncTask<Void, Void, Boolean> {
+   
+
+	private class DownloadAlbumsTask extends AsyncTask<Void, Void, Boolean> {
     	
         @Override
         protected void onPreExecute() {
@@ -86,7 +98,6 @@ public class FragmentAlbums extends Fragment {
  
         @Override
         protected Boolean doInBackground(Void... params) {
-        	//albums = controller.getParseFunctions().getAlbums();
         	albums = controller.getAlbums();
             if(albums != null && albums.size() > 0)
             	return true;
@@ -113,7 +124,7 @@ public class FragmentAlbums extends Fragment {
 	    				goToShowAlbum(album);
 	    			}
 	    		});
-	            
+	            Log.v("prototypev1", "on Postexecute success");
         	}
         	else {
         		noAlbums.setVisibility(View.VISIBLE);
@@ -126,7 +137,7 @@ public class FragmentAlbums extends Fragment {
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
-			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
 		}
     }
    

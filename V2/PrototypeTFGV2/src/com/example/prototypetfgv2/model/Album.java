@@ -11,7 +11,6 @@ public class Album implements Parcelable {
 	private String albumCover;
 	private String albumTitle;
 	private List<String> members;
-	//afegir llista de fotos i modifcar-ho pel set un cop soc a dins
 		
 	public Album(String id,String albumCover, String albumTitle, List<String> members) {
 		super();
