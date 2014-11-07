@@ -124,7 +124,7 @@ public class FragmentAlbums extends Fragment {
 	    				goToShowAlbum(album);
 	    			}
 	    		});
-	            Log.v("prototypev1", "on Postexecute success");
+	            //Log.v("prototypev1", "on Postexecute success");
         	}
         	else {
         		noAlbums.setVisibility(View.VISIBLE);
