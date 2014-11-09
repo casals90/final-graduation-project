@@ -8,14 +8,12 @@ public class User implements Parcelable {
 	String id;
 	String username;
 	String profilePicture;
-	int commonFriends;
 	
-	public User(String id, String username, String profilePicture,int commonFriends) {
+	public User(String id, String username, String profilePicture) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.profilePicture = profilePicture;
-		this.commonFriends = commonFriends;
 	}
 	
 	public User(Parcel in) {
@@ -56,14 +54,6 @@ public class User implements Parcelable {
 		this.profilePicture = profilePicture;
 	}
 
-	public int getCommonFriends() {
-		return commonFriends;
-	}
-
-	public void setCommonFriends(int commonFriends) {
-		this.commonFriends = commonFriends;
-	}
-
 	@Override
 	public int describeContents() {
 		return 0;
@@ -75,13 +65,11 @@ public class User implements Parcelable {
 		dest.writeString(id);
 		dest.writeString(username);
 		dest.writeString(profilePicture);
-		dest.writeInt(commonFriends);
 	}
 	
 	private void readFromParcel(Parcel in) {
         id = in .readString();
         username = in .readString();
         profilePicture = in .readString();
-        commonFriends = in .readInt();
     }
 } 
