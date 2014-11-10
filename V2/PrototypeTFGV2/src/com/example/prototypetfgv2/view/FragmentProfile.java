@@ -37,6 +37,7 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FragmentProfile extends Fragment {
 	
@@ -93,9 +94,11 @@ public class FragmentProfile extends Fragment {
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
 		//download profile picture from Parse
-		Bitmap picture = controller.getProfilePicture(); 
-		if(picture != null)
-			profilePicture.setImageBitmap(picture);
+		//Bitmap picture = controller.getProfilePicture();
+		String url = controller.getProfilePictureUrl();
+		if(url != null)
+			ImageLoader.getInstance().displayImage(url,profilePicture);
+		
 		//register the context menu to set profile picture
 		registerForContextMenu(profilePicture);
 		
@@ -370,7 +373,6 @@ public class FragmentProfile extends Fragment {
  
         @Override
         protected Boolean doInBackground(Void... params) {
-        	//albums = controller.getParseFunctions().getAlbums();
         	albums = controller.getAlbums();
             if(albums != null && albums.size() > 0)
             	return true;

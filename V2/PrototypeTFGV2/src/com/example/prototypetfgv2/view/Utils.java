@@ -14,11 +14,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.model.CurrentAlbum;
@@ -254,6 +258,26 @@ public class Utils {
 		Random r = new Random();
 		return r.nextInt(n);
 	}
+	
+	/*
+     * getting screen width
+     
+    public int getScreenWidth() {
+        int columnWidth;
+        WindowManager wm = (WindowManager) _context
+                .getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+ 
+        final Point point = new Point();
+        try {
+            display.getSize(point);
+        } catch (java.lang.NoSuchMethodError ignore) { // Older device
+            point.x = display.getWidth();
+            point.y = display.getHeight();
+        }
+        columnWidth = point.x;
+        return columnWidth;
+    }*/
 }
 
 	

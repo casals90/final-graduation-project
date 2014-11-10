@@ -82,11 +82,7 @@ public class GridViewAdapterForShowPhotos extends BaseAdapter {
 		}
 		else
 			holder = (ViewHolder) view.getTag();
-		//imageLoader.DisplayImage(photos.get(position).getPhoto(),holder.photo);
 		imageLoader.displayImage(photos.get(position).getPhoto(),holder.photo);
-		//imageLoader.displayImage(photos.get(position).getPhoto(),holder.photo,options);
-		//imageOld.DisplayImage(photos.get(position).getPhoto(),holder.photo);
-		//holder.photo.setImageResource(R.drawable.ic_launcher);
 		return view;
 	}
 

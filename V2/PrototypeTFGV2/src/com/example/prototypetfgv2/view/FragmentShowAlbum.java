@@ -1,11 +1,13 @@
 package com.example.prototypetfgv2.view;
 
-import java.util.List;
+import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.ShowPhotoActivity;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
@@ -30,7 +33,7 @@ public class FragmentShowAlbum extends Fragment {
 	
 	private Controller controller;
 	private Album album;
-	private List<Photo> photos;
+	private ArrayList<Photo> photos;
 	//Photo that user selected
 	private Photo photo;
 	
@@ -101,9 +104,8 @@ public class FragmentShowAlbum extends Fragment {
 	            gridView.setOnItemClickListener(new OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-						Log.v("prototypev1","photos position "+position);
-						photo = photos.get(position);
-						goToShowPhoto(photo);
+						Log.v("prototypev1","photo position "+position);
+						goToShowPhotoFullScreen(photo,position);
 					}
 				});
 	            Log.v("prototypev1", "final onpostexecute download photos grid");
@@ -124,15 +126,11 @@ public class FragmentShowAlbum extends Fragment {
 		}	
     }
 
-	public void goToShowPhoto(Photo photo) {
-		Bundle data = new Bundle();
-		data.putParcelable("Photo",photo);
-		FragmentShowPhoto fshowPhoto = new FragmentShowPhoto();
-		fshowPhoto.setArguments(data);
-		
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.container_fragment_main,fshowPhoto);
-		transaction.addToBackStack(null);
-		transaction.commit();	
+	public void goToShowPhotoFullScreen(Photo photo,int position) {
+		Intent showPhoto = new Intent(getActivity(),ShowPhotoActivity.class);
+		//showPhoto.putExtra("currentPhoto",photo);
+		showPhoto.putParcelableArrayListExtra("photos",photos);
+		showPhoto.putExtra("currentPosition",position);
+		startActivity(showPhoto);
 	}
 }

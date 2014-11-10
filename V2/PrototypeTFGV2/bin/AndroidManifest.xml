@@ -89,10 +89,14 @@
             android:label="@string/title_activity_comments" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.UploadPhotoActivity"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:screenOrientation="portrait" 
-            android:label="@string/title_activity_upload_photo" >
+            android:name=".view.UploadPhotoActivity"
+            android:label="@string/title_activity_upload_photo"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".ShowPhotoActivity"
+            android:label="@string/title_activity_show_photo">
         </activity>
     </application>
 

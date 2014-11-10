@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.security.auth.callback.Callback;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -145,6 +147,8 @@ public class ParseFunctions {
         final ParseObject photoUpload = new ParseObject("Photo");
         //photoUpload.put("photo",file);
         photoUpload.put("title",title);
+        photoUpload.put("likesNumber",0);
+        photoUpload.put("commentsNumber",0);
         //Save photo file in other ParseObject
         final ParseObject uploadParseFile = new ParseObject("PhotoFile");
         uploadParseFile.put("photo",file);
@@ -259,6 +263,10 @@ public class ParseFunctions {
 			Log.v("prototypev1", "downloadphotos from album "+obs.size());
 			for(ParseObject o : obs) {
 				String idUser = o.getString("ownerUser");
+				//Search likes and comments number
+				//int likes = countPhotoComments(o.getObjectId());
+				//int comments = countPhotoLikes(o.getObjectId());
+				//Log.v("prototypev1", "downloadphotos from album likes and comments "+likes+" "+comments);
 				if(ownerUsers.containsKey(idUser)) {
 					ownerUser = ownerUsers.get(idUser);
 				}
@@ -267,7 +275,7 @@ public class ParseFunctions {
 					ownerUser = getUser(o.getString("ownerUser"));
 					ownerUsers.put(idUser, ownerUser);
 				}
-				Photo photo = new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()),ownerUser);
+				Photo photo = new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()),ownerUser,o.getInt("likesNumber"),o.getInt("commentsNumber"));
 				photos.add(photo);
 			}	
 		} catch (ParseException e) {
@@ -294,7 +302,6 @@ public class ParseFunctions {
 		query.whereEqualTo("objectId",id);
 		try {
 			ParseUser u = query.getFirst();
-			//ParseFile profilePicture = (ParseFile)u.get("profilePicture");
 			String url = u.getString("profilePictureUrl");
 			if(url == null)
 				user = new User(u.getObjectId(),u.getUsername(),null);
@@ -565,30 +572,29 @@ public class ParseFunctions {
 		return ParseUser.getCurrentUser().getUsername();
 	}
 	
-	public Bitmap getProfilePicture() {
-		ParseFile profilePicture = (ParseFile) ParseUser.getCurrentUser().get("profilePicture");
-		if(profilePicture != null) {
-			try {
-				return Utils.byteArrayToBitmap(profilePicture.getData());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
+	public String getProfilePictureUrl() {
+		return ParseUser.getCurrentUser().getString("profilePictureUrl");
 	}
 	
 	public boolean setProfilePicture(Bitmap b) {
 		ParseUser user = ParseUser.getCurrentUser();
 		ParseFile img = new ParseFile("profile.jpeg",Utils.bitmapToByteArray(b));
-		img.saveInBackground();
-		user.put("profilePicture",img);
+		try {
+			img.save();
+			user.put("profilePictureUrl",img.getUrl());
+			return true;
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+			return false;
+		}
+		/*user.put("profilePicture",img);
 		try {
 			user.save();
 			return true;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return false;
-		}
+		}*/
 	}
 	
 	public boolean removeProfilePicture() {
@@ -858,21 +864,26 @@ public class ParseFunctions {
 	}
 	
 	public int countPhotoLikes(String id) {
+		Log.v("prototypev1", "likes "+id);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
 		query.whereEqualTo("idPhoto",id);
 		try {
 			int i = query.count();
+			Log.v("prototypev1", "end likes ");
 			return i;
 		} catch (ParseException e) {
 			e.printStackTrace();
+			Log.v("prototypev1", "error likes "+e);
 			return -1;
 		}
 	}
 	
 	public int countPhotoComments(String id) {
+		Log.v("prototypev1", "comments "+id);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
 		query.whereEqualTo("idPhoto",id);
 		try {
+			Log.v("prototypev1", "end comments "+id);
 			return query.count();
 		} catch (ParseException e) {
 			e.printStackTrace();

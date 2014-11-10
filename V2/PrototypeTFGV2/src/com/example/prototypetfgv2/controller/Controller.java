@@ -153,8 +153,8 @@ public class Controller extends Application {
 		return parseFunctions.getUsername();
 	}
 	
-	public Bitmap getProfilePicture() {
-		return parseFunctions.getProfilePicture();
+	public String getProfilePictureUrl() {
+		return parseFunctions.getProfilePictureUrl();
 	}
 	
 	public boolean setProfilePicture(Bitmap b) {

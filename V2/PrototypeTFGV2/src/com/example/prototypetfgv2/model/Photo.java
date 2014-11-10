@@ -15,6 +15,8 @@ public class Photo implements Parcelable {
     private String photo;
     private String createdAt;
     private User ownerUser;
+    private int likesNumber;
+    private int commentsNumber;
     
 	public Photo(String id, String title, String photo, String createdAt,User ownerUser) {
 		super();
@@ -23,6 +25,17 @@ public class Photo implements Parcelable {
 		this.photo = photo;
 		this.createdAt = createdAt;
 		this.ownerUser = ownerUser;
+	}
+	
+	public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.photo = photo;
+		this.createdAt = createdAt;
+		this.ownerUser = ownerUser;
+		this.likesNumber = likesNumber;
+		this.commentsNumber = commentNumber;
 	}
 	
 	public Photo(Parcel in) {
@@ -79,19 +92,34 @@ public class Photo implements Parcelable {
 		this.ownerUser = ownerUser;
 	}
 
-	public ArrayList<String>  jsonArrayToArrayListLike(JSONArray likes) {
+	public int getLikesNumber() {
+		return likesNumber;
+	}
+
+	public void setLikesNumber(int likesNumber) {
+		this.likesNumber = likesNumber;
+	}
+
+	public int getCommentsNumber() {
+		return commentsNumber;
+	}
+
+	public void setCommentsNumber(int commentsNumber) {
+		this.commentsNumber = commentsNumber;
+	}
+
+	/*public ArrayList<String>  jsonArrayToArrayListLike(JSONArray likes) {
 		ArrayList<String> l = new ArrayList<String>();
 		for(int i = 0; i < likes.length(); i++) {
 			try {
 				l.add(likes.getString(i));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
 			}
 		}
 		return l;
-	}
+	}*/
 
 	@Override
 	public int describeContents() {
@@ -106,6 +134,8 @@ public class Photo implements Parcelable {
 		dest.writeString(photo);
 		dest.writeString(createdAt);
 		dest.writeParcelable(ownerUser,flags);
+		dest.writeInt(likesNumber);
+		dest.writeInt(commentsNumber);
 	}
 	
 	private void readParcel(Parcel in) {
@@ -115,5 +145,7 @@ public class Photo implements Parcelable {
 		photo = in.readString();
 		createdAt = in.readString();
 		ownerUser = in.readParcelable(User.class.getClassLoader());
+		likesNumber = in.readInt();
+		commentsNumber = in.readInt();
 	}
 }
