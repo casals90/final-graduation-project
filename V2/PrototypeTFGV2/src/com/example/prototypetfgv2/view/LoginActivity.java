@@ -10,14 +10,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.CurrentUser;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
@@ -41,7 +44,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		app = (Controller) getApplicationContext();
-		controller = (Controller) getApplicationContext();
+		controller = (Controller) getApplication();
 		
 		mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);
@@ -182,8 +185,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 			mAuthTask = null;
 			progressDialog.dismiss();
 			if (success) {
-				Log.v("prototypev1","correcte onPostExecute");
-				rememberLogin();
+				//TODO download current user
+				CurrentUser user = controller.downloadCurrentUser();
+				//CurrentUser user = controller.getCurrentUser();
+				controller.setCurrentUser(user);
+				//rememberLogin();
 				goToMainActivity();
 			} 
 			else {

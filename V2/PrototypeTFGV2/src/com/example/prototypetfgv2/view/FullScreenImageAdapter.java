@@ -7,10 +7,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,11 +26,18 @@ import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.CurrentUser;
 import com.example.prototypetfgv2.model.Photo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
+	/*
+	 Bug que el primer no actualitza la view
+	 */
+	
+	private GestureDetectorCompat mDetector;
+	
 	private Activity activity;
 	private ArrayList<Photo> photos;
 	
@@ -36,19 +47,19 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	private Button buttonLike;
 	private Button buttonComment;
 	
-	
 	private boolean like;
-	
 	private int nLikes = 0;
 	private int nComments = 0;
-	private String idPhoto;
+	
+	private CurrentUser currentUser;
 	
 	public FullScreenImageAdapter(Activity activity, ArrayList<Photo> photos, int position) {
 		super();
 		this.activity = activity;
 		this.photos = photos;
-		controller = (Controller) activity.getApplicationContext();
-		
+		controller = (Controller) activity.getApplication();
+		currentUser = controller.getCurrentUser();
+		Log.v("prototypev1","current user "+currentUser.getLikes().size());
 		//Put the start user 
 		changeActionBarForFirstUser(position);
 	}
@@ -64,6 +75,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		ImageLoader.getInstance().displayImage(photos.get(position).getPhoto(),viewHolderActionBar.mImageView);
 		viewHolderActionBar.mTextViewPhotoTitle.setText(photos.get(position).getTitle());
 		viewHolderActionBar.mTextViewUsername.setText(photos.get(position).getOwnerUser().getUsername());
+		
 	}
 
 	@Override
@@ -79,48 +91,39 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		final Photo photo = photos.get(position);
-		idPhoto = photo.getId();
-        
+		//idPhoto = photo.getId();
+		
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container,false);
 		final ViewHolder viewHolder = new ViewHolder();
-		
-		like = controller.currentUserLikesCurrentPhoto(photo.getId());
 		
         viewHolder.mImageViewPhoto = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
         ImageLoader.getInstance().displayImage(photo.getPhoto(),viewHolder.mImageViewPhoto);
         
         viewHolder.like = (Button) viewLayout.findViewById(R.id.like);
         viewHolder.comment = (Button) viewLayout.findViewById(R.id.comment);
-        //Put values in button text
-        nComments = controller.countPhotoComments(photo.getId());
-        nLikes = controller.countPhotoLikes(photo.getId());
-        viewHolder.comment.setText(String.valueOf(nComments));
-        viewHolder.like.setText(String.valueOf(nLikes));
-        //new GetNumberCommentsTask().execute(photo.getId());
-        //new GetNumberLikesTask().execute(photo.getId());
-        //new UserLikeCurrentPhotoTask().execute(photo.getId());
+        buttonLike = viewHolder.like;
+        buttonComment = viewHolder.comment;
         
-        like = controller.currentUserLikesCurrentPhoto(photo.getId());
-        if(like)
+        new GetNumberCommentsTask().execute(photo.getId());
+        new GetNumberLikesTask().execute(photo.getId());
+        
+        like = currentUser.isUserLikedCurrentPhoto(photo.getId());
+        
+        if(!like) {
+        	viewHolder.like.setOnClickListener(new OnClickListener() {
+    			@Override
+    			public void onClick(View v) {
+    				new LikePhotoTask().execute(photo.getId());
+    				currentUser.addLike(photo.getId());
+    				incrementLikesNumberInButton(viewHolder.like);
+    				viewHolder.like.setOnClickListener(null);
+    			}
+    		});
+        }
+        else 
         	viewHolder.like.setBackgroundResource(R.color.cyan);
-        	
-        //Log.v("prototypev1", "like viewPager "+like);
-        viewHolder.like.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//Log.v("prototypev1", "onClicklistener like "+like);
-				//TODO like
-				if(!like) {
-					new LikeOrUnlikePhotoTask().execute(photo.getId());
-					incrementLikesNumberInButton(viewHolder.like);
-				}
-				else {
-					new LikeOrUnlikePhotoTask().execute(photo.getId());
-					decrementLikesNumberInButton(viewHolder.like);
-				}
-			}
-		});
+        
 			
         viewHolder.comment.setOnClickListener(new OnClickListener() {
 			
@@ -146,15 +149,14 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		button.setBackgroundResource(R.color.cyan);
 	}
 	
-	public void decrementLikesNumberInButton(Button button) {
+	/*public void decrementLikesNumberInButton(Button button) {
 		int n = Integer.valueOf(button.getText().toString());
 		n--;
 		if(n >= 0)
 			button.setText(String.valueOf(n));
 		else
 			button.setText(String.valueOf(0));
-		button.setBackgroundResource(R.color.Black);
-	}
+	}*/
 	
 	private class ViewHolderActionBar {
 		ImageView mImageView;
@@ -172,8 +174,8 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		activity.startActivity(commentsActivity);
 	}
 	
-	//Class to download photos
-	private class LikeOrUnlikePhotoTask extends AsyncTask<String, Void, Boolean> {
+	
+	private class LikePhotoTask extends AsyncTask<String, Void, Boolean> {
 		
         @Override
         protected void onPreExecute() {
@@ -183,24 +185,15 @@ public class FullScreenImageAdapter extends PagerAdapter {
         @Override
         protected Boolean doInBackground(String... params) {
         	String id = params[0];
-        	if(like)
-        		return controller.unlikePhoto(id);
-        	else
-        		return controller.likePhoto(id);
+        	return controller.likePhoto(id);
         }
 
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if(result) {
-				if(like) {
-					Toast.makeText(activity,"Unliked!",  Toast.LENGTH_LONG).show();
-					like = !like;
-				}
-				else {
-					Toast.makeText(activity,"Liked!",  Toast.LENGTH_LONG).show();
-					like = !like;
-				}
+				Toast.makeText(activity,"Liked!",  Toast.LENGTH_LONG).show();
+				like = !like;
 			}
 		}
 
@@ -211,7 +204,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		}	
     }
 	
-	private class UserLikeCurrentPhotoTask extends AsyncTask<String, Void, Boolean> {
+	/*private class UserLikeCurrentPhotoTask extends AsyncTask<String, Void, Boolean> {
 			
         @Override
         protected void onPreExecute() {
@@ -227,13 +220,11 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			Log.v("prototypev1", "userLike current photo "+result);
-			like = result;
 			buttonLike.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					if(!like) {
-						new LikeOrUnlikePhotoTask().execute(idPhoto);
+						new LikePhotoTask().execute(idPhoto);
 						incrementLikesNumberInButton(buttonLike);
 					}
 					else {
@@ -253,10 +244,10 @@ public class FullScreenImageAdapter extends PagerAdapter {
 			super.onCancelled();
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
-    }
+    }*/
 	
 	//Class to download photos
-	private class GetNumberLikesTask extends AsyncTask<String, Void, Boolean> {
+	private class GetNumberLikesTask extends AsyncTask<String, Void, Integer> {
 			
         @Override
         protected void onPreExecute() {
@@ -264,21 +255,18 @@ public class FullScreenImageAdapter extends PagerAdapter {
         }
  
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected Integer doInBackground(String... params) {
         	String id = params[0];
-        	nLikes = controller.countPhotoLikes(id);
-        	if(nLikes >= 0)
-        		return true;
-        	return false;
+        	return controller.countPhotoLikes(id);
+        	
         }
 
 		@Override
-		protected void onPostExecute(Boolean result) {
+		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			Log.v("prototypev1", "nlikes "+nLikes);
-			if(result) {
-				buttonLike.setText(String.valueOf(nLikes));
-			}
+			Log.v("prototypev1", "nlikes "+result);
+			if(result > 0) 
+				buttonLike.setText(String.valueOf(result));
 		}
 
 		@Override
@@ -288,7 +276,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		}	
     }
 	
-	private class GetNumberCommentsTask extends AsyncTask<String, Void, Boolean> {
+	private class GetNumberCommentsTask extends AsyncTask<String, Void, Integer> {
 		
         @Override
         protected void onPreExecute() {
@@ -296,21 +284,17 @@ public class FullScreenImageAdapter extends PagerAdapter {
         }
  
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected Integer doInBackground(String... params) {
         	String id = params[0];
-        	nComments = controller.countPhotoComments(id);
-        	if(nComments >= 0)
-        		return true;
-        	return false;
+        	return controller.countPhotoComments(id);
         }
 
 		@Override
-		protected void onPostExecute(Boolean result) {
+		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			Log.v("prototypev1", "nComments "+nComments);
-			if(result) {
-				buttonComment.setText(String.valueOf(nComments));
-			}
+			Log.v("prototypev1", "nComments "+result);
+			if(result > 0) 
+				buttonComment.setText(String.valueOf(result));	
 		}
 
 		@Override
@@ -319,4 +303,5 @@ public class FullScreenImageAdapter extends PagerAdapter {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
+	
 }

@@ -141,4 +141,8 @@
 	<color name="DarkBlue">#00008B</color>
 	<color name="Navy">#000080</color>
 	<color name="Black">#000000</color>    
+	
+	<!-- test -->
+	<color name="Black_gray">#414141</color>
+	<color name="Black_gray2">#3D3D3D</color>
 </resources>

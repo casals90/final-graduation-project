@@ -7,6 +7,7 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.R.id;
 import com.example.prototypetfgv2.R.layout;
 import com.example.prototypetfgv2.R.menu;
+import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,7 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ShowPhotoActivity extends Activity {
-	private GestureDetectorCompat mDetector; 
 	
 	String DEBUG_TAG ="Touch test";
 	private ArrayList<Photo> photos;
@@ -44,15 +44,19 @@ public class ShowPhotoActivity extends Activity {
 	private ViewPager mViewPager;
 	
 	private ViewHolderActionBar viewHolderActionBar;
+
 	
-	//ImageView mImageView;
-	private HashMap<String, Bitmap> profilePictures;
+	private Controller controller;
+	
+	private GestureDetectorCompat mDetector; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fullscreen_view);
 		initActionBar();
+		
+		controller = (Controller) this.getApplicationContext();
 		
 		Intent data = getIntent();
 		if(data != null) {
@@ -73,7 +77,6 @@ public class ShowPhotoActivity extends Activity {
 			@Override
 			public void onPageSelected(int position) {
 				updateActionBar(position);
-				
 			}
 			
 			@Override
@@ -88,7 +91,6 @@ public class ShowPhotoActivity extends Activity {
 				
 			}
 		});
-		
 	}
 	
 	public void updateActionBar(int position) {

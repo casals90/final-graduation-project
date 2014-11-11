@@ -19,10 +19,10 @@
     <application
         android:name=".controller.Controller"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher_test"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:hardwareAccelerated="true">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".view.InitActivity"
             android:label="@string/title_activity_init"
@@ -39,10 +39,10 @@
         </activity>
         <activity
             android:name=".view.LoginActivity"
+            android:hardwareAccelerated="false"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:hardwareAccelerated="false">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,10 +51,10 @@
         </activity>
         <activity
             android:name=".view.SignUpActivity"
+            android:hardwareAccelerated="false"
             android:label="@string/title_activity_sign_up"
             android:noHistory="true"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:hardwareAccelerated="false" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name=".view.MainActivity"
@@ -89,19 +89,23 @@
         </activity>
         <activity
             android:name=".view.CommentsActivity"
-            android:label="@string/title_activity_comments" 
-            android:windowSoftInputMode="adjustResize">
+            android:label="@string/title_activity_comments"
+            android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
             android:name=".view.UploadPhotoActivity"
+            android:hardwareAccelerated="false"
             android:label="@string/title_activity_upload_photo"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:hardwareAccelerated="false">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.ShowPhotoActivity"
-            android:label="@string/title_activity_show_photo">
+            android:name=".view.ShowPhotoActivity"
+            android:label="@string/title_activity_show_photo" >
+        </activity>
+        <activity
+            android:name="com.example.prototypetfgv2.view.ListViewPhotosActivity"
+            android:label="@string/title_activity_list_view_photos" >
         </activity>
     </application>
 

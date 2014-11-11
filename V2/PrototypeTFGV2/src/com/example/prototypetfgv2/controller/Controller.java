@@ -19,6 +19,7 @@ import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.example.prototypetfgv2.model.CurrentUser;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.SignUpActivity;
@@ -31,9 +32,10 @@ import com.parse.ParseUser;
 public class Controller extends Application {
 	
 	private ParseFunctions parseFunctions;
+	private CurrentUser currentUser;
+	
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
 		//Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
         //ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
@@ -51,13 +53,28 @@ public class Controller extends Application {
         .memoryCacheSize(2 * 1024 * 1024)
         .diskCacheSize(50 * 1024 * 1024)
         .diskCacheFileCount(100)
-        .writeDebugLogs()
         .build();        
         
         ImageLoader.getInstance().init(config);
         
 	}
 	
+	public void initCurrentUser() {
+		this.currentUser = parseFunctions.getCurrentUser();
+	}
+	
+	public CurrentUser getCurrentUser() {
+		return currentUser;
+	}
+
+	public CurrentUser downloadCurrentUser() {
+		return parseFunctions.getCurrentUser();
+	}
+	
+	public void setCurrentUser(CurrentUser currentUser) {
+		this.currentUser = currentUser;
+	}
+
 	public void clearImageLoader() {
 		ImageLoader.getInstance().clearDiskCache();
 		ImageLoader.getInstance().clearMemoryCache();

@@ -2,6 +2,7 @@ package com.example.prototypetfgv2.view;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
+import com.example.prototypetfgv2.model.CurrentUser;
 
 public class FragmentAlbums extends Fragment {
 	
@@ -43,9 +45,13 @@ public class FragmentAlbums extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		controller = (Controller) this.getActivity().getApplicationContext();
+		controller = (Controller) this.getActivity().getApplication();
 		controller.clearImageLoader();
 		getActivity().setTitle(R.string.albums);
+		
+		//CurrentUser u = controller.getCurrentUser();
+		//
+		//Log.v("prototypev1","current user from controller "+u);
 	}
 
 	@Override
@@ -122,6 +128,7 @@ public class FragmentAlbums extends Fragment {
 	    			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
 	    				Album album = albums.get(position);
 	    				goToShowAlbum(album);
+	    				//goToShowAlbum2(album);
 	    			}
 	    		});
 	            //Log.v("prototypev1", "on Postexecute success");
@@ -152,4 +159,17 @@ public class FragmentAlbums extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
+   
+   public void goToShowAlbum2(Album album) {
+		Bundle data = new Bundle();
+		data.putParcelable("Album",album);
+		ListViewPhotosFragment listViewPhotos = new ListViewPhotosFragment();
+		listViewPhotos.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,listViewPhotos);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
+   
 }

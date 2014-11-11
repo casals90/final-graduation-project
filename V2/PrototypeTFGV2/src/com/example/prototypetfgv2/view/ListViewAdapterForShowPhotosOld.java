@@ -15,13 +15,13 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.Photo;
 import com.nostra13.universalimageloader.core.ImageLoader;
  
-public class ListViewAdapterForShowPhotos extends BaseAdapter {
+public class ListViewAdapterForShowPhotosOld extends BaseAdapter {
     Context context;
     LayoutInflater inflater;
     private ImageLoader imageLoader;
     private List<Photo> myPhotos;
     
-    public ListViewAdapterForShowPhotos(Context context,List<Photo> myPhotos) {
+    public ListViewAdapterForShowPhotosOld(Context context,List<Photo> myPhotos) {
         this.context = context;
         this.myPhotos = myPhotos;
         inflater = LayoutInflater.from(context);

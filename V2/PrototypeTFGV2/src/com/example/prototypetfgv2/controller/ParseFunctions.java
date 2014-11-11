@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.example.prototypetfgv2.model.CurrentUser;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.view.InputUsernameActivity;
@@ -136,6 +137,40 @@ public class ParseFunctions {
 			return -1;
 		}
     }
+    
+    public ArrayList<String> getPhotosLikedCurrentUser() {
+    	ArrayList<String> likes = new ArrayList<String>();
+    	
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
+    	query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
+    	try {
+			List<ParseObject> parseLikes = query.find();
+			for(ParseObject l: parseLikes) {
+				likes.add(l.getString("idPhoto"));
+			}
+			return likes;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    /*public ArrayList<String> getPhotosCommentedUser() {
+    	ArrayList<String> comments = new ArrayList<String>();
+    	
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
+    	query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
+    	try {
+			List<ParseObject> parseComments = query.find();
+			for(ParseObject c: parseComments) {
+				comments.add(c.getString("idPhoto"));
+			}
+			return comments;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+    }*/
 	
     
     public void updatePhoto(Bitmap photo,String title,final Activity activity) {
@@ -331,10 +366,10 @@ public class ParseFunctions {
 				return null;
 			}
 			//Log.v("prototypev1", "hi ha "+ob.size()+" albums");
-			int i = 0;
+			//int i = 0;
 			for(ParseObject a : ob) {
 				//Log.v("prototypev1", "download album "+i);
-				i++;
+				//i++;
 				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
 				//Put a random cover photo of album
 				//miro si te mes de 1 foto
@@ -391,7 +426,7 @@ public class ParseFunctions {
 			//Log.v("prototypev1", "despres ownerUser");
 			//Log.v("prototypev1", "final download only 1 photo");
 			//Error aqui
-			Photo photo =  new Photo(p.getObjectId(),p.getString("title"),url,String.valueOf(p.getCreatedAt()),ownerUser);
+			Photo photo =  new Photo(p.getObjectId(),p.getString("title"),url,String.valueOf(p.getCreatedAt()));
 			//Log.v("prototypev1", "return correct download photo function");
 			return photo;
 		} catch (ParseException e) {
@@ -401,6 +436,7 @@ public class ParseFunctions {
 		}	
 	}
 	
+	//Actulitzar amb el nombre que hi ha a la classe foto directament
 	public String getPhotoMoreLikesInAlbum(String idAlbum) {
 		//Download Album (getFirst)
 		ArrayList<String> photos = getPhotosFromAlbum(idAlbum);
@@ -980,7 +1016,6 @@ public class ParseFunctions {
 		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
 		try {
 			int c = query.count();
-			//Log.v("prototypev1", "user likes current photo =  "+c);
 			if(c > 0)
 				return true;
 			return false;
@@ -988,6 +1023,17 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	/*public ArrayList<String> getAlbumsIdForCurrentUser() {
+		Array
+	}*/
+	
+	public CurrentUser getCurrentUser() {
+		ParseUser parseUser = ParseUser.getCurrentUser();
+		ArrayList<String> likes = getPhotosLikedCurrentUser();
+		//ArrayList<Albums> albums = get;
+		return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"), likes,null);
 	}
 }
 // Canviar lu de friends i albums memebers!!!!! Enlloc de tenir una arrayList fer una classe per cada un al parse i baxar-los (Friends (idUser1 idUser2...) Members (idUser - idAlbum))

@@ -1,10 +1,5 @@
 package com.example.prototypetfgv2.model;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -18,7 +13,9 @@ public class Photo implements Parcelable {
     private int likesNumber;
     private int commentsNumber;
     
-	public Photo(String id, String title, String photo, String createdAt,User ownerUser) {
+    //Only for download photo from album
+    //Borrar al actutalitzar 
+	public Photo(String id, String title, String photo, String createdAt) {
 		super();
 		this.id = id;
 		this.title = title;
