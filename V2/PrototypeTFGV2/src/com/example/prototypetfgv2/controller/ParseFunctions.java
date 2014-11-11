@@ -141,7 +141,6 @@ public class ParseFunctions {
     public void updatePhoto(Bitmap photo,String title,final Activity activity) {
     	// Create the ParseFile
         ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
-        //Log.v("prototypev1", "upload photo ");
         // Upload the image into Parse Cloud
         file.saveInBackground();
         final ParseObject photoUpload = new ParseObject("Photo");
@@ -154,6 +153,7 @@ public class ParseFunctions {
         uploadParseFile.put("photo",file);
         try {
 			uploadParseFile.save();
+			//Log.v("prototypev1", "file save");
 		} catch (ParseException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -168,16 +168,18 @@ public class ParseFunctions {
 			photoUpload.put("idPhotoFile",uploadParseFile.getObjectId());
 			photoUpload.put("photoFileUrl",file.getUrl());
 			//add more atributes
-			photoUpload.saveInBackground(new SaveCallback() {
-				@Override
-				public void done(ParseException e) {
-					Toast.makeText(activity.getApplicationContext(), "Correct update info",Toast.LENGTH_LONG).show();
-				}
-			});
-			
+			try {
+				photoUpload.save();
+				//Log.v("prototypev1", "save photo class");
+				Toast.makeText(activity.getApplicationContext(), "Update Photo",Toast.LENGTH_LONG).show();
+			} catch (ParseException e) {
+				e.printStackTrace();
+				//Log.v("prototypev1", "erro save photo"+e);
+			}
+
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			//Log.v("prototypev1", "erro save photo"+e);
 		}
     }
 	
@@ -250,7 +252,7 @@ public class ParseFunctions {
 	}
 	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String idAlbum) {
-		Log.v("prototypev1", "downloadphotos from album ");
+		//Log.v("prototypev1", "downloadphotos from album ");
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		HashMap<String, User> ownerUsers = new HashMap<String, User>();
 		User ownerUser;
@@ -260,7 +262,7 @@ public class ParseFunctions {
 		query.orderByDescending("createdAt");
 		try {
 			List<ParseObject> obs = query.find();
-			Log.v("prototypev1", "downloadphotos from album "+obs.size());
+			//Log.v("prototypev1", "downloadphotos from album "+obs.size());
 			for(ParseObject o : obs) {
 				String idUser = o.getString("ownerUser");
 				//Search likes and comments number
@@ -331,7 +333,7 @@ public class ParseFunctions {
 			//Log.v("prototypev1", "hi ha "+ob.size()+" albums");
 			int i = 0;
 			for(ParseObject a : ob) {
-				Log.v("prototypev1", "download album "+i);
+				//Log.v("prototypev1", "download album "+i);
 				i++;
 				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
 				//Put a random cover photo of album
@@ -342,8 +344,9 @@ public class ParseFunctions {
 					int random = Utils.getRandomInt(idPhotos.size());
 					//Download Random photo
 					Photo photo = downloadPhoto(idPhotos.get(random));
+					//String url = getURLPhoto(idPhotos.get(random));
 					//download photo id random
-					albums.add(new Album(a.getObjectId(),photo.getPhoto(),a.getString("albumTitle"),members));
+					albums.add(new Album(a.getObjectId(),photo.getId(),a.getString("albumTitle"),members));
 					//getPhotoMoreLikesInAlbum(a.getObjectId());
 				}
 				else 
@@ -353,12 +356,25 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return null;
 		}
-		Log.v("prototypev1", "end download albums");
+		//Log.v("prototypev1", "end download albums");
 		return albums;
 	}
 	
+	public String getPhotoUrl(String id) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereEqualTo("objectId",id);
+		try {
+			ParseObject photo = query.getFirst();
+			return photo.getString("photoFileUrl");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public Photo downloadPhoto(String idPhoto) {
-		Log.v("prototypev1", "download photo function start idPhoto "+idPhoto);
+		//Log.v("prototypev1", "download photo function start idPhoto "+idPhoto);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
 		query.whereEqualTo("objectId",idPhoto);
 		try {
@@ -376,11 +392,11 @@ public class ParseFunctions {
 			//Log.v("prototypev1", "final download only 1 photo");
 			//Error aqui
 			Photo photo =  new Photo(p.getObjectId(),p.getString("title"),url,String.valueOf(p.getCreatedAt()),ownerUser);
-			Log.v("prototypev1", "return correct download photo function");
+			//Log.v("prototypev1", "return correct download photo function");
 			return photo;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			Log.v("prototypev1", "error download photo function");
+			//Log.v("prototypev1", "error download photo function");
 			return null;
 		}	
 	}
@@ -827,6 +843,7 @@ public class ParseFunctions {
 		like.put("idPhoto",id);
 		try {
 			like.save();
+			incrementLikesNumber(id);
 			return true;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -834,12 +851,38 @@ public class ParseFunctions {
 		}
 	}
 	
+	public boolean incrementLikesNumber(String id) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereEqualTo("objectId",id);
+		try {
+			ParseObject photo = query.getFirst();
+			photo.increment("likesNumber");
+			photo.save();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/*public boolean decrementLikesNumber(String id) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereEqualTo("objectId",id);
+		try {
+			ParseObject photo = query.getFirst();
+			int 
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+	}*/
+	
 	public boolean unlikePhoto(String id) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
 		query.whereEqualTo("idPhoto",id);
 		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
 		try {
-			ParseObject  like = query.getFirst();
+			ParseObject like = query.getFirst();
 			if(like != null)
 				like.delete();
 			return true;
@@ -848,6 +891,8 @@ public class ParseFunctions {
 			return false;
 		}
 	}
+	
+	
 	
 	public boolean newComment(String idPhoto,String text) {
 		ParseObject comment = new ParseObject("Comment");
@@ -864,26 +909,25 @@ public class ParseFunctions {
 	}
 	
 	public int countPhotoLikes(String id) {
-		Log.v("prototypev1", "likes "+id);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
 		query.whereEqualTo("idPhoto",id);
 		try {
 			int i = query.count();
-			Log.v("prototypev1", "end likes ");
+			//Log.v("prototypev1", "end likes ");
 			return i;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			Log.v("prototypev1", "error likes "+e);
+			//Log.v("prototypev1", "error likes "+e);
 			return -1;
 		}
 	}
 	
 	public int countPhotoComments(String id) {
-		Log.v("prototypev1", "comments "+id);
+		//Log.v("prototypev1", "comments "+id);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
 		query.whereEqualTo("idPhoto",id);
 		try {
-			Log.v("prototypev1", "end comments "+id);
+			//Log.v("prototypev1", "end comments "+id);
 			return query.count();
 		} catch (ParseException e) {
 			e.printStackTrace();

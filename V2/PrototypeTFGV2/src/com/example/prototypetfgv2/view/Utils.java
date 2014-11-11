@@ -36,7 +36,7 @@ public class Utils {
 		// Convert it to byte
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100
-        b.compress(Bitmap.CompressFormat.JPEG, 35, stream);
+        b.compress(Bitmap.CompressFormat.JPEG, 30, stream);
         return stream.toByteArray();
 	}
 	
