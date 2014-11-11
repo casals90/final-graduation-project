@@ -10,6 +10,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -55,6 +58,8 @@ public class FragmentShowAlbum extends Fragment {
 		
 		//Put album title in action bar
 		getActivity().setTitle((album.getAlbumTitle()));
+		
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -69,6 +74,29 @@ public class FragmentShowAlbum extends Fragment {
 		new DownloadPhotosTask().execute();
 		return view;
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		inflater.inflate(R.menu.menu_show_photos, menu);
+	}
+	
+	/*@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+			case R.id.create_album:
+				albumName = inputAlbum.getText().toString();
+				//create album in parse
+				if(createAlbum())
+					goToAlbums();
+				break;
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
+	}*/
+	
 	
 	//Class to download photos
 	private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {

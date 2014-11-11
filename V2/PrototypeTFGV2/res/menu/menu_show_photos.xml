@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >	
+	<item
+      android:id="@+id/grid_view_mode"
+      android:icon="@drawable/ic_action_view_as_grid"
+      android:title="@string/grid_view_mode"
+      android:showAsAction="always">
+   </item>
+   <item
+      android:id="@+id/list_view_mode"
+      android:icon="@drawable/ic_action_view_as_list"
+      android:title="@string/list_view_mode"
+      android:showAsAction="always">
+   </item>
+</menu>

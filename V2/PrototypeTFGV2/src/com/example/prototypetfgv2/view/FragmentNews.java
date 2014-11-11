@@ -25,18 +25,6 @@ public class FragmentNews extends Fragment {
 		getActivity().setTitle(R.string.news);
 		
 		controller = (Controller) getActivity().getApplication();
-		
-		/*CurrentUser u = controller.downloadCurrentUser();
-		Log.v("prototypev1","download current user complete");
-		
-		controller.setCurrentUser(u);
-		Log.v("prototypev1","set controller");
-		
-		CurrentUser u2 = controller.getCurrentUser();
-		
-		//controller.setCurrentUser(u);
-		Log.v("prototypev1","current user get controller "+u2);*/
-		//Log.v("prototypev1","current user "+u);
 	}
 
 	@Override
