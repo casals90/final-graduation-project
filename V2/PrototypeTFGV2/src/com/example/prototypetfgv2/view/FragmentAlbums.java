@@ -70,15 +70,6 @@ public class FragmentAlbums extends Fragment {
 		return view;
 	}
 	
-	/*@Override
-	public void onStart() {
-		super.onStart();
-		Log.v("prototypev1", "on Start");
-		new DownloadAlbumsTask().execute();
-	}*/
-
-	
-	
 	public void goToNewAlbum() {
 		FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
@@ -109,9 +100,6 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
-        		
-        		//CurrentUser currentUser = controller.getCurrentUser();
-        		
         		//hidden label no albums 
         		noAlbums.setVisibility(View.INVISIBLE);
 	            adapter = new ListViewAdapterForAlbums(getActivity(),albums);
@@ -125,8 +113,8 @@ public class FragmentAlbums extends Fragment {
 	    			@Override
 	    			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
 	    				Album album = albums.get(position);
-	    				goToShowAlbum(album);
-	    				//goToShowAlbum2(album);
+	    				goToShowAlbumListMode(album);
+	    				//goToShowAlbumGridMode(album);
 	    			}
 	    		});
         	}
@@ -144,20 +132,8 @@ public class FragmentAlbums extends Fragment {
 			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
 		}
     }
-   
-   public void goToShowAlbum(Album album) {
-		Bundle data = new Bundle();
-		data.putParcelable("Album",album);
-		FragmentShowAlbum showAlbum = new FragmentShowAlbum();
-		showAlbum.setArguments(data);
-		
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.container_fragment_main,showAlbum);
-		transaction.addToBackStack(null);
-		transaction.commit();	
-	}
-   
-   public void goToShowAlbum2(Album album) {
+	
+	public void goToShowAlbumListMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
 		ListViewPhotosFragment listViewPhotos = new ListViewPhotosFragment();
@@ -169,4 +145,15 @@ public class FragmentAlbums extends Fragment {
 		transaction.commit();	
 	}
    
+   public void goToShowAlbumGridMode(Album album) {
+		Bundle data = new Bundle();
+		data.putParcelable("Album",album);
+		FragmentShowAlbum showAlbum = new FragmentShowAlbum();
+		showAlbum.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,showAlbum);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
 }

@@ -27,7 +27,6 @@ public class GridViewAdapterForShowPhotos extends BaseAdapter {
     private LayoutInflater inflater;
     private ImageLoader imageLoader;
     DisplayImageOptions options;
-   // private com.example.prototypetfgv2.view.ImageLoader imageOld;
 	private List<Photo> photos;
 	private Controller controller;
 	
@@ -40,16 +39,18 @@ public class GridViewAdapterForShowPhotos extends BaseAdapter {
 		controller = (Controller) context.getApplicationContext();
 		Log.v("prototypev1", "size photos grid "+photos.size());
 		//imageOld = new com.example.prototypetfgv2.view.ImageLoader(context);
+		initDisplayOptions();
 	}
 	
-	public void configureDisplayImageOptions() {
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
+	public void initDisplayOptions() {
+		options = new DisplayImageOptions.Builder()
 		.showImageOnLoading(R.drawable.ic_launcher) // resource or drawable
         .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
         .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
         .cacheInMemory(true) 
         .cacheOnDisk(true) 
         .considerExifParams(true)
+        .imageScaleType(ImageScaleType.IN_SAMPLE_INT) 
         .bitmapConfig(Bitmap.Config.RGB_565)
         .build();	 
 	}

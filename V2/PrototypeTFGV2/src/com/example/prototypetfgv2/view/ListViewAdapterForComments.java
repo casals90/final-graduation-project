@@ -20,15 +20,11 @@ public class ListViewAdapterForComments extends BaseAdapter {
 	private LayoutInflater inflater;
 	private ImageLoader imageLoader;
     
-    //private Controller controller;
-    
 	public ListViewAdapterForComments(Context context,ArrayList<Comment> comments) {
 		super();
 		inflater = LayoutInflater.from(context);
         imageLoader = ImageLoader.getInstance();
 		this.comments = comments;
-		//Log.v("prototypev1", "on adapter comments"+comments.size()+" text "+comments.get(0).getUser().getUsername()+" text "+comments.get(0).getComment()+" date "+comments.get(0).getDate());
-		//controller = (Controller) context.getApplicationContext();
 	}
 
 	@Override

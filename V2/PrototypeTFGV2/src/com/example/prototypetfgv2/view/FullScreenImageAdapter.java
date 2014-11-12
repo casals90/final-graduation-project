@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -23,12 +24,11 @@ import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.CurrentUser;
 import com.example.prototypetfgv2.model.Photo;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import android.graphics.Bitmap;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
@@ -39,22 +39,32 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	private Controller controller;
 	private LayoutInflater inflater;
 	private boolean like;
-	//private CurrentUser currentUser;
 	private String idAlbum;
-	
 	ImageLoader imageLoader;
+	private DisplayImageOptions options;
 	
 	public FullScreenImageAdapter(Activity activity, ArrayList<Photo> photos, int position,String idAlbum) {
 		super();
 		this.activity = activity;
 		this.photos = photos;
 		controller = (Controller) activity.getApplication();
-		//currentUser = controller.getCurrentUser();
-		
 		//Put the start user 
 		changeActionBarForFirstUser(position);
 		imageLoader = ImageLoader.getInstance();
 		this.idAlbum = idAlbum;
+		//Download likes from albums
+		controller.getLikesPhotosFromAlbum(idAlbum);
+		initDisplayOptions();
+	}
+	
+	public void initDisplayOptions() {
+		options = new DisplayImageOptions.Builder()
+        .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
+        .resetViewBeforeLoading(true) 
+        .considerExifParams(true)
+        .bitmapConfig(Bitmap.Config.RGB_565)
+        .build();
 	}
 	
 	public void changeActionBarForFirstUser(int position) {
@@ -68,7 +78,6 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		ImageLoader.getInstance().displayImage(photos.get(position).getPhoto(),viewHolderActionBar.mImageView);
 		viewHolderActionBar.mTextViewPhotoTitle.setText(photos.get(position).getTitle());
 		viewHolderActionBar.mTextViewUsername.setText(photos.get(position).getOwnerUser().getUsername());
-		
 	}
 
 	@Override
@@ -82,7 +91,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public Object instantiateItem(ViewGroup container, int position) {
+	public Object instantiateItem(ViewGroup container, final int position) {
 		
 		final Photo photo = photos.get(position);
 		final int nLikes = photo.getLikesNumber();
@@ -94,7 +103,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		
 		viewHolder.mProgressBar = (ProgressBar) viewLayout.findViewById(R.id.progressBar);
         viewHolder.mImageViewPhoto = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
-        imageLoader.displayImage(photo.getPhoto(),viewHolder.mImageViewPhoto,new SimpleImageLoadingListener() {
+        imageLoader.displayImage(photo.getPhoto(),viewHolder.mImageViewPhoto,options,new SimpleImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
             	viewHolder.mProgressBar.setVisibility(View.VISIBLE);
@@ -117,15 +126,14 @@ public class FullScreenImageAdapter extends PagerAdapter {
         viewHolder.like.setText(String.valueOf(nLikes));
         viewHolder.comment.setText(String.valueOf(nComments));
         
-        //like = currentUser.isUserLikedCurrentPhoto(photo.getId());
         like = controller.currentUserLikedCurrentPhoto(photo.getId());
+        
         if(!like) {
         	viewHolder.like.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View v) {
     				new LikePhotoTask().execute(photo.getId());
-    				//currentUser.addLike(photo.getId());
-    				photo.incrementNumberLikes();
+    				photos.get(position).incrementNumberLikes();
     				incrementLikesNumberInButton(viewHolder.like);
     				viewHolder.like.setOnClickListener(null);
     			}
@@ -143,7 +151,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 			}
 		});
         ((ViewPager) container).addView(viewLayout);
-        Log.v("prototypev1", "end prepare view ");
+        //Log.v("prototypev1", "end prepare view ");
         return viewLayout;
 	}
 	
@@ -194,7 +202,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if(result) {
-				Toast.makeText(activity,"Liked!",  Toast.LENGTH_LONG).show();
+				Toast.makeText(activity,"Liked!",  Toast.LENGTH_SHORT).show();
 				like = !like;
 			}
 		}

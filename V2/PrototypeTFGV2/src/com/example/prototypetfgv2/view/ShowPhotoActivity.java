@@ -1,38 +1,23 @@
 package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.R.id;
-import com.example.prototypetfgv2.R.layout;
-import com.example.prototypetfgv2.R.menu;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.Photo;
-import com.example.prototypetfgv2.model.User;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.model.Photo;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ShowPhotoActivity extends Activity {
 	
@@ -46,19 +31,32 @@ public class ShowPhotoActivity extends Activity {
 	private ViewHolderActionBar viewHolderActionBar;
 
 	
-	private Controller controller;
+	//private Controller controller;
 	
-	private GestureDetectorCompat mDetector; 
+	//private GestureDetectorCompat mDetector; 
 	private String idAlbum;
+	private DisplayImageOptions options;
 
+	public void initDisplayOptions() {
+		options = new DisplayImageOptions.Builder()
+		.showImageOnLoading(R.drawable.ic_launcher) // resource or drawable
+        .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
+        .cacheInMemory(true) 
+        .cacheOnDisk(true) 
+        .considerExifParams(true)
+        .bitmapConfig(Bitmap.Config.RGB_565)
+        .build();	 
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fullscreen_view);
 		initActionBar();
 		
-		controller = (Controller) this.getApplicationContext();
-		
+		//this.controller = (Controller) this.getApplicationContext();
+		initDisplayOptions();
 		Intent data = getIntent();
 		if(data != null) {
 			photos = data.getParcelableArrayListExtra("photos");
@@ -72,7 +70,6 @@ public class ShowPhotoActivity extends Activity {
 		mViewPager.setAdapter(fullScreenAdapter);
 		mViewPager.setCurrentItem(currentPosition);
 		mViewPager.setPageMargin(50);
-		//mViewPager.setOffscreenPageLimit(4);
 		
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			
@@ -97,7 +94,7 @@ public class ShowPhotoActivity extends Activity {
 	
 	public void updateActionBar(int position) {
 		Photo photo = photos.get(position);
-		ImageLoader.getInstance().displayImage(photo.getOwnerUser().getProfilePicture(),viewHolderActionBar.mImageView);
+		ImageLoader.getInstance().displayImage(photo.getOwnerUser().getProfilePicture(),viewHolderActionBar.mImageView,options);
 		viewHolderActionBar.mTextViewPhotoTitle.setText(photo.getTitle());
 		viewHolderActionBar.mTextViewUsername.setText(photo.getOwnerUser().getUsername());
 	}

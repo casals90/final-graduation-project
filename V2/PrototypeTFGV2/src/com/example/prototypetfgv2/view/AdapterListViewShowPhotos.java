@@ -2,22 +2,30 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.Photo;
-import com.example.prototypetfgv2.view.ListViewAdapterForShowPhotosOld.ViewHolder;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.Photo;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class AdapterListViewShowPhotos extends BaseAdapter {
 
@@ -28,54 +36,59 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	
-	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos, ImageLoader imageLoader) {
+	private boolean like;
+	private String idAlbum;
+	private Activity activity;
+	
+	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos, ImageLoader imageLoader,String idAlbum,Activity activity) {
 		super();
 		this.photos = photos;
 		this.inflater = LayoutInflater.from(context);
-		
-		controller = (Controller) context.getApplicationContext();
-		
+		this.controller = (Controller) context.getApplicationContext();
+		this.activity = activity;
+		this.idAlbum = idAlbum;
 		this.imageLoader = imageLoader;
+		initDisplayOptions();
+		
+		//Download likes from albums
+		controller.getLikesPhotosFromAlbum(idAlbum);
+		Log.v("prototypev1", "likes current user "+controller.getCurrentUser().getLikesPhotosInsideAlbum().size());
 	}
 	
-	public void configureDisplayOptions() {
+	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
-        .showImageOnLoading(R.drawable.ic_launcher) // resource or drawable
-        .showImageOnFail(R.drawable.ic_launcher)
-        .resetViewBeforeLoading(false)  // default
-        .delayBeforeLoading(1000)
-        .cacheInMemory(true) // default
-        .cacheOnDisk(true) // default
-        .considerExifParams(true) // default
+        .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
+        .resetViewBeforeLoading(true) 
+        .considerExifParams(true)
+        .bitmapConfig(Bitmap.Config.RGB_565)
         .build();
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return photos.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return photos.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	public class ViewHolder {
 		ImageView mImageViewProfilePicture,mImageViewPhoto;
+		ProgressBar mProgressBar;
 		TextView mTextViewUsername,mTextViewTitle;
 		Button mButtonLike, mButtonComment;
 	}
 	
 	@Override
-	public View getView(int position, View view, ViewGroup parenmt) {
+	public View getView(final int position, View view, ViewGroup parenmt) {
 		final ViewHolder holder;
 		final Photo photo;
 		if(view == null) {
@@ -86,6 +99,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
             holder.mTextViewUsername = (TextView) view.findViewById(R.id.username);
             holder.mTextViewTitle = (TextView) view.findViewById(R.id.title);
             holder.mImageViewPhoto = (ImageView) view.findViewById(R.id.photo);
+            holder.mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
             holder.mButtonLike = (Button) view.findViewById(R.id.button_like);
             holder.mButtonComment = (Button) view.findViewById(R.id.button_comment);
             
@@ -93,19 +107,107 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		}
 		else
 			holder = (ViewHolder) view.getTag();
-		photo = photos.get(position);
 		
+		photo = photos.get(position);
 		//options 
 		imageLoader.displayImage(photo.getPhoto(),holder.mImageViewPhoto);
-		imageLoader.displayImage(photo.getOwnerUser().getProfilePicture(),holder.mImageViewProfilePicture);
+		imageLoader.displayImage(photo.getOwnerUser().getProfilePicture(),holder.mImageViewProfilePicture,options,new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+            	holder.mProgressBar.setVisibility(View.VISIBLE);
+            	holder.mImageViewPhoto.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            	holder.mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            	holder.mProgressBar.setVisibility(View.INVISIBLE);
+            	holder.mImageViewPhoto.setVisibility(View.VISIBLE);
+            }
+        });
 		
 		holder.mTextViewUsername.setText(photo.getOwnerUser().getUsername());
 		holder.mTextViewTitle.setText(photo.getTitle());
 		
 		holder.mButtonLike.setText(String.valueOf(photo.getLikesNumber()));
 		holder.mButtonComment.setText(String.valueOf(photo.getCommentsNumber()));
-		
+		//Log.v("prototypev1", "--------------------------------");
+		like = controller.currentUserLikedCurrentPhoto(photo.getId());
+		//Log.v("prototypev1", "like for this item "+like);
+		if(!like) {
+			holder.mButtonLike.setBackgroundResource(R.color.Black_gray);
+			Log.v("prototypev1", "dins if like false");
+			holder.mButtonLike.setOnClickListener(new OnClickListener() {
+    			@Override
+    			public void onClick(View v) {
+    				new LikePhotoTask().execute(photo.getId());
+    				photos.get(position).incrementNumberLikes();
+    				incrementLikesNumberInButton(holder.mButtonLike);
+    				holder.mButtonLike.setOnClickListener(null);
+    			}
+    		});
+        }
+        else {
+        	//Log.v("prototypev1", "dins if like true");
+        	holder.mButtonLike.setBackgroundResource(R.color.cyan);
+        	holder.mButtonLike.setOnClickListener(null);
+        }
+		//Log.v("prototypev1", "--------------------------------");
+		holder.mButtonComment.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//TODO comments
+				
+			}
+		});
 		return view;
 	}
+	
+	public void goToCommentsActivity(Photo currentPhoto) {
+		Intent commentsActivity = new Intent(activity,CommentsActivity.class);
+		commentsActivity.putExtra("photo",currentPhoto);
+		activity.startActivity(commentsActivity);
+	}
+	
+	public void incrementLikesNumberInButton(Button button) {
+		Log.v("prototypev1", "dins increment button");
+		int n = Integer.valueOf(button.getText().toString());
+		n++;
+		button.setText(String.valueOf(n));
+		button.setBackgroundResource(R.color.cyan);
+	}
 
+	private class LikePhotoTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	String idPhoto = params[0];
+        	return controller.likePhoto(idPhoto,idAlbum);
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				Toast.makeText(activity,"Liked!",  Toast.LENGTH_SHORT).show();
+				like = !like;
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
 }

@@ -5,9 +5,11 @@ import java.util.List;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.view.ListViewAdapterChooseUsersNewAlbum.ViewHolder;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +24,8 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
 
 	private LayoutInflater inflater;
     private ImageLoader imageLoader;
-	
+	private DisplayImageOptions options;
+    
 	List<CurrentAlbum> currentAlbums;
 	
 	public AdapterForCurrentAlbum(Context context,List<CurrentAlbum> currentAlbums) {
@@ -31,6 +34,18 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
         this.imageLoader = ImageLoader.getInstance();
         
 		this.currentAlbums = currentAlbums;
+		initDisplayOptions();
+	}
+	
+	public void initDisplayOptions() {
+		options = new DisplayImageOptions.Builder()
+        .showImageOnLoading(R.drawable.ic_launcher) // resource or drawable
+        .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
+        .resetViewBeforeLoading(true) 
+        .considerExifParams(true)
+        .bitmapConfig(Bitmap.Config.RGB_565)
+        .build();
 	}
 
 	@Override
@@ -70,10 +85,7 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
 		else
 			holder = (ViewHolder) view.getTag();
 		holder.albumTitle.setText(currentAlbums.get(position).getTitle());
-		imageLoader.displayImage(currentAlbums.get(position).getCoverPhoto(),holder.albumCover);
-        //Default profile photo
-        if(currentAlbums.get(position).getCoverPhoto() == null)
-        	holder.albumCover.setImageResource(R.drawable.ic_launcher);
+		imageLoader.displayImage(currentAlbums.get(position).getCoverPhoto(),holder.albumCover,options);
         
 		return view;
 	}

@@ -2,28 +2,29 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class ListViewPhotosFragment extends Fragment {
 
@@ -44,15 +45,17 @@ public class ListViewPhotosFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		getActivity().setTitle(R.string.albums);
 		
-		controller = (Controller) this.getActivity().getApplicationContext();
+		controller = (Controller) this.getActivity().getApplication();
 		
 		//Fetch album data
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
 		//Put album title in action bar
 		getActivity().setTitle((album.getAlbumTitle()));
-		
+		controller.clearImageLoader();
 		imageLoader = ImageLoader.getInstance();
+		
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -65,6 +68,43 @@ public class ListViewPhotosFragment extends Fragment {
 		//New task
 		new DownloadPhotosTask().execute(album.getId());
 		return view;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_show_photos, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.grid_view_mode:
+				goToShowAlbumGridMode(album);
+				break;
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	public void goToShowAlbumGridMode(Album album) {
+		Bundle data = new Bundle();
+		data.putParcelable("Album",album);
+		FragmentShowAlbum showAlbum = new FragmentShowAlbum();
+		showAlbum.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,showAlbum);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
+	
+	public void goToShowPhotoFullScreen(Photo photo,int position) {
+		Intent showPhoto = new Intent(getActivity(),ShowPhotoActivity.class);
+		showPhoto.putParcelableArrayListExtra("photos",photos);
+		showPhoto.putExtra("currentPosition",position);
+		showPhoto.putExtra("idAlbum",album.getId());
+		startActivity(showPhoto);
 	}
 	
 	private class DownloadPhotosTask extends AsyncTask<String, Void, Boolean> {
@@ -97,13 +137,13 @@ public class ListViewPhotosFragment extends Fragment {
 				PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling);
 				mListViewPhotos.setOnScrollListener(listener);
 	        	
-				adapter = new AdapterListViewShowPhotos(getActivity().getApplicationContext(), photos,imageLoader);
+				adapter = new AdapterListViewShowPhotos(getActivity().getApplicationContext(), photos,imageLoader,album.getId(),getActivity());
 				mListViewPhotos.setAdapter(adapter);
 				mListViewPhotos.setOnItemClickListener(new OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 						Log.v("prototypev1","photo position "+position);
-						//goToShowPhotoFullScreen(photos.get(position),position);
+						goToShowPhotoFullScreen(photos.get(position),position);
 					}
 				});
 				

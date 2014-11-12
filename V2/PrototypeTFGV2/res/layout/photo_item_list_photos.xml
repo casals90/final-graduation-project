@@ -38,12 +38,20 @@
     
     <ImageView
         android:id="@+id/photo"
-        android:layout_width="fill_parent"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:src="@drawable/ic_launcher"
         android:layout_below="@+id/header_list_item"
         android:layout_centerHorizontal="true"
+        android:scaleType="center"
         android:contentDescription="@string/explain"/>
+    
+     <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
     
     <Button
         android:id="@+id/button_like"
@@ -51,6 +59,8 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_action_good"
         android:layout_below="@+id/photo"
+        android:focusable="false"
+		android:focusableInTouchMode="false"
         android:text="@string/zero"/>
     
     <Button
@@ -59,6 +69,8 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_action_comment"
         android:layout_below="@+id/photo"
+        android:focusable="false"
+		android:focusableInTouchMode="false"
         android:layout_toRightOf="@+id/button_like"
         android:text="@string/zero"/>
 

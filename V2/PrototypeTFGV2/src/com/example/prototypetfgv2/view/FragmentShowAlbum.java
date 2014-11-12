@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +49,6 @@ public class FragmentShowAlbum extends Fragment {
 		super.onCreate(savedInstanceState);
 		getActivity().setTitle(R.string.news);
 		controller = (Controller) this.getActivity().getApplicationContext();
-		controller.clearImageLoader();
 		//Fetch data album
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
@@ -77,25 +74,32 @@ public class FragmentShowAlbum extends Fragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
-		// TODO Auto-generated method stub
 		inflater.inflate(R.menu.menu_show_photos, menu);
 	}
 	
-	/*@Override
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
-			case R.id.create_album:
-				albumName = inputAlbum.getText().toString();
-				//create album in parse
-				if(createAlbum())
-					goToAlbums();
+			case R.id.list_view_mode:
+				goToShowAlbumListMode(album);
 				break;
 			default:
 				break;
 		}
 		return super.onOptionsItemSelected(item);
-	}*/
+	}
+	
+	public void goToShowAlbumListMode(Album album) {
+		Bundle data = new Bundle();
+		data.putParcelable("Album",album);
+		ListViewPhotosFragment listViewPhotos = new ListViewPhotosFragment();
+		listViewPhotos.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,listViewPhotos);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
 	
 	
 	//Class to download photos
@@ -131,15 +135,9 @@ public class FragmentShowAlbum extends Fragment {
 	            gridView.setOnItemClickListener(new OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-						Log.v("prototypev1","photo position "+position);
-						
-						//download likes
-						controller.getLikesPhotosFromAlbum(album.getId());
-						
 						goToShowPhotoFullScreen(photo,position);
 					}
 				});
-	            Log.v("prototypev1", "final onpostexecute download photos grid");
 			}
 			else {
 				//Show message no photos
@@ -159,7 +157,6 @@ public class FragmentShowAlbum extends Fragment {
 
 	public void goToShowPhotoFullScreen(Photo photo,int position) {
 		Intent showPhoto = new Intent(getActivity(),ShowPhotoActivity.class);
-		//showPhoto.putExtra("currentPhoto",photo);
 		showPhoto.putParcelableArrayListExtra("photos",photos);
 		showPhoto.putExtra("currentPosition",position);
 		showPhoto.putExtra("idAlbum",album.getId());
