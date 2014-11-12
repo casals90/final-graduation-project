@@ -13,7 +13,7 @@ import com.example.prototypetfgv2.model.CurrentUser;
 
 public class FragmentNews extends Fragment {
 
-	private Controller controller;
+	
 	
 	public FragmentNews() {
 		super();
@@ -24,7 +24,7 @@ public class FragmentNews extends Fragment {
 		super.onCreate(savedInstanceState);
 		getActivity().setTitle(R.string.news);
 		
-		controller = (Controller) getActivity().getApplication();
+		
 	}
 
 	@Override

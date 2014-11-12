@@ -48,10 +48,6 @@ public class FragmentAlbums extends Fragment {
 		controller = (Controller) this.getActivity().getApplication();
 		controller.clearImageLoader();
 		getActivity().setTitle(R.string.albums);
-		
-		//CurrentUser u = controller.getCurrentUser();
-		//
-		//Log.v("prototypev1","current user from controller "+u);
 	}
 
 	@Override
@@ -69,7 +65,6 @@ public class FragmentAlbums extends Fragment {
 				goToNewAlbum();
 			}
 		});
-		Log.v("prototypev1", "on Create view");
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_albums);
 		new DownloadAlbumsTask().execute();
 		return view;
@@ -114,6 +109,9 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
+        		
+        		//CurrentUser currentUser = controller.getCurrentUser();
+        		
         		//hidden label no albums 
         		noAlbums.setVisibility(View.INVISIBLE);
 	            adapter = new ListViewAdapterForAlbums(getActivity(),albums);
@@ -131,7 +129,6 @@ public class FragmentAlbums extends Fragment {
 	    				//goToShowAlbum2(album);
 	    			}
 	    		});
-	            //Log.v("prototypev1", "on Postexecute success");
         	}
         	else {
         		noAlbums.setVisibility(View.VISIBLE);

@@ -185,10 +185,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 			mAuthTask = null;
 			progressDialog.dismiss();
 			if (success) {
-				//TODO download current user
-				CurrentUser user = controller.downloadCurrentUser();
-				//CurrentUser user = controller.getCurrentUser();
-				controller.setCurrentUser(user);
+				//CurrentUser user =
+				controller.downloadCurrentUser();
+				//controller.setCurrentUser(user);
 				//rememberLogin();
 				goToMainActivity();
 			} 

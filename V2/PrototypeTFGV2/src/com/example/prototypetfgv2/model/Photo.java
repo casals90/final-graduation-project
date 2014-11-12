@@ -145,4 +145,8 @@ public class Photo implements Parcelable {
 		likesNumber = in.readInt();
 		commentsNumber = in.readInt();
 	}
+	
+	public void incrementNumberLikes() {
+		likesNumber++;
+	}
 }

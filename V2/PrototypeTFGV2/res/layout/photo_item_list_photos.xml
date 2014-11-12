@@ -38,7 +38,7 @@
     
     <ImageView
         android:id="@+id/photo"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="200dp"
         android:src="@drawable/ic_launcher"
         android:layout_below="@+id/header_list_item"

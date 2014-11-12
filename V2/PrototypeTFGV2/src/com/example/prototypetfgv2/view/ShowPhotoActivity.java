@@ -49,6 +49,7 @@ public class ShowPhotoActivity extends Activity {
 	private Controller controller;
 	
 	private GestureDetectorCompat mDetector; 
+	private String idAlbum;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +63,10 @@ public class ShowPhotoActivity extends Activity {
 		if(data != null) {
 			photos = data.getParcelableArrayListExtra("photos");
 			currentPosition = data.getIntExtra("currentPosition",0);
+			idAlbum = data.getStringExtra("idAlbum");
 		}
 		
-		fullScreenAdapter = new FullScreenImageAdapter(this, photos,currentPosition);
+		fullScreenAdapter = new FullScreenImageAdapter(this, photos,currentPosition,idAlbum);
 		
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(fullScreenAdapter);

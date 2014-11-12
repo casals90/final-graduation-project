@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,9 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.CurrentUser;
 import com.example.prototypetfgv2.model.Photo;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import android.graphics.Bitmap;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
@@ -35,17 +39,22 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	private Controller controller;
 	private LayoutInflater inflater;
 	private boolean like;
-	private CurrentUser currentUser;
+	//private CurrentUser currentUser;
+	private String idAlbum;
 	
-	public FullScreenImageAdapter(Activity activity, ArrayList<Photo> photos, int position) {
+	ImageLoader imageLoader;
+	
+	public FullScreenImageAdapter(Activity activity, ArrayList<Photo> photos, int position,String idAlbum) {
 		super();
 		this.activity = activity;
 		this.photos = photos;
 		controller = (Controller) activity.getApplication();
-		currentUser = controller.getCurrentUser();
-		Log.v("prototypev1","current user "+currentUser.getLikes().size());
+		//currentUser = controller.getCurrentUser();
+		
 		//Put the start user 
 		changeActionBarForFirstUser(position);
+		imageLoader = ImageLoader.getInstance();
+		this.idAlbum = idAlbum;
 	}
 	
 	public void changeActionBarForFirstUser(int position) {
@@ -83,8 +92,24 @@ public class FullScreenImageAdapter extends PagerAdapter {
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container,false);
 		final ViewHolder viewHolder = new ViewHolder();
 		
+		viewHolder.mProgressBar = (ProgressBar) viewLayout.findViewById(R.id.progressBar);
         viewHolder.mImageViewPhoto = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
-        ImageLoader.getInstance().displayImage(photo.getPhoto(),viewHolder.mImageViewPhoto);
+        imageLoader.displayImage(photo.getPhoto(),viewHolder.mImageViewPhoto,new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+            	viewHolder.mProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            	viewHolder.mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            	viewHolder.mProgressBar.setVisibility(View.INVISIBLE);
+            }
+        });
         
         viewHolder.like = (Button) viewLayout.findViewById(R.id.like);
         viewHolder.comment = (Button) viewLayout.findViewById(R.id.comment);
@@ -92,14 +117,15 @@ public class FullScreenImageAdapter extends PagerAdapter {
         viewHolder.like.setText(String.valueOf(nLikes));
         viewHolder.comment.setText(String.valueOf(nComments));
         
-        like = currentUser.isUserLikedCurrentPhoto(photo.getId());
-        
+        //like = currentUser.isUserLikedCurrentPhoto(photo.getId());
+        like = controller.currentUserLikedCurrentPhoto(photo.getId());
         if(!like) {
         	viewHolder.like.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View v) {
     				new LikePhotoTask().execute(photo.getId());
-    				currentUser.addLike(photo.getId());
+    				//currentUser.addLike(photo.getId());
+    				photo.incrementNumberLikes();
     				incrementLikesNumberInButton(viewHolder.like);
     				viewHolder.like.setOnClickListener(null);
     			}
@@ -140,6 +166,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	
 	private class ViewHolder {
 		ImageView mImageViewPhoto;
+		ProgressBar mProgressBar;
 		Button like,comment;
 	}
 	
@@ -159,8 +186,8 @@ public class FullScreenImageAdapter extends PagerAdapter {
  
         @Override
         protected Boolean doInBackground(String... params) {
-        	String id = params[0];
-        	return controller.likePhoto(id);
+        	String idPhoto = params[0];
+        	return controller.likePhoto(idPhoto,idAlbum);
         }
 
 		@Override

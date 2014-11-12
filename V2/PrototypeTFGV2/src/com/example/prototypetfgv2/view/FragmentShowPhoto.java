@@ -66,7 +66,7 @@ public class FragmentShowPhoto extends Fragment {
 			
 			@Override
 			public void onClick(View arg0) {
-				controller.likePhoto(currentPhoto.getId());
+				//controller.likePhoto(currentPhoto.getId());
 				//hidden like button
 				like.setVisibility(View.INVISIBLE);
 				unlike.setVisibility(View.VISIBLE);
@@ -79,7 +79,7 @@ public class FragmentShowPhoto extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				controller.unlikePhoto(currentPhoto.getId());
+				//controller.unlikePhoto(currentPhoto.getId());
 				//hidden unlike button
 				like.setVisibility(View.VISIBLE);
 				unlike.setVisibility(View.INVISIBLE);
@@ -89,7 +89,7 @@ public class FragmentShowPhoto extends Fragment {
 			}
 		});
 		//Check if currentUser likes photo
-		Log.v("prototypev1", "Users likes this photo "+controller.currentUserLikesCurrentPhoto(currentPhoto.getId()));
+		/*Log.v("prototypev1", "Users likes this photo "+controller.currentUserLikesCurrentPhoto(currentPhoto.getId()));
 		if(controller.currentUserLikesCurrentPhoto(currentPhoto.getId())) {
 			like.setVisibility(View.INVISIBLE);
 			unlike.setVisibility(View.VISIBLE);
@@ -97,7 +97,7 @@ public class FragmentShowPhoto extends Fragment {
 		else {
 			like.setVisibility(View.VISIBLE);
 			unlike.setVisibility(View.INVISIBLE);
-		}
+		}*/
 			
 		comment = (Button) view.findViewById(R.id.comment);
 		comment.setOnClickListener(new OnClickListener() {
@@ -137,7 +137,7 @@ public class FragmentShowPhoto extends Fragment {
         protected Boolean doInBackground(Void... params) {
         	countLikes = controller.countPhotoLikes(currentPhoto.getId());
         	countComments = controller.countPhotoComments(currentPhoto.getId());
-        	currentUserLikesThisPhoto = controller.getParseFunctions().currentUserLikesCurrentPhoto(currentPhoto.getId());
+        	//currentUserLikesThisPhoto = controller.getParseFunctions().currentUserLikesCurrentPhoto(currentPhoto.getId());
         	//Check correct values
         	if(countComments > -1 && countLikes > -1)
         		return true;

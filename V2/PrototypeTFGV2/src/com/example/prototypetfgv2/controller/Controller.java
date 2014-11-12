@@ -59,20 +59,25 @@ public class Controller extends Application {
         
 	}
 	
-	public void initCurrentUser() {
+	/*public void initCurrentUser() {
 		this.currentUser = parseFunctions.getCurrentUser();
-	}
+	}*/
 	
 	public CurrentUser getCurrentUser() {
 		return currentUser;
 	}
 
-	public CurrentUser downloadCurrentUser() {
-		return parseFunctions.getCurrentUser();
+	public void downloadCurrentUser() {
+		this.currentUser = parseFunctions.getCurrentUser();
 	}
 	
 	public void setCurrentUser(CurrentUser currentUser) {
 		this.currentUser = currentUser;
+	}
+	
+	public void getLikesPhotosFromAlbum(String idAlbum) {
+		 ArrayList<String> likes = parseFunctions.getPhotosFromAlbumLikedCurrentUser(currentUser.getId(), idAlbum);
+		 this.currentUser.setLikesPhotosInsideAlbum(likes);
 	}
 
 	public void clearImageLoader() {
@@ -139,6 +144,7 @@ public class Controller extends Application {
 	}
 	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
+		//TODO guardar les fotos que soc admin
 		return parseFunctions.downloadPhotosFromAlbum(albumId);
 	}
 	
@@ -257,7 +263,7 @@ public class Controller extends Application {
 	}
 	
 	public ArrayList<Album> getAlbums() {
-		return parseFunctions.getAlbums();
+		return parseFunctions.getAlbums(this.currentUser);
 	}
 	
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
@@ -294,17 +300,24 @@ public class Controller extends Application {
 	}
 
 	//Social Network module
-	public boolean likePhoto(String id) {
-		return parseFunctions.likePhoto(id);
+	public boolean likePhoto(String idPhoto,String idAlbum) {
+		currentUser.addLike(idPhoto);
+		return parseFunctions.likePhoto(idPhoto,idAlbum);
 	}
 	
-	public boolean unlikePhoto(String id) {
+	public boolean currentUserLikedCurrentPhoto(String idPhoto) {
+		return currentUser.isUserLikedCurrentPhoto(idPhoto);
+	}
+	
+	/*public boolean unlikePhoto(String id) {
 		return parseFunctions.unlikePhoto(id);
 	}
 	
-	public boolean currentUserLikesCurrentPhoto(String id) {
+	/*public boolean currentUserLikesCurrentPhoto(String id) {
 		return parseFunctions.currentUserLikesCurrentPhoto(id);
-	}
+	}*/
+	
+	
 	
 	public boolean newComment(String idPhoto,String text) {
 		return parseFunctions.newComment(idPhoto, text);

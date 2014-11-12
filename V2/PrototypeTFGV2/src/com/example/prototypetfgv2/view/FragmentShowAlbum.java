@@ -132,6 +132,10 @@ public class FragmentShowAlbum extends Fragment {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 						Log.v("prototypev1","photo position "+position);
+						
+						//download likes
+						controller.getLikesPhotosFromAlbum(album.getId());
+						
 						goToShowPhotoFullScreen(photo,position);
 					}
 				});
@@ -158,6 +162,7 @@ public class FragmentShowAlbum extends Fragment {
 		//showPhoto.putExtra("currentPhoto",photo);
 		showPhoto.putParcelableArrayListExtra("photos",photos);
 		showPhoto.putExtra("currentPosition",position);
+		showPhoto.putExtra("idAlbum",album.getId());
 		startActivity(showPhoto);
 	}
 }

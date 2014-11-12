@@ -6,6 +6,8 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -29,6 +33,7 @@ public class ListViewPhotosFragment extends Fragment {
 	private ArrayList<Photo> photos;
 	private ProgressBar mProgressBar;
 	private Album album;
+	private ImageLoader imageLoader;
 	
 	public ListViewPhotosFragment() {
 		super();
@@ -46,6 +51,8 @@ public class ListViewPhotosFragment extends Fragment {
 		album = data.getParcelable("Album");
 		//Put album title in action bar
 		getActivity().setTitle((album.getAlbumTitle()));
+		
+		imageLoader = ImageLoader.getInstance();
 	}
 	
 	@Override
@@ -84,7 +91,13 @@ public class ListViewPhotosFragment extends Fragment {
 			if(result) {
 				mListViewPhotos.setVisibility(View.VISIBLE);
 	        	mProgressBar.setVisibility(View.INVISIBLE);
-				adapter = new AdapterListViewShowPhotos(getActivity().getApplicationContext(), photos);
+	        	
+	        	boolean pauseOnScroll = false; // or true
+				boolean pauseOnFling = true; // or false
+				PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling);
+				mListViewPhotos.setOnScrollListener(listener);
+	        	
+				adapter = new AdapterListViewShowPhotos(getActivity().getApplicationContext(), photos,imageLoader);
 				mListViewPhotos.setAdapter(adapter);
 				mListViewPhotos.setOnItemClickListener(new OnItemClickListener() {
 					@Override
@@ -93,6 +106,31 @@ public class ListViewPhotosFragment extends Fragment {
 						//goToShowPhotoFullScreen(photos.get(position),position);
 					}
 				});
+				
+				/*mListViewPhotos.setOnScrollListener(new OnScrollListener() {
+					
+					@Override
+					public void onScroll(AbsListView view,int firstVisibleItem, int visibleItemCount,int totalItemCount) {
+						// TODO Auto-generated method stub
+						Log.v("prototypev1","es mou l scroll");
+					}
+
+					@Override
+					public void onScrollStateChanged(AbsListView view,int scrollState) {
+						Log.v("prototypev1","es mou l scroll");
+						if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+							Log.v("prototypev1","es mou l scroll");
+							ImageLoader.getInstance().stop();
+							
+						}
+						else {
+							Log.v("prototypev1","es mou l scroll");
+							ImageLoader.getInstance().resume();
+						}
+					}
+					
+					
+				});*/
 			}
 		}
 

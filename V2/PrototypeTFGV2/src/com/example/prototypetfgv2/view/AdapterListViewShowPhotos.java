@@ -8,6 +8,7 @@ import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.view.ListViewAdapterForShowPhotosOld.ViewHolder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,22 +28,25 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	
-	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos) {
+	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos, ImageLoader imageLoader) {
 		super();
 		this.photos = photos;
 		this.inflater = LayoutInflater.from(context);
 		
 		controller = (Controller) context.getApplicationContext();
+		
+		this.imageLoader = imageLoader;
 	}
 	
 	public void configureDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
         .showImageOnLoading(R.drawable.ic_launcher) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher)
         .resetViewBeforeLoading(false)  // default
         .delayBeforeLoading(1000)
-        .cacheInMemory(false) // default
-        .cacheOnDisk(false) // default
-        .considerExifParams(false) // default
+        .cacheInMemory(true) // default
+        .cacheOnDisk(true) // default
+        .considerExifParams(true) // default
         .build();
 	}
 
@@ -90,8 +94,10 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		else
 			holder = (ViewHolder) view.getTag();
 		photo = photos.get(position);
-		ImageLoader.getInstance().displayImage(photo.getPhoto(),holder.mImageViewPhoto,options);
-		ImageLoader.getInstance().displayImage(photo.getOwnerUser().getProfilePicture(),holder.mImageViewProfilePicture);
+		
+		//options 
+		imageLoader.displayImage(photo.getPhoto(),holder.mImageViewPhoto);
+		imageLoader.displayImage(photo.getOwnerUser().getProfilePicture(),holder.mImageViewProfilePicture);
 		
 		holder.mTextViewUsername.setText(photo.getOwnerUser().getUsername());
 		holder.mTextViewTitle.setText(photo.getTitle());
