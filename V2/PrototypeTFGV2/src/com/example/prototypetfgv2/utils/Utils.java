@@ -1,4 +1,4 @@
-package com.example.prototypetfgv2.view;
+package com.example.prototypetfgv2.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -14,15 +14,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.model.CurrentAlbum;

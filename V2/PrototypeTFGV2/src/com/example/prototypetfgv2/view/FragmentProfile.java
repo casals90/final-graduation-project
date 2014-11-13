@@ -37,6 +37,7 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FragmentProfile extends Fragment {

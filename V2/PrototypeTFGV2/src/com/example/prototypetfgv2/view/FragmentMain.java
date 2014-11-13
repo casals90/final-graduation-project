@@ -9,14 +9,8 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,7 +32,6 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 
-//implements OnBackStackChangedListener
 public class FragmentMain extends Fragment implements OnClickListener {
 	
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -195,6 +188,7 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	    );
 
 	    // Save a file: path for use with ACTION_VIEW intents
+	    //mCurrentPhotoPath = "file:/"+image.getAbsolutePath();
 	    mCurrentPhotoPath = image.getAbsolutePath();
 	    return image;
 	}

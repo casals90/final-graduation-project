@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
+import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
  
 public class ListViewAdapterForSearchUsers extends BaseAdapter {
