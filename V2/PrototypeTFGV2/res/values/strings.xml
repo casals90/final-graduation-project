@@ -69,6 +69,7 @@
     <string name="grid_view_mode">Grid mode</string>
     <string name="list_view_mode">List mode</string>
     <string name="enter_photo_title">Input photo title</string>
+     <string name="new_album"> New album</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>

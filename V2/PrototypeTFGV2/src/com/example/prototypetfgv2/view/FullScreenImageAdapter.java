@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +27,7 @@ import com.example.prototypetfgv2.model.Photo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 public class FullScreenImageAdapter extends PagerAdapter {
@@ -40,7 +40,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	private LayoutInflater inflater;
 	private boolean like;
 	private String idAlbum;
-	ImageLoader imageLoader;
+	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	
 	public FullScreenImageAdapter(Activity activity, ArrayList<Photo> photos, int position,String idAlbum) {
@@ -63,6 +63,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
         .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
         .resetViewBeforeLoading(true) 
         .considerExifParams(true)
+        .imageScaleType(ImageScaleType.EXACTLY)
         .bitmapConfig(Bitmap.Config.RGB_565)
         .build();
 	}

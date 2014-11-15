@@ -17,7 +17,6 @@ import android.util.DisplayMetrics;
 public class BitmapUtils {
 	
 	public static Bitmap decodeFileForDisplay(File f,Activity activity){
-
 	    try {
 	        //Decode image size
 	        BitmapFactory.Options o = new BitmapFactory.Options();
@@ -45,7 +44,6 @@ public class BitmapUtils {
 	            e1.printStackTrace();
 	        }
 	        return scaledPhoto;
-
 	    } catch (FileNotFoundException e) {}
 	    	return null;
 	}

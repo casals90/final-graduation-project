@@ -191,14 +191,11 @@ public class ParseFunctions {
         uploadParseFile.put("photo",file);
         try {
 			uploadParseFile.save();
-			//Log.v("prototypev1", "file save");
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
         //Save the owner of the photo
         photoUpload.put("ownerUser",ParseUser.getCurrentUser().getObjectId());
-        //Log.v("prototypev1", "upload photo put current album ");
         String album;
 		try {
 			album = ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id");
@@ -208,16 +205,27 @@ public class ParseFunctions {
 			//add more atributes
 			try {
 				photoUpload.save();
-				//Log.v("prototypev1", "save photo class");
-				Toast.makeText(activity.getApplicationContext(), "Update Photo",Toast.LENGTH_LONG).show();
+				//Increment number of photos
+				incrementPhotosNumberInAlbum(album);
+				//Toast.makeText(activity.getApplicationContext(),"Update Photo",Toast.LENGTH_LONG).show();
 			} catch (ParseException e) {
 				e.printStackTrace();
-				//Log.v("prototypev1", "erro save photo"+e);
 			}
 
 		} catch (JSONException e) {
 			e.printStackTrace();
-			//Log.v("prototypev1", "erro save photo"+e);
+		}
+    }
+    
+    public void incrementPhotosNumberInAlbum(String idAlbum) {
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
+    	query.whereEqualTo("objectId",idAlbum);
+    	try {
+			ParseObject album = query.getFirst();
+			album.increment("photosNumber");
+			album.save();
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
     }
 	
@@ -357,7 +365,7 @@ public class ParseFunctions {
 		ArrayList<String> albumsAdmin = new ArrayList<String>();
 		ArrayList<Album> albums = new ArrayList<Album>();
 		
-		//Log.v("prototypev1", "Start download albums");
+		Log.v("prototypev1", "Start download albums");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery(ALBUM);
 		query.whereEqualTo("idMembers",ParseUser.getCurrentUser().getObjectId());
 		query.orderByDescending("createdAt");
@@ -368,26 +376,27 @@ public class ParseFunctions {
 				return null;
 			}
 			//Log.v("prototypev1", "hi ha "+ob.size()+" albums");
-			//int i = 0;
+			int i = 0;
 			for(ParseObject a : ob) {
-				//Log.v("prototypev1", "download album "+i);
-				//i++;
+				Log.v("prototypev1", "download album "+i);
+				i++;
 				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
 				//Put a random cover photo of album
 				//Check if user is admin
 				if(a.getString("idAdmin").compareTo(currentUser.getId())== 0)
 					albumsAdmin.add(a.getObjectId());
-				int photoNumber = countPhotosNumberFromAlbum(a.getObjectId());
+				//int photoNumber = countPhotosNumberFromAlbum(a.getObjectId());
+				int photoNumber = a.getInt("photosNumber");
 				if(photoNumber > 0) {
 					ArrayList<String> idPhotos = getPhotosFromAlbum(a.getObjectId());
 					int random = Utils.getRandomInt(idPhotos.size());
 					//Download Random photo
 					Photo photo = downloadPhoto(idPhotos.get(random));
-					albums.add(new Album(a.getObjectId(),photo.getId(),a.getString("albumTitle"),members));
+					albums.add(new Album(a.getObjectId(),photo.getPhoto(),a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
 					//getPhotoMoreLikesInAlbum(a.getObjectId());
 				}
 				else 
-					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"),members));
+					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
 			}	
 		} catch (ParseException e) {
 			e.printStackTrace();

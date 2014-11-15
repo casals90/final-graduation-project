@@ -24,8 +24,10 @@ import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.utils.Utils;
 import com.example.prototypetfgv2.view.SignUpActivity;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -50,6 +52,7 @@ public class Controller extends Application {
         
         
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+        .memoryCache(new WeakMemoryCache())
         .denyCacheImageMultipleSizesInMemory()
         .tasksProcessingOrder(QueueProcessingType.LIFO)
         .memoryCache(new LruMemoryCache(2 * 1024 * 1024))

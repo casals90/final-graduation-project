@@ -21,21 +21,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ShowPhotoActivity extends Activity {
 	
-	String DEBUG_TAG ="Touch test";
 	private ArrayList<Photo> photos;
 	private int currentPosition;
-	private FullScreenImageAdapter fullScreenAdapter;
-	
-	private ViewPager mViewPager;
-	
-	private ViewHolderActionBar viewHolderActionBar;
-
-	
-	//private Controller controller;
-	
-	//private GestureDetectorCompat mDetector; 
 	private String idAlbum;
 	private DisplayImageOptions options;
+	
+	private FullScreenImageAdapter fullScreenAdapter;
+	private ViewPager mViewPager;
+	private ViewHolderActionBar viewHolderActionBar;
 
 	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
@@ -55,7 +48,6 @@ public class ShowPhotoActivity extends Activity {
 		setContentView(R.layout.activity_fullscreen_view);
 		initActionBar();
 		
-		//this.controller = (Controller) this.getApplicationContext();
 		initDisplayOptions();
 		Intent data = getIntent();
 		if(data != null) {
@@ -70,7 +62,6 @@ public class ShowPhotoActivity extends Activity {
 		mViewPager.setAdapter(fullScreenAdapter);
 		mViewPager.setCurrentItem(currentPosition);
 		mViewPager.setPageMargin(50);
-		
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			
 			@Override

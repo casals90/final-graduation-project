@@ -274,6 +274,16 @@ public class Utils {
         columnWidth = point.x;
         return columnWidth;
     }*/
+	
+	public static ArrayList<Integer> getMetrics(Activity activity) {
+		DisplayMetrics metrics =  activity.getResources().getDisplayMetrics();
+		int width = metrics.widthPixels;
+		int height = metrics.heightPixels;
+		ArrayList<Integer> size = new ArrayList<Integer>();
+		size.add(width);
+		size.add(height);
+		return size;
+	}
 }
 
 	

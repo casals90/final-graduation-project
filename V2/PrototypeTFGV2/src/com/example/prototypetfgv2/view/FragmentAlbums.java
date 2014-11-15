@@ -1,22 +1,19 @@
 package com.example.prototypetfgv2.view;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,20 +21,20 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
-import com.example.prototypetfgv2.model.CurrentUser;
+import com.example.prototypetfgv2.utils.Utils;
 
 public class FragmentAlbums extends Fragment {
 	
 	private Controller controller;
+	private FragmentAlbums fragmentAlbums = this;
 	
-	private ListView listviewAlbums;
+	private ViewPager mViewPager;
 	private ProgressBar mProgressBar;
-	private Button newAlbum;
 	private TextView noAlbums;
 	
-	private ListViewAdapterForAlbums adapter;
-	private List<Album> albums;
-    
+	private ChooseAlbumAdapter adapter;
+	private ArrayList<Album> albums;
+	
 	public FragmentAlbums() {
 		super();
 	}
@@ -48,6 +45,26 @@ public class FragmentAlbums extends Fragment {
 		controller = (Controller) this.getActivity().getApplication();
 		controller.clearImageLoader();
 		getActivity().setTitle(R.string.albums);
+		//For show menu in action bar
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_fragment_albums, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+			case R.id.new_album:
+				goToNewAlbum();
+				break;
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -55,17 +72,9 @@ public class FragmentAlbums extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
-		noAlbums = (TextView) view.findViewById(R.id.label_no_albums);
-		listviewAlbums = (ListView) view.findViewById(R.id.list_albums);
-		
-		newAlbum = (Button) view.findViewById(R.id.add_album);
-		newAlbum.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				goToNewAlbum();
-			}
-		});
+		mViewPager = (ViewPager) view.findViewById(R.id.pagerAlbums);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_albums);
+		
 		new DownloadAlbumsTask().execute();
 		return view;
 	}
@@ -78,6 +87,13 @@ public class FragmentAlbums extends Fragment {
 		transaction.commit();
 	}
 	
+	private void configureSizeOfViewPager(ViewPager viewPager) {
+		ArrayList<Integer> metrics = Utils.getMetrics(getActivity());
+		int height = metrics.get(1);
+		//Calculate 70% of pixels
+		int newHeight = (int)Math.round((height * 0.75));
+		viewPager.getLayoutParams().height = newHeight;
+	}
    
 
 	private class DownloadAlbumsTask extends AsyncTask<Void, Void, Boolean> {
@@ -86,12 +102,13 @@ public class FragmentAlbums extends Fragment {
         protected void onPreExecute() {
         	super.onPreExecute();
         	mProgressBar.setVisibility(View.VISIBLE);
+        	mViewPager.setVisibility(View.INVISIBLE);
         }
  
         @Override
         protected Boolean doInBackground(Void... params) {
         	albums = controller.getAlbums();
-            if(albums != null && albums.size() > 0)
+            if(albums != null)
             	return true;
             return false;
             		
@@ -100,30 +117,18 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
-        		//hidden label no albums 
-        		noAlbums.setVisibility(View.INVISIBLE);
-	            adapter = new ListViewAdapterForAlbums(getActivity(),albums);
-	            // Binds the Adapter to the ListView
-	            listviewAlbums.setAdapter(adapter);
-	            // Close the progressdialog
+	            adapter = new ChooseAlbumAdapter(albums, getActivity(),fragmentAlbums);
+	            mViewPager.setAdapter(adapter);
+	            mViewPager.setPageMargin(50);
+	            //Configure size of viewPager
+	            configureSizeOfViewPager(mViewPager);
 	            mProgressBar.setVisibility(View.INVISIBLE);
-	            //Create listener
-	            listviewAlbums.setOnItemClickListener(new OnItemClickListener() {
-
-	    			@Override
-	    			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-	    				Album album = albums.get(position);
-	    				goToShowAlbumListMode(album);
-	    				//goToShowAlbumGridMode(album);
-	    			}
-	    		});
+	            mViewPager.setVisibility(View.VISIBLE);
         	}
         	else {
         		noAlbums.setVisibility(View.VISIBLE);
-        		listviewAlbums.setVisibility(View.INVISIBLE);
         		mProgressBar.setVisibility(View.INVISIBLE);
         	}
-        		
         }
 
 		@Override

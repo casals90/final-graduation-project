@@ -143,7 +143,7 @@ public class FragmentNewAlbum extends Fragment {
 		FragmentTransaction transaction = manager.beginTransaction();
 		FragmentAlbums albums = new FragmentAlbums();
 		transaction.replace(R.id.container_fragment_main,albums);
-		//transaction.addToBackStack(null);
+		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 	

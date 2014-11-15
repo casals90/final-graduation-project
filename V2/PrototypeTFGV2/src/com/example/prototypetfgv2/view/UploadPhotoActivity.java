@@ -1,6 +1,7 @@
 package com.example.prototypetfgv2.view;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -48,7 +49,7 @@ public class UploadPhotoActivity extends Activity {
 		mImageView = (ImageView) findViewById(R.id.new_image);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 		send = (ImageButton) findViewById(R.id.send_title);
-		send.setOnClickListener(new OnClickListener() {
+		/*send.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
@@ -59,12 +60,13 @@ public class UploadPhotoActivity extends Activity {
 				}
 				finish();
 			}
-		});
+		});*/
 		Bundle data = getIntent().getExtras();
 		if(data != null)
 			mCurrentPhotoPath = data.getString("pathNewPhoto");
 
-    	new CreateBitmapTask().execute();
+    	//new CreateBitmapTask().execute();
+		new BitmapWorkerTask(mImageView).execute(mCurrentPhotoPath);
 	}
 	
 	/*public void initDisplayOptions() {
@@ -94,6 +96,56 @@ public class UploadPhotoActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+	    private final WeakReference<ImageView> imageViewReference;
+	    private int data = 0;
+
+	    public BitmapWorkerTask(ImageView imageView) {
+	        // Use a WeakReference to ensure the ImageView can be garbage collected
+	        imageViewReference = new WeakReference<ImageView>(imageView);
+	    }
+	    
+	    @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+	    // Decode image in background.
+	    @Override
+	    protected Bitmap doInBackground(String... params) {
+	        String filePath = params[0];
+	        File file = new File(filePath);
+	        return BitmapUtils.decodeFileForDisplay(file,activity);
+	    }
+
+	    // Once complete, see if ImageView is still around and set bitmap.
+	    @Override
+	    protected void onPostExecute(Bitmap bitmap) {
+	        if (imageViewReference != null && bitmap != null) {
+	            final ImageView imageView = imageViewReference.get();
+	            if (imageView != null) {
+	            	//Put bitmap in a gloab field
+	            	photo = bitmap;
+	            	mProgressBar.setVisibility(View.INVISIBLE);
+	                imageView.setImageBitmap(bitmap);
+	                
+	                send.setOnClickListener(new OnClickListener() {
+	        			@Override
+	        			public void onClick(View arg0) {
+	        				String title = mEditText.getText().toString();
+	        				if(title.length() > 0) {
+	        					mEditText.setText("");
+	        					controller.updatePhoto(photo, title,activity);
+	        				}
+	        				finish();
+	        			}
+	        		});
+	            }
+	        }
+	    }
 	}
 	
 	private class CreateBitmapTask extends AsyncTask<Void, Void, Boolean> {

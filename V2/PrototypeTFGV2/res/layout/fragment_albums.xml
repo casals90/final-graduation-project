@@ -6,34 +6,16 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp">
 
-    <Button
-        android:id="@+id/add_album"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_action_new"
-        android:layout_below="@+id/title"
-        android:text="@string/add_new_album" />
-    
-    <ListView
-        android:id="@+id/list_albums"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/add_album"/>
-    
-    <TextView 
-        android:id="@+id/label_no_albums"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_album"
-        android:layout_below="@+id/add_album"
-        android:layout_marginTop="5dp"
-        android:visibility="invisible"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pagerAlbums"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"/>
 
     <ProgressBar
         android:id="@+id/progressBar_albums"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="invisible"/>
+        android:visibility="visible"/>
 
 </RelativeLayout>
