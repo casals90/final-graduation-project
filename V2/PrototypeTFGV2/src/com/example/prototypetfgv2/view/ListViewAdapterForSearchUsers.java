@@ -1,8 +1,6 @@
 package com.example.prototypetfgv2.view;
 
-import java.util.List;
-
-import org.json.JSONArray;
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,25 +13,20 @@ import android.widget.TextView;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
-import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
  
 public class ListViewAdapterForSearchUsers extends BaseAdapter {
 	
     private LayoutInflater inflater;
     private ImageLoader imageLoader;
-    
-    private List<User> users;
-    private JSONArray friends;
-    
+    private ArrayList<User> users;
+    private ArrayList<String> friends;
     private Controller controller;
     
-    public ListViewAdapterForSearchUsers(Context context,List<User> users) {      
+    public ListViewAdapterForSearchUsers(Context context,ArrayList<User> users) {      
         inflater = LayoutInflater.from(context);
         imageLoader = ImageLoader.getInstance();
-        
-        controller = (Controller) context.getApplicationContext();
-               
+        controller = (Controller) context.getApplicationContext();    
         this.users = users;
         friends = controller.getFriends();
     }
@@ -62,6 +55,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
  
     public View getView(final int position, View view, ViewGroup parent) {
         final ViewHolder holder;
+        final User user = users.get(position);
         if (view == null) { 
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.item_user_view,null);
@@ -79,15 +73,15 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
         // Set the results into TextViews
         holder.username.setText(users.get(position).getUsername());
         
-        imageLoader.displayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+        imageLoader.displayImage(user.getProfilePicture(),holder.profilePicture);
         //Default profile photo
-        if(users.get(position).getProfilePicture() == null)
+        if(user.getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
-        //Show image when user is in friend list
-        if(!Utils.isElementExist(friends,users.get(position).getId()))
-        	holder.imageFriend.setVisibility(View.INVISIBLE);
-        else
+        if(friends.contains(user.getId()))
         	holder.imageFriend.setVisibility(View.VISIBLE);
+        else
+        	holder.imageFriend.setVisibility(View.INVISIBLE);
+        
         return view;
     }
 }

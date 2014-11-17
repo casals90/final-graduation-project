@@ -48,7 +48,6 @@ import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-
 public class ParseFunctions {
 	
 	// All customs ParseObjects TODO
@@ -78,19 +77,17 @@ public class ParseFunctions {
 		ParseUser parseUser = new ParseUser();
 		parseUser.setUsername(username);
 		parseUser.setPassword(password);
-		parseUser.put("friends",new JSONArray());
+		//parseUser.put("friends",new JSONArray());
 		//parseUser.put("photos",new JSONArray());
 		//parseUser.put("friendsRequest",new JSONArray());
 		//parseUser.put("albums",new JSONArray());
-		//parseUser.put("photosNumber",0);
-		//parseUser.put("friendsNumber",0);
-		//parseUser.put("albumNumber",0);
+		parseUser.put("photosNumber",0);
+		parseUser.put("friendsNumber",0);
+		parseUser.put("albumNumber",0);
 		//Add default profile picture
 		//parseUser.put("profilePicture",new ParseFile(null));
-	
 		try {
 			parseUser.signUp();
-			
 			return parseUser;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -146,11 +143,11 @@ public class ParseFunctions {
     	query.whereEqualTo("ownerAlbum",idAlbum);
     	try {
 			List<ParseObject> parseLikes = query.find();
-			Log.v("prototypev1", "likes parse function PArseobject "+parseLikes.size());
+			//Log.v("prototypev1", "likes parse function PArseobject "+parseLikes.size());
 			for(ParseObject l: parseLikes) {
 				likes.add(l.getString("idPhoto"));
 			}
-			Log.v("prototypev1", "likes parse function "+likes.size());
+			//Log.v("prototypev1", "likes parse function "+likes.size());
 			return likes;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -361,32 +358,45 @@ public class ParseFunctions {
 	}
 	
 	public ArrayList<Album> getAlbums(CurrentUser currentUser) {
-		
+		ArrayList<Album> albums = new ArrayList<Album>();
+		ArrayList<String> albumsId = new ArrayList<String>();
+		Log.v("prototypev1", "Start download albums");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
+		query.whereEqualTo("idUser",currentUser.getId());
+		query.orderByDescending("createdAt");
+			
+		try {
+			List<ParseObject> listAlbumMember = query.find();
+			Log.v("prototypev1", "albums number "+listAlbumMember.size());
+			if(listAlbumMember.size() == 0) {
+				return null;
+			}
+			for(ParseObject albumMember: listAlbumMember) {
+				albumsId.add(albumMember.getString("idAlbum"));
+			}
+			albums = downloadAlbums(albumsId, currentUser);
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return albums;
+	}
+	
+	public ArrayList<Album> downloadAlbums(ArrayList<String> idAlbums,CurrentUser currentUser) {
+		Log.v("prototypev1", "start download albums 2 ");
 		ArrayList<String> albumsAdmin = new ArrayList<String>();
 		ArrayList<Album> albums = new ArrayList<Album>();
 		
-		Log.v("prototypev1", "Start download albums");
-		ParseQuery<ParseObject> query = ParseQuery.getQuery(ALBUM);
-		query.whereEqualTo("idMembers",ParseUser.getCurrentUser().getObjectId());
-		query.orderByDescending("createdAt");
-		try {
-			List<ParseObject> ob = query.find();
-			if(ob.size() == 0) {
-				Log.v("prototypev1", "return null");
-				return null;
-			}
-			//Log.v("prototypev1", "hi ha "+ob.size()+" albums");
-			int i = 0;
-			for(ParseObject a : ob) {
-				Log.v("prototypev1", "download album "+i);
-				i++;
-				List<String> members = Utils.jsonArrayToListString(a.getJSONArray("idMembers"));
-				//Put a random cover photo of album
-				//Check if user is admin
+		for(int i = 0; i < idAlbums.size(); i++) {
+			ParseQuery<ParseObject> query = ParseQuery.getQuery(ALBUM);
+			query.whereEqualTo("objectId",idAlbums.get(i));
+			try {
+				ParseObject a = query.getFirst();
 				if(a.getString("idAdmin").compareTo(currentUser.getId())== 0)
 					albumsAdmin.add(a.getObjectId());
-				//int photoNumber = countPhotosNumberFromAlbum(a.getObjectId());
 				int photoNumber = a.getInt("photosNumber");
+				//download members
+				ArrayList<String> members = getMembers(a.getObjectId());
 				if(photoNumber > 0) {
 					ArrayList<String> idPhotos = getPhotosFromAlbum(a.getObjectId());
 					int random = Utils.getRandomInt(idPhotos.size());
@@ -397,15 +407,29 @@ public class ParseFunctions {
 				}
 				else 
 					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
-			}	
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return albums;
+	}
+	
+	public ArrayList<String> getMembers(String idAlbum) {
+		ArrayList<String> members = new ArrayList<String>();
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMembers");
+		query.whereEqualTo("idAlbum",idAlbum);
+		try {
+			List<ParseObject> obs = query.find();
+			for(ParseObject o : obs) {
+				members.add(o.getString("idUser"));
+			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
 		}
-		//Log.v("prototypev1", "end download albums");
-		//Put albums admin in Current user
-		currentUser.setAlbumsAdmin(albumsAdmin);
-		return albums;
+		return members;
 	}
 	
 	public String getPhotoUrl(String id) {
@@ -415,7 +439,6 @@ public class ParseFunctions {
 			ParseObject photo = query.getFirst();
 			return photo.getString("photoFileUrl");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -462,35 +485,32 @@ public class ParseFunctions {
 		return null;	
 	}
 	
-	public ArrayList<User> downloadFriends() {
+	public ArrayList<User> downloadFriends(CurrentUser currentUser) {
 		ArrayList<User> users = new ArrayList<User>();
-		JSONArray idFriends = getFriends();
+		ArrayList<String> friends = getFriends(currentUser);
 		
-		for(int i = 0; i < idFriends.length(); i ++) {
+		for(int i = 0; i < friends.size(); i++) {
 			ParseQuery<ParseUser> query = ParseUser.getQuery();
+			query.whereEqualTo("objectId",friends.get(i));
+			query.orderByDescending("username");
 			try {
-				query.whereEqualTo("objectId",idFriends.get(i));
-				query.orderByDescending("username");
-				
-				ParseUser u = query.getFirst();
-				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
-				if(profilePicture == null)
-					users.add(new User(u.getObjectId(),u.getUsername(), null));
+				ParseUser user = query.getFirst();
+				String urlProfilePicture = user.getString("profilePictureUrl");
+				if(urlProfilePicture == null)
+					users.add(new User(user.getObjectId(),user.getUsername(), null));
 				else
-					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl()));
-			} catch (JSONException e) {
-				e.printStackTrace();
+					users.add(new User(user.getObjectId(),user.getUsername(),urlProfilePicture));
 			} catch (ParseException e) {
 				e.printStackTrace();
+				return null;
 			}
 		}
 		return users;
 	 }
 	
-	public ArrayList<User> downloadFriendsInputSearch(String input) {
+	public ArrayList<User> downloadFriendsInputSearch(String input,CurrentUser currentUser) {
 		ArrayList<User> users = new ArrayList<User>();
-		JSONArray f = ParseUser.getCurrentUser().getJSONArray("friends");
-		ArrayList<String> friends = Utils.jsonArrayToArrayListString(f);
+		ArrayList<String> friends = getFriends(currentUser);
 		
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereStartsWith("username",input);
@@ -499,11 +519,8 @@ public class ParseFunctions {
 		try {
 			List<ParseUser> parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
-				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
-				if(profilePicture == null)
-					users.add(new User(u.getObjectId(),u.getUsername(), null));
-				else
-					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl()));
+				String profilePictureUrl = u.getString("profilePictureUrl");
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl));
 			}
 			return users;
 		} catch (ParseException e) {
@@ -512,23 +529,19 @@ public class ParseFunctions {
 		}
 	}
 	
-	 public ArrayList<User> getUsers(String username) {
+	 public ArrayList<User> getUsers(String username,CurrentUser currentUser) {
 		ArrayList<User> users = new ArrayList<User>();
 		List<ParseUser> parseUsers;
 		
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereStartsWith("username",username);
+		query.whereNotEqualTo("objectId",currentUser.getId());
 		query.orderByDescending("username");
 		try {
 			parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
-				if(u.getParseFile("profilePicture") != null) {
-					ParseFile profilePicture = (ParseFile)u.get("profilePicture");
-					users.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl()));
-				}
-				//Not have a profile picture (default)
-				else 
-					users.add(new User(u.getObjectId(),u.getUsername(),null));	
+				String profilePictureUrl = u.getString("profilePictureUrl");
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl));
 			}
 			return users;
 		} catch (ParseException e) {
@@ -537,9 +550,20 @@ public class ParseFunctions {
 		}
 	} 
 	 
-	public JSONArray getFriends() {
-		JSONArray f = ParseUser.getCurrentUser().getJSONArray("friends");
-		return f;
+	public ArrayList<String> getFriends(CurrentUser currentUser) {
+		ArrayList<String> friends = new ArrayList<String>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idUser",currentUser.getId());
+		try {
+			List<ParseObject> friendship = query.find();
+			for(ParseObject f : friendship) {
+				friends.add(f.getString("idFriend"));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return friends;
 	}
 	
 	public JSONArray getFriendsRequest() {
@@ -547,90 +571,23 @@ public class ParseFunctions {
 		return r;
 	}
 	
-	public boolean addFriend(final String idNewFriend) {
-		//Add new friend in request list of current user
-		ParseUser currentUser = ParseUser.getCurrentUser();
-		//currentUser.getJSONArray("friendsRequest").put(idNewFriend);
-		currentUser.getJSONArray("friends").put(idNewFriend);
-		//Increment the friendsNumber column
-		int friendsNumber = currentUser.getInt("friendsNumber");
-		friendsNumber++;
-		currentUser.put("friendsNumber",friendsNumber);
+	public boolean addFriend(String idNewFriend,CurrentUser currentUser) {
+		ParseObject friendship = new ParseObject("Friendship");
+		friendship.put("idUser",currentUser.getId());
+		friendship.put("idFriend",idNewFriend);
 		try {
-			currentUser.save();
-			sendPush2(idNewFriend);
+			friendship.save();
+			incrementFriendsNumber();
 			return true;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return false;
-		}		
+		}
 	}
 	
-	public void sendPush2(String id) {
-		// Find users near a given location
-		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-		userQuery.whereEqualTo("objectId",id);
-		 
-		// Find devices associated with these users
-		ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
-		pushQuery.whereMatchesQuery("user",userQuery);
-		 
-		// Send push notification to query
-		ParsePush push = new ParsePush();
-		push.setQuery(pushQuery); // Set our Installation query
-		push.setMessage("Hellow world");
-		push.sendInBackground();
-			
-	}
-	
-	public void sendPush(String id) {
-		Log.v("prototypev1", "send push "+id);
-		/*ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-		installation.put("userId",id);
-		//ParseInstallation installation = new ParseInstallation();
-		//installation.put("userId",id);
-		try {
-			installation.save();
-			
-			
-			// Create our Installation query
-			ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
-			pushQuery.whereEqualTo("userId",ParseUser.getCurrentUser().getObjectId());
-			 
-			// Send push notification to query
-			ParsePush push = new ParsePush();
-			push.setQuery(pushQuery); // Set our Installation query
-			push.setMessage("Willie Hayes injured by own pop fly.");
-			push.sendInBackground();
-					
-		} catch (ParseException e) {
-			e.printStackTrace();
-			Log.v("prototypev1", "error push "+e);
-		}*/
-		
-		// Find users near a given location
-		ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-		userQuery.whereEqualTo("objectId",id);
-		
-		try {
-			ParseUser u = userQuery.getFirst();
-			Log.v("prototypev1", "send push "+u.getUsername());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		} 
-		
-		// Find devices associated with these users
-		ParseQuery<ParseInstallation> pushQuery = ParseInstallation.getQuery();
-		pushQuery.whereMatchesQuery("user", userQuery);
-		
-		
-		 
-		// Send push notification to query
-		ParsePush push = new ParsePush();
-		push.setQuery(pushQuery); // Set our Installation query
-		push.setMessage("Free hotdogs at the Parse concession stand!");
-		push.sendInBackground();
-		
+	public void incrementFriendsNumber() {
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		currentUser.increment("friendsNumber");
 	}
 	
 	public String getUsername() {
@@ -652,14 +609,6 @@ public class ParseFunctions {
 			e1.printStackTrace();
 			return false;
 		}
-		/*user.put("profilePicture",img);
-		try {
-			user.save();
-			return true;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return false;
-		}*/
 	}
 	
 	public boolean removeProfilePicture() {
@@ -674,25 +623,30 @@ public class ParseFunctions {
 		}
 	}
 	
-	public boolean isMyFriend(String id) {
-		JSONArray friends = getFriends();
-		return Utils.isElementExist(friends, id);
+	public boolean deleteFriend(String id,CurrentUser currentUser) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idUser",currentUser.getId());
+		query.whereEqualTo("idFriend",id);
+		try {
+			ParseObject friendship = query.getFirst();
+			friendship.delete();
+			return decrementFriendsNumber();
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
-	//Revisar
-	public boolean deleteFriend(String id) {
-		JSONArray friends = Utils.removeElementToJsonArray(getFriends(),id);
-		ParseUser user = ParseUser.getCurrentUser();
-		user.put("friends",friends);
-		//Decrement friendsNumber column
-		int friendsNumber = user.getInt("friendsNumber");
-		friendsNumber--;
-		if(friendsNumber <= 0)
-			user.put("friendsNumber",0);
+	public boolean decrementFriendsNumber() {
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		int n = currentUser.getInt("friendsNumber");
+		if(n > 0)
+			n--;
 		else
-			user.put("friendsNumber",friendsNumber);
+			n = 0;
+		currentUser.put("friendsNumber",n);
 		try {
-			user.save();
+			currentUser.save();
 			return true;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -717,7 +671,10 @@ public class ParseFunctions {
 					} 
 					else if (user.isNew()) { 
 						Log.v("prototypev1", "signup twitter new user");
-						user.put("friends",new JSONArray());
+						//user.put("friends",new JSONArray());
+						user.put("photosNumber",0);
+						user.put("friendsNumber",0);
+						user.put("albumNumber",0);
 						try {
 							user.save();
 							goToInputUsername(activity);
@@ -778,24 +735,37 @@ public class ParseFunctions {
 		return false;
 	}
 	
-	public boolean newAlbum(JSONArray members,String albumName) {
+	public boolean addMembersInAlbum(ArrayList<String> members,String idAlbum) {
+		
+		for(int i = 0; i < members.size(); i++) {
+			ParseObject albumMember = new ParseObject("AlbumMember");
+			albumMember.put("idAlbum",idAlbum);
+			albumMember.put("idUser",members.get(i));
+			try {
+				albumMember.save();
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean newAlbum(ArrayList<String> members,String albumName,CurrentUser currentUser) {
 		ParseObject newAlbum = new ParseObject(ALBUM);
 		//Admin is current user
-		newAlbum.put("idAdmin",ParseUser.getCurrentUser().getObjectId());
+		newAlbum.put("idAdmin",currentUser.getId());
 		//Put current user in members
-		members.put(ParseUser.getCurrentUser().getObjectId());
-		if(albumName == null)
-			newAlbum.put("albumTitle","Default name");
-		else
-			newAlbum.put("albumTitle",albumName);
-		newAlbum.put("idMembers",members);
+		members.add(currentUser.getId());
+		newAlbum.put("albumTitle",albumName);
+		//newAlbum.put("idMembers",members);
 		//Increment number of albums
 		ParseUser user = ParseUser.getCurrentUser();
 		user.increment("albumsNumber");
 		user.saveInBackground();
 		try {
 			newAlbum.save();
-			return true;
+			return addMembersInAlbum(members,newAlbum.getObjectId());
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return false;

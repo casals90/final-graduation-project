@@ -1,7 +1,6 @@
 package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,7 +35,7 @@ public class FragmentNewAlbum extends Fragment {
 	private ListView listMembers;
 	private ProgressBar progressBar;
 	
-	private List<User> users;
+	private ArrayList<User> users;
 	private ArrayList<String> members;
 	private String albumName;
 	
@@ -44,19 +43,17 @@ public class FragmentNewAlbum extends Fragment {
 	
 	public FragmentNewAlbum() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.friends);
+		getActivity().setTitle(R.string.newAlbum);
 		
 		controller = (Controller) getActivity().getApplicationContext();
 		
 		final Bundle args = this.getArguments();
 		if(args == null) {
-			//Log.v("prototypev1", "args = null");
 			members = new ArrayList<String>();
 		}
 		else {
@@ -79,7 +76,6 @@ public class FragmentNewAlbum extends Fragment {
 		add.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//go to add members
 				albumName = inputAlbum.getText().toString();
 				goToAddUsersNewAlbum();
@@ -98,13 +94,11 @@ public class FragmentNewAlbum extends Fragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
-		// TODO Auto-generated method stub
 		inflater.inflate(R.menu.menu_new_album, menu);
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 			case R.id.create_album:
 				albumName = inputAlbum.getText().toString();
@@ -125,7 +119,6 @@ public class FragmentNewAlbum extends Fragment {
 		//put data
 		final Bundle data = new Bundle();
 		if(members != null && members.size() > 0 && adapter != null) {
-			//Log.v("prototypev1", " members != null to send "+members);
 			members = adapter.getMembers();
 			data.putStringArrayList("members",members);
 			albumName = inputAlbum.getText().toString();
@@ -148,6 +141,7 @@ public class FragmentNewAlbum extends Fragment {
 	}
 	
 	public boolean createAlbum() {
+		members = adapter.getMembers();
 		if(members == null || members.size() <= 0) {
 			Toast.makeText(getActivity(),"Minimum adding 1 member",  Toast.LENGTH_LONG).show();
 			return false;
@@ -157,6 +151,7 @@ public class FragmentNewAlbum extends Fragment {
 			return false;
 		}
 		else {
+			Log.v("prototypev1", "create albums"+members.size());
 			controller.newAlbum(members, albumName);
 			return true;
 		}

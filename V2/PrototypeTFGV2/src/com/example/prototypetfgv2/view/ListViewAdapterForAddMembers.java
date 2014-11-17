@@ -1,9 +1,9 @@
 package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,10 +21,9 @@ public class ListViewAdapterForAddMembers extends BaseAdapter {
 
 	private LayoutInflater inflater;
 	private ImageLoader imageLoader;
-	
-	private List<User> users;
+	private ArrayList<User> users;
 		
-	public ListViewAdapterForAddMembers(Context context, List<User> users) {
+	public ListViewAdapterForAddMembers(Context context, ArrayList<User> users) {
 		super();
 		
 		this.inflater = LayoutInflater.from(context);
@@ -34,6 +33,7 @@ public class ListViewAdapterForAddMembers extends BaseAdapter {
 	
 	public ArrayList<String> getMembers() {
 		ArrayList<String> members = new ArrayList<String>();
+		Log.v("prototypev1", "getMembers "+users.size());
 		for(int i = 0; i < users.size(); i++) {
 			members.add(users.get(i).getId());
 		}
@@ -42,19 +42,16 @@ public class ListViewAdapterForAddMembers extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return users.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return users.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -67,6 +64,7 @@ public class ListViewAdapterForAddMembers extends BaseAdapter {
 	@Override
 	public View getView(final int position, View view, ViewGroup parent) {
 		final ViewHolder holder;
+		final User user = users.get(position);
 		if(view == null) {
 			holder = new ViewHolder();
             view = inflater.inflate(R.layout.item_user_list_members,null);
@@ -79,17 +77,15 @@ public class ListViewAdapterForAddMembers extends BaseAdapter {
 		else 
 			holder = (ViewHolder) view.getTag();
 		
-		holder.username.setText(users.get(position).getUsername());
-		//imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
-		imageLoader.displayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+		holder.username.setText(user.getUsername());
+		imageLoader.displayImage(user.getProfilePicture(),holder.profilePicture);
 		//Default profile photo
-        if(users.get(position).getProfilePicture() == null)
+        if(user.getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
 		holder.buttonDelete.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//Delete user
 				deleteUser(position);
 			}

@@ -1,7 +1,6 @@
 package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,13 +10,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,18 +32,16 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	private EditText search;
 	
 	private ListViewAdapterChooseUsersNewAlbum adapter;
-    private List<User> users;
+    private ArrayList<User> users;
 	private Controller controller;
 	private ArrayList<String> members;
 	private String albumName;
-	private String nameToSearch;
 	private String input;
 	
 	private DownloadFriendsTask download;
     
 	public FragmentAddUsersNewAlbum() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -54,7 +49,7 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 		super.onCreate(savedInstanceState);
 		getActivity().setTitle(R.string.add_new_album);
 		
-		controller = (Controller) getActivity().getApplicationContext();
+		controller = (Controller) getActivity().getApplication();
 		
 		final Bundle args = this.getArguments();
 		if(args == null) {
@@ -71,13 +66,11 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
-		// TODO Auto-generated method stub
 		inflater.inflate(R.menu.menu_new_album, menu);
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 			case R.id.create_album:
 				if(adapter != null) {
@@ -103,31 +96,21 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 		search.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				//TODO
 				input = s.toString();
 				Log.v("prototypev1", "input change ");
-				//controller.getParseFunctions().downloadFriendsInputSearch(input);
 				download = new DownloadFriendsTask();
-				download.execute();
-				
-				
+				download.execute();				
 			}
 		});
-		
 		download = new DownloadFriendsTask();
 		download.execute();
 		return view;
@@ -144,7 +127,7 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	Log.v("prototypev1", "DownloadFriendsTask input "+input);
-	    	if(input == null || input.length() <= 0)  {
+	    	if(input == null)  {
 	    		users = controller.downloadFriends();
 	    		Log.v("prototypev1", "downloadFriends");
 	    	}
@@ -152,8 +135,7 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	    		Log.v("prototypev1", "downloadFriendsInputSearch(input)");
 	    		users = controller.downloadFriendsInputSearch(input);
 	    	}
-	    	Log.v("prototypev1", "DownloadFriendsTask users size = "+users.size());
-	        if(users.size() > 0)
+	        if(users != null)
 	        	return true;
 	        return false;
 	    }
@@ -199,13 +181,4 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 		//transaction.addToBackStack(null);
 		transaction.commit();
 	}
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		//Log.v("prototypev1", "on destroy addusers");
-	}
-	
-	
 }

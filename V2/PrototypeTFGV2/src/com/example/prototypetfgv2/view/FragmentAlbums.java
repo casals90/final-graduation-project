@@ -126,7 +126,7 @@ public class FragmentAlbums extends Fragment {
 	            mViewPager.setVisibility(View.VISIBLE);
         	}
         	else {
-        		noAlbums.setVisibility(View.VISIBLE);
+        		//noAlbums.setVisibility(View.VISIBLE);
         		mProgressBar.setVisibility(View.INVISIBLE);
         	}
         }

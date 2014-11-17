@@ -1,5 +1,6 @@
 package com.example.prototypetfgv2.view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -33,7 +34,7 @@ public class FragmentFriends extends Fragment {
 	
 	private ListView listview;
 	private ListViewAdapterForSearchUsers adapter;
-    private List<User> users;
+    private ArrayList<User> users;
     
     private String input;
     
@@ -48,7 +49,7 @@ public class FragmentFriends extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		controller = (Controller) this.getActivity().getApplicationContext();
+		controller = (Controller) this.getActivity().getApplication();
 		getActivity().setTitle(R.string.friends);
 	}
 
@@ -113,7 +114,6 @@ public class FragmentFriends extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-				// TODO Auto-generated method stub
 				User user = users.get(position);
 				//pass the user to new fragment and change fragment
 				goToUserProfile(user);

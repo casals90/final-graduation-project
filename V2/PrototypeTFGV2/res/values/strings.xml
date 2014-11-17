@@ -30,6 +30,7 @@
     <string name="import_profile_picture_from_camera">Take photo to profile picture</string>
     <string name="no_import_profile_picture">No import profile picture</string>
     <string name="username_already_exist">This username already exist</string>
+    <string name="newAlbum">New Album</string>
 
     <!-- explain images -->
     <string name="explain">explain</string>

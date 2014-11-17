@@ -23,10 +23,10 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
 	private LayoutInflater inflater;
 	private ImageLoader imageLoader;
     
-    private List<User> users;
+    private ArrayList<User> users;
     private ArrayList<String> members;
     
-	public ListViewAdapterChooseUsersNewAlbum(Context context,List<User> users,ArrayList<String> members) {
+	public ListViewAdapterChooseUsersNewAlbum(Context context,ArrayList<User> users,ArrayList<String> members) {
 		super();
 		this.inflater = LayoutInflater.from(context);
         this.imageLoader = ImageLoader.getInstance();
@@ -46,19 +46,16 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return users.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return users.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 	
@@ -70,8 +67,8 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
 
 	@Override
 	public View getView(final int position, View view, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		final ViewHolder holder;
+		final User user = users.get(position);
 		if(view == null) {
 			holder = new ViewHolder();
             view = inflater.inflate(R.layout.item_user_add_album,null);
@@ -84,14 +81,14 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
 		else
 			holder = (ViewHolder) view.getTag();
 		
-		holder.username.setText(users.get(position).getUsername());
-		imageLoader.displayImage(users.get(position).getProfilePicture(),holder.profilePicture);
+		holder.username.setText(user.getUsername());
+		imageLoader.displayImage(user.getProfilePicture(),holder.profilePicture);
 		//imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
         //Default profile photo
-        if(users.get(position).getProfilePicture() == null)
+        if(user.getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
         
-        if(Utils.stringIsInArrayList(members,users.get(position).getId()))
+        if(members.contains(user.getId()))
         	holder.checkbox.setChecked(true);
         else
         	holder.checkbox.setChecked(false);
@@ -101,12 +98,9 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
             public void onClick(View v) {  
             	String id = users.get(position).getId();
                 if(((CheckBox)v).isChecked()) {  
-                    //Add to checkbox array
-                	//Log.v("prototypev1", "clico la de"+id);
                 	members.add(id);
                 }  
                 else { 
-                    //Remove from checkbox array
                 	members.remove(id);
                 }  
             }  

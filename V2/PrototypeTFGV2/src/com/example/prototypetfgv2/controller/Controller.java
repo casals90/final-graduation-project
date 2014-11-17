@@ -159,15 +159,15 @@ public class Controller extends Application {
 	}*/
 	
 	public ArrayList<User> getUsers(String username) {
-		return parseFunctions.getUsers(username);
+		return parseFunctions.getUsers(username,currentUser);
 	}
 	
 	public ArrayList<User> downloadFriends() {
-		return parseFunctions.downloadFriends();
+		return parseFunctions.downloadFriends(currentUser);
 	}
 	
-	public JSONArray getFriends() {
-		return parseFunctions.getFriends();
+	public ArrayList<String> getFriends() {
+		return parseFunctions.getFriends(currentUser);
 	}
 	
 	public JSONArray getFriendsRequest() {
@@ -175,7 +175,7 @@ public class Controller extends Application {
 	}
 	
 	public boolean addFriend(String id) {
-		return parseFunctions.addFriend(id);
+		return parseFunctions.addFriend(id,currentUser);
 	}
 	
 	public String getUsername() {
@@ -195,11 +195,12 @@ public class Controller extends Application {
 	}
 	
 	public boolean isMyFriend(String id) {
-		return parseFunctions.isMyFriend(id);
+		ArrayList<String> friends = parseFunctions.getFriends(currentUser);
+		return friends.contains(id);
 	}
 	
 	public boolean deleteFriend(String id) {
-		return parseFunctions.deleteFriend(id);
+		return parseFunctions.deleteFriend(id,currentUser);
 	}
 	
 	public String getPhotosNumber() {
@@ -260,16 +261,16 @@ public class Controller extends Application {
 	}
 	
 	public boolean newAlbum(ArrayList<String> members,String albumName) {
-		JSONArray m = Utils.arrayListStringToJsonArray(members);
-		return parseFunctions.newAlbum(m,albumName);
+		//JSONArray m = Utils.arrayListStringToJsonArray(members);
+		return parseFunctions.newAlbum(members,albumName,currentUser);
 	}
 	
 	public ArrayList<User> downloadFriendsInputSearch(String input){
-		return parseFunctions.downloadFriendsInputSearch(input);
+		return parseFunctions.downloadFriendsInputSearch(input,currentUser);
 	}
 	
 	public ArrayList<Album> getAlbums() {
-		return parseFunctions.getAlbums(this.currentUser);
+		return parseFunctions.getAlbums(currentUser);
 	}
 	
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
