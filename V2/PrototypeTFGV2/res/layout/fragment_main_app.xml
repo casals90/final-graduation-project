@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
     tools:context="com.example.androidtestfragments.MainActivity$PlaceholderFragment">
     
     <FrameLayout 
-    android:id="@+id/container_fragment_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.androidtestfragments.MainActivity"
-    android:background="@color/White"/>
+	    android:id="@+id/container_fragment_main"
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    tools:context="com.example.androidtestfragments.MainActivity"
+	    android:background="@color/White"
+	    android:layout_weight="0.99"/>
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dip"
+        android:layout_height="55dp"
         android:orientation="horizontal" 
+        android:layout_weight="0.01"
         android:weightSum="5"
         android:id="@+id/containerMain"
-        android:background="@color/Black"
-        android:layout_alignParentBottom ="true">
+        android:background="@color/Black">
 
         <ImageButton
-        android:id="@+id/ibAlbums"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:src="@drawable/ic_action_picture" 
-        android:contentDescription="@string/explain"/>
+	        android:id="@+id/ibAlbums"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:src="@drawable/ic_action_picture" 
+	        android:contentDescription="@string/explain"/>
         
         <ImageButton
-        android:id="@+id/ibNews"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:src="@drawable/ic_action_web_site" 
-        android:contentDescription="@string/explain"/>
+	        android:id="@+id/ibNews"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:src="@drawable/ic_action_web_site" 
+	        android:contentDescription="@string/explain"/>
         
         <ImageButton
-        android:id="@+id/ibTakePhoto"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/ic_action_camera" 
-        android:contentDescription="@string/explain"/>
+	        android:id="@+id/ibTakePhoto"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:src="@drawable/ic_action_camera" 
+	        android:contentDescription="@string/explain"/>
         
         <ImageButton
-        android:id="@+id/ibFriends"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:src="@drawable/ic_action_group" 
-        android:contentDescription="@string/explain"/>
+	        android:id="@+id/ibFriends"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:src="@drawable/ic_action_group" 
+	        android:contentDescription="@string/explain"/>
         
         <ImageButton
-        android:id="@+id/ibProfile"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:src="@drawable/ic_action_person" 
-        android:contentDescription="@string/explain"/>
-        
+	        android:id="@+id/ibProfile"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:src="@drawable/ic_action_person" 
+	        android:contentDescription="@string/explain"/>
    	</LinearLayout>
- 
-
-</RelativeLayout>
+</LinearLayout>

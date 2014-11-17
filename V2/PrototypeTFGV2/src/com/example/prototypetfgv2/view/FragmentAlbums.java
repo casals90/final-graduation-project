@@ -87,13 +87,13 @@ public class FragmentAlbums extends Fragment {
 		transaction.commit();
 	}
 	
-	private void configureSizeOfViewPager(ViewPager viewPager) {
+	/*private void configureSizeOfViewPager(ViewPager viewPager) {
 		ArrayList<Integer> metrics = Utils.getMetrics(getActivity());
 		int height = metrics.get(1);
 		//Calculate 70% of pixels
 		int newHeight = (int)Math.round((height * 0.75));
 		viewPager.getLayoutParams().height = newHeight;
-	}
+	}*/
    
 
 	private class DownloadAlbumsTask extends AsyncTask<Void, Void, Boolean> {
@@ -121,7 +121,7 @@ public class FragmentAlbums extends Fragment {
 	            mViewPager.setAdapter(adapter);
 	            mViewPager.setPageMargin(50);
 	            //Configure size of viewPager
-	            configureSizeOfViewPager(mViewPager);
+	            //configureSizeOfViewPager(mViewPager);
 	            mProgressBar.setVisibility(View.INVISIBLE);
 	            mViewPager.setVisibility(View.VISIBLE);
         	}
