@@ -21,13 +21,13 @@
         android:orientation="horizontal" 
         android:layout_weight="0.01"
         android:weightSum="5"
-        android:id="@+id/containerMain"
-        android:background="@color/Black">
+        android:id="@+id/containerMain">
 
         <ImageButton
 	        android:id="@+id/ibAlbums"
 	        android:layout_width="0dp"
 	        android:layout_height="match_parent"
+	        android:background="@drawable/bg_menu_buttons"
 	        android:layout_weight="1"
 	        android:src="@drawable/ic_action_picture" 
 	        android:contentDescription="@string/explain"/>
@@ -36,6 +36,7 @@
 	        android:id="@+id/ibNews"
 	        android:layout_width="0dp"
 	        android:layout_height="match_parent"
+	        android:background="@drawable/bg_menu_buttons"
 	        android:layout_weight="1"
 	        android:src="@drawable/ic_action_web_site" 
 	        android:contentDescription="@string/explain"/>
@@ -43,7 +44,8 @@
         <ImageButton
 	        android:id="@+id/ibTakePhoto"
 	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
+	        android:layout_height="match_parent"
+	        android:background="@drawable/bg_menu_buttons"
 	        android:layout_weight="1"
 	        android:src="@drawable/ic_action_camera" 
 	        android:contentDescription="@string/explain"/>
@@ -52,6 +54,7 @@
 	        android:id="@+id/ibFriends"
 	        android:layout_width="0dp"
 	        android:layout_height="match_parent"
+	        android:background="@drawable/bg_menu_buttons"
 	        android:layout_weight="1"
 	        android:src="@drawable/ic_action_group" 
 	        android:contentDescription="@string/explain"/>
@@ -61,6 +64,7 @@
 	        android:layout_width="0dp"
 	        android:layout_height="match_parent"
 	        android:layout_weight="1"
+	        android:background="@drawable/bg_menu_buttons"
 	        android:src="@drawable/ic_action_person" 
 	        android:contentDescription="@string/explain"/>
    	</LinearLayout>

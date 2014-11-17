@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +54,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		
 		//Download likes from albums
 		controller.getLikesPhotosFromAlbum(idAlbum);
-		Log.v("prototypev1", "likes current user "+controller.getCurrentUser().getLikesPhotosInsideAlbum().size());
+		//Log.v("prototypev1", "likes current user "+controller.getCurrentUser().getLikesPhotosInsideAlbum().size());
 	}
 	
 	public void initDisplayOptions() {
@@ -135,11 +137,9 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		
 		holder.mButtonLike.setText(String.valueOf(photo.getLikesNumber()));
 		holder.mButtonComment.setText(String.valueOf(photo.getCommentsNumber()));
-		//Log.v("prototypev1", "--------------------------------");
 		like = controller.currentUserLikedCurrentPhoto(photo.getId());
-		//Log.v("prototypev1", "like for this item "+like);
 		if(!like) {
-			holder.mButtonLike.setBackgroundResource(R.color.Black_gray);
+			changeShapeColorBlack(holder.mButtonLike);
 			Log.v("prototypev1", "dins if like false");
 			holder.mButtonLike.setOnClickListener(new OnClickListener() {
     			@Override
@@ -152,17 +152,16 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
     		});
         }
         else {
-        	//Log.v("prototypev1", "dins if like true");
-        	holder.mButtonLike.setBackgroundResource(R.color.cyan);
+        	changeShapeColorCyan(holder.mButtonLike);
         	holder.mButtonLike.setOnClickListener(null);
         }
-		//Log.v("prototypev1", "--------------------------------");
+		
+		changeShapeColorBlack(holder.mButtonComment);
 		holder.mButtonComment.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				//TODO comments
-				
+				goToCommentsActivity(photo);
 			}
 		});
 		return view;
@@ -179,7 +178,18 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		int n = Integer.valueOf(button.getText().toString());
 		n++;
 		button.setText(String.valueOf(n));
-		button.setBackgroundResource(R.color.cyan);
+		//button.setBackgroundResource(R.color.cyan);
+		changeShapeColorCyan(button);
+	}
+	
+	public void changeShapeColorCyan(Button button) {
+		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
+		bgShape.setColor(Color.CYAN);
+	}
+	
+	public void changeShapeColorBlack(Button button) {
+		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
+		bgShape.setColor(Color.BLACK);
 	}
 
 	private class LikePhotoTask extends AsyncTask<String, Void, Boolean> {

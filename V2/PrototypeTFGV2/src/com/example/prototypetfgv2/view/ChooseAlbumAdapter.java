@@ -86,10 +86,10 @@ public class ChooseAlbumAdapter extends PagerAdapter {
 			}
 		});
         
+        holder.mTextViewAlbumTitle = (TextView) viewLayout.findViewById(R.id.album_title);
         holder.mImageView = (ImageView) viewLayout.findViewById(R.id.cover_album);
         holder.mTextViewPhotoNumbers = (TextView) viewLayout.findViewById(R.id.photos_number);
         holder.mTextViewMembersNumber = (TextView) viewLayout.findViewById(R.id.members_number);
-        holder.mTextViewAlbumTitle = (TextView) viewLayout.findViewById(R.id.album_title);
         //show image cover
         imageLoader.displayImage(album.getAlbumCover(),holder.mImageView,options);
         holder.mTextViewPhotoNumbers.setText(String.valueOf(album.getPhotosNumber()));

@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -130,6 +132,8 @@ public class FullScreenImageAdapter extends PagerAdapter {
         like = controller.currentUserLikedCurrentPhoto(photo.getId());
         
         if(!like) {
+        	//Change color
+        	changeShapeColorBlack(viewHolder.like);
         	viewHolder.like.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View v) {
@@ -141,9 +145,9 @@ public class FullScreenImageAdapter extends PagerAdapter {
     		});
         }
         else 
-        	viewHolder.like.setBackgroundResource(R.color.cyan);
+        	changeShapeColorCyan(viewHolder.like);
         
-			
+        changeShapeColorBlack(viewHolder.comment);
         viewHolder.comment.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -152,7 +156,6 @@ public class FullScreenImageAdapter extends PagerAdapter {
 			}
 		});
         ((ViewPager) container).addView(viewLayout);
-        //Log.v("prototypev1", "end prepare view ");
         return viewLayout;
 	}
 	
@@ -165,7 +168,19 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		int n = Integer.valueOf(button.getText().toString());
 		n++;
 		button.setText(String.valueOf(n));
-		button.setBackgroundResource(R.color.cyan);
+		//button.setBackgroundResource(R.color.cyan);
+		//button.setBackgroundColor(R.drawable.bg_button_cyan);
+		changeShapeColorCyan(button);
+	}
+	
+	public void changeShapeColorCyan(Button button) {
+		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
+		bgShape.setColor(Color.CYAN);
+	}
+	
+	public void changeShapeColorBlack(Button button) {
+		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
+		bgShape.setColor(Color.BLACK);
 	}
 	
 	private class ViewHolderActionBar {

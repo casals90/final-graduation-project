@@ -57,9 +57,13 @@
         android:id="@+id/button_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/White"
         android:drawableLeft="@drawable/ic_action_good"
+        android:background="@drawable/bg_button"
         android:layout_below="@+id/photo"
         android:focusable="false"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
 		android:focusableInTouchMode="false"
         android:text="@string/zero"/>
     
@@ -67,6 +71,8 @@
         android:id="@+id/button_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/White"
+        android:background="@drawable/bg_button"
         android:drawableLeft="@drawable/ic_action_comment"
         android:layout_below="@+id/photo"
         android:focusable="false"
