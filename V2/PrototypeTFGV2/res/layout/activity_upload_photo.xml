@@ -19,8 +19,11 @@
     
     <LinearLayout
         android:id="@+id/footer"
+        android:background="@drawable/bg_input_title_upload"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:weightSum="10"
+        android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
         
@@ -28,8 +31,9 @@
 	        android:id="@+id/photo_title"
 	        android:layout_height="wrap_content"
 	        android:layout_width="0dp"
+	        android:textColor="@color/White"
 	        android:hint="@string/enter_photo_title"
-	        android:layout_weight="5"/>
+	        android:layout_weight="9"/>
     
 	    <ImageButton 
 	        android:id="@+id/send_title"
