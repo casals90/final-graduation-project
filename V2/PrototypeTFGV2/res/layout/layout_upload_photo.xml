@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Black">
+    
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/explain"/>
+    
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp">
+        
+        <EditText
+            android:id="@+id/photo_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="@string/enter_photo_title"
+            android:textColor="@color/White"
+            android:focusable="true"
+            android:background="@drawable/bg_input_title_upload"/>
+        
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+            
+            <ImageButton
+                android:id="@+id/accept"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_action_accept"
+                android:background="@drawable/selector_buttons_upload_photo"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:contentDescription="@string/explain"/>
+            
+            <ImageButton
+                android:id="@+id/cancel"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_action_remove"
+                android:background="@drawable/selector_buttons_upload_photo"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:contentDescription="@string/explain"/>  
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -173,7 +173,7 @@ public class ParseFunctions {
     }*/
 	
     
-    public void updatePhoto(Bitmap photo,String title,final Activity activity) {
+    public void uploadPhoto(Bitmap photo,String title,final Activity activity) {
     	// Create the ParseFile
         ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
         // Upload the image into Parse Cloud
@@ -383,11 +383,12 @@ public class ParseFunctions {
 	}
 	
 	public ArrayList<Album> downloadAlbums(ArrayList<String> idAlbums,CurrentUser currentUser) {
-		Log.v("prototypev1", "start download albums 2 ");
+		Log.v("prototypev1", "start download albums parse");
 		ArrayList<String> albumsAdmin = new ArrayList<String>();
 		ArrayList<Album> albums = new ArrayList<Album>();
 		
 		for(int i = 0; i < idAlbums.size(); i++) {
+			Log.v("prototypev1", "downlaod album "+i);
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(ALBUM);
 			query.whereEqualTo("objectId",idAlbums.get(i));
 			try {
@@ -409,8 +410,10 @@ public class ParseFunctions {
 					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
 			} catch (ParseException e) {
 				e.printStackTrace();
+				Log.v("prototypev1", "error downlaod album "+e);
 				return null;
 			}
+			Log.v("prototypev1", "end downlaod album "+i);
 		}
 		return albums;
 	}

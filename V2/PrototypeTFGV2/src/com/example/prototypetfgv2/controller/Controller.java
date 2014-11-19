@@ -140,8 +140,8 @@ public class Controller extends Application {
 		return false;
 	}
 	
-	public void updatePhoto(Bitmap photo,String title,Activity activity) {
-		parseFunctions.updatePhoto(photo,title,activity);
+	public void uploadPhoto(Bitmap photo,String title,Activity activity) {
+		parseFunctions.uploadPhoto(photo,title,activity);
 	}
 	
 	public void logout() {

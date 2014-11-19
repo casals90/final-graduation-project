@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_pressed="true"> <!-- pressed state -->
+      <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+		   <solid android:color="#33B5E5" ></solid>
+		   <corners android:radius="0px"></corners>
+	   </shape>
+    </item>
+    
+	<item android:state_focused="true"> <!-- focused state -->
+	    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+		   <solid android:color="#33B5E5" ></solid>
+		   <corners android:radius="0px"></corners>
+	   </shape> <!-- focused state -->
+     </item>
+     
+	<item android:drawable="@drawable/bg_default_upload_photo"/>
+	
+</selector>
