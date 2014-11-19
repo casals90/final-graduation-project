@@ -14,6 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,18 +24,20 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
-import com.example.prototypetfgv2.utils.Utils;
 
 public class FragmentAlbums extends Fragment {
 	
 	private Controller controller;
 	private FragmentAlbums fragmentAlbums = this;
 	
-	private ViewPager mViewPager;
+	//private ViewPager mViewPager;
+	//private UnderlinePageIndicator mIndicator;
 	private ProgressBar mProgressBar;
 	private TextView noAlbums;
+	private ListView mListViewAlbums;
 	
-	private ChooseAlbumAdapter adapter;
+	//private ChooseAlbumAdapter adapter;
+	private ListViewAlbumsAdapter adapter;
 	private ArrayList<Album> albums;
 	
 	public FragmentAlbums() {
@@ -72,9 +77,10 @@ public class FragmentAlbums extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_albums,container,false);
 		
-		mViewPager = (ViewPager) view.findViewById(R.id.pagerAlbums);
-		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_albums);
-		
+		//mViewPager = (ViewPager) view.findViewById(R.id.pagerAlbums);
+		//mIndicator = (UnderlinePageIndicator) view.findViewById(R.id.indicator);
+		mListViewAlbums = (ListView) view.findViewById(R.id.list_albums);
+		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_albums);	
 		new DownloadAlbumsTask().execute();
 		return view;
 	}
@@ -102,7 +108,7 @@ public class FragmentAlbums extends Fragment {
         protected void onPreExecute() {
         	super.onPreExecute();
         	mProgressBar.setVisibility(View.VISIBLE);
-        	mViewPager.setVisibility(View.INVISIBLE);
+        	//mViewPager.setVisibility(View.INVISIBLE);
         }
  
         @Override
@@ -117,13 +123,31 @@ public class FragmentAlbums extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
-	            adapter = new ChooseAlbumAdapter(albums, getActivity(),fragmentAlbums);
+        		adapter = new ListViewAlbumsAdapter(albums,getActivity().getApplicationContext());
+        		mProgressBar.setVisibility(View.INVISIBLE);
+        		mListViewAlbums.setAdapter(adapter);
+        		mListViewAlbums.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int postion, long id) {
+						// TODO Auto-generated method stub
+						goToShowAlbumListMode(albums.get(postion));
+					}
+				});
+	            /*adapter = new ChooseAlbumAdapter(albums, getActivity(),fragmentAlbums);
 	            mViewPager.setAdapter(adapter);
 	            mViewPager.setPageMargin(50);
+	            //Indicator
 	            //Configure size of viewPager
 	            //configureSizeOfViewPager(mViewPager);
 	            mProgressBar.setVisibility(View.INVISIBLE);
 	            mViewPager.setVisibility(View.VISIBLE);
+	            //ViewPager Indicator
+	            mIndicator.setFades(false);
+	            mIndicator.setViewPager(mViewPager);
+	            
+	            //mIndicator2.setFades(false);
+	            //mIndicator2.setViewPager(mViewPager);*/
         	}
         	else {
         		//noAlbums.setVisibility(View.VISIBLE);

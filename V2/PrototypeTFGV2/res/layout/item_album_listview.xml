@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/Black">
+    
+    <ImageView
+        android:id="@+id/album_cover"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/explain"
+        android:src="@drawable/ic_launcher"
+        android:layout_marginRight="5dp"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        
+        <TextView
+            android:id="@+id/album_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/White"
+            android:text="@string/album_title"/>
+        
+        <TextView
+            android:id="@+id/photos_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_action_picture"
+            android:textColor="@color/White"
+            android:gravity="center_vertical"
+            android:textSize="15sp"
+            android:drawablePadding="5dp"
+            android:text="@string/zero"/>
+        
+        <TextView
+            android:id="@+id/members_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_action_group_white"
+            android:textColor="@color/White"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp"
+            android:text="@string/zero"/> 
+    </LinearLayout>
+</LinearLayout>
