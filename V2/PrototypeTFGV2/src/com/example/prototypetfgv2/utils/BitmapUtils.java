@@ -56,14 +56,6 @@ public class BitmapUtils {
 	    return Bitmap.createBitmap(photo, 0, 0, width, height, matrix, false);
 	}
 	
-	private void galleryAddPic(String mCurrentPhotoPath,Activity activity) {
-	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-	    File f = new File(mCurrentPhotoPath);
-	    Uri contentUri = Uri.fromFile(f);
-	    mediaScanIntent.setData(contentUri);
-	    activity.sendBroadcast(mediaScanIntent);
-	}
-	
 	private static int exifToDegrees(int exifOrientation) {        
 	    if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90)  
 	    	return 90; 

@@ -186,7 +186,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	
 	public void changeShapeColorBlack(Button button) {
 		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
-		bgShape.setColor(Color.argb(99,0,0,0));
+		bgShape.setColor(Color.argb(204,44,44,44));
 	}
 
 	private class LikePhotoTask extends AsyncTask<String, Void, Boolean> {

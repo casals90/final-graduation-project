@@ -12,6 +12,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,11 +27,13 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.parse.codec.binary.Hex;
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
@@ -119,7 +122,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-            	viewHolder.mProgressBar.setVisibility(View.INVISIBLE);
+            	viewHolder.mProgressBar.setVisibility(View.INVISIBLE);            	
             }
         });
         
@@ -179,7 +182,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	
 	public void changeShapeColorBlack(Button button) {
 		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
-		bgShape.setColor(Color.argb(99,0,0,0));
+		bgShape.setColor(Color.argb(204,44,44,44));
 	}
 	
 	private class ViewHolderActionBar {
