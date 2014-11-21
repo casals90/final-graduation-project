@@ -25,7 +25,7 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
 
-public class FragmentShowAlbum extends Fragment {
+public class FragmentShowPhotosGrid extends Fragment {
 	
 	private GridView gridView;
 	private ProgressBar mProgressBar;
@@ -39,7 +39,7 @@ public class FragmentShowAlbum extends Fragment {
 	
 	private GridViewAdapterForShowPhotos adapter;
 	
-	public FragmentShowAlbum() {
+	public FragmentShowPhotosGrid() {
 		super();
 		
 	}

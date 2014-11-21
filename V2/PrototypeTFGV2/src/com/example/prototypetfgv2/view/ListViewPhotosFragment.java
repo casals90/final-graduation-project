@@ -90,7 +90,7 @@ public class ListViewPhotosFragment extends Fragment {
 	public void goToShowAlbumGridMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
-		FragmentShowAlbum showAlbum = new FragmentShowAlbum();
+		FragmentShowPhotosGrid showAlbum = new FragmentShowPhotosGrid();
 		showAlbum.setArguments(data);
 		
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();

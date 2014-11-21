@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,22 +22,18 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class GridViewAdapterForShowPhotos extends BaseAdapter {
 	
-	private Context context;
     private LayoutInflater inflater;
     private ImageLoader imageLoader;
-    DisplayImageOptions options;
+    private DisplayImageOptions options;
 	private List<Photo> photos;
-	private Controller controller;
 	
 	public GridViewAdapterForShowPhotos(Context context, List<Photo> photos) {
 		super();
-		this.context = context;
 		this.photos = photos;
 		this.imageLoader = ImageLoader.getInstance();
 		this.inflater = LayoutInflater.from(context);
-		controller = (Controller) context.getApplicationContext();
 		Log.v("prototypev1", "size photos grid "+photos.size());
-		//imageOld = new com.example.prototypetfgv2.view.ImageLoader(context);
+		
 		initDisplayOptions();
 	}
 	

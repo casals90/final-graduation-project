@@ -168,19 +168,18 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		int n = Integer.valueOf(button.getText().toString());
 		n++;
 		button.setText(String.valueOf(n));
-		//button.setBackgroundResource(R.color.cyan);
-		//button.setBackgroundColor(R.drawable.bg_button_cyan);
 		changeShapeColorCyan(button);
 	}
 	
 	public void changeShapeColorCyan(Button button) {
 		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
-		bgShape.setColor(Color.CYAN);
+		//cyan
+		bgShape.setColor(Color.rgb(51,181,229));
 	}
 	
 	public void changeShapeColorBlack(Button button) {
 		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
-		bgShape.setColor(Color.BLACK);
+		bgShape.setColor(Color.argb(99,0,0,0));
 	}
 	
 	private class ViewHolderActionBar {

@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Black"
     tools:context="com.example.prototypetfgv2.view.ListViewPhotosActivity" >
 
     <ListView
@@ -14,7 +13,9 @@
         android:smoothScrollbar="true"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:visibility="gone" />
+        android:dividerHeight="5dp"
+        android:background="@color/White"
+        android:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progressBar"

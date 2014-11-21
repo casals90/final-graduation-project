@@ -8,13 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/Black">
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
         
         <ImageView
             android:id="@+id/profile_picture"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_launcher"
+            android:layout_marginLeft="5dp"
             android:contentDescription="@string/explain"/>
         
         <TextView
@@ -23,7 +25,8 @@
             android:layout_height="wrap_content"
             android:text="@string/username"
             android:textSize="20sp"
-            android:textColor="@color/White"
+            android:textColor="@color/Black"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/profile_picture"/>
         
         <TextView
@@ -31,7 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/photo_title"
-            android:textColor="@color/White"
+            android:textColor="@color/Black"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/profile_picture"
             android:layout_below="@+id/username"/>   
     </RelativeLayout>
@@ -43,7 +47,9 @@
         android:src="@drawable/ic_launcher"
         android:layout_below="@+id/header_list_item"
         android:layout_centerHorizontal="true"
-        android:scaleType="fitXY"
+        android:scaleType="center"
+        android:background="@color/WhiteSmoke"
+        android:layout_marginBottom="5dp"
         android:contentDescription="@string/explain"/>
     
      <ProgressBar
@@ -64,6 +70,7 @@
         android:focusable="false"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
 		android:focusableInTouchMode="false"
         android:text="@string/zero"/>
     
@@ -77,6 +84,7 @@
         android:layout_alignBottom="@+id/photo"
         android:focusable="false"
 		android:focusableInTouchMode="false"
+		android:layout_marginBottom="5dp"
         android:layout_toRightOf="@+id/button_like"
         android:text="@string/zero"/>
 
