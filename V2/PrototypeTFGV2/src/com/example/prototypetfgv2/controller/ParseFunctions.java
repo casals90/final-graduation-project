@@ -100,7 +100,6 @@ public class ParseFunctions {
 		try {
 			ParseUser.logIn(username, password);	
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.v("prototypev1", "error log in Parse "+e);
 			return false;

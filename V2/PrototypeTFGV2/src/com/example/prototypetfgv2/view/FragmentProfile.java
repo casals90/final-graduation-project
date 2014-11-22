@@ -289,11 +289,11 @@ public class FragmentProfile extends Fragment {
 	public void removeProfilePicture() {
 		//default profile picture
 		profilePicture.setImageResource(R.drawable.ic_launcher);
-		new RemoveProfilePictureFromLibraryTask().execute();
+		new RemoveProfilePictureTask().execute();
 	}
 	
 	// Task to remove profile picture
-	public class RemoveProfilePictureFromLibraryTask extends AsyncTask<Void, Void, Boolean> {
+	public class RemoveProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
 		
 		@Override
 	    protected void onPreExecute() {

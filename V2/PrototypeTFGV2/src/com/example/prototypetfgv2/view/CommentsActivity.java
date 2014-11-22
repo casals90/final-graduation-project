@@ -134,6 +134,14 @@ public class CommentsActivity extends Activity {
 		}
     }
 	
+	@Override
+	public void onBackPressed() {
+		Log.v("prototypev1", "press back button");
+		super.onBackPressed();
+	}
+	
+	
+	
 	private class SendCommentTask extends AsyncTask<Void, Void, Boolean> {
     	
         @Override

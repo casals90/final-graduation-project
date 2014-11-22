@@ -2,9 +2,15 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -23,11 +29,14 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.view.FragmentProfile.SetProfilePictureTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 public class ListViewPhotosFragment extends Fragment {
 
+	private static final int REQUEST_PICK_IMAGE = 2;
+	
 	private ListView mListViewPhotos;
 	private AdapterListViewShowPhotos adapter;
 	private Controller controller;
@@ -81,11 +90,42 @@ public class ListViewPhotosFragment extends Fragment {
 			case R.id.grid_view_mode:
 				goToShowAlbumGridMode(album);
 				break;
+			//Overflow menu options
+			case R.id.settings:
+				//TODO albums settings
+				Log.v("prototypev1","gotoalbums settings");
+				break;
+			case R.id.add_photo_from_gallery:
+				//TODO add photo from gallery
+				choosePhotoFromGallery();
+				break;
 			default:
 				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	//Choose from gallery
+	public void choosePhotoFromGallery() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_PICK_IMAGE);
+	}
+	
+	public Bitmap searchPhotoSelect(Intent data) {
+		Uri selectedImage = data.getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String filePath = cursor.getString(columnIndex);
+        cursor.close();
+        return BitmapFactory.decodeFile(filePath);
+	}
+	
 	
 	public void goToShowAlbumGridMode(Album album) {
 		Bundle data = new Bundle();
@@ -105,6 +145,23 @@ public class ListViewPhotosFragment extends Fragment {
 		showPhoto.putExtra("currentPosition",position);
 		showPhoto.putExtra("idAlbum",album.getId());
 		startActivity(showPhoto);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case REQUEST_PICK_IMAGE:
+				Log.v("prototypev1","he entrat a triar foto");
+				if(resultCode == Activity.RESULT_OK && data != null) {
+					Bitmap yourSelectedImage = searchPhotoSelect(data);
+			        //Save photo in parse and create photo object
+					Log.v("prototypev1","error signup "+yourSelectedImage.getByteCount());
+				}
+				break;
+	
+			default:
+				break;
+		}
 	}
 	
 	private class DownloadPhotosTask extends AsyncTask<String, Void, Boolean> {
@@ -146,31 +203,6 @@ public class ListViewPhotosFragment extends Fragment {
 						goToShowPhotoFullScreen(photos.get(position),position);
 					}
 				});
-				
-				/*mListViewPhotos.setOnScrollListener(new OnScrollListener() {
-					
-					@Override
-					public void onScroll(AbsListView view,int firstVisibleItem, int visibleItemCount,int totalItemCount) {
-						// TODO Auto-generated method stub
-						Log.v("prototypev1","es mou l scroll");
-					}
-
-					@Override
-					public void onScrollStateChanged(AbsListView view,int scrollState) {
-						Log.v("prototypev1","es mou l scroll");
-						if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-							Log.v("prototypev1","es mou l scroll");
-							ImageLoader.getInstance().stop();
-							
-						}
-						else {
-							Log.v("prototypev1","es mou l scroll");
-							ImageLoader.getInstance().resume();
-						}
-					}
-					
-					
-				});*/
 			}
 		}
 

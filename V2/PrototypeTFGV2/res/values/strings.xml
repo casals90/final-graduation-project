@@ -70,8 +70,10 @@
     <string name="grid_view_mode">Grid mode</string>
     <string name="list_view_mode">List mode</string>
     <string name="enter_photo_title">Input photo title</string>
-     <string name="new_album"> New album</string>
-
+    <string name="new_album">New album</string>
+	<string name="album_settings">Album settings</string>
+	<string name="add_photo_from_gallery">Add photo from gallery</string>
+    
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>
     <string name="comment">comment</string>

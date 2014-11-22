@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -121,4 +122,5 @@ public class ShowPhotoActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
 }

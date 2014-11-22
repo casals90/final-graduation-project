@@ -12,4 +12,20 @@
       android:title="@string/list_view_mode"
       android:showAsAction="always">
    </item>
+   <item
+      android:id="@+id/album_settings"
+      android:icon="@drawable/ic_action_overflow"
+      android:title="@string/album_settings"
+      android:showAsAction="always">
+      <menu>
+          <item
+		      android:id="@+id/settings"
+		      android:title="@string/album_settings"
+		      android:showAsAction="always"/>
+          <item
+		      android:id="@+id/add_photo_from_gallery"
+		      android:title="@string/add_photo_from_gallery"
+		      android:showAsAction="always"/>
+      </menu>
+   </item>
 </menu>
