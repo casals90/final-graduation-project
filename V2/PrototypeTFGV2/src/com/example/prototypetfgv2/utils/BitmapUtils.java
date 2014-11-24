@@ -40,7 +40,6 @@ public class BitmapUtils {
 	                scaledPhoto = convertBitmapToCorrectOrientation(scaledPhoto, rotation);
 
 	        } catch (IOException e1) {
-	            // TODO Auto-generated catch block
 	            e1.printStackTrace();
 	        }
 	        return scaledPhoto;
@@ -53,7 +52,7 @@ public class BitmapUtils {
 	    int height = photo.getHeight();
 	    Matrix matrix = new Matrix();
 	    matrix.preRotate(rotation);
-	    return Bitmap.createBitmap(photo, 0, 0, width, height, matrix, false);
+	    return Bitmap.createBitmap(photo,0,0, width, height, matrix, false);
 	}
 	
 	private static int exifToDegrees(int exifOrientation) {        

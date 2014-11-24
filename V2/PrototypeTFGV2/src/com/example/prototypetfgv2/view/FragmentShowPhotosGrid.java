@@ -18,7 +18,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
@@ -68,8 +67,14 @@ public class FragmentShowPhotosGrid extends Fragment {
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_download_albums);
 		noPhotos = (TextView) view.findViewById(R.id.no_photos);
 		//New task
-		new DownloadPhotosTask().execute();
+		//new DownloadPhotosTask().execute(album.getId());
 		return view;
+	}
+	
+	@Override
+	public void onResume() {
+		new DownloadPhotosTask().execute(album.getId());
+		super.onResume();
 	}
 	
 	@Override
@@ -101,9 +106,53 @@ public class FragmentShowPhotosGrid extends Fragment {
 		transaction.commit();	
 	}
 	
+	private class DownloadPhotosTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	gridView.setVisibility(View.INVISIBLE);
+        	mProgressBar.setVisibility(View.VISIBLE);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	String id = params[0];
+        	photos = controller.downloadPhotosFromAlbum(id);
+        	if(photos != null)
+        		return true;
+        	return false;
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				gridView.setVisibility(View.VISIBLE);
+	        	mProgressBar.setVisibility(View.INVISIBLE);        	
+	        	// Pass the results into ListViewAdapter.java
+	            adapter = new GridViewAdapterForShowPhotos(getActivity(),photos);
+	            // Binds the Adapter to the ListView
+	            gridView.setAdapter(adapter);
+	            gridView.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						goToShowPhotoFullScreen(photo,position);
+					}
+				});
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
+	
 	
 	//Class to download photos
-	private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
+	/*private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
 		
         @Override
         protected void onPreExecute() {
@@ -153,7 +202,7 @@ public class FragmentShowPhotosGrid extends Fragment {
 			mProgressBar.setVisibility(View.INVISIBLE);
 			Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
-    }
+    }*/
 
 	public void goToShowPhotoFullScreen(Photo photo,int position) {
 		Intent showPhoto = new Intent(getActivity(),ShowPhotoActivity.class);

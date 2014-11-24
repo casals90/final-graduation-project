@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -29,7 +29,6 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
-import com.example.prototypetfgv2.view.FragmentProfile.SetProfilePictureTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
@@ -44,11 +43,12 @@ public class ListViewPhotosFragment extends Fragment {
 	private ProgressBar mProgressBar;
 	private Album album;
 	private ImageLoader imageLoader;
+	private String mCurrentPhotoPath;
 	
 	public ListViewPhotosFragment() {
 		super();
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,7 +63,6 @@ public class ListViewPhotosFragment extends Fragment {
 		getActivity().setTitle((album.getAlbumTitle()));
 		controller.clearImageLoader();
 		imageLoader = ImageLoader.getInstance();
-		
 		setHasOptionsMenu(true);
 	}
 	
@@ -71,12 +70,17 @@ public class ListViewPhotosFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.layout_list_view_photos,container,false);
-		
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 		mListViewPhotos = (ListView) view.findViewById(R.id.photos);
 		//New task
-		new DownloadPhotosTask().execute(album.getId());
+		//new DownloadPhotosTask().execute(album.getId());
 		return view;
+	}
+	
+	@Override
+	public void onResume() {
+		new DownloadPhotosTask().execute(album.getId());
+		super.onResume();
 	}
 	
 	@Override
@@ -96,7 +100,6 @@ public class ListViewPhotosFragment extends Fragment {
 				Log.v("prototypev1","gotoalbums settings");
 				break;
 			case R.id.add_photo_from_gallery:
-				//TODO add photo from gallery
 				choosePhotoFromGallery();
 				break;
 			default:
@@ -110,10 +113,10 @@ public class ListViewPhotosFragment extends Fragment {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_PICK_IMAGE);
+		startActivityForResult(Intent.createChooser(intent,"Select Picture"),REQUEST_PICK_IMAGE);
 	}
 	
-	public Bitmap searchPhotoSelect(Intent data) {
+	public String searchPhotoSelect(Intent data) {
 		Uri selectedImage = data.getData();
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -123,9 +126,8 @@ public class ListViewPhotosFragment extends Fragment {
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String filePath = cursor.getString(columnIndex);
         cursor.close();
-        return BitmapFactory.decodeFile(filePath);
+        return filePath;
 	}
-	
 	
 	public void goToShowAlbumGridMode(Album album) {
 		Bundle data = new Bundle();
@@ -151,11 +153,12 @@ public class ListViewPhotosFragment extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 			case REQUEST_PICK_IMAGE:
-				Log.v("prototypev1","he entrat a triar foto");
 				if(resultCode == Activity.RESULT_OK && data != null) {
-					Bitmap yourSelectedImage = searchPhotoSelect(data);
-			        //Save photo in parse and create photo object
-					Log.v("prototypev1","error signup "+yourSelectedImage.getByteCount());
+					mCurrentPhotoPath = searchPhotoSelect(data);
+					Intent uploadPhoto = new Intent(getActivity(), UploadPhotoActivity.class);
+					uploadPhoto.putExtra("photo",mCurrentPhotoPath);
+					uploadPhoto.putExtra("idAlbum",album.getId());
+					startActivity(uploadPhoto);
 				}
 				break;
 	

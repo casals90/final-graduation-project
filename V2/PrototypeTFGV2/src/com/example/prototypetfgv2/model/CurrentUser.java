@@ -7,20 +7,28 @@ public class CurrentUser {
 	private String id;
 	private String username;
 	private String profilePicture;
+	private String currentAlbum;
+	private int friendsNumber;
+	private int photosNumber;
+	private int albumsNumber;
 	private ArrayList<String> likesPhotosInsideAlbum;
 	private ArrayList<String> albums;
 	private ArrayList<String> ownerPhotosFromAlbum;
 	private ArrayList<String> albumsAdmin;
 	
-	public CurrentUser(String id, String username, String profilePicture) {
+	public CurrentUser(String id, String username, String profilePicture,String currentAlbum,int friendsNumber,int photosNumber,int albumsNumber) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.profilePicture = profilePicture;
+		this.currentAlbum = currentAlbum;
+		this.friendsNumber = friendsNumber;
+		this.photosNumber = photosNumber;
 		this.likesPhotosInsideAlbum = new ArrayList<String>();
 		this.albums = new ArrayList<String>();
 		this.ownerPhotosFromAlbum = new ArrayList<String>();
 		this.albumsAdmin = new ArrayList<String>();
+		this.albumsNumber = albumsNumber;
 	}
 
 	/*public CurrentUser(String id, String username, String profilePicture,ArrayList<String> likes,ArrayList<String> albums) {
@@ -83,8 +91,40 @@ public class CurrentUser {
 		this.albumsAdmin = albumsAdmin;
 	}
 
-	// End getters and setters
+	public String getCurrentAlbum() {
+		return currentAlbum;
+	}
+
+	public void setCurrentAlbum(String currentAlbum) {
+		this.currentAlbum = currentAlbum;
+	}
 	
+	public int getAlbumsNumber() {
+		return albumsNumber;
+	}
+
+	public void setAlbumsNumber(int albumsNumber) {
+		this.albumsNumber = albumsNumber;
+	}
+	
+	public int getFriendsNumber() {
+		return friendsNumber;
+	}
+
+	public void setFriendsNumber(int friendsNumber) {
+		this.friendsNumber = friendsNumber;
+	}
+
+	public int getPhotosNumber() {
+		return photosNumber;
+	}
+
+	public void setPhotosNumber(int photosNumber) {
+		this.photosNumber = photosNumber;
+	}
+	
+	// End getters and setters
+
 	public void addLike(String idPhoto) {
 		likesPhotosInsideAlbum.add(idPhoto);
 	}

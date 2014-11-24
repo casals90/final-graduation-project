@@ -19,6 +19,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.model.CurrentAlbum;
@@ -32,25 +33,15 @@ public class Utils {
 		// Convert it to byte
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100
-        b.compress(Bitmap.CompressFormat.JPEG, 30, stream);
+        b.compress(Bitmap.CompressFormat.JPEG,25, stream);
         return stream.toByteArray();
 	}
 	
 	//Function that convert byte array to bitmap 
 	public static Bitmap byteArrayToBitmap(byte[] data) {
-		return BitmapFactory.decodeByteArray(data, 0,data.length);
+		Log.v("prototypev1","utils byteArraytobitmap"+data.length);
+		return BitmapFactory.decodeByteArray(data,0,data.length);
 	}
-	
-	//returns the bytesize of the give bitmap
-	/*public static int byteSizeOf(Bitmap bitmap) {
-	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-	        return bitmap.getAllocationByteCount();
-	    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-	        return bitmap.getByteCount();
-	    } else {
-	        return bitmap.getRowBytes() * bitmap.getHeight();
-	    }
-	}*/
 	
 	//function that create a date 
 	public static String getNowDate() {

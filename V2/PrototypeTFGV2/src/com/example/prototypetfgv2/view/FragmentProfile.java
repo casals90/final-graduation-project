@@ -24,8 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -88,7 +86,7 @@ public class FragmentProfile extends Fragment {
 		photosNumber = (TextView) view.findViewById(R.id.photos_number);
 		photosNumber.setText(controller.getPhotosNumber());
 		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
-		albumsNumber.setText(controller.getPhotosNumber());
+		albumsNumber.setText(controller.getAlbumsNumber());
 		friendsNumber = (TextView) view.findViewById(R.id.friends_number);
 		friendsNumber.setText(controller.getFriendsNumber());
 		
@@ -104,7 +102,7 @@ public class FragmentProfile extends Fragment {
 		registerForContextMenu(profilePicture);
 		
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarChangeProfilePicture);
-		mProgressBarCurrentAlbum = (ProgressBar) view.findViewById(R.id.progressbar_spinner);
+		//mProgressBarCurrentAlbum = (ProgressBar) view.findViewById(R.id.progressbar_spinner);
 		//logout
 		buttonLogOut = (Button) view.findViewById(R.id.button_logout);
 		buttonLogOut.setOnClickListener(new OnClickListener() {			
@@ -113,9 +111,9 @@ public class FragmentProfile extends Fragment {
 			}
 		});
 		
-		noAlbums = (TextView) view.findViewById(R.id.no_album);
+		//noAlbums = (TextView) view.findViewById(R.id.no_album);
 		//Put progressbar to wait
-		chooseAlbum = (Spinner) view.findViewById(R.id.albums_spinner);
+		/*chooseAlbum = (Spinner) view.findViewById(R.id.albums_spinner);
 		chooseAlbum.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
@@ -132,7 +130,7 @@ public class FragmentProfile extends Fragment {
 			}
 		});
 		
-		new DownloadCurrentAlbumTask().execute();
+		new DownloadCurrentAlbumTask().execute();*/
 		return view;
 	}
 	

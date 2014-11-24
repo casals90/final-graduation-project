@@ -1,6 +1,5 @@
 package com.example.prototypetfgv2.controller;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -24,8 +23,6 @@ import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.utils.Utils;
 import com.example.prototypetfgv2.view.SignUpActivity;
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -140,8 +137,17 @@ public class Controller extends Application {
 		return false;
 	}
 	
-	public void uploadPhoto(Bitmap photo,String title,Activity activity) {
-		parseFunctions.uploadPhoto(photo,title,activity);
+	public void uploadPhoto(Bitmap photo,String title,Activity activity,String idAlbum) {
+		//Use de current album (only in take photo)
+		if(idAlbum == null) {
+			//CurrentAlbum
+			String currentAlbum = getCurrentUser().getCurrentAlbum();
+			parseFunctions.uploadPhoto(photo,title,activity,currentAlbum);
+		}
+		//Pass the album (only in import photo from gallery)
+		else
+			parseFunctions.uploadPhoto(photo,title,activity,idAlbum);
+		
 	}
 	
 	public void logout() {
@@ -204,11 +210,15 @@ public class Controller extends Application {
 	}
 	
 	public String getPhotosNumber() {
-		return parseFunctions.getPhotosNumber();
+		return String.valueOf(currentUser.getPhotosNumber());
 	}
 	
 	public String getFriendsNumber() {
-		return parseFunctions.getFriendsNumber();
+		return String.valueOf(currentUser.getFriendsNumber());
+	}
+	
+	public String getAlbumsNumber() {
+		return String.valueOf(currentUser.getAlbumsNumber());
 	}
 	
 	public boolean logInTwitter(Activity activity) {
@@ -298,12 +308,9 @@ public class Controller extends Application {
 		return parseFunctions.getUsername(id);
 	}
 	
-	public CurrentAlbum getCurrentAlbum() {
-		return parseFunctions.getCurrentAlbum();
-	}
-	
-	public int getAlbumsNumber() {
-		return parseFunctions.getAlbumsNumber();
+	public String getCurrentAlbum() {
+		//return parseFunctions.getCurrentAlbum();
+		return currentUser.getCurrentAlbum();
 	}
 
 	//Social Network module

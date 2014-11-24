@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -33,6 +35,7 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.utils.BitmapUtils;
+import com.example.prototypetfgv2.utils.Utils;
 
 public class UploadPhotoActivity extends Activity {
 
@@ -45,12 +48,12 @@ public class UploadPhotoActivity extends Activity {
 	private View mProgressBar;
 	
 	private String mCurrentPhotoPath;
-	
+	private String idAlbum;
 	private Bitmap photo;
+	private Boolean comeFromTakePhoto;
 	
 	private Controller controller;
 	private static Activity activity;
-	
 	
 	@Override 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,21 @@ public class UploadPhotoActivity extends Activity {
 		//check current album
 		//new DownloadCurrentAlbumTask().execute();
 		//Take photo
-		dispatchTakePictureIntent();
+		Intent data = getIntent();
+		
+		mCurrentPhotoPath = data.getStringExtra("photo");
+		idAlbum = data.getStringExtra("idAlbum");
+		
+		if(mCurrentPhotoPath == null && idAlbum == null) {
+			comeFromTakePhoto = true;
+			//Put current album id
+			idAlbum = controller.getCurrentAlbum();
+			dispatchTakePictureIntent();
+		}	
+		else {
+			comeFromTakePhoto = false;
+			new BitmapWorkerTask(mImageView).execute(mCurrentPhotoPath);
+		}
 	}
 
 	@Override
@@ -152,6 +169,10 @@ public class UploadPhotoActivity extends Activity {
 					break;
 			}
 		}
+		
+		public void goToListViewAlbum(String idAlbum) {
+			
+		}
 	
 	/*public void showFragmentDialog(ArrayList<CurrentAlbum> listCurrentAlbums) {
         FragmentManager manager = getFragmentManager();
@@ -162,7 +183,7 @@ public class UploadPhotoActivity extends Activity {
         dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
         dialog.show(manager,"dialog");
 
-    }
+    }*/
 	
 	public void showConfirmDialog() {
 		//AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity().getApplicationContext());
@@ -173,12 +194,12 @@ public class UploadPhotoActivity extends Activity {
 		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
 		                //do things
-		        	    goToAlbums();
+		        	    //goToAlbums();
 		           }
 		       });
 		AlertDialog alert = builder.create();
 		alert.show();
-	}*/
+	}
 	
 	class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 	    private final WeakReference<ImageView> imageViewReference;
@@ -221,7 +242,7 @@ public class UploadPhotoActivity extends Activity {
 	        				String title = mEditText.getText().toString();
 	        				if(title.length() > 0) {
 	        					mEditText.setText("");
-	        					controller.uploadPhoto(photo, title,activity);
+	        					controller.uploadPhoto(photo, title,activity,idAlbum);
 	        					galleryAddPic();
 	        				}
 	        				finish();
@@ -238,67 +259,4 @@ public class UploadPhotoActivity extends Activity {
 	        }
 	    }
 	}
-	private class DownloadCurrentAlbumTask extends AsyncTask<Void, Void, Integer> {
-    	
-		ProgressDialog mProgressDialog;
-    	ArrayList<CurrentAlbum> currentAlbums;
-    	CurrentAlbum currentAlbum;
-    	ArrayList<Album> albums;
-    	
-        @Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-        	mProgressDialog= ProgressDialog.show(getApplication(), "Check your albums","waiting", true);   
-        }
- 
-        @Override
-        protected Integer doInBackground(Void... params) {
-        	currentAlbum = controller.getCurrentAlbum();
-        	Log.v("prototypev1", "getCurrentalbum  "+currentAlbum);
-        	if(currentAlbum == null) {
-        		albums = controller.getAlbums();
-        		Log.v("prototypev1", "getAlbums  "+albums);
-        		if(albums == null)
-        			return -1;
-        		else {
-        			currentAlbums = new ArrayList<CurrentAlbum>();
-                	for(Album a: albums) {
-                    	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle()));
-                    }
-        			return 0;
-        		}
-        	}
-        	else
-        		return 1;
-        }
- 
-        @Override
-        protected void onPostExecute(final Integer check) {
-        	mProgressDialog.dismiss();
-        	mCurrentPhotoPath = null;
-        	switch (check) {
-				case -1:
-					//All null
-					//showConfirmDialog();
-					break;
-				case 0:
-					//showFragmentDialog(currentAlbums);
-					break;
-				case 1:
-					//nothing null take photo
-					//newTakePhoto();;
-					dispatchTakePictureIntent();
-					break;
-	
-				default:
-					break;
-				}
-        }
-
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			Toast.makeText(getApplication(),"Error download albums",  Toast.LENGTH_LONG).show();
-		}
-    }
 }

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.security.auth.callback.Callback;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -23,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
@@ -40,13 +37,10 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
-import com.parse.ParseInstallation;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 public class ParseFunctions {
 	
@@ -77,10 +71,6 @@ public class ParseFunctions {
 		ParseUser parseUser = new ParseUser();
 		parseUser.setUsername(username);
 		parseUser.setPassword(password);
-		//parseUser.put("friends",new JSONArray());
-		//parseUser.put("photos",new JSONArray());
-		//parseUser.put("friendsRequest",new JSONArray());
-		//parseUser.put("albums",new JSONArray());
 		parseUser.put("photosNumber",0);
 		parseUser.put("friendsNumber",0);
 		parseUser.put("albumNumber",0);
@@ -123,7 +113,7 @@ public class ParseFunctions {
     }
     
     // No testejada
-    public int getAlbumsNumber() {
+    /*public int getAlbumsNumber() {
     	ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
     	query.whereEqualTo("idMembers",ParseUser.getCurrentUser().getObjectId());
     	try {
@@ -132,7 +122,7 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return -1;
 		}
-    }
+    }*/
     
     public ArrayList<String> getPhotosFromAlbumLikedCurrentUser(String idUser,String idAlbum) {
     	ArrayList<String> likes = new ArrayList<String>();
@@ -154,25 +144,7 @@ public class ParseFunctions {
 		}
     }
     
-    /*public ArrayList<String> getPhotosCommentedUser() {
-    	ArrayList<String> comments = new ArrayList<String>();
-    	
-    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
-    	query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
-    	try {
-			List<ParseObject> parseComments = query.find();
-			for(ParseObject c: parseComments) {
-				comments.add(c.getString("idPhoto"));
-			}
-			return comments;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return null;
-		}
-    }*/
-	
-    
-    public void uploadPhoto(Bitmap photo,String title,final Activity activity) {
+    public void uploadPhoto(Bitmap photo,String title,final Activity activity,String idAlbum) {
     	// Create the ParseFile
         ParseFile file = new ParseFile("photo.jpeg",Utils.bitmapToByteArray(photo));
         // Upload the image into Parse Cloud
@@ -192,23 +164,16 @@ public class ParseFunctions {
 		}
         //Save the owner of the photo
         photoUpload.put("ownerUser",ParseUser.getCurrentUser().getObjectId());
-        String album;
+		photoUpload.put("ownerAlbum",idAlbum);
+		photoUpload.put("idPhotoFile",uploadParseFile.getObjectId());
+		photoUpload.put("photoFileUrl",file.getUrl());
+			
 		try {
-			album = ParseUser.getCurrentUser().getJSONObject("currentAlbum").getString("id");
-			photoUpload.put("ownerAlbum",album);
-			photoUpload.put("idPhotoFile",uploadParseFile.getObjectId());
-			photoUpload.put("photoFileUrl",file.getUrl());
-			//add more atributes
-			try {
-				photoUpload.save();
-				//Increment number of photos
-				incrementPhotosNumberInAlbum(album);
-				//Toast.makeText(activity.getApplicationContext(),"Update Photo",Toast.LENGTH_LONG).show();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-		} catch (JSONException e) {
+			photoUpload.save();
+			//Increment number of photos
+			incrementPhotosNumberInAlbum(idAlbum);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -356,6 +321,17 @@ public class ParseFunctions {
 		}
 	}
 	
+	public int getAlbumsNumber(String idUser) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
+		query.whereEqualTo("idUser",idUser);
+		try {
+			return query.count();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			return -1;
+		}
+	}
+	
 	public ArrayList<Album> getAlbums(CurrentUser currentUser) {
 		ArrayList<Album> albums = new ArrayList<Album>();
 		ArrayList<String> albumsId = new ArrayList<String>();
@@ -382,7 +358,6 @@ public class ParseFunctions {
 	}
 	
 	public ArrayList<Album> downloadAlbums(ArrayList<String> idAlbums,CurrentUser currentUser) {
-		Log.v("prototypev1", "start download albums parse");
 		ArrayList<String> albumsAdmin = new ArrayList<String>();
 		ArrayList<Album> albums = new ArrayList<Album>();
 		
@@ -460,7 +435,7 @@ public class ParseFunctions {
 			//String url = getURLPhoto(p.getString("idPhotoFile"));
 			String url = p.getString("photoFileUrl");
 			//Log.v("prototypev1", "despres geturl");
-			User ownerUser = getUser(p.getString("ownerUser"));
+			//User ownerUser = getUser(p.getString("ownerUser"));
 			//Log.v("prototypev1", "despres ownerUser");
 			//Log.v("prototypev1", "final download only 1 photo");
 			//Error aqui
@@ -760,7 +735,8 @@ public class ParseFunctions {
 		//Put current user in members
 		members.add(currentUser.getId());
 		newAlbum.put("albumTitle",albumName);
-		//newAlbum.put("idMembers",members);
+		newAlbum.put("membersNumber",members.size());
+		newAlbum.put("photosNumber",0);
 		//Increment number of albums
 		ParseUser user = ParseUser.getCurrentUser();
 		user.increment("albumsNumber");
@@ -1011,30 +987,18 @@ public class ParseFunctions {
 		}
 	}
 	
-	/*public boolean currentUserLikesCurrentPhoto(String id) {
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
-		query.whereEqualTo("idPhoto",id);
-		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
-		try {
-			int c = query.count();
-			if(c > 0)
-				return true;
-			return false;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}*/
-	
-	/*public ArrayList<String> getAlbumsIdForCurrentUser() {
-		Array
-	}*/
-	
 	public CurrentUser getCurrentUser() {
 		ParseUser parseUser = ParseUser.getCurrentUser();
-		//ArrayList<String> likes = getPhotosLikedCurrentUser();
-		//ArrayList<Albums> albums = get;
-		return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"));
+		JSONObject currentAlbum = parseUser.getJSONObject("currentAlbum");
+		String idAlbum;
+		try {
+			idAlbum = currentAlbum.getString("id");
+			int albumsNumber = getAlbumsNumber(parseUser.getObjectId());
+			return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),idAlbum,parseUser.getInt("friendsNumber"),parseUser.getInt("photosNumber"),albumsNumber);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error getCurrentUser"+e);
+			return null;
+		}
 	}
 }
-// Canviar lu de friends i albums memebers!!!!! Enlloc de tenir una arrayList fer una classe per cada un al parse i baxar-los (Friends (idUser1 idUser2...) Members (idUser - idAlbum))
