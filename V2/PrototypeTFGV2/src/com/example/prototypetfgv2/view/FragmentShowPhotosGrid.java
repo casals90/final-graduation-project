@@ -2,11 +2,16 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +31,8 @@ import com.example.prototypetfgv2.model.Photo;
 
 public class FragmentShowPhotosGrid extends Fragment {
 	
+	private static final int REQUEST_PICK_IMAGE = 2;
+	
 	private GridView gridView;
 	private ProgressBar mProgressBar;
 	private TextView noPhotos;
@@ -35,6 +42,7 @@ public class FragmentShowPhotosGrid extends Fragment {
 	private ArrayList<Photo> photos;
 	//Photo that user selected
 	private Photo photo;
+	private String mCurrentPhotoPath;
 	
 	private GridViewAdapterForShowPhotos adapter;
 	
@@ -88,10 +96,57 @@ public class FragmentShowPhotosGrid extends Fragment {
 			case R.id.list_view_mode:
 				goToShowAlbumListMode(album);
 				break;
+				//Overflow menu options
+			case R.id.settings:
+				//TODO albums settings
+				Log.v("prototypev1","gotoalbums settings");
+				break;
+			case R.id.add_photo_from_gallery:
+				choosePhotoFromGallery();
+				break;
 			default:
 				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	//Choose from gallery
+	public void choosePhotoFromGallery() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(Intent.createChooser(intent,"Select Picture"),REQUEST_PICK_IMAGE);
+	}
+	
+	public String searchPhotoSelect(Intent data) {
+		Uri selectedImage = data.getData();
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        cursor.moveToFirst();
+
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String filePath = cursor.getString(columnIndex);
+        cursor.close();
+        return filePath;
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case REQUEST_PICK_IMAGE:
+				if(resultCode == Activity.RESULT_OK && data != null) {
+					mCurrentPhotoPath = searchPhotoSelect(data);
+					Intent uploadPhoto = new Intent(getActivity(), UploadPhotoActivity.class);
+					uploadPhoto.putExtra("photo",mCurrentPhotoPath);
+					uploadPhoto.putExtra("idAlbum",album.getId());
+					startActivity(uploadPhoto);
+				}
+				break;
+	
+			default:
+				break;
+		}
 	}
 	
 	public void goToShowAlbumListMode(Album album) {

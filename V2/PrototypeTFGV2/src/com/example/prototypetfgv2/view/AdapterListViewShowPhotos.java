@@ -110,8 +110,9 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		
 		photo = photos.get(position);
 		//options 
-		imageLoader.displayImage(photo.getPhoto(),holder.mImageViewPhoto);
-		imageLoader.displayImage(photo.getOwnerUser().getProfilePicture(),holder.mImageViewProfilePicture,options,new SimpleImageLoadingListener() {
+		imageLoader.displayImage(photo.getOwnerUser().getProfilePicture(),holder.mImageViewProfilePicture,options);
+		//imageLoader.displayImage(photo.getPhoto(),holder.mImageViewPhoto);
+		imageLoader.displayImage(photo.getPhoto(),holder.mImageViewPhoto,options,new SimpleImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
             	holder.mProgressBar.setVisibility(View.VISIBLE);
@@ -144,7 +145,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
     			public void onClick(View v) {
     				new LikePhotoTask().execute(photo.getId());
     				photos.get(position).incrementNumberLikes();
-    				incrementLikesNumberInButton(holder.mButtonLike);
+    				incrementLikesNumberInButton(holder.mButtonLike,photo.getId());
     				holder.mButtonLike.setOnClickListener(null);
     			}
     		});
@@ -171,11 +172,11 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		activity.startActivity(commentsActivity);
 	}
 	
-	public void incrementLikesNumberInButton(Button button) {
-		Log.v("prototypev1", "dins increment button");
+	public void incrementLikesNumberInButton(Button button,String idPhoto) {
 		int n = Integer.valueOf(button.getText().toString());
 		n++;
 		button.setText(String.valueOf(n));
+		controller.addLikePhotoCurrentUser(idPhoto);
 		changeShapeColorCyan(button);
 	}
 	

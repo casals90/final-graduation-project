@@ -323,15 +323,9 @@ public class Controller extends Application {
 		return currentUser.isUserLikedCurrentPhoto(idPhoto);
 	}
 	
-	/*public boolean unlikePhoto(String id) {
-		return parseFunctions.unlikePhoto(id);
+	public void addLikePhotoCurrentUser(String idPhoto) {
+		currentUser.addLike(idPhoto);
 	}
-	
-	/*public boolean currentUserLikesCurrentPhoto(String id) {
-		return parseFunctions.currentUserLikesCurrentPhoto(id);
-	}*/
-	
-	
 	
 	public boolean newComment(String idPhoto,String text) {
 		return parseFunctions.newComment(idPhoto, text);

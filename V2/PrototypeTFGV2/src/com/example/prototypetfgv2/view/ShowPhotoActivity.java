@@ -9,9 +9,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +46,7 @@ public class ShowPhotoActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_fullscreen_view);
 		initActionBar();
 		
@@ -78,6 +79,7 @@ public class ShowPhotoActivity extends Activity {
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+		
 	}
 	
 	public void updateActionBar(int position) {

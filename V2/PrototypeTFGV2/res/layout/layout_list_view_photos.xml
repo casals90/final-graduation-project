@@ -14,7 +14,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:dividerHeight="5dp"
-        android:background="@color/White"
+        android:listSelector="@android:color/transparent"
         android:visibility="visible" />
 
     <ProgressBar

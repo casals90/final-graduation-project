@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -149,6 +147,7 @@ public class ListViewPhotosFragment extends Fragment {
 		startActivity(showPhoto);
 	}
 	
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
@@ -192,8 +191,8 @@ public class ListViewPhotosFragment extends Fragment {
 				mListViewPhotos.setVisibility(View.VISIBLE);
 	        	mProgressBar.setVisibility(View.INVISIBLE);
 	        	
-	        	boolean pauseOnScroll = false; // or true
-				boolean pauseOnFling = true; // or false
+	        	boolean pauseOnScroll = false; 
+				boolean pauseOnFling = true;
 				PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling);
 				mListViewPhotos.setOnScrollListener(listener);
 	        	
@@ -202,7 +201,6 @@ public class ListViewPhotosFragment extends Fragment {
 				mListViewPhotos.setOnItemClickListener(new OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-						Log.v("prototypev1","photo position "+position);
 						goToShowPhotoFullScreen(photos.get(position),position);
 					}
 				});
