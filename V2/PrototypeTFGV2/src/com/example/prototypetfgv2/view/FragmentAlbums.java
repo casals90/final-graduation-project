@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +27,7 @@ import com.example.prototypetfgv2.model.Album;
 public class FragmentAlbums extends Fragment {
 	
 	private Controller controller;
-	private FragmentAlbums fragmentAlbums = this;
+	//private FragmentAlbums fragmentAlbums = this;
 	
 	//private ViewPager mViewPager;
 	//private UnderlinePageIndicator mIndicator;

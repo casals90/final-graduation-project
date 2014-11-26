@@ -71,9 +71,9 @@
     <string name="list_view_mode">List mode</string>
     <string name="enter_photo_title">Input photo title</string>
     <string name="new_album">New album</string>
-	<string name="album_settings">Album settings</string>
-	<string name="add_photo_from_gallery">Add photo from gallery</string>
-    
+    <string name="album_settings">Album settings</string>
+    <string name="add_photo_from_gallery">Add photo from gallery</string>
+
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>
     <string name="comment">comment</string>
@@ -122,5 +122,7 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="title_activity_list_view_photos">ListViewPhotosActivity</string>
+    <string name="title_activity_show_full_screen_photo_profile">ShowFullScreenPhotoProfile</string>
+    <string name="title_activity_full_screen_photos_current_user">FullScreenPhotosCurrentUser</string>
 
 </resources>

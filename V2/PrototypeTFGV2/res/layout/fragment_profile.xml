@@ -53,7 +53,8 @@
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
 	        android:gravity="center"
-	        android:layout_marginRight="10dp">
+	        android:layout_marginRight="10dp"
+	        android:clickable="true">
 	        
 	        <TextView
 	            android:id="@+id/photos_number"
@@ -76,7 +77,8 @@
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
 	        android:gravity="center"
-	        android:layout_marginRight="10dp">
+	        android:layout_marginRight="10dp"
+	        android:clickable="true">
 	      
 	        <TextView
 	            android:id="@+id/albums_number"
@@ -98,7 +100,8 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
-	        android:gravity="center">
+	        android:gravity="center"
+	        android:clickable="true">
 	      
 	        <TextView
 	            android:id="@+id/friends_number"
@@ -115,5 +118,21 @@
 	            android:text="@string/friends"/>     
 		</LinearLayout>
 	</LinearLayout>
+    
+    <ListView
+        android:id="@+id/list_my_photos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:dividerHeight="5dp"
+        android:listSelector="@android:color/transparent"
+        android:layout_below="@+id/button_logout"/>
+
+    <ProgressBar
+        android:id="@+id/progressBarListPhotos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
     
 </RelativeLayout>

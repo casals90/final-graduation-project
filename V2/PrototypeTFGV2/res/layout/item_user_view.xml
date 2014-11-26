@@ -21,14 +21,14 @@
         android:layout_toRightOf="@+id/profilePicture"
         android:text="@string/username"/>
     
-    <TextView
+    <!-- <TextView
         android:id="@+id/commonFriends"
         android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/username"
         android:layout_toRightOf="@+id/profilePicture"
-        android:text="@string/commonFriends"/>
+        android:text="@string/commonFriends"/>  -->
 
     <ImageView
         android:id="@+id/image_is_friend"

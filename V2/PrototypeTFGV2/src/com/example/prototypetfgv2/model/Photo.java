@@ -9,6 +9,7 @@ public class Photo implements Parcelable {
     private String title;
     private String photo;
     private String createdAt;
+    private String ownerAlbum;
     private User ownerUser;
     private int likesNumber;
     private int commentsNumber;
@@ -21,7 +22,7 @@ public class Photo implements Parcelable {
 		this.title = title;
 		this.photo = photo;
 		this.createdAt = createdAt;
-		this.ownerUser = ownerUser;
+		//this.ownerUser = ownerUser;
 	}
 	
 	public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber) {
@@ -33,6 +34,18 @@ public class Photo implements Parcelable {
 		this.ownerUser = ownerUser;
 		this.likesNumber = likesNumber;
 		this.commentsNumber = commentNumber;
+	}
+	
+	public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber,String idAlbum) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.photo = photo;
+		this.createdAt = createdAt;
+		this.ownerUser = ownerUser;
+		this.likesNumber = likesNumber;
+		this.commentsNumber = commentNumber;
+		this.ownerAlbum = idAlbum;
 	}
 	
 	public Photo(Parcel in) {
@@ -105,22 +118,17 @@ public class Photo implements Parcelable {
 		this.commentsNumber = commentsNumber;
 	}
 
-	/*public ArrayList<String>  jsonArrayToArrayListLike(JSONArray likes) {
-		ArrayList<String> l = new ArrayList<String>();
-		for(int i = 0; i < likes.length(); i++) {
-			try {
-				l.add(likes.getString(i));
-			} catch (JSONException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		return l;
-	}*/
-
 	@Override
 	public int describeContents() {
 		return 0;
+	}
+
+	public String getOwnerAlbum() {
+		return ownerAlbum;
+	}
+
+	public void setOwnerAlbum(String ownerAlbum) {
+		this.ownerAlbum = ownerAlbum;
 	}
 
 	@Override
@@ -130,6 +138,7 @@ public class Photo implements Parcelable {
 		dest.writeString(title);
 		dest.writeString(photo);
 		dest.writeString(createdAt);
+		dest.writeString(ownerAlbum);
 		dest.writeParcelable(ownerUser,flags);
 		dest.writeInt(likesNumber);
 		dest.writeInt(commentsNumber);
@@ -141,6 +150,7 @@ public class Photo implements Parcelable {
 		title = in.readString();
 		photo = in.readString();
 		createdAt = in.readString();
+		ownerAlbum = in.readString();
 		ownerUser = in.readParcelable(User.class.getClassLoader());
 		likesNumber = in.readInt();
 		commentsNumber = in.readInt();

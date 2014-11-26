@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 
@@ -28,6 +29,9 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
  
 public class Controller extends Application {
@@ -82,7 +86,14 @@ public class Controller extends Application {
 		 ArrayList<String> likes = parseFunctions.getPhotosFromAlbumLikedCurrentUser(currentUser.getId(), idAlbum);
 		 this.currentUser.setLikesPhotosInsideAlbum(likes);
 	}
+	
 
+	public void getLikesFromUserPhotos() {
+		ArrayList<String> likes = parseFunctions.getLikesFromMyPhotos(currentUser.getId());
+		Log.v("prototypev1", "likes size"+likes.size());
+		currentUser.setLikesPhotosInsideAlbum(likes);
+	}
+	
 	public void clearImageLoader() {
 		ImageLoader.getInstance().clearDiskCache();
 		ImageLoader.getInstance().clearMemoryCache();
@@ -128,6 +139,13 @@ public class Controller extends Application {
 			return true;
 		}
 		return false;
+	}
+	
+	public ArrayList<Photo> downloadMyPhotos(String idUser) {
+		if(idUser == null)
+			return parseFunctions.downloadMyPhotos(currentUser.getId());
+		return parseFunctions.downloadMyPhotos(idUser);
+		
 	}
 	
 	public boolean logIn(String username, String password) {

@@ -56,7 +56,7 @@
         <activity
             android:name=".view.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/title_activity_main">
+            android:label="@string/title_activity_main" >
         </activity>
         <activity
             android:name="com.facebook.LoginActivity"
@@ -92,19 +92,23 @@
         </activity>
         <activity
             android:name=".view.UploadPhotoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:hardwareAccelerated="false"
             android:label="@string/title_activity_upload_photo"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name=".view.ShowPhotoActivity"
             android:label="@string/title_activity_show_photo" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.ListViewPhotosActivity"
+            android:name=".view.ListViewPhotosActivity"
             android:label="@string/title_activity_list_view_photos" >
         </activity>
+        <activity
+            android:name="com.example.prototypetfgv2.view.ShowFullScreenPhotoProfile"
+            android:label="@string/title_activity_show_full_screen_photo_profile"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
     </application>
-
 </manifest>

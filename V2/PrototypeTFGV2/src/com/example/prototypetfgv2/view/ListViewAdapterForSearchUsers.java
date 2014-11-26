@@ -62,7 +62,7 @@ public class ListViewAdapterForSearchUsers extends BaseAdapter {
             // Locate the TextViews in listview_item.xml
             holder.username = (TextView) view.findViewById(R.id.username);
             //holder.addFriend = (ImageButton) view.findViewById(R.id.button_add_friend);
-            holder.commonFriends = (TextView) view.findViewById(R.id.commonFriends);
+            //holder.commonFriends = (TextView) view.findViewById(R.id.commonFriends);
             // Locate the ImageView in listview_item.xml@string/head_arrowImage
             holder.profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
             holder.imageFriend = (ImageView) view.findViewById(R.id.image_is_friend);

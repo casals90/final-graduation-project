@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -24,17 +25,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -48,17 +54,19 @@ public class FragmentProfile extends Fragment {
 	private Button buttonLogOut;
 	private ImageView profilePicture;
 	private TextView username, photosNumber,albumsNumber,friendsNumber,noAlbums;
-	private ProgressBar mProgressBar,mProgressBarCurrentAlbum;
+	private ProgressBar mProgressBar,mProgressBarCurrentAlbum,mProgressBarListPhotos;
 	private Spinner chooseAlbum;
+	private ListView mListView;
 	
 	private List<Album> albums;
 	private ArrayList<CurrentAlbum> currentAlbums;
 	private CurrentAlbum currentAlbum;
+	private ArrayList<Photo> photos;
 	
 	private Bitmap newProfilePicture;
 	
 	private Controller controller;
-	
+	private ShowPhotosInProfileAdapter adapter;
 	private SharedPreferences sharedPreferences;
 	
 	public FragmentProfile() {
@@ -78,6 +86,9 @@ public class FragmentProfile extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile,container,false);
+		
+		mProgressBarListPhotos = (ProgressBar) view.findViewById(R.id.progressBarListPhotos);
+		mListView = (ListView) view.findViewById(R.id.list_my_photos);
 		
 		//username from current user
 		username = (TextView) view.findViewById(R.id.username);
@@ -111,6 +122,36 @@ public class FragmentProfile extends Fragment {
 			}
 		});
 		
+		//Listeners to click info panel
+		LinearLayout albums = (LinearLayout) view.findViewById(R.id.albums);
+		LinearLayout photos = (LinearLayout) view.findViewById(R.id.photos);
+		LinearLayout friends = (LinearLayout) view.findViewById(R.id.friends);
+		
+		albums.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				goToAlbums();			
+			}
+		});
+		photos.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.v("prototypev1","click photos ");
+			}
+		});
+		friends.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO new fragment with a listview and show all friends list
+				Log.v("prototypev1","click friends ");
+				goToFragmentListFriends();
+			}
+		});
+		
 		//noAlbums = (TextView) view.findViewById(R.id.no_album);
 		//Put progressbar to wait
 		/*chooseAlbum = (Spinner) view.findViewById(R.id.albums_spinner);
@@ -130,10 +171,17 @@ public class FragmentProfile extends Fragment {
 			}
 		});
 		
-		new DownloadCurrentAlbumTask().execute();*/
+		*/
+		
 		return view;
-	}
+	}	
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		new DownloadPhotosTask().execute();
+	}
+
 	public void logout() {
 		controller.logout();
 		deleteSharedPReferences();
@@ -290,6 +338,29 @@ public class FragmentProfile extends Fragment {
 		new RemoveProfilePictureTask().execute();
 	}
 	
+	public void goToAlbums() {
+		FragmentAlbums fragmentAlbums = new FragmentAlbums();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fragmentAlbums);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
+	
+	public void goToFragmentListFriends() {
+		FragmentListFriends fragmentListFriends = new FragmentListFriends();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fragmentListFriends);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
+	
+	public void goToShowPhotoFullScreen(Photo photo,int position) {
+		Intent showPhoto = new Intent(getActivity(),ShowFullScreenPhotoProfile.class);
+		showPhoto.putParcelableArrayListExtra("photos",photos);
+		showPhoto.putExtra("currentPosition",position);
+		startActivity(showPhoto);
+	}
+	
 	// Task to remove profile picture
 	public class RemoveProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
 		
@@ -321,6 +392,49 @@ public class FragmentProfile extends Fragment {
 			profilePicture.setVisibility(View.VISIBLE);
 			Log.v("prototypev1","set profile picture cancelat ");
 			Toast.makeText(getActivity(),"Error remove profile picture",  Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	public class DownloadPhotosTask extends AsyncTask<Void, Void, ArrayList<Photo>> {
+		
+		@Override
+	    protected void onPreExecute() {
+			mProgressBarListPhotos.setVisibility(View.VISIBLE);
+			mListView.setVisibility(View.INVISIBLE);      
+	    };
+		
+		@Override
+		protected ArrayList<Photo> doInBackground(Void... params) {
+			return controller.downloadMyPhotos(null);
+		}
+
+		@Override
+		protected void onPostExecute(final ArrayList<Photo> photosUser) {
+			mProgressBarListPhotos.setVisibility(View.INVISIBLE);
+			if(photosUser != null) {
+				photos = photosUser;
+				adapter = new ShowPhotosInProfileAdapter(getActivity().getApplicationContext(),photos,controller,getActivity());
+				mListView.setVisibility(View.VISIBLE);
+				mListView.setAdapter(adapter);
+				mListView.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						goToShowPhotoFullScreen(photos.get(position),position);
+					}
+				});
+			}
+			else {
+				//TODO textview 0 friends
+			}
+			
+		}
+
+		@Override
+		protected void onCancelled() {
+			mProgressBarListPhotos.setVisibility(View.INVISIBLE);
+			//profilePicture.setVisibility(View.VISIBLE);
+			Log.v("prototypev1","download photos cancelat");
+			Toast.makeText(getActivity(),"Error download photos",Toast.LENGTH_LONG).show();
 		}
 	}
 	

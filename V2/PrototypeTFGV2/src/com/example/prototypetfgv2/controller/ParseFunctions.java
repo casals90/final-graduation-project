@@ -469,7 +469,7 @@ public class ParseFunctions {
 		for(int i = 0; i < friends.size(); i++) {
 			ParseQuery<ParseUser> query = ParseUser.getQuery();
 			query.whereEqualTo("objectId",friends.get(i));
-			query.orderByDescending("username");
+			query.orderByAscending("username");
 			try {
 				ParseUser user = query.getFirst();
 				String urlProfilePicture = user.getString("profilePictureUrl");
@@ -483,7 +483,25 @@ public class ParseFunctions {
 			}
 		}
 		return users;
-	 }
+	}
+	
+	public ArrayList<Photo> downloadMyPhotos(String idUser) {
+		ArrayList<Photo> photos = new ArrayList<Photo>();
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereEqualTo("ownerUser",idUser);
+		query.orderByDescending("createdAt");
+		try {
+			List<ParseObject> parsePhotos = query.find();
+			for(ParseObject p : parsePhotos) {
+				photos.add(new Photo(p.getObjectId(),p.getString("title"),p.getString("photoFileUrl"),p.getCreatedAt().toString(),null,p.getInt("likesNumber"),p.getInt("commentsNumber"),p.getString("ownerAlbum")));
+			}
+			return photos;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	public ArrayList<User> downloadFriendsInputSearch(String input,CurrentUser currentUser) {
 		ArrayList<User> users = new ArrayList<User>();
@@ -979,6 +997,22 @@ public class ParseFunctions {
 			List<ParseObject> obs = query.find();
 			for(ParseObject o : obs) {
 				likes.add(o.getString("idUser"));
+			}
+			return likes;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<String> getLikesFromMyPhotos(String idUser) {
+		ArrayList<String> likes = new ArrayList<String>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
+		query.whereEqualTo("idUser",idUser);
+		try {
+			List<ParseObject> parseLikes = query.find();
+			for(ParseObject l:parseLikes) {
+				likes.add(l.getString("idPhoto"));
 			}
 			return likes;
 		} catch (ParseException e) {

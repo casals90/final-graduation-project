@@ -147,7 +147,6 @@ public class ListViewPhotosFragment extends Fragment {
 		startActivity(showPhoto);
 	}
 	
-	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
