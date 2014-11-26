@@ -73,7 +73,7 @@ public class ParseFunctions {
 		parseUser.setPassword(password);
 		parseUser.put("photosNumber",0);
 		parseUser.put("friendsNumber",0);
-		parseUser.put("albumNumber",0);
+		parseUser.put("albumsNumber",0);
 		//Add default profile picture
 		//parseUser.put("profilePicture",new ParseFile(null));
 		try {
@@ -350,11 +350,11 @@ public class ParseFunctions {
 				albumsId.add(albumMember.getString("idAlbum"));
 			}
 			albums = downloadAlbums(albumsId, currentUser);
-			
+			return albums;
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}
-		return albums;
+			return null;
+		}	
 	}
 	
 	public ArrayList<Album> downloadAlbums(ArrayList<String> idAlbums,CurrentUser currentUser) {
@@ -661,26 +661,25 @@ public class ParseFunctions {
 		ParseTwitterUtils.logIn(activity, new LogInCallback() {
 			@Override
 			public void done(ParseUser user, ParseException err) {
-					if (user == null) {
-						Log.v("prototypev1", "logintwitter user cancelled");
+				if (user == null) {
+					Log.v("prototypev1", "logintwitter user cancelled");
+				} 
+				else if (user.isNew()) { 
+					Log.v("prototypev1", "signup twitter new user");
+					user.put("photosNumber",0);
+					user.put("friendsNumber",0);
+					user.put("albumsNumber",0);
+					try {
+						user.save();
+						goToInputUsername(activity);
 					} 
-					else if (user.isNew()) { 
-						Log.v("prototypev1", "signup twitter new user");
-						//user.put("friends",new JSONArray());
-						user.put("photosNumber",0);
-						user.put("friendsNumber",0);
-						user.put("albumNumber",0);
-						try {
-							user.save();
-							goToInputUsername(activity);
-						} 
-						catch (ParseException e) {
-								e.printStackTrace();
-								user = null; 
-						}   
-					} 
-					else 
-					    goToMainActivity(activity);
+					catch (ParseException e) {
+							e.printStackTrace();
+							user = null; 
+					}   
+				} 
+				else 
+				    goToMainActivity(activity);
 			}
 		});
 	}
@@ -794,10 +793,16 @@ public class ParseFunctions {
 	
 	public CurrentAlbum getCurrentAlbum() {
 		JSONObject currentAlbum = ParseUser.getCurrentUser().getJSONObject("currentAlbum");
-		if(currentAlbum != null)
-			return new CurrentAlbum(currentAlbum);
-		return null;
-		
+		CurrentAlbum album;
+		if(currentAlbum != null) {
+			album = new CurrentAlbum(currentAlbum);
+			//Album photo
+			ArrayList<String> photos = getPhotosFromAlbum(album.getId());
+			Photo photo = downloadPhoto(photos.get(0));
+			album.setCoverPhoto(photo.getPhoto());
+			return album;
+		}
+		return null;	
 	}
 	
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
@@ -1024,15 +1029,21 @@ public class ParseFunctions {
 	public CurrentUser getCurrentUser() {
 		ParseUser parseUser = ParseUser.getCurrentUser();
 		JSONObject currentAlbum = parseUser.getJSONObject("currentAlbum");
-		String idAlbum;
-		try {
-			idAlbum = currentAlbum.getString("id");
+		if(currentAlbum != null) {
+			String idAlbum;
+			try {
+				idAlbum = currentAlbum.getString("id");
+				int albumsNumber = getAlbumsNumber(parseUser.getObjectId());
+				return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),idAlbum,parseUser.getInt("friendsNumber"),parseUser.getInt("photosNumber"),albumsNumber);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.v("prototypev1", "error getCurrentUser"+e);
+				return null;
+			}
+		}
+		else {
 			int albumsNumber = getAlbumsNumber(parseUser.getObjectId());
-			return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),idAlbum,parseUser.getInt("friendsNumber"),parseUser.getInt("photosNumber"),albumsNumber);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			Log.v("prototypev1", "error getCurrentUser"+e);
-			return null;
+			return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),null,parseUser.getInt("friendsNumber"),parseUser.getInt("photosNumber"),albumsNumber);
 		}
 	}
 }

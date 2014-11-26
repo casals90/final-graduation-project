@@ -1,7 +1,6 @@
 package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -26,7 +26,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,11 +36,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.utils.Utils;
@@ -52,14 +52,15 @@ public class FragmentProfile extends Fragment {
 	private static final int REQUEST_PICK_IMAGE = 2;
 	
 	private Button buttonLogOut;
-	private ImageView profilePicture;
-	private TextView username, photosNumber,albumsNumber,friendsNumber,noAlbums;
+	private ImageButton setCurrentAlbum;
+	private ImageView profilePicture,currentAlbumCover;
+	private TextView username, photosNumber,albumsNumber,friendsNumber,noAlbums,currentAlbumName;
 	private ProgressBar mProgressBar,mProgressBarCurrentAlbum,mProgressBarListPhotos;
 	private Spinner chooseAlbum;
 	private ListView mListView;
 	
-	private List<Album> albums;
-	private ArrayList<CurrentAlbum> currentAlbums;
+	//private List<Album> albums;
+	//private ArrayList<CurrentAlbum> currentAlbums;
 	private CurrentAlbum currentAlbum;
 	private ArrayList<Photo> photos;
 	
@@ -79,13 +80,18 @@ public class FragmentProfile extends Fragment {
 		controller = (Controller) this.getActivity().getApplicationContext();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		getActivity().setTitle(R.string.profile);
-				
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile,container,false);
+		
+		//Current album:
+		currentAlbumCover = (ImageView) view.findViewById(R.id.current_album_cover);
+		currentAlbumName = (TextView) view.findViewById(R.id.current_album_name);
+		new DownloadCurrentAlbumTask().execute();
+		setCurrentAlbum = (ImageButton) view.findViewById(R.id.set_current_album);
 		
 		mProgressBarListPhotos = (ProgressBar) view.findViewById(R.id.progressBarListPhotos);
 		mListView = (ListView) view.findViewById(R.id.list_my_photos);
@@ -124,9 +130,8 @@ public class FragmentProfile extends Fragment {
 		
 		//Listeners to click info panel
 		LinearLayout albums = (LinearLayout) view.findViewById(R.id.albums);
-		LinearLayout photos = (LinearLayout) view.findViewById(R.id.photos);
+		//LinearLayout photos = (LinearLayout) view.findViewById(R.id.photos);
 		LinearLayout friends = (LinearLayout) view.findViewById(R.id.friends);
-		
 		albums.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -134,45 +139,16 @@ public class FragmentProfile extends Fragment {
 				goToAlbums();			
 			}
 		});
-		photos.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Log.v("prototypev1","click photos ");
-			}
-		});
 		friends.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO new fragment with a listview and show all friends list
 				Log.v("prototypev1","click friends ");
 				goToFragmentListFriends();
 			}
 		});
 		
-		//noAlbums = (TextView) view.findViewById(R.id.no_album);
-		//Put progressbar to wait
-		/*chooseAlbum = (Spinner) view.findViewById(R.id.albums_spinner);
-		chooseAlbum.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
-				Log.v("prototypev1", "download albums "+currentAlbums.get(position).getTitle());
-				currentAlbum = currentAlbums.get(position);
-				
-				new SetCurrentAlbumTask().execute();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub	
-			}
-		});
-		
-		*/
-		
+		noAlbums = (TextView) view.findViewById(R.id.no_albums);
 		return view;
 	}	
 	
@@ -236,6 +212,12 @@ public class FragmentProfile extends Fragment {
 	
 	public void importPhotoFromTwitter() {
 		new ImportProfilePictureFromTwitterTask().execute();
+	}
+	
+	public void showDialogChooseCurrentAlbum() {
+		FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
+        dialog.show(fm, "fragment_edit_name");
 	}
 
 	//Choose from gallery
@@ -400,7 +382,8 @@ public class FragmentProfile extends Fragment {
 		@Override
 	    protected void onPreExecute() {
 			mProgressBarListPhotos.setVisibility(View.VISIBLE);
-			mListView.setVisibility(View.INVISIBLE);      
+			mListView.setVisibility(View.INVISIBLE);
+			noAlbums.setVisibility(View.INVISIBLE);
 	    };
 		
 		@Override
@@ -411,7 +394,8 @@ public class FragmentProfile extends Fragment {
 		@Override
 		protected void onPostExecute(final ArrayList<Photo> photosUser) {
 			mProgressBarListPhotos.setVisibility(View.INVISIBLE);
-			if(photosUser != null) {
+			Log.v("prototypev1", "photos user"+photosUser);
+			if(photosUser != null && photosUser.size() > 0) {
 				photos = photosUser;
 				adapter = new ShowPhotosInProfileAdapter(getActivity().getApplicationContext(),photos,controller,getActivity());
 				mListView.setVisibility(View.VISIBLE);
@@ -424,7 +408,7 @@ public class FragmentProfile extends Fragment {
 				});
 			}
 			else {
-				//TODO textview 0 friends
+				noAlbums.setVisibility(View.VISIBLE);
 			}
 			
 		}
@@ -432,7 +416,6 @@ public class FragmentProfile extends Fragment {
 		@Override
 		protected void onCancelled() {
 			mProgressBarListPhotos.setVisibility(View.INVISIBLE);
-			//profilePicture.setVisibility(View.VISIBLE);
 			Log.v("prototypev1","download photos cancelat");
 			Toast.makeText(getActivity(),"Error download photos",Toast.LENGTH_LONG).show();
 		}
@@ -480,43 +463,39 @@ public class FragmentProfile extends Fragment {
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
-        	chooseAlbum.setVisibility(View.INVISIBLE);
-        	mProgressBarCurrentAlbum.setVisibility(View.VISIBLE);
+        	//mProgressBarCurrentAlbum.setVisibility(View.VISIBLE);
+        	currentAlbumCover.setVisibility(View.INVISIBLE);
+        	currentAlbumName.setVisibility(View.INVISIBLE);
         }
  
         @Override
         protected Boolean doInBackground(Void... params) {
-        	albums = controller.getAlbums();
-            if(albums != null && albums.size() > 0)
+        	currentAlbum = controller.downloadCurrentAlbum();	
+            if(currentAlbum != null)
             	return true;
-            return false;
-            		
+            return false;   		
         }
  
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
-                currentAlbums = new ArrayList<CurrentAlbum>();
-                for(Album a: albums) {
-                	currentAlbums.add(new CurrentAlbum(a.getId(),a.getAlbumTitle()));
-                }
-                
-                chooseAlbum.setAdapter(new AdapterForCurrentAlbum(getActivity().getApplicationContext(),currentAlbums));
-                int currentAlbumPosition = Utils.getPositionCurrentAlbum(currentAlbums);
-                if(currentAlbumPosition != -1) {
-                	chooseAlbum.setSelection(currentAlbumPosition);
-                }
-                //Default
-                else
-                	chooseAlbum.setSelection(0);
-                
-                chooseAlbum.setVisibility(View.VISIBLE);
-            	mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
+        		//Current album:
+        		currentAlbumCover.setVisibility(View.VISIBLE);
+            	currentAlbumName.setVisibility(View.VISIBLE);
+        		ImageLoader.getInstance().displayImage(currentAlbum.getCoverPhoto(),currentAlbumCover);
+        		currentAlbumName.setText(currentAlbum.getTitle());
+        		setCurrentAlbum.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO show dialog with all albums and check current album
+						showDialogChooseCurrentAlbum();
+					}
+				});
         	}
         	else {
-        		noAlbums.setVisibility(View.VISIBLE);
-        		chooseAlbum.setVisibility(View.INVISIBLE);
-        		mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
+        		//noAlbums.setVisibility(View.VISIBLE);
+        		//mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
         	}
         		
         }
@@ -527,14 +506,14 @@ public class FragmentProfile extends Fragment {
 			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
 		}
     }
-	
+	//TODO
 	private class SetCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
     	
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
-        	chooseAlbum.setVisibility(View.INVISIBLE);
-        	mProgressBarCurrentAlbum.setVisibility(View.VISIBLE);
+        	
+        	
         }
  
         @Override
@@ -545,8 +524,7 @@ public class FragmentProfile extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
-        		chooseAlbum.setVisibility(View.VISIBLE);
-            	mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
+        		
         	}
         	else
         		Toast.makeText(getActivity(),"0 albums",  Toast.LENGTH_LONG).show();

@@ -33,7 +33,6 @@ public class CurrentAlbum implements Parcelable {
 		}
 	};
 
-	
 	public CurrentAlbum(JSONObject currentAlbum) {
 		try {
 			this.id = currentAlbum.getString("id");

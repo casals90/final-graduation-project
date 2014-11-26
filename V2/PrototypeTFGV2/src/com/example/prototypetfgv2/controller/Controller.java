@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONArray;
 
@@ -29,9 +28,6 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
  
 public class Controller extends Application {
@@ -170,7 +166,7 @@ public class Controller extends Application {
 	
 	public void logout() {
 		parseFunctions.logout();
-		//Log.v("prototypev1", "users logout "+ParseUser.getCurrentUser()+" local "+appClass.getUser());
+		deleteCurrentUser();
 	}
 	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String albumId) {
@@ -327,8 +323,16 @@ public class Controller extends Application {
 	}
 	
 	public String getCurrentAlbum() {
-		//return parseFunctions.getCurrentAlbum();
 		return currentUser.getCurrentAlbum();
+	}
+	
+	public CurrentAlbum downloadCurrentAlbum() {
+		String idCurrentAlbum = getCurrentAlbum();
+		return parseFunctions.getCurrentAlbum();
+	}
+	
+	public void deleteCurrentUser() {
+		currentUser = null;
 	}
 
 	//Social Network module

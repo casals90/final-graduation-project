@@ -137,7 +137,7 @@ public class SignUpActivity extends Activity {
 			progressDialog.dismiss();
 			if (success) {
 				//finish();
-				Log.v("prototypev1","correcte onPostExecute");
+				controller.downloadCurrentUser();
 				goToMainActivity();
 			} else {
 				Log.v("prototypev1","sign up cancelat ");

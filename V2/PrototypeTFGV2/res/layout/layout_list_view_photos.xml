@@ -16,6 +16,15 @@
         android:dividerHeight="5dp"
         android:listSelector="@android:color/transparent"
         android:visibility="visible" />
+    
+    <TextView
+        android:id="@+id/no_photos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:layout_below="@+id/button_logout"
+        android:text="@string/no_photos"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

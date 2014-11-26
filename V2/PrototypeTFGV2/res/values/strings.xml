@@ -57,7 +57,7 @@
     <string name="members_of_album">members of album</string>
     <string name="album_title">album title</string>
     <string name="my_albums">My albums</string>
-    <string name="no_album">You dont have any album</string>
+    <string name="no_album">You dont have any albums</string>
     <string name="like">like</string>
     <string name="unlike">unlike</string>
     <string name="label_likes">likes</string>
@@ -72,6 +72,7 @@
     <string name="enter_photo_title">Input photo title</string>
     <string name="new_album">New album</string>
     <string name="album_settings">Album settings</string>
+    <string name="no_current_album">You dont have current album. Change in a profile</string>
     <string name="add_photo_from_gallery">Add photo from gallery</string>
 
     <!-- Comments and likes -->
@@ -85,7 +86,9 @@
     <string name="label_friends">friends number</string>
     <string name="label_photos">photos</string>
     <string name="number_x">X</string>
-    <string name="current_album">current album</string>
+    <string name="current_album">current album:</string>
+    <string name="current_album_name">album name</string>
+    <string name="user_not_photos">You dont have any photos</string>
 
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>
@@ -99,6 +102,7 @@
     <string name="search_people">search people</string>
     <string name="commonFriends">common friends</string>
     <string name="no_results">0 matches</string>
+    <string name="no_friends">You dont have any friends</string>
 
     <!-- Menu set current photo -->
     <string name="remove_current_photo">Remove current photo</string>

@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
@@ -35,6 +36,7 @@ public class ListViewPhotosFragment extends Fragment {
 	private static final int REQUEST_PICK_IMAGE = 2;
 	
 	private ListView mListViewPhotos;
+	private TextView mTextView;
 	private AdapterListViewShowPhotos adapter;
 	private Controller controller;
 	private ArrayList<Photo> photos;
@@ -70,8 +72,7 @@ public class ListViewPhotosFragment extends Fragment {
 		View view = inflater.inflate(R.layout.layout_list_view_photos,container,false);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 		mListViewPhotos = (ListView) view.findViewById(R.id.photos);
-		//New task
-		//new DownloadPhotosTask().execute(album.getId());
+		mTextView = (TextView) view.findViewById(R.id.no_photos);
 		return view;
 	}
 	
@@ -171,6 +172,7 @@ public class ListViewPhotosFragment extends Fragment {
         protected void onPreExecute() {
         	super.onPreExecute();
         	mListViewPhotos.setVisibility(View.INVISIBLE);
+        	mTextView.setVisibility(View.INVISIBLE);
         	mProgressBar.setVisibility(View.VISIBLE);
         }
  
@@ -186,10 +188,10 @@ public class ListViewPhotosFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
+			mProgressBar.setVisibility(View.INVISIBLE);
 			if(result) {
 				mListViewPhotos.setVisibility(View.VISIBLE);
 	        	mProgressBar.setVisibility(View.INVISIBLE);
-	        	
 	        	boolean pauseOnScroll = false; 
 				boolean pauseOnFling = true;
 				PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling);
@@ -204,6 +206,8 @@ public class ListViewPhotosFragment extends Fragment {
 					}
 				});
 			}
+			else 
+				mTextView.setVisibility(View.VISIBLE);
 		}
 
 		@Override

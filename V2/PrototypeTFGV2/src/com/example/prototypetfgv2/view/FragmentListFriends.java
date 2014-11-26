@@ -15,13 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class FragmentListFriends extends Fragment {
 
 	private ListView mListView;
 	private ProgressBar mProgressBar;
-	
+	private TextView mTextView;
 	private Controller controller;
 	private ListviewFriendsAdapter adapter;
 	
@@ -44,6 +45,7 @@ public class FragmentListFriends extends Fragment {
 		
 		mListView = (ListView) view.findViewById(R.id.listview_friends);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+		mTextView = (TextView) view.findViewById(R.id.no_friends);
 		
 		new DownloadFriendsTask().execute();
 		return view;
@@ -55,7 +57,8 @@ public class FragmentListFriends extends Fragment {
 		@Override
 	    protected void onPreExecute() {
 			mProgressBar.setVisibility(View.VISIBLE);
-			mListView.setVisibility(View.INVISIBLE);      
+			mListView.setVisibility(View.INVISIBLE); 
+			mTextView.setVisibility(View.INVISIBLE);
 	    };
 		
 		@Override
@@ -66,15 +69,13 @@ public class FragmentListFriends extends Fragment {
 		@Override
 		protected void onPostExecute(final ArrayList<User> friends) {
 			mProgressBar.setVisibility(View.INVISIBLE);
-			if(friends != null) {
+			if(friends != null && friends.size() > 0) {
 				adapter = new ListviewFriendsAdapter(getActivity().getApplicationContext(), friends);
 				mListView.setVisibility(View.VISIBLE);
 				mListView.setAdapter(adapter);
 			}
-			else {
-				//TODO textview 0 friends
-			}
-			
+			else 
+				mTextView.setVisibility(View.VISIBLE);
 		}
 
 		@Override

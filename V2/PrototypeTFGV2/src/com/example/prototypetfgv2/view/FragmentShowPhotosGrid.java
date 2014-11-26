@@ -74,8 +74,6 @@ public class FragmentShowPhotosGrid extends Fragment {
 		gridView = (GridView) view.findViewById(R.id.gridView_photos);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_download_albums);
 		noPhotos = (TextView) view.findViewById(R.id.no_photos);
-		//New task
-		//new DownloadPhotosTask().execute(album.getId());
 		return view;
 	}
 	
@@ -167,6 +165,7 @@ public class FragmentShowPhotosGrid extends Fragment {
         protected void onPreExecute() {
         	super.onPreExecute();
         	gridView.setVisibility(View.INVISIBLE);
+        	noPhotos.setVisibility(View.INVISIBLE);
         	mProgressBar.setVisibility(View.VISIBLE);
         }
  
@@ -182,6 +181,7 @@ public class FragmentShowPhotosGrid extends Fragment {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
+			mProgressBar.setVisibility(View.INVISIBLE); 
 			if(result) {
 				gridView.setVisibility(View.VISIBLE);
 	        	mProgressBar.setVisibility(View.INVISIBLE);        	
@@ -196,6 +196,8 @@ public class FragmentShowPhotosGrid extends Fragment {
 					}
 				});
 			}
+			else
+				noPhotos.setVisibility(View.INVISIBLE);
 		}
 
 		@Override

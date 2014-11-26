@@ -35,10 +35,10 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 		super.onCreate(savedInstanceState);
 		controller = (Controller)getActivity().getApplicationContext();
 		
-		Bundle data = this.getArguments();
+		/*Bundle data = this.getArguments();
 		if(data != null) {
 			currentAlbums = data.getParcelableArrayList("listCurrentAlbums");
-		}
+		}*/
 	}
     
 	@Override
@@ -46,17 +46,17 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 
         View view = inflater.inflate(R.layout.dialog_fragment_choose_album,null);
         listAlbums = (ListView) view.findViewById(R.id.list_choose_album);
-        listAlbums.setAdapter(new AdapterForCurrentAlbum(getActivity().getApplicationContext(),currentAlbums));
+        /*listAlbums.setAdapter(new AdapterForCurrentAlbum(getActivity().getApplicationContext(),currentAlbums));
         listAlbums.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				//Put the selected album like a current album
-				//controller.setCurrentAlbum(currentAlbums.get(position));
+				controller.setCurrentAlbum(currentAlbums.get(position));
 				currentAlbum = currentAlbums.get(position);
 				new SetCurrentAlbumTask().execute();
 			}
-		});
+		});*/
         
         mProgressBarDialog = (ProgressBar) view.findViewById(R.id.progressBarDialog);
         getDialog().setTitle("My Dialog Title");

@@ -52,6 +52,8 @@ public class UploadPhotoActivity extends Activity {
 	private Bitmap photo;
 	private Boolean comeFromTakePhoto;
 	
+	private boolean takePhoto; 
+	
 	private Controller controller;
 	private static Activity activity;
 	
@@ -69,8 +71,7 @@ public class UploadPhotoActivity extends Activity {
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 		accept = (ImageButton) findViewById(R.id.accept);
 		cancel = (ImageButton) findViewById(R.id.cancel);
-		//check current album
-		//new DownloadCurrentAlbumTask().execute();
+		
 		//Take photo
 		Intent data = getIntent();
 		
@@ -81,7 +82,13 @@ public class UploadPhotoActivity extends Activity {
 			comeFromTakePhoto = true;
 			//Put current album id
 			idAlbum = controller.getCurrentAlbum();
-			dispatchTakePictureIntent();
+			if(idAlbum != null)
+				dispatchTakePictureIntent();
+			else {
+				//TODO Dialog information not take photo
+				//Clicar ok gotoprofile
+				showConfirmDialog();
+			}
 		}	
 		else {
 			comeFromTakePhoto = false;
@@ -186,15 +193,15 @@ public class UploadPhotoActivity extends Activity {
     }*/
 	
 	public void showConfirmDialog() {
-		//AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity().getApplicationContext());
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(getString(R.string.no_album))
+		builder.setMessage(getString(R.string.no_current_album))
 		       .setCancelable(false)
 		       .setTitle(getString(R.string.title_info_dialog))
 		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
 		                //do things
 		        	    //goToAlbums();
+		        	   finish();
 		           }
 		       });
 		AlertDialog alert = builder.create();
