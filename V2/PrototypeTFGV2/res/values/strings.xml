@@ -89,6 +89,7 @@
     <string name="current_album">current album:</string>
     <string name="current_album_name">album name</string>
     <string name="user_not_photos">You dont have any photos</string>
+    <string name="set_current_album">Set current album</string>
 
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>

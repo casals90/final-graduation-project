@@ -12,10 +12,11 @@ public class CurrentAlbum implements Parcelable {
 	private String title;
 	private String coverPhoto;
 	
-	public CurrentAlbum(String id, String title) {
+	public CurrentAlbum(String id, String title, String coverPhoto) {
 		super();
 		this.id = id;
 		this.title = title;
+		this.coverPhoto = coverPhoto;
 	}
 	
 	public CurrentAlbum(Parcel in) {

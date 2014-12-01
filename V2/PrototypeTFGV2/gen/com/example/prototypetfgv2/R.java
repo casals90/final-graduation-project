@@ -637,7 +637,7 @@ containing a value of this type.
         public static final int action_settings=0x7f07001c;
         /**  Profile users to search 
          */
-        public static final int add_friend=0x7f070070;
+        public static final int add_friend=0x7f070071;
         public static final int add_members=0x7f070040;
         public static final int add_new_album=0x7f07003e;
         public static final int add_photo_from_gallery=0x7f070055;
@@ -653,8 +653,8 @@ containing a value of this type.
         /**  Strings for Login and Sign up activities 
          */
         public static final int app_tittle=0x7f07001f;
-        public static final int cancel=0x7f070063;
-        public static final int choose_from_library=0x7f07006d;
+        public static final int cancel=0x7f070064;
+        public static final int choose_from_library=0x7f07006e;
         public static final int com_facebook_choose_friends=0x7f07000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070000;
         public static final int com_facebook_internet_permission_error_message=0x7f070013;
@@ -682,18 +682,18 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f070009;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f07000a;
         public static final int comment=0x7f070057;
-        public static final int commonFriends=0x7f070068;
+        public static final int commonFriends=0x7f070069;
         public static final int current_album=0x7f07005e;
         public static final int current_album_name=0x7f07005f;
-        public static final int current_friend=0x7f070072;
+        public static final int current_friend=0x7f070073;
         public static final int date_of_comment=0x7f070058;
         public static final int date_of_photo=0x7f07004e;
-        public static final int delete=0x7f070062;
-        public static final int delete_friend=0x7f070071;
+        public static final int delete=0x7f070063;
+        public static final int delete_friend=0x7f070072;
         /**  Delete photo dialog 
          */
-        public static final int dialog_delete_photo=0x7f070061;
-        public static final int dialog_delete_photo_message=0x7f070065;
+        public static final int dialog_delete_photo=0x7f070062;
+        public static final int dialog_delete_photo_message=0x7f070066;
         public static final int enter_photo_title=0x7f070051;
         /**  explain images 
          */
@@ -704,8 +704,8 @@ containing a value of this type.
         public static final int friends=0x7f070037;
         public static final int grid_view_mode=0x7f07004f;
         public static final int hello_world=0x7f07001b;
-        public static final int import_from_facebook=0x7f07006e;
-        public static final int import_from_twitter=0x7f07006f;
+        public static final int import_from_facebook=0x7f07006f;
+        public static final int import_from_twitter=0x7f070070;
         public static final int import_profile_picture_from_camera=0x7f070030;
         public static final int import_profile_picture_from_facebook=0x7f07002d;
         public static final int import_profile_picture_from_library=0x7f07002f;
@@ -715,7 +715,7 @@ containing a value of this type.
         public static final int input_album_title=0x7f07003f;
         /**  Friends 
          */
-        public static final int input_username=0x7f070066;
+        public static final int input_username=0x7f070067;
         public static final int input_username_members=0x7f070041;
         public static final int label_albums=0x7f07005a;
         public static final int label_comments=0x7f070049;
@@ -737,10 +737,10 @@ containing a value of this type.
         public static final int news=0x7f070036;
         public static final int no_album=0x7f070045;
         public static final int no_current_album=0x7f070054;
-        public static final int no_friends=0x7f07006a;
+        public static final int no_friends=0x7f07006b;
         public static final int no_import_profile_picture=0x7f070031;
         public static final int no_photos=0x7f07004b;
-        public static final int no_results=0x7f070069;
+        public static final int no_results=0x7f07006a;
         public static final int number_x=0x7f07005d;
         /**  keys 
          */
@@ -756,36 +756,37 @@ containing a value of this type.
         public static final int remember_login=0x7f070028;
         /**  Menu set current photo 
          */
-        public static final int remove_current_photo=0x7f07006b;
+        public static final int remove_current_photo=0x7f07006c;
         public static final int repeat_password=0x7f070022;
-        public static final int search_people=0x7f070067;
+        public static final int search_people=0x7f070068;
+        public static final int set_current_album=0x7f070061;
         public static final int sign_up=0x7f070024;
-        public static final int take_photo=0x7f07006c;
-        public static final int title_activity_comments=0x7f070077;
-        public static final int title_activity_configure_new_profil_from_social_network=0x7f070075;
-        public static final int title_activity_full_screen_photos_current_user=0x7f07007f;
-        public static final int title_activity_init=0x7f070073;
-        public static final int title_activity_input_username=0x7f070076;
-        public static final int title_activity_list_view_photos=0x7f07007d;
-        public static final int title_activity_loading_twitter_information=0x7f070074;
+        public static final int take_photo=0x7f07006d;
+        public static final int title_activity_comments=0x7f070078;
+        public static final int title_activity_configure_new_profil_from_social_network=0x7f070076;
+        public static final int title_activity_full_screen_photos_current_user=0x7f070080;
+        public static final int title_activity_init=0x7f070074;
+        public static final int title_activity_input_username=0x7f070077;
+        public static final int title_activity_list_view_photos=0x7f07007e;
+        public static final int title_activity_loading_twitter_information=0x7f070075;
         /**  activities names 
          */
         public static final int title_activity_main=0x7f070039;
-        public static final int title_activity_show_full_screen_photo_profile=0x7f07007e;
-        public static final int title_activity_show_photo=0x7f070079;
+        public static final int title_activity_show_full_screen_photo_profile=0x7f07007f;
+        public static final int title_activity_show_photo=0x7f07007a;
         public static final int title_activity_sign_up=0x7f070026;
-        public static final int title_activity_upload_photo=0x7f070078;
+        public static final int title_activity_upload_photo=0x7f070079;
         public static final int title_info_dialog=0x7f07004d;
         public static final int title_my_photos=0x7f07003d;
-        public static final int title_section1=0x7f07007a;
-        public static final int title_section2=0x7f07007b;
-        public static final int title_section3=0x7f07007c;
+        public static final int title_section1=0x7f07007b;
+        public static final int title_section2=0x7f07007c;
+        public static final int title_section3=0x7f07007d;
         public static final int unlike=0x7f070047;
         public static final int upload_by=0x7f07004c;
         public static final int user_not_photos=0x7f070060;
         public static final int username=0x7f070020;
         public static final int username_already_exist=0x7f070032;
-        public static final int yes=0x7f070064;
+        public static final int yes=0x7f070065;
         public static final int zero=0x7f07004a;
     }
     public static final class style {

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -33,7 +34,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,25 +42,24 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.utils.Utils;
+import com.example.prototypetfgv2.view.FragmentDialogChooseCurrentAlbum.OnSetCurrentAlbum;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class FragmentProfile extends Fragment {
+public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 	
 	private static final String MyPREFERENCES = "PrototypeTFGV1";
 	
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final int REQUEST_PICK_IMAGE = 2;
+	private static final int REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM = 3;
 	
 	private Button buttonLogOut;
 	private ImageButton setCurrentAlbum;
 	private ImageView profilePicture,currentAlbumCover;
 	private TextView username, photosNumber,albumsNumber,friendsNumber,noAlbums,currentAlbumName;
 	private ProgressBar mProgressBar,mProgressBarCurrentAlbum,mProgressBarListPhotos;
-	private Spinner chooseAlbum;
 	private ListView mListView;
 	
-	//private List<Album> albums;
-	//private ArrayList<CurrentAlbum> currentAlbums;
 	private CurrentAlbum currentAlbum;
 	private ArrayList<Photo> photos;
 	
@@ -90,7 +89,6 @@ public class FragmentProfile extends Fragment {
 		//Current album:
 		currentAlbumCover = (ImageView) view.findViewById(R.id.current_album_cover);
 		currentAlbumName = (TextView) view.findViewById(R.id.current_album_name);
-		new DownloadCurrentAlbumTask().execute();
 		setCurrentAlbum = (ImageButton) view.findViewById(R.id.set_current_album);
 		
 		mProgressBarListPhotos = (ProgressBar) view.findViewById(R.id.progressBarListPhotos);
@@ -156,6 +154,7 @@ public class FragmentProfile extends Fragment {
 	public void onResume() {
 		super.onResume();
 		new DownloadPhotosTask().execute();
+		new DownloadCurrentAlbumTask().execute();
 	}
 
 	public void logout() {
@@ -216,8 +215,22 @@ public class FragmentProfile extends Fragment {
 	
 	public void showDialogChooseCurrentAlbum() {
 		FragmentManager fm = getActivity().getSupportFragmentManager();
-        FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
-        dialog.show(fm, "fragment_edit_name");
+        /*FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
+        dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
+        //dialog.show(fm, "fragment_edit_name");
+		getTargetFragment().onActivityResult(getTargetRequestCode(),Activity.RESULT_OK, getActivity().getIntent());*/
+		FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
+		dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
+        dialog.show(fm, "add_friend_dialog");
+	}
+	
+
+	@Override
+	public void onSetCurrentAlbum(CurrentAlbum newCurrentAlbum) {
+		// TODO Auto-generated method stub
+		currentAlbumName.setText(newCurrentAlbum.getTitle());
+		//currentAlbumCover.setImageBitmap(newCurrentAlbum.getCoverPhoto());
+		ImageLoader.getInstance().displayImage(newCurrentAlbum.getCoverPhoto(),currentAlbumCover);
 	}
 
 	//Choose from gallery
@@ -263,7 +276,7 @@ public class FragmentProfile extends Fragment {
 		        new SetProfilePictureTask().execute();
 			}
 			break;
-
+			
 		default:
 			break;
 		}

@@ -2,7 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -43,13 +42,11 @@ public class FullScreenPhotosProfileAdapter extends PagerAdapter {
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	private String idAlbum;
-	private ActionBar actionBar;
 	
 	public FullScreenPhotosProfileAdapter(Activity activity,ArrayList<Photo> photos) {
 		super();
 		this.activity = activity;
 		this.photos = photos;
-		this.actionBar = activity.getActionBar();
 		this.imageLoader = ImageLoader.getInstance();
 		this.controller = (Controller) activity.getApplication();
 		initDisplayOptions();
@@ -153,7 +150,6 @@ public class FullScreenPhotosProfileAdapter extends PagerAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO hidden or show full screen
 				Log.v("prototypev1","click viewPager ");
 				fullScreen(viewHolder.like,viewHolder.comment);
 			}
@@ -197,11 +193,9 @@ public class FullScreenPhotosProfileAdapter extends PagerAdapter {
 	public void fullScreen(Button like,Button comment) {
 		fullScreen = !fullScreen;
 		if(fullScreen) {
-			actionBar.hide();
 			showOrHiddenButtons(fullScreen, like, comment);
 		} 
 		else {
-			actionBar.show();
 			showOrHiddenButtons(fullScreen, like, comment);
 		}
 	}
