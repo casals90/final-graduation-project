@@ -335,6 +335,10 @@ public class Controller extends Application {
 		currentUser = null;
 	}
 
+	public ArrayList<Album> downloadCommonAlbums(String idFriend) {
+		return parseFunctions.downloadCommonAlbums(currentUser, idFriend);
+	}
+	
 	//Social Network module
 	public boolean likePhoto(String idPhoto,String idAlbum) {
 		currentUser.addLike(idPhoto);

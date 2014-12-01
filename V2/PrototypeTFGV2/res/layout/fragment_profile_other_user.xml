@@ -6,13 +6,21 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp">
 
-    <ImageView
+     <ImageView
         android:id="@+id/profilePicture"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ic_launcher"
         android:layout_marginRight="10dp"
-        android:contentDescription="@string/explain"/>
+        android:contentDescription="@string/explain"
+        android:visibility="visible"/>
+    
+    <ProgressBar
+        android:id="@+id/progressBarChangeProfilePicture"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginRight="10dp"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/username"
@@ -21,6 +29,88 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/profilePicture"
         android:text="@string/username"/>
+    
+    <LinearLayout
+        android:id="@+id/profile_information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_toRightOf="@+id/profilePicture"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp">
+    
+	    <LinearLayout
+	        android:id="@+id/photos"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:layout_marginRight="10dp"
+	        android:clickable="true">
+	        
+	        <TextView
+	            android:id="@+id/photos_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/zero"/>
+	        
+	        <TextView
+	            android:id="@+id/label_photos_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/label_photos"/>      
+		</LinearLayout>
+		
+	    <LinearLayout
+	        android:id="@+id/albums"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:layout_marginRight="10dp"
+	        android:clickable="true">
+	      
+	        <TextView
+	            android:id="@+id/albums_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/zero"/>
+	        
+	        <TextView
+	            android:id="@+id/label_albums_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/label_albums"/>   
+		</LinearLayout>
+		
+	    <LinearLayout
+	        android:id="@+id/friends"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:clickable="true">
+	      
+	        <TextView
+	            android:id="@+id/friends_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/zero"/>
+	        
+	        <TextView
+	            android:id="@+id/label_friends_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/friends"/>     
+		</LinearLayout>
+	</LinearLayout>
     
     <Button
         android:id="@+id/button_add_friend" 
@@ -43,5 +133,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/profilePicture"
-        android:visibility="invisible"/>        
+        android:visibility="invisible"/>  
+        
+    <TextView
+        android:id="@+id/common_albums"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_add_friend"
+        android:text="@string/common_albums"/>
+    
+    <ListView
+        android:id="@+id/list_albums"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/common_albums"/>
+    
+     <ProgressBar
+         android:id="@+id/progressBarCommonAlbums"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerInParent="true"
+         android:visibility="invisible"
+         android:layout_marginRight="10dp"/>
+
 </RelativeLayout>

@@ -108,7 +108,6 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
 		//download profile picture from Parse
-		//Bitmap picture = controller.getProfilePicture();
 		String url = controller.getProfilePictureUrl();
 		if(url != null)
 			ImageLoader.getInstance().displayImage(url,profilePicture);
@@ -141,7 +140,6 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 			
 			@Override
 			public void onClick(View v) {
-				Log.v("prototypev1","click friends ");
 				goToFragmentListFriends();
 			}
 		});
@@ -215,10 +213,6 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 	
 	public void showDialogChooseCurrentAlbum() {
 		FragmentManager fm = getActivity().getSupportFragmentManager();
-        /*FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
-        dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
-        //dialog.show(fm, "fragment_edit_name");
-		getTargetFragment().onActivityResult(getTargetRequestCode(),Activity.RESULT_OK, getActivity().getIntent());*/
 		FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
 		dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
         dialog.show(fm, "add_friend_dialog");
@@ -227,9 +221,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 
 	@Override
 	public void onSetCurrentAlbum(CurrentAlbum newCurrentAlbum) {
-		// TODO Auto-generated method stub
 		currentAlbumName.setText(newCurrentAlbum.getTitle());
-		//currentAlbumCover.setImageBitmap(newCurrentAlbum.getCoverPhoto());
 		ImageLoader.getInstance().displayImage(newCurrentAlbum.getCoverPhoto(),currentAlbumCover);
 	}
 
@@ -407,7 +399,6 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 		@Override
 		protected void onPostExecute(final ArrayList<Photo> photosUser) {
 			mProgressBarListPhotos.setVisibility(View.INVISIBLE);
-			Log.v("prototypev1", "photos user"+photosUser);
 			if(photosUser != null && photosUser.size() > 0) {
 				photos = photosUser;
 				adapter = new ShowPhotosInProfileAdapter(getActivity().getApplicationContext(),photos,controller,getActivity());

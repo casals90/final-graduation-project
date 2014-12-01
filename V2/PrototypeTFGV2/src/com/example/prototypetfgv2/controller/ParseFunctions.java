@@ -112,17 +112,42 @@ public class ParseFunctions {
     	return true;
     }
     
-    // No testejada
-    /*public int getAlbumsNumber() {
-    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
-    	query.whereEqualTo("idMembers",ParseUser.getCurrentUser().getObjectId());
-    	try {
-			return query.count();
+    public ArrayList<Album> downloadCommonAlbums(CurrentUser currentUser,String idFriend) {
+    	ArrayList<String> albumsCurrentUser = new ArrayList<String>();
+		ArrayList<String> albumsToDownload = new ArrayList<String>();
+		ArrayList<Album> commonAlbums = new ArrayList<Album>();
+		//Download idAlbums from current user
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
+		query.whereEqualTo("idUser",currentUser.getId());
+		query.orderByDescending("createdAt");
+		try {
+			List<ParseObject> parseAlbumsMembers = query.find();
+			for(ParseObject o:parseAlbumsMembers) {
+				albumsCurrentUser.add(o.getString("idAlbum"));
+			}
 		} catch (ParseException e) {
 			e.printStackTrace();
-			return -1;
+			return null;
 		}
-    }*/
+		//Download idAlbums from friend user
+		ParseQuery<ParseObject> queryFriend = ParseQuery.getQuery("AlbumMember");
+		queryFriend.whereEqualTo("idUser",idFriend);
+		queryFriend.orderByDescending("createdAt");
+		try {
+			List<ParseObject> parseAlbumsMembers = queryFriend.find();
+			for(ParseObject o:parseAlbumsMembers) {
+				String idAlbum = o.getString("idAlbum");
+				if(albumsCurrentUser.contains(idAlbum))
+					albumsToDownload.add(idAlbum);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+		//Download album list
+		commonAlbums = downloadAlbums(albumsToDownload, currentUser);
+    	return commonAlbums;
+    }
     
     public ArrayList<String> getPhotosFromAlbumLikedCurrentUser(String idUser,String idAlbum) {
     	ArrayList<String> likes = new ArrayList<String>();
@@ -132,11 +157,9 @@ public class ParseFunctions {
     	query.whereEqualTo("ownerAlbum",idAlbum);
     	try {
 			List<ParseObject> parseLikes = query.find();
-			//Log.v("prototypev1", "likes parse function PArseobject "+parseLikes.size());
 			for(ParseObject l: parseLikes) {
 				likes.add(l.getString("idPhoto"));
 			}
-			//Log.v("prototypev1", "likes parse function "+likes.size());
 			return likes;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -150,7 +173,6 @@ public class ParseFunctions {
         // Upload the image into Parse Cloud
         file.saveInBackground();
         final ParseObject photoUpload = new ParseObject("Photo");
-        //photoUpload.put("photo",file);
         photoUpload.put("title",title);
         photoUpload.put("likesNumber",0);
         photoUpload.put("commentsNumber",0);
@@ -173,7 +195,6 @@ public class ParseFunctions {
 			//Increment number of photos
 			incrementPhotosNumberInAlbum(idAlbum);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -239,27 +260,21 @@ public class ParseFunctions {
 	}
 	
 	public String getURLPhoto(String idPhotoFile) {
-		Log.v("prototypev1", "get url start idPhotoFile ="+idPhotoFile);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("PhotoFile");
 		query.whereEqualTo("objectId",idPhotoFile);
 		try {
-			//ParseObject file = query.getFirst();
 			List<ParseObject> obs = query.find();
 			ParseObject file = obs.get(0);
-			Log.v("prototypev1", "despres get first recive file PArseOBject "+file.getObjectId());
 			ParseFile f = file.getParseFile("photo");
 			String url = f.getUrl();
-			Log.v("prototypev1", "get url correct ");
 			return url;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			Log.v("prototypev1", "error get url "+e);
 			return null;
 		}
 	}
 	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String idAlbum) {
-		//Log.v("prototypev1", "downloadphotos from album ");
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		HashMap<String, User> ownerUsers = new HashMap<String, User>();
 		User ownerUser;
@@ -269,7 +284,6 @@ public class ParseFunctions {
 		query.orderByDescending("createdAt");
 		try {
 			List<ParseObject> obs = query.find();
-			//Log.v("prototypev1", "downloadphotos from album "+obs.size());
 			for(ParseObject o : obs) {
 				String idUser = o.getString("ownerUser");
 				//Search likes and comments number
@@ -302,7 +316,6 @@ public class ParseFunctions {
 	}
 	
 	public User getUser(String id) {
-		//Log.v("prototypev1", "get user start");
 		User user;
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereEqualTo("objectId",id);
@@ -310,10 +323,9 @@ public class ParseFunctions {
 			ParseUser u = query.getFirst();
 			String url = u.getString("profilePictureUrl");
 			if(url == null)
-				user = new User(u.getObjectId(),u.getUsername(),null);
+				user = new User(u.getObjectId(),u.getUsername(),null,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber"));
 			else
-				user = new User(u.getObjectId(),u.getUsername(),url);
-			Log.v("prototypev1", "get user end");
+				user = new User(u.getObjectId(),u.getUsername(),url,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber"));
 			return user;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -327,7 +339,6 @@ public class ParseFunctions {
 		try {
 			return query.count();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			return -1;
 		}
 	}
@@ -335,14 +346,12 @@ public class ParseFunctions {
 	public ArrayList<Album> getAlbums(CurrentUser currentUser) {
 		ArrayList<Album> albums = new ArrayList<Album>();
 		ArrayList<String> albumsId = new ArrayList<String>();
-		Log.v("prototypev1", "Start download albums");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
 		query.whereEqualTo("idUser",currentUser.getId());
 		query.orderByDescending("createdAt");
 			
 		try {
 			List<ParseObject> listAlbumMember = query.find();
-			Log.v("prototypev1", "albums number "+listAlbumMember.size());
 			if(listAlbumMember.size() == 0) {
 				return null;
 			}
@@ -362,7 +371,7 @@ public class ParseFunctions {
 		ArrayList<Album> albums = new ArrayList<Album>();
 		
 		for(int i = 0; i < idAlbums.size(); i++) {
-			Log.v("prototypev1", "downlaod album "+i);
+			//Log.v("prototypev1", "downlaod album "+i);
 			ParseQuery<ParseObject> query = ParseQuery.getQuery(ALBUM);
 			query.whereEqualTo("objectId",idAlbums.get(i));
 			try {
@@ -373,12 +382,14 @@ public class ParseFunctions {
 				//download members
 				ArrayList<String> members = getMembers(a.getObjectId());
 				if(photoNumber > 0) {
-					ArrayList<String> idPhotos = getPhotosFromAlbum(a.getObjectId());
-					int random = Utils.getRandomInt(idPhotos.size());
+					//ArrayList<String> idPhotos = getPhotosFromAlbum(a.getObjectId());
+					//int random = Utils.getRandomInt(idPhotos.size());
 					//Download Random photo
-					Photo photo = downloadPhoto(idPhotos.get(random));
-					albums.add(new Album(a.getObjectId(),photo.getPhoto(),a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
+					//Photo photo = downloadPhoto(idPhotos.get(random));
+					String photoURL = getLastPhotoFromAlbum(a.getObjectId());
+					//albums.add(new Album(a.getObjectId(),photo.getPhoto(),a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
 					//getPhotoMoreLikesInAlbum(a.getObjectId());
+					albums.add(new Album(a.getObjectId(),photoURL,a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
 				}
 				else 
 					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
@@ -390,6 +401,19 @@ public class ParseFunctions {
 			Log.v("prototypev1", "end downlaod album "+i);
 		}
 		return albums;
+	}
+	
+	public String getLastPhotoFromAlbum(String idAlbum) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereEqualTo("ownerAlbum",idAlbum);
+		query.orderByDescending("createdAt");
+		try {
+			ParseObject photo = query.getFirst();
+			return photo.getString("photoFileUrl");
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public ArrayList<String> getMembers(String idAlbum) {
@@ -422,34 +446,19 @@ public class ParseFunctions {
 	}
 	
 	public Photo downloadPhoto(String idPhoto) {
-		//Log.v("prototypev1", "download photo function start idPhoto "+idPhoto);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
 		query.whereEqualTo("objectId",idPhoto);
 		try {
-			//Log.v("prototypev1", "dins el try");
 			ParseObject p = query.getFirst();
-			//List<ParseObject> photos = query.find();
-			//ParseObject p = photos.get(0);
-			//ParseObject p = query.getFirst();
-			//Log.v("prototypev1", "despres getFirst");
-			//String url = getURLPhoto(p.getString("idPhotoFile"));
 			String url = p.getString("photoFileUrl");
-			//Log.v("prototypev1", "despres geturl");
-			//User ownerUser = getUser(p.getString("ownerUser"));
-			//Log.v("prototypev1", "despres ownerUser");
-			//Log.v("prototypev1", "final download only 1 photo");
-			//Error aqui
 			Photo photo =  new Photo(p.getObjectId(),p.getString("title"),url,String.valueOf(p.getCreatedAt()));
-			//Log.v("prototypev1", "return correct download photo function");
 			return photo;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			//Log.v("prototypev1", "error download photo function");
 			return null;
 		}	
 	}
 	
-	//Actulitzar amb el nombre que hi ha a la classe foto directament
 	public String getPhotoMoreLikesInAlbum(String idAlbum) {
 		//Download Album (getFirst)
 		ArrayList<String> photos = getPhotosFromAlbum(idAlbum);
@@ -474,9 +483,9 @@ public class ParseFunctions {
 				ParseUser user = query.getFirst();
 				String urlProfilePicture = user.getString("profilePictureUrl");
 				if(urlProfilePicture == null)
-					users.add(new User(user.getObjectId(),user.getUsername(), null));
+					users.add(new User(user.getObjectId(),user.getUsername(), null,user.getInt("friendsNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
 				else
-					users.add(new User(user.getObjectId(),user.getUsername(),urlProfilePicture));
+					users.add(new User(user.getObjectId(),user.getUsername(),urlProfilePicture,user.getInt("friendsNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				return null;
@@ -515,7 +524,7 @@ public class ParseFunctions {
 			List<ParseUser> parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
 				String profilePictureUrl = u.getString("profilePictureUrl");
-				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl));
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			}
 			return users;
 		} catch (ParseException e) {
@@ -536,7 +545,7 @@ public class ParseFunctions {
 			parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
 				String profilePictureUrl = u.getString("profilePictureUrl");
-				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl));
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			}
 			return users;
 		} catch (ParseException e) {
@@ -780,9 +789,9 @@ public class ParseFunctions {
 				ParseUser u = parseUsers.get(0);
 				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
 				if(profilePicture == null)
-					downloads.add(new User(u.getObjectId(),u.getUsername(), null));
+					downloads.add(new User(u.getObjectId(),u.getUsername(), null,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 				else
-					downloads.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl()));
+					downloads.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				return null;
@@ -949,21 +958,17 @@ public class ParseFunctions {
 		query.whereEqualTo("idPhoto",id);
 		try {
 			int i = query.count();
-			//Log.v("prototypev1", "end likes ");
 			return i;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			//Log.v("prototypev1", "error likes "+e);
 			return -1;
 		}
 	}
 	
 	public int countPhotoComments(String id) {
-		//Log.v("prototypev1", "comments "+id);
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
 		query.whereEqualTo("idPhoto",id);
 		try {
-			//Log.v("prototypev1", "end comments "+id);
 			return query.count();
 		} catch (ParseException e) {
 			e.printStackTrace();

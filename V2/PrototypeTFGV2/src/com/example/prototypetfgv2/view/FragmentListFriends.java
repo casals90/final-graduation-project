@@ -9,10 +9,13 @@ import com.example.prototypetfgv2.model.User;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,6 +76,13 @@ public class FragmentListFriends extends Fragment {
 				adapter = new ListviewFriendsAdapter(getActivity().getApplicationContext(), friends);
 				mListView.setVisibility(View.VISIBLE);
 				mListView.setAdapter(adapter);
+				mListView.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						goToUserProfile(friends.get(position));
+					}
+				});
 			}
 			else 
 				mTextView.setVisibility(View.VISIBLE);
@@ -85,5 +95,17 @@ public class FragmentListFriends extends Fragment {
 			Log.v("prototypev1","download friends cancelat");
 			Toast.makeText(getActivity(),"Error download friends",Toast.LENGTH_LONG).show();
 		}
+	}
+	
+	public void goToUserProfile(User user) {
+		Bundle data = new Bundle();
+		data.putParcelable("User",user);
+		FragmentProfileOtherUser fpou = new FragmentProfileOtherUser();
+		fpou.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fpou);
+		transaction.addToBackStack(null);
+		transaction.commit();	
 	}
 }

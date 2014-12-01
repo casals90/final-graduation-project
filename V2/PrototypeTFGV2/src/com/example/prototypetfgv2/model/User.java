@@ -8,12 +8,18 @@ public class User implements Parcelable {
 	String id;
 	String username;
 	String profilePicture;
+	private int friendsNumber;
+	private int photosNumber;
+	private int albumsNumber;
 	
-	public User(String id, String username, String profilePicture) {
+	public User(String id, String username, String profilePicture,int friendsNumber,int photosNumber,int albumsNumber) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.profilePicture = profilePicture;
+		this.friendsNumber = friendsNumber;
+		this.photosNumber = photosNumber;
+		this.albumsNumber = albumsNumber;
 	}
 	
 	public User(Parcel in) {
@@ -58,18 +64,47 @@ public class User implements Parcelable {
 	public int describeContents() {
 		return 0;
 	}
+	
+	public int getFriendsNumber() {
+		return friendsNumber;
+	}
+
+	public void setFriendsNumber(int friendsNumber) {
+		this.friendsNumber = friendsNumber;
+	}
+
+	public int getPhotosNumber() {
+		return photosNumber;
+	}
+
+	public void setPhotosNumber(int photosNumber) {
+		this.photosNumber = photosNumber;
+	}
+
+	public int getAlbumsNumber() {
+		return albumsNumber;
+	}
+
+	public void setAlbumsNumber(int albumsNumber) {
+		this.albumsNumber = albumsNumber;
+	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
 		dest.writeString(id);
 		dest.writeString(username);
 		dest.writeString(profilePicture);
+		dest.writeInt(friendsNumber);
+		dest.writeInt(albumsNumber);
+		dest.writeInt(photosNumber);
 	}
 	
 	private void readFromParcel(Parcel in) {
         id = in .readString();
         username = in .readString();
         profilePicture = in .readString();
+        friendsNumber = in.readInt();
+        albumsNumber = in.readInt();
+        photosNumber = in.readInt();
     }
 } 

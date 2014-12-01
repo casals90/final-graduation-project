@@ -112,8 +112,8 @@ public class FragmentAlbums extends Fragment {
         		mListViewAlbums.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
-					public void onItemClick(AdapterView<?> parent, View view,int postion, long id) {
-						goToShowAlbumListMode(albums.get(postion));
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						goToShowAlbumListMode(albums.get(position));
 					}
 				});
         	}
