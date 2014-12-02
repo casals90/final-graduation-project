@@ -2,11 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.model.Album;
-import com.example.prototypetfgv2.view.AdapterListViewShowPhotos.ViewHolder;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +10,29 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.model.Album;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 public class ListViewAlbumsAdapter extends BaseAdapter {
 
 	private ArrayList<Album> albums;
 	private LayoutInflater inflater;
 	private ImageLoader imageLoader;
+	private int positionCurrentAlbum;
 	
 	public ListViewAlbumsAdapter(ArrayList<Album> albums,Context context) {
 		this.albums = albums;
 		this.inflater = LayoutInflater.from(context);
 		this.imageLoader = ImageLoader.getInstance();
+		this.positionCurrentAlbum = -1;
+	}
+	
+	public ListViewAlbumsAdapter(ArrayList<Album> albums,Context context,int positionCurrentAlbum) {
+		this.albums = albums;
+		this.inflater = LayoutInflater.from(context);
+		this.imageLoader = ImageLoader.getInstance();
+		this.positionCurrentAlbum = positionCurrentAlbum;
 	}
 
 	@Override
@@ -43,7 +51,7 @@ public class ListViewAlbumsAdapter extends BaseAdapter {
 	}
 	
 	public class ViewHolder {
-		ImageView mImageView;
+		ImageView mImageView,currentAlbum;;
 		TextView mTextViewTitle,mTextViewPhotosNumber,mTextViewMembersNumber;
 	}
 
@@ -59,7 +67,7 @@ public class ListViewAlbumsAdapter extends BaseAdapter {
 			holder.mTextViewTitle = (TextView) view.findViewById(R.id.album_title);
 			holder.mTextViewPhotosNumber = (TextView) view.findViewById(R.id.photos_number);  
 			holder.mTextViewMembersNumber = (TextView) view.findViewById(R.id.members_number);  
-			
+			holder.currentAlbum = (ImageView) view.findViewById(R.id.current_album);
 			view.setTag(holder);
 		}
 		else
@@ -72,7 +80,10 @@ public class ListViewAlbumsAdapter extends BaseAdapter {
 		holder.mTextViewTitle.setText(album.getAlbumTitle());
 		holder.mTextViewPhotosNumber.setText(String.valueOf(album.getPhotosNumber()));
 		holder.mTextViewMembersNumber.setText(String.valueOf(album.getMembersNumber()));
-		
+		if(positionCurrentAlbum == position)
+			holder.currentAlbum.setVisibility(View.VISIBLE);
+		else
+			holder.currentAlbum.setVisibility(View.INVISIBLE);
 		return view;
 	}
 

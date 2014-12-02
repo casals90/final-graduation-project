@@ -48,7 +48,7 @@ public class ShowPhotosInProfileAdapter extends BaseAdapter {
 		this.controller = (Controller) context.getApplicationContext();
 		this.activity = activity;
 		
-		controller.getLikesFromUserPhotos();
+		//controller.getLikesFromUserPhotos();
 	}
 	
 	

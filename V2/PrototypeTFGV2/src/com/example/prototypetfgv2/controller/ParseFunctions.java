@@ -274,6 +274,40 @@ public class ParseFunctions {
 		}
 	}
 	
+	public ArrayList<Photo> downloadAllPhotosFromCurrentUser(CurrentUser currentUser) {
+		ArrayList<Photo> photos = new ArrayList<Photo>();
+		ArrayList<String> idAlbums = getAlbumsId(currentUser);
+		HashMap<String, User> ownerUsers = new HashMap<String, User>();
+		User ownerUser;
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		//query.whereEqualTo("ownerAlbum", idAlbums);
+		query.whereContainedIn("ownerAlbum", idAlbums);
+		query.orderByDescending("createdAt");
+		try {
+			List<ParseObject> parsePhotos = query.find();
+			for(ParseObject o : parsePhotos) {
+				//Log.v("prototypev1", "all photos number "+parsePhotos.size());
+				String idUser = o.getString("ownerUser");
+				if(ownerUsers.containsKey(idUser)) {
+					ownerUser = ownerUsers.get(idUser);
+				}
+				else {
+					//download and put inside the hasmap
+					ownerUser = getUser(o.getString("ownerUser"));
+					ownerUsers.put(idUser, ownerUser);
+				}
+				Photo photo = new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()),ownerUser,o.getInt("likesNumber"),o.getInt("commentsNumber"),o.getString("ownerAlbum"));
+				photos.add(photo);
+			}
+			return photos;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error download "+e);
+			return null;
+		}
+	}
+	
 	public ArrayList<Photo> downloadPhotosFromAlbum(String idAlbum) {
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		HashMap<String, User> ownerUsers = new HashMap<String, User>();
@@ -284,9 +318,9 @@ public class ParseFunctions {
 		query.orderByDescending("createdAt");
 		try {
 			List<ParseObject> obs = query.find();
+			//Log.v("prototypev1", "all photos user "+obs.size());
 			for(ParseObject o : obs) {
 				String idUser = o.getString("ownerUser");
-				//Search likes and comments number
 				if(ownerUsers.containsKey(idUser)) {
 					ownerUser = ownerUsers.get(idUser);
 				}
@@ -340,6 +374,23 @@ public class ParseFunctions {
 			return query.count();
 		} catch (ParseException e) {
 			return -1;
+		}
+	}
+	
+	public ArrayList<String> getAlbumsId(CurrentUser currentUser) {
+		ArrayList<String> albumsId = new ArrayList<String>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
+		query.whereEqualTo("idUser",currentUser.getId());
+		query.orderByDescending("createdAt");
+		try {
+			List<ParseObject> listAlbumMember = query.find();
+			for(ParseObject a:listAlbumMember) {
+				albumsId.add(a.getString("idAlbum"));
+			}
+			return albumsId;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -398,7 +449,7 @@ public class ParseFunctions {
 				Log.v("prototypev1", "error downlaod album "+e);
 				return null;
 			}
-			Log.v("prototypev1", "end downlaod album "+i);
+			//Log.v("prototypev1", "end downlaod album "+i);
 		}
 		return albums;
 	}
@@ -1028,6 +1079,23 @@ public class ParseFunctions {
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public void getAllLikes(CurrentUser currentUser) {
+		ArrayList<String> likes = new ArrayList<String>();
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
+		query.whereEqualTo("idUser",currentUser.getId());
+		try {
+			List<ParseObject> parseLikes = query.find();
+			for(ParseObject o : parseLikes) {
+				likes.add(o.getString("idPhoto"));
+			}
+			currentUser.setLikes(likes);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error download all likes"+e);
 		}
 	}
 	

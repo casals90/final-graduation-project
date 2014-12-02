@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,8 +16,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,14 +24,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.Album;
-import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.utils.BitmapUtils;
-import com.example.prototypetfgv2.utils.Utils;
 
 public class UploadPhotoActivity extends Activity {
 
@@ -85,7 +77,6 @@ public class UploadPhotoActivity extends Activity {
 			if(idAlbum != null)
 				dispatchTakePictureIntent();
 			else {
-				//TODO Dialog information not take photo
 				//Clicar ok gotoprofile
 				showConfirmDialog();
 			}

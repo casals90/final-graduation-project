@@ -8,38 +8,45 @@
         android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerInside"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/explain"
         android:background="@color/WhiteSmoke"/>
 
-    <Button
-        android:id="@+id/button_like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/White"
-        android:drawableLeft="@drawable/ic_action_good"
-        android:background="@drawable/bg_button"
- 		android:layout_alignBottom="@+id/photo"
-        android:focusable="false"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-		android:focusableInTouchMode="false"
-        android:text="@string/zero"/>
+    <LinearLayout 
+         android:id="@+id/buttons"
+         android:orientation="horizontal"
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_alignBottom="@+id/photo"
+         android:layout_alignParentRight="true">
+         
+         <Button
+	        android:id="@+id/button_like"
+	        android:layout_width="wrap_content"
+	        android:layout_height="30dp"
+	        android:textColor="@color/White"
+	        android:drawableLeft="@drawable/ic_action_good"
+	        android:background="@drawable/bg_button"
+	        android:focusable="false"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginBottom="5dp"
+			android:focusableInTouchMode="false"
+	        android:text="@string/zero"/>
     
-    <Button
-        android:id="@+id/button_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/White"
-        android:background="@drawable/bg_button"
-        android:drawableLeft="@drawable/ic_action_comment"
-        android:layout_alignBottom="@+id/photo"
-        android:focusable="false"
-		android:focusableInTouchMode="false"
-		android:layout_marginBottom="5dp"
-        android:layout_toRightOf="@+id/button_like"
-        android:text="@string/zero"/>
+	    <Button
+	        android:id="@+id/button_comment"
+	        android:layout_width="wrap_content"
+	        android:layout_height="30dp"
+	        android:textColor="@color/White"
+	        android:background="@drawable/bg_button"
+	        android:drawableLeft="@drawable/ic_action_comment"
+	        android:layout_marginRight="10dp"
+	        android:focusable="false"
+			android:focusableInTouchMode="false"
+			android:layout_marginBottom="5dp"
+	        android:text="@string/zero"/>  
+     </LinearLayout>
     
     <ProgressBar
         android:id="@+id/progressBar"

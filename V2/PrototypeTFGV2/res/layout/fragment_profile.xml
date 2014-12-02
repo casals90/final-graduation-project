@@ -29,13 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/profilePicture"
         android:text="@string/username"/>
-
-    <Button
-        android:id="@+id/button_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/username"
-        android:text="@string/logout" />
     
     <LinearLayout
         android:id="@+id/profile_information"
@@ -118,63 +111,6 @@
 	            android:text="@string/friends"/>     
 		</LinearLayout>
 	</LinearLayout>
-	
-    <TextView
-      android:id="@+id/above_line"
-      style="?android:listSeparatorTextViewStyle"
-      android:layout_width="fill_parent"
-      android:layout_below="@+id/profile_information"
-      android:layout_height="wrap_content"/>
-    
-    <LinearLayout
-        android:id="@+id/currentAlbum"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/above_line"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-	    
-        <TextView
-            android:id="@+id/label_current_album"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/current_album"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="center"/>
-        
-        <ImageView
-	        android:id="@+id/current_album_cover"
-	        android:layout_width="50dp"
-	        android:layout_height="50dp"
-	        android:src="@drawable/ic_launcher"
-	        android:layout_marginRight="5dp"
-	        android:contentDescription="@string/explain"/>
-        
-         <TextView
-            android:id="@+id/current_album_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:text="@string/current_album_name"/>
-         
-         <ImageButton 
-	        android:id="@+id/set_current_album"
-	        android:layout_height="wrap_content"
-	        android:layout_width="wrap_content"
-	        android:src="@drawable/ic_action_edit"
-	        android:contentDescription="@string/explain"
-	        android:layout_gravity="center"
-	        android:background="@drawable/selector_icons"/> 
-    </LinearLayout>
-    
-    <TextView
-		android:id="@+id/below_line"
-		style="?android:listSeparatorTextViewStyle"
-		android:layout_width="fill_parent"
-		android:layout_below="@+id/currentAlbum"
-		android:layout_marginTop="-25dp"
-		android:layout_height="wrap_content"/>
     
     <ListView
         android:id="@+id/list_my_photos"
@@ -182,12 +118,13 @@
         android:layout_height="match_parent"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:dividerHeight="5dp"
+        android:dividerHeight="2.5dp"
+        android:layout_marginTop="10dp"
         android:listSelector="@android:color/transparent"
-        android:layout_below="@+id/below_line"/>
+        android:layout_below="@+id/profile_information"/>
         
      <TextView
-        android:id="@+id/no_albums"
+        android:id="@+id/no_photos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
@@ -199,7 +136,7 @@
         android:id="@+id/progressBarListPhotos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_alignTop="@+id/list_my_photos"/>
     
 </RelativeLayout>

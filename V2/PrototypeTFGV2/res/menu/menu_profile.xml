@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item
+      android:id="@+id/options_profile"
+      android:icon="@drawable/ic_action_overflow"
+      android:title="@string/current_album"
+      android:showAsAction="always">
+      <menu>
+          <item
+		      android:id="@+id/set_current_album"
+		      android:title="@string/set_current_album"
+		      android:showAsAction="always"/>
+          <item
+		      android:id="@+id/logout"
+		      android:title="@string/logout"
+		      android:showAsAction="always"/>
+      </menu>
+	    
+   </item>  
+</menu>

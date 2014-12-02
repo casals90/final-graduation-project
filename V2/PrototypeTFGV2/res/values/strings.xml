@@ -80,13 +80,16 @@
     <string name="comment">comment</string>
     <string name="date_of_comment">date of comment</string>
 
+    <!-- News -->
+    <string name="label_add_photo">add photo in</string>
+    
     <!-- profile -->
-    <string name="logout">logout</string>
+    <string name="logout">Log Out</string>
     <string name="label_albums">albums</string>
     <string name="label_friends">friends number</string>
     <string name="label_photos">photos</string>
     <string name="number_x">X</string>
-    <string name="current_album">current album:</string>
+    <string name="current_album">current album</string>
     <string name="current_album_name">album name</string>
     <string name="user_not_photos">You dont have any photos</string>
     <string name="set_current_album">Set current album</string>

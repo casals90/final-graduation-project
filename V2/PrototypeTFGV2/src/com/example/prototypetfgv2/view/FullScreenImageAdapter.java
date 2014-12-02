@@ -58,7 +58,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 		//Put the start user 
 		changeActionBarForFirstUser(position);
 		//Download likes from albums
-		controller.getLikesPhotosFromAlbum(idAlbum);
+		//controller.getLikesPhotosFromAlbum(idAlbum);
 		initDisplayOptions();
 	}
 	

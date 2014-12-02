@@ -184,6 +184,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 			if (success) {
 				//CurrentUser user =
 				controller.downloadCurrentUser();
+				controller.getAllLikes();
+				Log.v("prototypev1","despres getAllLikes -> "+controller.getCurrentUser().getLikes().size());
 				//controller.setCurrentUser(user);
 				//rememberLogin();
 				goToMainActivity();

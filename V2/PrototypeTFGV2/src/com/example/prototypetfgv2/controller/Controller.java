@@ -78,7 +78,7 @@ public class Controller extends Application {
 		this.currentUser = currentUser;
 	}
 	
-	public void getLikesPhotosFromAlbum(String idAlbum) {
+	/*public void getLikesPhotosFromAlbum(String idAlbum) {
 		 ArrayList<String> likes = parseFunctions.getPhotosFromAlbumLikedCurrentUser(currentUser.getId(), idAlbum);
 		 this.currentUser.setLikesPhotosInsideAlbum(likes);
 	}
@@ -88,7 +88,7 @@ public class Controller extends Application {
 		ArrayList<String> likes = parseFunctions.getLikesFromMyPhotos(currentUser.getId());
 		Log.v("prototypev1", "likes size"+likes.size());
 		currentUser.setLikesPhotosInsideAlbum(likes);
-	}
+	}*/
 	
 	public void clearImageLoader() {
 		ImageLoader.getInstance().clearDiskCache();
@@ -128,6 +128,10 @@ public class Controller extends Application {
 	public ParseFunctions getParseFunctions() {
 		return parseFunctions;
 	}
+	
+	public ArrayList<Album> downloadAlbumsList(ArrayList<String> idAlbums) {
+		return parseFunctions.downloadAlbums(idAlbums, currentUser);
+	}
 
 	public boolean signUp(String username,String password) {
 		ParseUser parseUser = parseFunctions.signUpInParse(username, password);
@@ -142,6 +146,10 @@ public class Controller extends Application {
 			return parseFunctions.downloadMyPhotos(currentUser.getId());
 		return parseFunctions.downloadMyPhotos(idUser);
 		
+	}
+	
+	public ArrayList<Photo> downloadAllPhotosFromCurrentUser() {
+		return parseFunctions.downloadAllPhotosFromCurrentUser(currentUser);
 	}
 	
 	public boolean logIn(String username, String password) {
@@ -298,7 +306,12 @@ public class Controller extends Application {
 	}
 	
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
+		currentUser.setCurrentAlbum(currentAlbum.getId());
 		return parseFunctions.setCurrentAlbum(currentAlbum);
+	}
+	
+	public void setCurrentAlbumId(String id) {
+		currentUser.setCurrentAlbum(id);
 	}
 	
 	public String getRandomPhotoFromAlbum(String idAlbum) {
@@ -327,8 +340,12 @@ public class Controller extends Application {
 	}
 	
 	public CurrentAlbum downloadCurrentAlbum() {
-		String idCurrentAlbum = getCurrentAlbum();
+		//String idCurrentAlbum = getCurrentAlbum();
 		return parseFunctions.getCurrentAlbum();
+	}
+	
+	public String getCurrentAlbumId() {
+		return getCurrentAlbum();
 	}
 	
 	public void deleteCurrentUser() {
@@ -337,6 +354,10 @@ public class Controller extends Application {
 
 	public ArrayList<Album> downloadCommonAlbums(String idFriend) {
 		return parseFunctions.downloadCommonAlbums(currentUser, idFriend);
+	}
+	
+	public void getAllLikes() {
+		parseFunctions.getAllLikes(currentUser);
 	}
 	
 	//Social Network module

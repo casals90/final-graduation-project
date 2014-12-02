@@ -2,7 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -23,25 +22,30 @@ import com.example.prototypetfgv2.model.CurrentAlbum;
 
 public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 	
-	private OnSetCurrentAlbum callback;
-	
-	
+	//private OnSetCurrentAlbum callback;
+
 	private ListView listAlbums;
 	private Controller controller;
 	private ArrayList<Album> albums;
 	private ProgressBar mProgressBarDialog;
 	private CurrentAlbum currentAlbum;
+	private String currentAlbumId;
+	private int positionCurrentAlbum;
 
 	//Create a callback interface
-	public interface OnSetCurrentAlbum {
-        public void onSetCurrentAlbum(CurrentAlbum newCurrentAlbum);
-    }
+	/*public interface OnSetCurrentAlbum {
+        public void onSetCurrentAlbum(String idCurrentAlbum);
+    }*/
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		controller = (Controller)getActivity().getApplicationContext();
-		callback = (OnSetCurrentAlbum) getTargetFragment();
+		//callback = (OnSetCurrentAlbum) getTargetFragment();
+		
+		Bundle data = getArguments();
+		currentAlbumId = data.getString("currentAlbumId");
+		Log.v("prototypev1", "idCurrentAlbum "+currentAlbumId);
 	}
     
 	@Override
@@ -58,6 +62,15 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
         
         return view;
     }
+	
+	public int getPositionCurrentAlbum(String id) {
+		
+		for(int i = 0; i < albums.size(); i++) {
+			if(id.compareTo(albums.get(i).getId()) == 0)
+					return i;
+		}
+		return -1;
+	}
 
 	private class SetCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
 	
@@ -113,17 +126,23 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 			if(success) {
 				mProgressBarDialog.setVisibility(View.INVISIBLE);
 				listAlbums.setVisibility(View.VISIBLE);
-				listAlbums.setAdapter(new ListViewAlbumsAdapter(albums, getActivity().getApplicationContext()));
+				positionCurrentAlbum = getPositionCurrentAlbum(currentAlbumId);
+				Log.v("prototypev1", "pos current album "+positionCurrentAlbum);
+				listAlbums.setAdapter(new ListViewAlbumsAdapter(albums, getActivity().getApplicationContext(),positionCurrentAlbum));
 				listAlbums.setOnItemClickListener(new OnItemClickListener() {
 	
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-						Album album = albums.get(position);
-						currentAlbum = new CurrentAlbum(album.getId(),album.getAlbumTitle(),album.getAlbumCover());
-						//Put the selected album like a current album
-						controller.setCurrentAlbum(currentAlbum);
-						callback.onSetCurrentAlbum(currentAlbum);
-						new SetCurrentAlbumTask().execute();
+						if(positionCurrentAlbum != position) {
+							Album album = albums.get(position);
+							currentAlbum = new CurrentAlbum(album.getId(),album.getAlbumTitle(),album.getAlbumCover());
+							//Put the selected album like a current album
+							controller.setCurrentAlbum(currentAlbum);
+							//callback.onSetCurrentAlbum(currentAlbum);
+							new SetCurrentAlbumTask().execute();
+						}
+						else
+							getDialog().dismiss();
 					}
 				});
 			}

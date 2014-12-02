@@ -52,7 +52,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		this.imageLoader = imageLoader;
 		initDisplayOptions();
 		
-		controller.getLikesPhotosFromAlbum(idAlbum);
+		//controller.getLikesPhotosFromAlbum(idAlbum);
 	}
 	
 	public void initDisplayOptions() {
@@ -109,9 +109,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		
 		photo = photos.get(position);
-		//options 
 		imageLoader.displayImage(photo.getOwnerUser().getProfilePicture(),holder.mImageViewProfilePicture,options);
-		//imageLoader.displayImage(photo.getPhoto(),holder.mImageViewPhoto);
 		imageLoader.displayImage(photo.getPhoto(),holder.mImageViewPhoto,options,new SimpleImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -139,7 +137,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		like = controller.currentUserLikedCurrentPhoto(photo.getId());
 		if(!like) {
 			changeShapeColorBlack(holder.mButtonLike);
-			Log.v("prototypev1", "dins if like false");
+			//Log.v("prototypev1", "dins if like false");
 			holder.mButtonLike.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View v) {

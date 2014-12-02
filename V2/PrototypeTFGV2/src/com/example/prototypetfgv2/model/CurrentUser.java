@@ -11,7 +11,7 @@ public class CurrentUser {
 	private int friendsNumber;
 	private int photosNumber;
 	private int albumsNumber;
-	private ArrayList<String> likesPhotosInsideAlbum;
+	private ArrayList<String> likes;
 	private ArrayList<String> albums;
 	private ArrayList<String> ownerPhotosFromAlbum;
 	private ArrayList<String> albumsAdmin;
@@ -24,7 +24,7 @@ public class CurrentUser {
 		this.currentAlbum = currentAlbum;
 		this.friendsNumber = friendsNumber;
 		this.photosNumber = photosNumber;
-		this.likesPhotosInsideAlbum = new ArrayList<String>();
+		this.likes = new ArrayList<String>();
 		this.albums = new ArrayList<String>();
 		this.ownerPhotosFromAlbum = new ArrayList<String>();
 		this.albumsAdmin = new ArrayList<String>();
@@ -57,13 +57,13 @@ public class CurrentUser {
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
 	}
-	
-	public ArrayList<String> getLikesPhotosInsideAlbum() {
-		return likesPhotosInsideAlbum;
+
+	public ArrayList<String> getLikes() {
+		return likes;
 	}
 
-	public void setLikesPhotosInsideAlbum(ArrayList<String> likesPhotosInsideAlbum) {
-		this.likesPhotosInsideAlbum = likesPhotosInsideAlbum;
+	public void setLikes(ArrayList<String> likes) {
+		this.likes = likes;
 	}
 
 	public ArrayList<String> getAlbums() {
@@ -126,7 +126,7 @@ public class CurrentUser {
 	// End getters and setters
 
 	public void addLike(String idPhoto) {
-		likesPhotosInsideAlbum.add(idPhoto);
+		likes.add(idPhoto);
 	}
 	
 	public void addAlbum(String idAlbum) {
@@ -138,7 +138,7 @@ public class CurrentUser {
 	}
 	
 	public boolean isUserLikedCurrentPhoto(String idPhoto) {
-		return likesPhotosInsideAlbum.contains(idPhoto);
+		return likes.contains(idPhoto);
 	}
 	
 	public boolean isUserAdmin(String idAlbum) {

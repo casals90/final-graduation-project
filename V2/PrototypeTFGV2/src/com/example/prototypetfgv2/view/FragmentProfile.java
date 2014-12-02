@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -22,14 +21,14 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,29 +41,25 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.utils.Utils;
-import com.example.prototypetfgv2.view.FragmentDialogChooseCurrentAlbum.OnSetCurrentAlbum;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
+public class FragmentProfile extends Fragment {
 	
 	private static final String MyPREFERENCES = "PrototypeTFGV1";
 	
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final int REQUEST_PICK_IMAGE = 2;
-	private static final int REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM = 3;
 	
-	private Button buttonLogOut;
-	private ImageButton setCurrentAlbum;
 	private ImageView profilePicture,currentAlbumCover;
-	private TextView username, photosNumber,albumsNumber,friendsNumber,noAlbums,currentAlbumName;
-	private ProgressBar mProgressBar,mProgressBarCurrentAlbum,mProgressBarListPhotos;
+	private TextView username, photosNumber,albumsNumber,friendsNumber,noPhotos,currentAlbumName;
+	private ProgressBar mProgressBar,mProgressBarListPhotos;
 	private ListView mListView;
 	
 	private CurrentAlbum currentAlbum;
+	private String currentAlbumId;
 	private ArrayList<Photo> photos;
 	
 	private Bitmap newProfilePicture;
-	
 	private Controller controller;
 	private ShowPhotosInProfileAdapter adapter;
 	private SharedPreferences sharedPreferences;
@@ -79,6 +74,9 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 		controller = (Controller) this.getActivity().getApplicationContext();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		getActivity().setTitle(R.string.profile);
+		
+		//For show menu in action bar
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -86,10 +84,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile,container,false);
 		
-		//Current album:
-		currentAlbumCover = (ImageView) view.findViewById(R.id.current_album_cover);
-		currentAlbumName = (TextView) view.findViewById(R.id.current_album_name);
-		setCurrentAlbum = (ImageButton) view.findViewById(R.id.set_current_album);
+		
 		
 		mProgressBarListPhotos = (ProgressBar) view.findViewById(R.id.progressBarListPhotos);
 		mListView = (ListView) view.findViewById(R.id.list_my_photos);
@@ -116,14 +111,6 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 		registerForContextMenu(profilePicture);
 		
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarChangeProfilePicture);
-		//mProgressBarCurrentAlbum = (ProgressBar) view.findViewById(R.id.progressbar_spinner);
-		//logout
-		buttonLogOut = (Button) view.findViewById(R.id.button_logout);
-		buttonLogOut.setOnClickListener(new OnClickListener() {			
-			public void onClick(View v) {
-				logout();
-			}
-		});
 		
 		//Listeners to click info panel
 		LinearLayout albums = (LinearLayout) view.findViewById(R.id.albums);
@@ -144,7 +131,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 			}
 		});
 		
-		noAlbums = (TextView) view.findViewById(R.id.no_albums);
+		noPhotos = (TextView) view.findViewById(R.id.no_photos);
 		return view;
 	}	
 	
@@ -152,7 +139,25 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 	public void onResume() {
 		super.onResume();
 		new DownloadPhotosTask().execute();
-		new DownloadCurrentAlbumTask().execute();
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_profile, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.logout:
+				logout();
+				break;
+			case R.id.set_current_album:
+				showDialogChooseCurrentAlbum();
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void logout() {
@@ -172,9 +177,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
+	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		getActivity().getMenuInflater().inflate(R.menu.set_profile_picture, menu);
 		menu.setHeaderTitle("Set a profile picture");
@@ -198,7 +201,6 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 			break;
 		case R.id.import_from_twitter:
 			importPhotoFromTwitter();
-			Log.v("prototypev1","twitter");
 			break;
 
 		default:
@@ -213,16 +215,12 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 	
 	public void showDialogChooseCurrentAlbum() {
 		FragmentManager fm = getActivity().getSupportFragmentManager();
+		Bundle data = new Bundle();
+		currentAlbumId = controller.getCurrentAlbum();
+		data.putString("currentAlbumId",currentAlbumId);
 		FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
-		dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
+		dialog.setArguments(data);
         dialog.show(fm, "add_friend_dialog");
-	}
-	
-
-	@Override
-	public void onSetCurrentAlbum(CurrentAlbum newCurrentAlbum) {
-		currentAlbumName.setText(newCurrentAlbum.getTitle());
-		ImageLoader.getInstance().displayImage(newCurrentAlbum.getCoverPhoto(),currentAlbumCover);
 	}
 
 	//Choose from gallery
@@ -388,7 +386,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 	    protected void onPreExecute() {
 			mProgressBarListPhotos.setVisibility(View.VISIBLE);
 			mListView.setVisibility(View.INVISIBLE);
-			noAlbums.setVisibility(View.INVISIBLE);
+			noPhotos.setVisibility(View.INVISIBLE);
 	    };
 		
 		@Override
@@ -412,7 +410,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 				});
 			}
 			else {
-				noAlbums.setVisibility(View.VISIBLE);
+				noPhotos.setVisibility(View.VISIBLE);
 			}
 			
 		}
@@ -462,7 +460,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 		}
 	}
 	
-	private class DownloadCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
+	/*private class DownloadCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
     	
         @Override
         protected void onPreExecute() {
@@ -484,7 +482,7 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
         protected void onPostExecute(final Boolean success) {
         	if(success) {
         		//Current album:
-        		currentAlbumCover.setVisibility(View.VISIBLE);
+        		/*currentAlbumCover.setVisibility(View.VISIBLE);
             	currentAlbumName.setVisibility(View.VISIBLE);
         		ImageLoader.getInstance().displayImage(currentAlbum.getCoverPhoto(),currentAlbumCover);
         		currentAlbumName.setText(currentAlbum.getTitle());
@@ -509,9 +507,9 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 			super.onCancelled();
 			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
 		}
-    }
+    }*/
 	//TODO
-	private class SetCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
+	/*private class SetCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
     	
         @Override
         protected void onPreExecute() {
@@ -539,5 +537,5 @@ public class FragmentProfile extends Fragment implements OnSetCurrentAlbum {
 			super.onCancelled();
 			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
 		}
-    }
+    }*/
 }

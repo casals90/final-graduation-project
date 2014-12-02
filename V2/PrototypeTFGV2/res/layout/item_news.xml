@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <RelativeLayout
+        android:id="@+id/header_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+        
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:textColor="@color/Black"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/profile_picture"/>
+        
+        <TextView
+            android:id="@+id/label_add_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_add_photo"
+            android:textStyle="normal"
+            android:textColor="@color/Black"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/username"/>
+        
+        <TextView
+            android:id="@+id/album_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/album_title"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/Black"
+            android:layout_toRightOf="@+id/label_add_photo"/>
+        
+        <TextView
+           android:id="@+id/date"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/date_of_photo"
+           android:textStyle="italic"
+           android:textSize="10sp"
+           android:layout_marginLeft="10dp"
+           android:textColor="@color/Black"
+           android:layout_below="@+id/username"/>
+        
+    </RelativeLayout>
+    
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_below="@+id/header_list_item"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:background="@color/WhiteSmoke"
+        android:layout_marginBottom="5dp"
+        android:contentDescription="@string/explain"/>
+    
+     <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+    
+     <LinearLayout 
+         android:id="@+id/buttons"
+         android:orientation="horizontal"
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_alignBottom="@+id/photo"
+         android:layout_alignParentRight="true">
+         
+         <Button
+	        android:id="@+id/button_like"
+	        android:layout_width="wrap_content"
+	        android:layout_height="30dp"
+	        android:textColor="@color/White"
+	        android:drawableLeft="@drawable/ic_action_good"
+	        android:background="@drawable/bg_button"
+	        android:focusable="false"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginBottom="5dp"
+			android:focusableInTouchMode="false"
+	        android:text="@string/zero"/>
+    
+	    <Button
+	        android:id="@+id/button_comment"
+	        android:layout_width="wrap_content"
+	        android:layout_height="30dp"
+	        android:textColor="@color/White"
+	        android:background="@drawable/bg_button"
+	        android:drawableLeft="@drawable/ic_action_comment"
+	        android:layout_marginRight="10dp"
+	        android:focusable="false"
+			android:focusableInTouchMode="false"
+			android:layout_marginBottom="5dp"
+	        android:text="@string/zero"/>  
+     </LinearLayout>
+
+</RelativeLayout>
+
