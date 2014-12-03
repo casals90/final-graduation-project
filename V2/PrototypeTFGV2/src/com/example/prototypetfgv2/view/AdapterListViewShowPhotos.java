@@ -9,15 +9,15 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +42,9 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	private String idAlbum;
 	private Activity activity;
 	
-	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos, ImageLoader imageLoader,String idAlbum,Activity activity) {
+	private GoToProfileUserInterface goToProfileUserInterface;
+	
+	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos, ImageLoader imageLoader,String idAlbum,Activity activity,GoToProfileUserInterface goToProfileUserInterface) {
 		super();
 		this.photos = photos;
 		this.inflater = LayoutInflater.from(context);
@@ -51,7 +53,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		this.idAlbum = idAlbum;
 		this.imageLoader = imageLoader;
 		initDisplayOptions();
-		
+		this.goToProfileUserInterface = goToProfileUserInterface;
 		//controller.getLikesPhotosFromAlbum(idAlbum);
 	}
 	
@@ -81,6 +83,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	}
 
 	public class ViewHolder {
+		RelativeLayout header;
 		ImageView mImageViewProfilePicture,mImageViewPhoto;
 		ProgressBar mProgressBar;
 		TextView mTextViewUsername,mTextViewTitle;
@@ -95,6 +98,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 			holder = new ViewHolder();
             view = inflater.inflate(R.layout.photo_item_list_photos, null);
             
+            holder.header = (RelativeLayout) view.findViewById(R.id.header_list_item);
             holder.mImageViewProfilePicture = (ImageView) view.findViewById(R.id.profile_picture);
             holder.mTextViewUsername = (TextView) view.findViewById(R.id.username);
             holder.mTextViewTitle = (TextView) view.findViewById(R.id.title);
@@ -128,6 +132,15 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
             	holder.mImageViewPhoto.setVisibility(View.VISIBLE);
             }
         });
+		
+		holder.header.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				goToProfileUserInterface.goToProfileUser(photo.getOwnerUser());
+			}
+		});
 		
 		holder.mTextViewUsername.setText(photo.getOwnerUser().getUsername());
 		holder.mTextViewTitle.setText(photo.getTitle());

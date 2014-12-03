@@ -37,7 +37,6 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		super();
 	}
 	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

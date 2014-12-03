@@ -28,10 +28,11 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.model.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
-public class ListViewPhotosFragment extends Fragment {
+public class ListViewPhotosFragment extends Fragment implements GoToProfileUserInterface {
 
 	private static final int REQUEST_PICK_IMAGE = 2;
 	
@@ -44,6 +45,7 @@ public class ListViewPhotosFragment extends Fragment {
 	private Album album;
 	private ImageLoader imageLoader;
 	private String mCurrentPhotoPath;
+	private GoToProfileUserInterface goToProfileUserInterface;
 	
 	public ListViewPhotosFragment() {
 		super();
@@ -55,6 +57,8 @@ public class ListViewPhotosFragment extends Fragment {
 		getActivity().setTitle(R.string.albums);
 		
 		controller = (Controller) this.getActivity().getApplication();
+		
+		this.goToProfileUserInterface = this;
 		
 		//Fetch album data
 		Bundle data = this.getArguments();
@@ -197,7 +201,7 @@ public class ListViewPhotosFragment extends Fragment {
 				PauseOnScrollListener listener = new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling);
 				mListViewPhotos.setOnScrollListener(listener);
 	        	
-				adapter = new AdapterListViewShowPhotos(getActivity().getApplicationContext(), photos,imageLoader,album.getId(),getActivity());
+				adapter = new AdapterListViewShowPhotos(getActivity().getApplicationContext(), photos,imageLoader,album.getId(),getActivity(),goToProfileUserInterface);
 				mListViewPhotos.setAdapter(adapter);
 				mListViewPhotos.setOnItemClickListener(new OnItemClickListener() {
 					@Override
@@ -216,4 +220,31 @@ public class ListViewPhotosFragment extends Fragment {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
+
+	@Override
+	public void goToProfileUser(User user) {
+		if(user.getId().compareTo(controller.getCurrentUser().getId())== 0)
+			goToProfile();
+		else
+			goToUserProfile(user);	
+	}
+	
+	public void goToProfile() {
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentProfile());
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
+	
+	public void goToUserProfile(User user) {
+		Bundle data = new Bundle();
+		data.putParcelable("User",user);
+		FragmentProfileOtherUser fpou = new FragmentProfileOtherUser();
+		fpou.setArguments(data);
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fpou);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
 }

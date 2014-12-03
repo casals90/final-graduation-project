@@ -21,24 +21,16 @@
         android:layout_height="80dp"
         android:layout_marginRight="10dp"
         android:visibility="invisible"/>
-
-    <TextView
-        android:id="@+id/username"
-        android:textSize="25sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/profilePicture"
-        android:text="@string/username"/>
     
     <LinearLayout
         android:id="@+id/profile_information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/username"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/profilePicture"
         android:orientation="horizontal"
         android:layout_centerInParent="true"
-        android:layout_marginTop="10dp">
+        >
     
 	    <LinearLayout
 	        android:id="@+id/photos"
@@ -113,20 +105,14 @@
 	</LinearLayout>
     
     <Button
-        android:id="@+id/button_add_friend" 
-        android:layout_below="@+id/profilePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_friend"
+        android:id="@+id/button_friend" 
+        android:layout_below="@+id/profile_information"
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@+id/profilePicture"
+        android:drawableLeft="@drawable/ic_action_accept_dark"
+        android:layout_height="40dp"
+        android:text="@string/friend"
         android:layout_marginTop="5dp"/>   
-        
-    <Button
-        android:id="@+id/button_delete_friend" 
-        android:layout_below="@+id/profilePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_friend"
-        android:layout_marginTop="5dp"/> 
         
     <ProgressBar
         android:id="@+id/progressBarOtherProfile"
@@ -139,7 +125,7 @@
         android:id="@+id/common_albums"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button_add_friend"
+        android:layout_below="@+id/button_friend"
         android:text="@string/common_albums"/>
     
     <ListView

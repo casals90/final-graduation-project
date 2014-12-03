@@ -160,4 +160,16 @@ public class CurrentUser {
 	public boolean isCurrentUserAdmin(String idAlbum) {
 		return albumsAdmin.contains(idAlbum);
 	}
+	
+	public void incrementFriendsNumber() {
+		friendsNumber ++;
+	}
+	
+	public void decrementFriendsNumber() {
+		if(friendsNumber > 0)
+			friendsNumber--;
+		else
+			friendsNumber = 0;
+		
+	}
 }

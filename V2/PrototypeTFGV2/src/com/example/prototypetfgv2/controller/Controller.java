@@ -203,6 +203,7 @@ public class Controller extends Application {
 	}
 	
 	public boolean addFriend(String id) {
+		currentUser.incrementFriendsNumber();
 		return parseFunctions.addFriend(id,currentUser);
 	}
 	
@@ -228,6 +229,7 @@ public class Controller extends Application {
 	}
 	
 	public boolean deleteFriend(String id) {
+		currentUser.decrementFriendsNumber();
 		return parseFunctions.deleteFriend(id,currentUser);
 	}
 	

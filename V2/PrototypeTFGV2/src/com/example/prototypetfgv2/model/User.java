@@ -88,6 +88,39 @@ public class User implements Parcelable {
 	public void setAlbumsNumber(int albumsNumber) {
 		this.albumsNumber = albumsNumber;
 	}
+	
+	public void decrementFriendsNumber() {
+		if(friendsNumber > 0)
+			friendsNumber--;
+		else
+			friendsNumber = 0;
+	}
+	
+	public void decrementPhotosNumber() {
+		if(photosNumber > 0)
+			photosNumber--;
+		else
+			photosNumber = 0;
+	}
+	
+	public void decrementAlbumsNumber() {
+		if(albumsNumber > 0)
+			albumsNumber--;
+		else
+			albumsNumber = 0;
+	}
+	
+	public void incrementFriendsNumber() {
+		friendsNumber++;
+	}
+	
+	public void incrementPhotosNumber() {
+		photosNumber++;
+	}
+
+	public void incrementAlbumsNumber() {
+		albumsNumber++;
+	}
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {

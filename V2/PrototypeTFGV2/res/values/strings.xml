@@ -95,6 +95,7 @@
     <string name="set_current_album">Set current album</string>
     <string name="common_albums">Common albums:</string>
     <string name="private_albums">Private albums</string>
+    <string name="friend">Friend</string>
 
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>

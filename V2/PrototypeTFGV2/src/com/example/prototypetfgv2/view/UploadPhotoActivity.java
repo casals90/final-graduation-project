@@ -107,70 +107,70 @@ public class UploadPhotoActivity extends Activity {
 	}
 	
 	//Functions to take photo
-		private void dispatchTakePictureIntent() {
-		    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		    // Ensure that there's a camera activity to handle the intent
-		    if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
-		        // Create the File where the photo should go
-		        File photoFile = null;
-		        try {
-		            photoFile = createImageFile();
-		        } catch (IOException ex) {
-		            // Error occurred while creating the File
-		        }
-		        // Continue only if the File was successfully created
-		        if (photoFile != null) {
-		            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
-		            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-		        }
-		    }
+	private void dispatchTakePictureIntent() {
+	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    // Ensure that there's a camera activity to handle the intent
+	    if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+	        // Create the File where the photo should go
+	        File photoFile = null;
+	        try {
+	            photoFile = createImageFile();
+	        } catch (IOException ex) {
+	            // Error occurred while creating the File
+	        }
+	        // Continue only if the File was successfully created
+	        if (photoFile != null) {
+	            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
+	            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	        }
 		}
+	}
 		
-		private File createImageFile() throws IOException {
-		    // Create an image file name
-		    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		    String imageFileName = "JPEG_" + timeStamp + "_";
-		    File storageDir = Environment.getExternalStoragePublicDirectory(
-		            Environment.DIRECTORY_PICTURES);
-		    File image = File.createTempFile(
-		        imageFileName,  /* prefix */
-		        ".jpeg",         /* suffix */
-		        storageDir      /* directory */
-		    );
+	private File createImageFile() throws IOException {
+	    // Create an image file name
+	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	    String imageFileName = "JPEG_" + timeStamp + "_";
+	    File storageDir = Environment.getExternalStoragePublicDirectory(
+	            Environment.DIRECTORY_PICTURES);
+	    File image = File.createTempFile(
+	        imageFileName,  /* prefix */
+	        ".jpeg",         /* suffix */
+	        storageDir      /* directory */
+	    );
 
-		    mCurrentPhotoPath = image.getAbsolutePath();
-		    return image;
-		}
+	    mCurrentPhotoPath = image.getAbsolutePath();
+	    return image;
+	}
 		
-		private void galleryAddPic() {
-		    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-		    File f = new File(mCurrentPhotoPath);
-		    Uri contentUri = Uri.fromFile(f);
-		    mediaScanIntent.setData(contentUri);
-		    sendBroadcast(mediaScanIntent);
-		}
-			
-		@Override
-		public void onActivityResult(int requestCode, int resultCode, Intent data) {
-			switch (requestCode) {
-				case REQUEST_IMAGE_CAPTURE:
-					if(resultCode == Activity.RESULT_OK) {
-						new BitmapWorkerTask(mImageView).execute(mCurrentPhotoPath);
-					}
-					break;
-				case REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM:
-					if(resultCode == Activity.RESULT_OK) {
-						dispatchTakePictureIntent();
-					}
-					break;
-				default:
-					break;
-			}
-		}
+	private void galleryAddPic() {
+	    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+	    File f = new File(mCurrentPhotoPath);
+	    Uri contentUri = Uri.fromFile(f);
+	    mediaScanIntent.setData(contentUri);
+	    sendBroadcast(mediaScanIntent);
+	}
 		
-		public void goToListViewAlbum(String idAlbum) {
-			
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case REQUEST_IMAGE_CAPTURE:
+				if(resultCode == Activity.RESULT_OK) {
+					new BitmapWorkerTask(mImageView).execute(mCurrentPhotoPath);
+				}
+				break;
+			case REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM:
+				if(resultCode == Activity.RESULT_OK) {
+					dispatchTakePictureIntent();
+				}
+				break;
+			default:
+				break;
 		}
+	}
+	
+	public void goToListViewAlbum(String idAlbum) {
+		
+	}
 	
 	/*public void showFragmentDialog(ArrayList<CurrentAlbum> listCurrentAlbums) {
         FragmentManager manager = getFragmentManager();

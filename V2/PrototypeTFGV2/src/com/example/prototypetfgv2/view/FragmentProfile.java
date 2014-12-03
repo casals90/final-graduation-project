@@ -1,18 +1,24 @@
 package com.example.prototypetfgv2.view;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,7 +46,9 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.utils.BitmapUtils;
 import com.example.prototypetfgv2.utils.Utils;
+import com.example.prototypetfgv2.view.UploadPhotoActivity.BitmapWorkerTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FragmentProfile extends Fragment {
@@ -63,6 +71,8 @@ public class FragmentProfile extends Fragment {
 	private Controller controller;
 	private ShowPhotosInProfileAdapter adapter;
 	private SharedPreferences sharedPreferences;
+
+	private String mCurrentPhotoPath;
 	
 	public FragmentProfile() {
 		super();
@@ -73,7 +83,7 @@ public class FragmentProfile extends Fragment {
 		super.onCreate(savedInstanceState);
 		controller = (Controller) this.getActivity().getApplicationContext();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		getActivity().setTitle(R.string.profile);
+		
 		
 		//For show menu in action bar
 		setHasOptionsMenu(true);
@@ -88,10 +98,6 @@ public class FragmentProfile extends Fragment {
 		
 		mProgressBarListPhotos = (ProgressBar) view.findViewById(R.id.progressBarListPhotos);
 		mListView = (ListView) view.findViewById(R.id.list_my_photos);
-		
-		//username from current user
-		username = (TextView) view.findViewById(R.id.username);
-		username.setText(controller.getUsername());
 		
 		photosNumber = (TextView) view.findViewById(R.id.photos_number);
 		photosNumber.setText(controller.getPhotosNumber());
@@ -138,6 +144,7 @@ public class FragmentProfile extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		getActivity().setTitle(controller.getCurrentUser().getUsername());
 		new DownloadPhotosTask().execute();
 	}
 	
@@ -191,7 +198,7 @@ public class FragmentProfile extends Fragment {
 			removeProfilePicture();
 			break;
 		case R.id.take_photo:
-			takePhoto();
+			dispatchTakePictureIntent();
 			break;
 		case R.id.choose_from_library:
 			choosePhotoFromGallery();
@@ -250,11 +257,8 @@ public class FragmentProfile extends Fragment {
 		switch (requestCode) {
 		case REQUEST_IMAGE_CAPTURE:
 			if(resultCode == Activity.RESULT_OK && data != null) {
-				Log.v("prototypev1","he entrat a capturar fto");
-				Bundle extras = data.getExtras();
-		        Bitmap photo = (Bitmap)extras.get("data");
-		        newProfilePicture = Bitmap.createScaledBitmap(photo,80,80,true);
-		        new SetProfilePictureTask().execute();
+				new BitmapWorkerTask(profilePicture).execute(mCurrentPhotoPath);
+				
 			}
 			break;
 		case REQUEST_PICK_IMAGE:
@@ -274,14 +278,49 @@ public class FragmentProfile extends Fragment {
 	}
 	
 	//Take photo
-	public void takePhoto() {
-		Context context = getActivity(); 
-		PackageManager packageManager = context.getPackageManager();
-		
-	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	    if (takePictureIntent.resolveActivity(packageManager) != null) 
-	        startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);	        
-	}	
+	//Functions to take photo
+		private void dispatchTakePictureIntent() {
+		    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		    // Ensure that there's a camera activity to handle the intent
+		    if (takePictureIntent.resolveActivity(this.getActivity().getPackageManager()) != null) {
+		        // Create the File where the photo should go
+		        File photoFile = null;
+		        try {
+		            photoFile = createImageFile();
+		        } catch (IOException ex) {
+		            // Error occurred while creating the File
+		        }
+		        // Continue only if the File was successfully created
+		        if (photoFile != null) {
+		            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(photoFile));
+		            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+		        }
+			}
+		}
+			
+		private File createImageFile() throws IOException {
+		    // Create an image file name
+		    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		    String imageFileName = "JPEG_" + timeStamp + "_";
+		    File storageDir = Environment.getExternalStoragePublicDirectory(
+		            Environment.DIRECTORY_PICTURES);
+		    File image = File.createTempFile(
+		        imageFileName,  /* prefix */
+		        ".jpeg",         /* suffix */
+		        storageDir      /* directory */
+		    );
+
+		    mCurrentPhotoPath = image.getAbsolutePath();
+		    return image;
+		}
+			
+		private void galleryAddPic() {
+		    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+		    File f = new File(mCurrentPhotoPath);
+		    Uri contentUri = Uri.fromFile(f);
+		    mediaScanIntent.setData(contentUri);
+		    this.getActivity().sendBroadcast(mediaScanIntent);
+		}
 	
 	// Task to change and upload profile picture
 	public class SetProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
@@ -460,82 +499,42 @@ public class FragmentProfile extends Fragment {
 		}
 	}
 	
-	/*private class DownloadCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
-    	
-        @Override
+	class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
+	    private final WeakReference<ImageView> imageViewReference;
+
+	    public BitmapWorkerTask(ImageView imageView) {
+	        // Use a WeakReference to ensure the ImageView can be garbage collected
+	        imageViewReference = new WeakReference<ImageView>(imageView);
+	    }
+	    
+	    @Override
         protected void onPreExecute() {
         	super.onPreExecute();
-        	//mProgressBarCurrentAlbum.setVisibility(View.VISIBLE);
-        	currentAlbumCover.setVisibility(View.INVISIBLE);
-        	currentAlbumName.setVisibility(View.INVISIBLE);
-        }
- 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-        	currentAlbum = controller.downloadCurrentAlbum();	
-            if(currentAlbum != null)
-            	return true;
-            return false;   		
-        }
- 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-        	if(success) {
-        		//Current album:
-        		/*currentAlbumCover.setVisibility(View.VISIBLE);
-            	currentAlbumName.setVisibility(View.VISIBLE);
-        		ImageLoader.getInstance().displayImage(currentAlbum.getCoverPhoto(),currentAlbumCover);
-        		currentAlbumName.setText(currentAlbum.getTitle());
-        		setCurrentAlbum.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						// TODO show dialog with all albums and check current album
-						showDialogChooseCurrentAlbum();
-					}
-				});
-        	}
-        	else {
-        		//noAlbums.setVisibility(View.VISIBLE);
-        		//mProgressBarCurrentAlbum.setVisibility(View.INVISIBLE);
-        	}
-        		
+        	mProgressBar.setVisibility(View.VISIBLE);
         }
 
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
-		}
-    }*/
-	//TODO
-	/*private class SetCurrentAlbumTask extends AsyncTask<Void, Void, Boolean> {
-    	
-        @Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-        	
-        	
-        }
- 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-        	return controller.setCurrentAlbum(currentAlbum);		
-        }
- 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-        	if(success) {
-        		
-        	}
-        	else
-        		Toast.makeText(getActivity(),"0 albums",  Toast.LENGTH_LONG).show();
-        }
+	    // Decode image in background.
+	    @Override
+	    protected Bitmap doInBackground(String... params) {
+	        String filePath = params[0];
+	        File file = new File(filePath);
+	        return BitmapFactory.decodeFile(file.getAbsolutePath());
+	    }
 
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			Toast.makeText(getActivity(),"Error download albums",  Toast.LENGTH_LONG).show();
-		}
-    }*/
+	    // Once complete, see if ImageView is still around and set bitmap.
+	    @Override
+	    protected void onPostExecute(Bitmap bitmap) {
+	        if (imageViewReference != null && bitmap != null) {
+	            final ImageView imageView = imageViewReference.get();
+	            if (imageView != null) {
+	            	//Put bitmap in a global field
+	            	//photo = bitmap;
+	            	mProgressBar.setVisibility(View.INVISIBLE);
+	            	Bitmap b = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
+	            	//mImageView.setVisibility(View.VISIBLE);
+	                imageView.setImageBitmap(b);
+	            }
+	        }
+	    }
+	}
 }

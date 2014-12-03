@@ -31,11 +31,11 @@ public class FragmentProfileOtherUser extends Fragment {
 	private final int INVISIBLE = View.INVISIBLE;
 	
 	private ImageView profilePicture;
-	private TextView username, photosNumber,albumsNumber,friendsNumber,commonAlbumsLabel;
-	private Button bAddFriend,bDeleteFriend;
+	private TextView photosNumber,albumsNumber,friendsNumber,commonAlbumsLabel;
+	private Button buttonFriend;
 	private ProgressBar mProgressBar,mProgressBarDownloadCommonAlbums;
 	private ListView listCommonAlbums;
-	
+	private boolean isMyFriend;
 	private User user;
 	private ArrayList<Album> commonAlbums;
 	private ImageLoader imageLoader;
@@ -54,6 +54,10 @@ public class FragmentProfileOtherUser extends Fragment {
 		
 		Bundle data = this.getArguments();
 		user = data.getParcelable("User");
+		
+		getActivity().getActionBar().setTitle(user.getUsername());
+		
+		this.isMyFriend = controller.isMyFriend(user.getId());
 	}
 
 	@Override
@@ -61,23 +65,19 @@ public class FragmentProfileOtherUser extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile_other_user,container,false);
 		
-		username = (TextView) view.findViewById(R.id.username);
-		username.setText(user.getUsername());
-		
 		commonAlbumsLabel = (TextView) view.findViewById(R.id.common_albums);
 		
 		photosNumber = (TextView) view.findViewById(R.id.photos_number);
 		photosNumber.setText(String.valueOf(user.getPhotosNumber()));
 		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
-		albumsNumber.setText(String.valueOf(controller.getAlbumsNumber()));
+		albumsNumber.setText(String.valueOf(user.getAlbumsNumber()));
 		friendsNumber = (TextView) view.findViewById(R.id.friends_number);
-		friendsNumber.setText(String.valueOf(controller.getFriendsNumber()));
+		friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
 		
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
 		
 		if(user.getProfilePicture() != null)
-			//imageLoader.DisplayImage(user.getProfilePicture(),profilePicture);/
 			imageLoader.displayImage(user.getProfilePicture(),profilePicture);
 		
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarOtherProfile);
@@ -85,46 +85,46 @@ public class FragmentProfileOtherUser extends Fragment {
 		
 		listCommonAlbums = (ListView) view.findViewById(R.id.list_albums);
 		
-		bAddFriend = (Button) view.findViewById(R.id.button_add_friend);
-		bAddFriend.setOnClickListener(new OnClickListener() {
+		buttonFriend = (Button) view.findViewById(R.id.button_friend);
+		
+		buttonFriend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				//add in friend list
-				new AddFriendTask().execute();
-				
-				bAddFriend.setVisibility(INVISIBLE);
-				bDeleteFriend.setVisibility(VISIBLE);
+				//new AddFriendTask().execute();
+				if(isMyFriend) 
+					new DeleteFriendTask().execute();
+				else
+					new AddFriendTask().execute();
+				isMyFriend = !isMyFriend;
 			}
-		
 		});
 		
-		bDeleteFriend = (Button) view.findViewById(R.id.button_delete_friend);
-		bDeleteFriend.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//Delete from friend list
-				new DeleteFriendTask().execute();
-				
-				bAddFriend.setVisibility(VISIBLE);
-				bDeleteFriend.setVisibility(INVISIBLE);
-			}
-		
-		});
-		
-		if(controller.isMyFriend(user.getId())) {
+		if(isMyFriend) {
 			//is in friend list
-			bAddFriend.setVisibility(INVISIBLE);
-			bDeleteFriend.setVisibility(VISIBLE);
 			new DownloadCommonAlbumsTask().execute();
+			//Change button
+			buttonIsFriend();
 		}
 		else {
 			//no is in friends list
-			bAddFriend.setVisibility(VISIBLE);
-			bDeleteFriend.setVisibility(INVISIBLE);
-			commonAlbumsLabel.setText(R.string.private_albums);
+			buttonAddFriend();
 		}
 		
 		return view;
+	}
+	
+	public void buttonIsFriend() {
+		buttonFriend.setText(getString(R.string.friend));
+		int imgResource = R.drawable.ic_action_good;
+		buttonFriend.setCompoundDrawablesWithIntrinsicBounds(imgResource, 0, 0, 0);
+	}
+	
+	public void buttonAddFriend() {
+		buttonFriend.setText(getString(R.string.add_friend));
+		int imgResource = R.drawable.ic_action_new;
+		buttonFriend.setCompoundDrawablesWithIntrinsicBounds(imgResource, 0, 0, 0);
+		commonAlbumsLabel.setText(getString(R.string.private_albums));
 	}
 	
 	private class DownloadCommonAlbumsTask extends AsyncTask<Void, Void, Boolean> {
@@ -174,8 +174,12 @@ public class FragmentProfileOtherUser extends Fragment {
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
-            bDeleteFriend.setVisibility(INVISIBLE);
-            mProgressBar.setVisibility(VISIBLE);
+            //mProgressBar.setVisibility(VISIBLE);
+        	//friendsNumber.setText()
+        	user.decrementFriendsNumber();
+        	friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
+        	listCommonAlbums.setVisibility(View.INVISIBLE);
+        	buttonAddFriend();
         }
  
         @Override
@@ -187,8 +191,8 @@ public class FragmentProfileOtherUser extends Fragment {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if(result) {
-				mProgressBar.setVisibility(INVISIBLE);
-				bAddFriend.setVisibility(VISIBLE);
+				//mProgressBar.setVisibility(INVISIBLE);
+				
 			}
 		}
 
@@ -196,7 +200,6 @@ public class FragmentProfileOtherUser extends Fragment {
 		protected void onCancelled() {
 			super.onCancelled();
 			mProgressBar.setVisibility(INVISIBLE);
-			bDeleteFriend.setVisibility(VISIBLE);
 			Toast.makeText(getActivity(),"Error delete friend",  Toast.LENGTH_LONG).show();
 		}	
     }
@@ -206,8 +209,13 @@ public class FragmentProfileOtherUser extends Fragment {
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
-           bAddFriend.setVisibility(INVISIBLE);
-           mProgressBar.setVisibility(VISIBLE);
+          // buttonFriend.setVisibility(INVISIBLE);
+           //mProgressBar.setVisibility(VISIBLE);
+	    	user.incrementFriendsNumber();
+	    	friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
+	    	buttonIsFriend();
+	    	listCommonAlbums.setVisibility(View.VISIBLE);
+	    	new DownloadCommonAlbumsTask().execute();
         }
  
         @Override
@@ -219,8 +227,7 @@ public class FragmentProfileOtherUser extends Fragment {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if(result) {
-				mProgressBar.setVisibility(INVISIBLE);
-				bDeleteFriend.setVisibility(VISIBLE);
+				//mProgressBar.setVisibility(INVISIBLE);
 			}
 		}
  
@@ -228,7 +235,7 @@ public class FragmentProfileOtherUser extends Fragment {
 		protected void onCancelled() {
 			super.onCancelled();
 			mProgressBar.setVisibility(INVISIBLE);
-			bAddFriend.setVisibility(VISIBLE);
+			buttonFriend.setVisibility(VISIBLE);
 			Toast.makeText(getActivity(),"Error add friend",  Toast.LENGTH_LONG).show();
 		}	
     }
