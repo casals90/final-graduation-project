@@ -2,6 +2,7 @@ package com.example.prototypetfgv2.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class ParseFunctions {
 	public void initParse(Context context) {
 		Parse.initialize(context, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
 		ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
+		ParseFacebookUtils.initialize("496776443798396");
 	}
 
     public ParseUser signUpInParse(String username,String password) {
@@ -742,6 +744,42 @@ public class ParseFunctions {
 				    goToMainActivity(activity);
 			}
 		});
+	}
+	
+	public void logInFacebook(final Activity activity) {
+		Log.d("prototypev1", "execute loginfacebook");
+		List<String> permissions = Arrays.asList("public_profile", "user_friends", "user_about_me","user_relationships", "user_birthday", "user_location");
+	    ParseFacebookUtils.logIn(permissions, activity, new LogInCallback() {
+
+			@Override
+			public void done(ParseUser user, ParseException e) {
+				// TODO Auto-generated method stub
+				//LoginActivity.this.progressDialog.dismiss();
+	            if (user == null) {
+	                Log.d("prototypev1","Uh oh. The user cancelled the Facebook login.");
+	            } else if (user.isNew()) {
+	                Log.d("prototypev1","User signed up and logged in through Facebook!");
+	                user.put("photosNumber",0);
+					user.put("friendsNumber",0);
+					user.put("albumsNumber",0);
+					try {
+						user.save();
+						Log.d("prototypev1","goToInputUsername Facebook");
+						goToInputUsername(activity);
+					}
+					catch (ParseException e2) {
+						e.printStackTrace();
+						user = null; 
+				}  
+	            } else {
+	                Log.d("prototypev1","User logged in through Facebook!");
+	               // showUserDetailsActivity();
+	            }
+	            if(e != null) {
+	            	Log.d("prototypev1","error facebook "+e);
+	            }
+			}
+	    });
 	}
 	
 	public JSONObject getTwitterData() {

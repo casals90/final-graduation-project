@@ -1,11 +1,9 @@
 package com.example.prototypetfgv2.view;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,11 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.parse.ParseFacebookUtils;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
@@ -25,13 +22,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 	
 	private Controller controller;
 	
-	private EditText mUsernameView,mPasswordView;
-	private TextView mIncorrectLoginView;
+	//private EditText mUsernameView,mPasswordView;
+	//private TextView mIncorrectLoginView;
 	private Button mLogin,mSignup,mLoginTwitter,mLoginFacebook;
 	
 	private String username,password;
-	
-	private LogInTask mAuthTask;
 	
 	SharedPreferences sharedpreferences;
 	Controller app;
@@ -43,9 +38,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 		app = (Controller) getApplicationContext();
 		controller = (Controller) getApplication();
 		
-		mUsernameView = (EditText)findViewById(R.id.username);
+		/*mUsernameView = (EditText)findViewById(R.id.username);
 		mPasswordView = (EditText)findViewById(R.id.password);
-		mIncorrectLoginView = (TextView)findViewById(R.id.incorrect_login);
+		mIncorrectLoginView = (TextView)findViewById(R.id.incorrect_login);*/
 		mLogin = (Button)findViewById(R.id.log_in);
 		mLogin.setOnClickListener(this);
 		mSignup=(Button)findViewById(R.id.sign_up);
@@ -81,22 +76,24 @@ public class LoginActivity extends Activity implements OnClickListener {
 		int id = v.getId();
 		switch (id) {
 		case R.id.log_in:
-			showIncorrectLoginMessage(false);			
 			logIn(); 
-			
+			Log.d("prototypev1", "login ");
 			break;
 			
 		case R.id.sign_up:
-			goToSignUp();
+			//goToSignUp();
+			Log.d("prototypev1", "sign up");
 			break;
 			
 		case R.id.log_in_twitter:
 			controller.logInTwitter(this);
-			//go to new activity
+			//Log.d("prototypev1", "login twitter");
 			break;
 		
 		case R.id.log_in_facebook:
-			
+			//controller.getParseFunctions().logInFacebook(this);
+			//logInFacebook();
+			Log.d("prototypev1", "login twitter");
 			break;
 		
 		default:
@@ -104,7 +101,21 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-	public void fetchInputData() {
+	public void logInFacebook() {
+		//LoginActivity.this.progressDialog = ProgressDialog.show(
+	    // LoginActivity.this, "", "Logging in...", true);
+		controller.getParseFunctions().logInFacebook(this);
+	    
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  Log.v("prototypev1","onActivityResult facebook");
+	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+	}
+	
+	/*public void fetchInputData() {
 		username = mUsernameView.getText().toString();
 		password = mPasswordView.getText().toString();
 	}
@@ -119,17 +130,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 	public void changeErrorMessage(String error) {
 		Log.v("prototypev1","error signup "+error);
 		mIncorrectLoginView.setText(error);
-	}
+	}*/
 	
 	public void logIn() {
-		fetchInputData();
-		mAuthTask = new LogInTask();
-		mAuthTask.execute((Void) null);		
-	}
-	
-	public void goToMainActivity() {
-		Intent main = new Intent(this, MainActivity.class);
-        startActivity(main);
+		Intent inputUsernameAndPassword = new Intent(this,InputUsernameAndPassword.class);
+		startActivity(inputUsernameAndPassword);
 	}
 	
 	public void goToSignUp() {
@@ -142,7 +147,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		startActivity(inputUsername);
 	}
 	
-	public void rememberLogin() {
+	/*public void rememberLogin() {
 		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedpreferences.edit();
 		
@@ -160,47 +165,5 @@ public class LoginActivity extends Activity implements OnClickListener {
 		editor.remove("username");
 		editor.remove("password");
 		editor.commit();
-	}
-	
-	//class to do log in in Parse in background
-	public class LogInTask extends AsyncTask<Void, Void, Boolean> {
-		ProgressDialog progressDialog;
-		
-		@Override
-	    protected void onPreExecute()
-	    {
-	        progressDialog= ProgressDialog.show(LoginActivity.this, "Log in","waiting", true);       
-	    };
-		
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			return controller.logIn(username, password);
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			progressDialog.dismiss();
-			if (success) {
-				//CurrentUser user =
-				controller.downloadCurrentUser();
-				controller.getAllLikes();
-				Log.v("prototypev1","despres getAllLikes -> "+controller.getCurrentUser().getLikes().size());
-				//controller.setCurrentUser(user);
-				//rememberLogin();
-				goToMainActivity();
-			} 
-			else {
-				Log.v("prototypev1","log in cancelat");
-				showIncorrectLoginMessage(true);
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			progressDialog.dismiss();
-			mAuthTask = null;
-			Log.v("prototypev1","log in cancelat 2");
-		}
-	}
+	}*/
 }

@@ -39,7 +39,7 @@
         <activity
             android:name=".view.LoginActivity"
             android:label="@string/app_name"
-            android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,8 +60,7 @@
         </activity>
         <activity
             android:name="com.facebook.LoginActivity"
-            android:label="@string/log_in_facebook" >
-        </activity>
+            android:label="@string/app_name" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -106,9 +105,15 @@
             android:label="@string/title_activity_list_view_photos" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.ShowFullScreenPhotoProfile"
+            android:name=".view.ShowFullScreenPhotoProfile"
             android:label="@string/title_activity_show_full_screen_photo_profile"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
+        <activity
+            android:name="com.example.prototypetfgv2.view.InputUsernameAndPassword"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:label="@string/upper_log_in">
+        </activity>
     </application>
+
 </manifest>
