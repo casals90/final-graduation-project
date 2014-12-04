@@ -1,5 +1,11 @@
 package com.example.prototypetfgv2.view;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -21,6 +27,14 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.android.Facebook;
+import com.facebook.model.GraphUser;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 public class InputUsernameActivity extends Activity {
 
@@ -30,6 +44,7 @@ public class InputUsernameActivity extends Activity {
 	private ImageButton mImageButtonAccept, mImageButtonRemove;
 	private TextView mTextViewTitleActionBar,mTextViewInocrrectUsername;
 	private String username;
+	private String facebookIdUser;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +145,10 @@ public class InputUsernameActivity extends Activity {
 				//check if user login with Twitter or facebook
 				if(controller.isLinkedWithTwitter())
 					controller.setProfilePictureFromTwitter();
-				//else
-					//facebook
+				else {
+					
+				}
+				//facebook
 				return true;
 			}
 			return false;
@@ -140,9 +157,12 @@ public class InputUsernameActivity extends Activity {
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			progressDialog.dismiss();
-			Log.v("prototypev1","onPostExecute "+success);
 			if (success) {
 				Log.v("prototypev1","correcte onPostExecute update user name");
+				Session session = ParseFacebookUtils.getSession();
+			    if (session != null && session.isOpened()) {
+			    	controller.importProfilePhotoFromFacebook();
+			    }
 				goToMainActivity();
 			} 
 			else {

@@ -96,6 +96,10 @@ public class Controller extends Application {
 		currentUser.setLikesPhotosInsideAlbum(likes);
 	}*/
 	
+	public void importProfilePhotoFromFacebook() {
+		parseFunctions.importProfilePhotoFromFacebook();
+	}
+	
 	public void clearImageLoader() {
 		ImageLoader.getInstance().clearDiskCache();
 		ImageLoader.getInstance().clearMemoryCache();
@@ -108,7 +112,7 @@ public class Controller extends Application {
 	}
 	
 	public boolean setUsername(String username) {
-		Log.v("prototypev1", "controller get setusername "+parseFunctions.setUsername(username));
+		//Log.v("prototypev1", "controller get setusername "+parseFunctions.setUsername(username));
 		return parseFunctions.setUsername(username);
 	}
 	

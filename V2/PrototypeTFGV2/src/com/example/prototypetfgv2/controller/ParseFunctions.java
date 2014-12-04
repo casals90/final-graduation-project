@@ -32,6 +32,9 @@ import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.utils.Utils;
 import com.example.prototypetfgv2.view.InputUsernameActivity;
 import com.example.prototypetfgv2.view.MainActivity;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.model.GraphUser;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -947,6 +950,30 @@ public class ParseFunctions {
 				}
 			}
 		});
+	}
+	
+	public void importProfilePhotoFromFacebook() {
+	    Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
+	            new Request.GraphUserCallback() {
+					@Override
+					public void onCompleted(GraphUser user, Response response) {
+						if (user != null) {
+							String facebookIdUser = user.getId();
+							String url = "http://graph.facebook.com/"+facebookIdUser+"/picture?type=large";
+							ParseUser u = ParseUser.getCurrentUser();
+							u.put("profilePictureUrl",url);
+							try {
+								u.save();
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+	    
+	                    } else if (response.getError() != null) {
+	                        // handle error
+	                    }                 
+					}               
+	            });
+	    request.executeAsync();
 	}
 	
 	public String getUsername(String id) {
