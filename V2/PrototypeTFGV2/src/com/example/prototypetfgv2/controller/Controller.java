@@ -78,6 +78,12 @@ public class Controller extends Application {
 		this.currentUser = currentUser;
 	}
 	
+	public boolean importProfilePhotoTwitter() {
+		String url = parseFunctions.getProfilePictureTwitterURL();
+		return parseFunctions.setProfilePictureFromSocialNetworks(url);
+	}
+	
+	
 	/*public void getLikesPhotosFromAlbum(String idAlbum) {
 		 ArrayList<String> likes = parseFunctions.getPhotosFromAlbumLikedCurrentUser(currentUser.getId(), idAlbum);
 		 this.currentUser.setLikesPhotosInsideAlbum(likes);
@@ -106,20 +112,8 @@ public class Controller extends Application {
 		return parseFunctions.setUsername(username);
 	}
 	
-	public void importProfilePictureFromSocialNetwork() {
-		Log.v("prototypev1", "isLinked  ");
-		if(isLinkedWithTwitter(ParseUser.getCurrentUser())) {
-			//set profile picture from twitter
-			Log.v("prototypev1", "isLinked yes twitter");
-			setProfilePictureFromTwitter();
-		}
-		else if(isLinkedWithFacebook(ParseUser.getCurrentUser())) {
-			//set profile picture from facebook
-		}
-	}
-	
-	public boolean isLinkedWithTwitter(ParseUser user) {
-		return parseFunctions.isLinkedWithTwitter(user);
+	public boolean isLinkedWithTwitter() {
+		return parseFunctions.isLinkedWithTwitter();
 	}
 	
 	public boolean isLinkedWithFacebook(ParseUser user) {

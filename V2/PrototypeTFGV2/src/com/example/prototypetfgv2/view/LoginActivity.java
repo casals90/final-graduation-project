@@ -65,9 +65,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		switch (id) {
 		
 			case R.id.log_in_facebook:
-				//controller.getParseFunctions().logInFacebook(this);
-				//logInFacebook();
-				Log.d("prototypev1", "login twitter");
+				logInFacebook();
 				break;
 			
 			case R.id.log_in_twitter:
@@ -86,17 +84,15 @@ public class LoginActivity extends Activity implements OnClickListener {
 	}
 	
 	public void logInFacebook() {
-		
-		controller.getParseFunctions().logInFacebook(this);
-	    
+		controller.getParseFunctions().logInFacebook(this); 
 	}
 	
-	/*@Override
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);
 	  Log.v("prototypev1","onActivityResult facebook");
 	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
-	}*/
+	}
 	
 	public void logIn() {
 		Intent inputUsernameAndPassword = new Intent(this,InputUsernameAndPassword.class);

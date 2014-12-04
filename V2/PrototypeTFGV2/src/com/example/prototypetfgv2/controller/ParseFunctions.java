@@ -213,7 +213,8 @@ public class ParseFunctions {
 		}
     }
 	
-	public boolean isLinkedWithTwitter(ParseUser user) {
+	public boolean isLinkedWithTwitter() {
+		ParseUser user = ParseUser.getCurrentUser();
 		return ParseTwitterUtils.isLinked(user);
 		
 	}
@@ -231,7 +232,7 @@ public class ParseFunctions {
 		else {
 			Log.v("prototypev1", "no existeix");
 			ParseUser currentUser = ParseUser.getCurrentUser();
-			Log.v("prototypev1", "current user "+currentUser.getUsername());
+			Log.v("prototypev1", "current user "+currentUser.getUsername()+"and new username is "+username);
 			currentUser.setUsername(username);
 			try {
 				currentUser.save();
@@ -674,6 +675,18 @@ public class ParseFunctions {
 		}
 	}
 	
+	public boolean setProfilePictureFromSocialNetworks(String url) {
+		ParseUser currentUser = ParseUser.getCurrentUser();
+		currentUser.put("profilePictureUrl",url);
+		try {
+			currentUser.save();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public boolean removeProfilePicture() {
 		ParseUser user = ParseUser.getCurrentUser();
 		user.remove("profilePicture");
@@ -746,7 +759,7 @@ public class ParseFunctions {
 							user = null; 
 					}   
 				} 
-				else 
+				else
 				    goToMainActivity(activity);
 			}
 		});
@@ -759,8 +772,6 @@ public class ParseFunctions {
 
 			@Override
 			public void done(ParseUser user, ParseException e) {
-				// TODO Auto-generated method stub
-				//LoginActivity.this.progressDialog.dismiss();
 	            if (user == null) {
 	                Log.d("prototypev1","Uh oh. The user cancelled the Facebook login.");
 	            } else if (user.isNew()) {

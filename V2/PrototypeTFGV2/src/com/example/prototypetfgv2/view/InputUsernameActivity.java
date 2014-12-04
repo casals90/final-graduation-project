@@ -96,7 +96,8 @@ public class InputUsernameActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//TODO go to login
+				//Go to login activity
+				controller.logout();
 				finish();
 			}
 		});
@@ -105,8 +106,6 @@ public class InputUsernameActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				username = mEditTextUsername.getText().toString();
-				// TODO set username
 				new UpdateUseNameTask().execute();
 			}
 		});
@@ -117,19 +116,25 @@ public class InputUsernameActivity extends Activity {
 		
 		@Override
 	    protected void onPreExecute() {
+			username = mEditTextUsername.getText().toString();
 			mTextViewInocrrectUsername.setVisibility(View.INVISIBLE);
 	        progressDialog= ProgressDialog.show(InputUsernameActivity.this, "Set username","waiting", true);       
 	    };
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			return controller.setUsername(username);
-			/*if(controller.setUsername(username)) {
-				//import profile picture
-				//controller.setProfilePictureFromTwitter();			
+			if(controller.setUsername(username)) {
+				controller.downloadCurrentUser();
+				controller.getAllLikes();
+				//import profile picture from social network
+				//check if user login with Twitter or facebook
+				if(controller.isLinkedWithTwitter())
+					controller.setProfilePictureFromTwitter();
+				//else
+					//facebook
 				return true;
 			}
-			return false;*/
+			return false;
 		}
 
 		@Override
@@ -138,7 +143,6 @@ public class InputUsernameActivity extends Activity {
 			Log.v("prototypev1","onPostExecute "+success);
 			if (success) {
 				Log.v("prototypev1","correcte onPostExecute update user name");
-				mTextViewInocrrectUsername.setVisibility(View.INVISIBLE);
 				goToMainActivity();
 			} 
 			else {

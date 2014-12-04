@@ -141,15 +141,20 @@ public class InputUsernameAndPassword extends Activity {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			return controller.logIn(username, password);
+			if(controller.logIn(username, password)) {
+				controller.downloadCurrentUser();
+				controller.getAllLikes();
+				return true;
+			}
+			return false;
 		}
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			progressDialog.dismiss();
 			if (success) {
-				controller.downloadCurrentUser();
-				controller.getAllLikes();
+				//controller.downloadCurrentUser();
+				//controller.getAllLikes();
 				goToMainActivity();
 			} 
 			else {
