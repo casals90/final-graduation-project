@@ -5,16 +5,16 @@
     android:background="@drawable/portrait_background">
     
     <TextView
-      android:id="@+id/title"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/app_tittle"
-      android:textColor="@color/White"
-      android:layout_alignParentTop="true"
-      android:layout_centerInParent="true"
-      android:textSize="50sp"
-      android:layout_marginTop="10dp"
-      android:layout_marginBottom="10dp"/>
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/app_tittle"
+		android:textColor="@color/White"
+		android:layout_alignParentTop="true"
+		android:layout_centerInParent="true"
+		android:textSize="50sp"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"/>
     
     <LinearLayout
         android:id="@+id/panel_login_buttons"
@@ -27,13 +27,19 @@
         android:orientation="vertical"
         android:gravity="center">
         
-        <com.facebook.widget.LoginButton
+        <Button 
 	        android:id="@+id/log_in_facebook"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="10dp"
 	      	android:layout_marginRight="10dp"
 	      	android:layout_marginTop="10dp"
+	      	android:text="@string/log_in_facebook"
+	      	android:background="@drawable/bg_button_facebook"
+	      	android:drawableLeft="@drawable/icon_fb"
+	      	android:textSize="16sp"
+	      	android:textStyle="bold"
+	    	android:textColor="@color/White"
 	        android:layout_gravity="center_horizontal"/>
         
         <Button 
@@ -55,13 +61,14 @@
         <Button 
 	    	android:id="@+id/log_in"
 	    	android:layout_width="match_parent"
-	    	android:layout_height="55dp"
+	    	android:layout_height="wrap_content"
 	    	android:text="@string/log_in"
 	    	android:textSize="16sp"
 	      	android:textStyle="bold"
 	    	android:textColor="@color/White"
 	    	android:layout_marginLeft="10dp"
 	      	android:layout_marginTop="10dp"
+	      	android:background="@drawable/bg_button_photo_cloud"
 	      	android:layout_marginRight="10dp"
 	      	android:drawableLeft="@drawable/ic_launcher_test_scale"
 	    	android:layout_gravity="center"/>
@@ -69,11 +76,12 @@
         <Button 
 	    	android:id="@+id/sign_up"
 	    	android:layout_width="match_parent"
-	    	android:layout_height="55dp"
+	    	android:layout_height="wrap_content"
 	    	android:text="@string/sign_up"
 	    	android:textSize="16sp"
 	      	android:textStyle="bold"
 	    	android:textColor="@color/White"
+	    	android:background="@drawable/bg_button_photo_cloud"
 	    	android:layout_marginLeft="10dp"
 	      	android:layout_marginTop="10dp"
 	      	android:layout_marginRight="10dp"

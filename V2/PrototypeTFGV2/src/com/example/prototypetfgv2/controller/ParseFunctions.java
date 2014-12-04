@@ -110,8 +110,8 @@ public class ParseFunctions {
 				return false;		
 		} catch (ParseException e) {
 			e.printStackTrace();
+			return false;
 		}
-    	return true;
     }
     
     public ArrayList<Album> downloadCommonAlbums(CurrentUser currentUser,String idFriend) {
@@ -223,17 +223,23 @@ public class ParseFunctions {
 	}
 	
 	public boolean setUsername(String username) {
+		Log.v("prototypev1", "is username exist "+isUsernameExist(username));
 		if(isUsernameExist(username)) {
+			Log.v("prototypev1", "set usrname exist");
 			return false;
 		}
 		else {
+			Log.v("prototypev1", "no existeix");
 			ParseUser currentUser = ParseUser.getCurrentUser();
+			Log.v("prototypev1", "current user "+currentUser.getUsername());
 			currentUser.setUsername(username);
 			try {
 				currentUser.save();
+				Log.v("prototypev1", "save current user set username");
 				return true;
 			} catch (ParseException e) {
 				e.printStackTrace();
+				Log.v("prototypev1", "error set username"+e);
 				return false;
 			}
 		}

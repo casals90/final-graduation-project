@@ -50,8 +50,7 @@
         <activity
             android:name=".view.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:noHistory="true"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+            android:noHistory="true">
         </activity>
         <activity
             android:name=".view.MainActivity"

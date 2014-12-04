@@ -17,13 +17,16 @@
     <string name="repeat_password">repeat password</string>
     <string name="log_in">Log in PhotoCloud</string>
     <string name="upper_log_in">LOG IN</string>
+    <string name="upper_sign_up">SIGN UP</string>
+    <string name="upper_input_username">INPUT USERNAME</string>
     <string name="sign_up">Sign up</string>
     <string name="incorrect_login">Incorrect login</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
     <string name="incorrent_sign_up">error of input data (maybe two password)</string>
+    <string name="incorrect_username_or_pasword">Incorrect username or password</string>
     <string name="remember_login">Remember login</string>
     <string name="log_in_twitter">Log in with Twitter</string>
-    <string name="log_in_facebook">Log in Facebook</string>
+    <string name="log_in_facebook">Log in with Facebook</string>
     <string name="accept">Accept</string>
     <string name="import_profile_picture_from_facebook">Import profile picture from Facebook</string>
     <string name="import_profile_picture_from_twitter">Import profile picture from Twitter</string>

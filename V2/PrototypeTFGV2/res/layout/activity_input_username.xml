@@ -10,9 +10,13 @@
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:focusableInTouchMode="true"
+	   	android:singleLine="true"
+        android:drawableLeft="@drawable/ic_action_person_dark"
         android:hint="@string/username"/>
 
     <TextView
@@ -20,16 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
         android:textSize="12sp"
         android:textColor="@color/Red"
         android:text="@string/username_already_exist" 
         android:visibility="invisible"/>
-    
-    <Button
-        android:id="@+id/b_accept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/incorrect_username"
-        android:text="@string/accept" />
-
 </RelativeLayout>

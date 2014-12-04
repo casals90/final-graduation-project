@@ -102,6 +102,7 @@ public class Controller extends Application {
 	}
 	
 	public boolean setUsername(String username) {
+		Log.v("prototypev1", "controller get setusername "+parseFunctions.setUsername(username));
 		return parseFunctions.setUsername(username);
 	}
 	

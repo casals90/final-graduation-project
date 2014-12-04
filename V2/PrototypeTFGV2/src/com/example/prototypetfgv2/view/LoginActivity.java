@@ -1,7 +1,6 @@
 package com.example.prototypetfgv2.view;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,29 +17,19 @@ import com.parse.ParseFacebookUtils;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
-	private static final String MyPREFERENCES = "PrototypeTFGV1";
-	
+	//private static final String MyPREFERENCES = "PrototypeTFGV1";
 	private Controller controller;
-	
-	//private EditText mUsernameView,mPasswordView;
-	//private TextView mIncorrectLoginView;
 	private Button mLogin,mSignup,mLoginTwitter,mLoginFacebook;
 	
-	private String username,password;
-	
 	SharedPreferences sharedpreferences;
-	Controller app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		app = (Controller) getApplicationContext();
+		
 		controller = (Controller) getApplication();
 		
-		/*mUsernameView = (EditText)findViewById(R.id.username);
-		mPasswordView = (EditText)findViewById(R.id.password);
-		mIncorrectLoginView = (TextView)findViewById(R.id.incorrect_login);*/
 		mLogin = (Button)findViewById(R.id.log_in);
 		mLogin.setOnClickListener(this);
 		mSignup=(Button)findViewById(R.id.sign_up);
@@ -49,7 +38,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 		mLoginTwitter.setOnClickListener(this);
 		mLoginFacebook = (Button)findViewById(R.id.log_in_facebook);
 		mLoginFacebook.setOnClickListener(this);
-		
 	}
 	
 	@Override
@@ -75,61 +63,39 @@ public class LoginActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		int id = v.getId();
 		switch (id) {
-		case R.id.log_in:
-			logIn(); 
-			Log.d("prototypev1", "login ");
-			break;
-			
-		case R.id.sign_up:
-			//goToSignUp();
-			Log.d("prototypev1", "sign up");
-			break;
-			
-		case R.id.log_in_twitter:
-			controller.logInTwitter(this);
-			//Log.d("prototypev1", "login twitter");
-			break;
 		
-		case R.id.log_in_facebook:
-			//controller.getParseFunctions().logInFacebook(this);
-			//logInFacebook();
-			Log.d("prototypev1", "login twitter");
-			break;
-		
-		default:
-			break;
+			case R.id.log_in_facebook:
+				//controller.getParseFunctions().logInFacebook(this);
+				//logInFacebook();
+				Log.d("prototypev1", "login twitter");
+				break;
+			
+			case R.id.log_in_twitter:
+				controller.logInTwitter(this);
+				break;
+			case R.id.log_in:
+				logIn(); 
+				break;
+			case R.id.sign_up:
+				goToSignUp();
+				break;
+			
+			default:
+				break;
 		}
 	}
 	
 	public void logInFacebook() {
-		//LoginActivity.this.progressDialog = ProgressDialog.show(
-	    // LoginActivity.this, "", "Logging in...", true);
+		
 		controller.getParseFunctions().logInFacebook(this);
 	    
 	}
 	
-	@Override
+	/*@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);
 	  Log.v("prototypev1","onActivityResult facebook");
 	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
-	}
-	
-	/*public void fetchInputData() {
-		username = mUsernameView.getText().toString();
-		password = mPasswordView.getText().toString();
-	}
-	
-	public void showIncorrectLoginMessage(boolean show) {
-		if(show)
-			mIncorrectLoginView.setVisibility(View.VISIBLE);
-		else
-			mIncorrectLoginView.setVisibility(View.INVISIBLE);
-	}
-	
-	public void changeErrorMessage(String error) {
-		Log.v("prototypev1","error signup "+error);
-		mIncorrectLoginView.setText(error);
 	}*/
 	
 	public void logIn() {

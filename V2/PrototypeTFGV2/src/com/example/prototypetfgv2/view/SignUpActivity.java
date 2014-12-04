@@ -1,18 +1,23 @@
 package com.example.prototypetfgv2.view;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
@@ -20,13 +25,12 @@ import com.example.prototypetfgv2.controller.Controller;
 public class SignUpActivity extends Activity {
 	
 	private Controller controller;
+
+	private ImageButton mImageButtonRemove,mImageButtonAccept;
+	private EditText mEditTextUsername,mEditTextPassword,mEditTextRepeatPassword;
+	private TextView mTextViewTitleActionBar,mIncorrectSignUp;;
 	
-	private EditText mUsernameView, mPasswordView, mRepeatPasswordView;
-	private TextView mIncorrectSignUpView;
-	private Button mSignup;
-	private String mUsername,mPassword,mRepeatPassword;
-	
-	private SignUpTask mAuthTask = null;
+	private String username,password,repeatPassword;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,20 +39,31 @@ public class SignUpActivity extends Activity {
 		
 		controller = (Controller) getApplicationContext();
 		
-		mUsernameView = (EditText)findViewById(R.id.username);
-		mPasswordView = (EditText)findViewById(R.id.password);
-		mRepeatPasswordView = (EditText)findViewById(R.id.repeat_password);
-		mIncorrectSignUpView = (TextView)findViewById(R.id.incorrect_sign_up);
-		mSignup = (Button)findViewById(R.id.sign_up);
-		mSignup.setOnClickListener(new OnClickListener() {
-			
+		initActionBar();
+		
+		mEditTextUsername = (EditText) findViewById(R.id.username);
+		mEditTextPassword = (EditText) findViewById(R.id.password);
+		mEditTextRepeatPassword = (EditText) findViewById(R.id.repeat_password);
+		mIncorrectSignUp = (TextView) findViewById(R.id.incorrect_sign_up);
+		mEditTextRepeatPassword.setOnEditorActionListener(new OnEditorActionListener() {
+
 			@Override
-			public void onClick(View v) {
-				//restart error message
-				showSignUpErrorMessage(false);
-				signUp();
+			public boolean onEditorAction(TextView v, int actionId,KeyEvent event) {
+				int result = actionId & EditorInfo.IME_MASK_ACTION;
+		        switch(result) {
+			        case EditorInfo.IME_ACTION_DONE:
+			            // done stuff
+			        	Log.v("prototypev1","done");
+			        	signUp();
+			            break;
+			    }
+		        return false;
 			}
 		});
+		
+		// Request focus and show soft keyboard automatically
+        mEditTextUsername.requestFocus();
+        getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 	}
 
 	@Override
@@ -70,29 +85,49 @@ public class SignUpActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void fetchInputData() {
-		mUsername = mUsernameView.getText().toString();
-		mPassword = mPasswordView.getText().toString();
-		mRepeatPassword = mRepeatPasswordView.getText().toString();
+	public void initActionBar() {
+		ActionBar actionBar = getActionBar();
+
+		actionBar.setCustomView(R.layout.custom_action_bar_log_in);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		
+		mTextViewTitleActionBar = (TextView) getActionBar().getCustomView().findViewById(R.id.label);
+		mTextViewTitleActionBar.setText(getString(R.string.upper_sign_up));
+		
+		mImageButtonRemove = (ImageButton) getActionBar().getCustomView().findViewById(R.id.button_back);
+		mImageButtonRemove.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		mImageButtonAccept = (ImageButton) getActionBar().getCustomView().findViewById(R.id.button_accept);
+		mImageButtonAccept.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				signUp();
+			}
+		});
 	}
 	
+	
 	public boolean areTwoPasswordsEquals() {
-		if(mPassword.equals(mRepeatPassword))
+		if(password.equals(repeatPassword))
 			return true;
 		return false;
 	}
 	
 	public void signUp() {
 		
-		if (mAuthTask != null) 
-			return;
-				
-		fetchInputData();
+		username = mEditTextUsername.getText().toString();
+    	password = mEditTextPassword.getText().toString();
+    	repeatPassword = mEditTextRepeatPassword.getText().toString();
 		
 		if(areTwoPasswordsEquals()) {
 			Log.v("prototypev1","The two passwords are equals");
-			mAuthTask = new SignUpTask();
-			mAuthTask.execute((Void) null);	
+			new SignUpTask().execute();	
 		}	
 		else {
 			Log.v("prototypev1","The two passwords are not equals");
@@ -102,14 +137,9 @@ public class SignUpActivity extends Activity {
 	
 	public void showSignUpErrorMessage(boolean show) {
 		if(show)
-			mIncorrectSignUpView.setVisibility(View.VISIBLE);
+			mIncorrectSignUp.setVisibility(View.VISIBLE);
 		else
-			mIncorrectSignUpView.setVisibility(View.INVISIBLE);
-	}
-	
-	public void changeErrorMessage(String error) {
-		Log.v("prototypev1","error signup "+error);
-		mIncorrectSignUpView.setText(error);
+			mIncorrectSignUp.setVisibility(View.INVISIBLE);
 	}
 	
 	public void goToMainActivity() {
@@ -128,15 +158,13 @@ public class SignUpActivity extends Activity {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			return controller.signUp(mUsername, mPassword);
+			return controller.signUp(username, password);
 		}
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
 			progressDialog.dismiss();
 			if (success) {
-				//finish();
 				controller.downloadCurrentUser();
 				goToMainActivity();
 			} else {
@@ -148,9 +176,9 @@ public class SignUpActivity extends Activity {
 		@Override
 		protected void onCancelled() {
 			progressDialog.dismiss();
-			mAuthTask = null;
 			Log.v("prototypev1","sign up cancelat ");
+			showSignUpErrorMessage(true);
 		}
-	}	
+	}
 	
 }
