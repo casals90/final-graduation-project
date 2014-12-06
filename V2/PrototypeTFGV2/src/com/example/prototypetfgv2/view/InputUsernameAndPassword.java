@@ -3,19 +3,17 @@ package com.example.prototypetfgv2.view;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -28,6 +26,9 @@ import com.example.prototypetfgv2.controller.Controller;
 
 public class InputUsernameAndPassword extends Activity {
 
+	private static final String MyPREFERENCES = "PhotoCloudData";
+	private SharedPreferences sharedPreferences;
+	
 	private EditText mEditTextUsername,mEditTextPassword;
 	private ImageButton mImageButtonAccept, mImageButtonRemove;
 	private TextView mTextViewIncorrectLogin;
@@ -42,6 +43,8 @@ public class InputUsernameAndPassword extends Activity {
 		setContentView(R.layout.activity_input_username_and_password);
 		
 		initActionBar();
+		
+		sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		
 		mEditTextUsername = (EditText) findViewById(R.id.username);
 		mEditTextPassword = (EditText) findViewById(R.id.password);
@@ -92,7 +95,6 @@ public class InputUsernameAndPassword extends Activity {
 			public void onClick(View v) {
 				username = mEditTextUsername.getText().toString();
 				password = mEditTextPassword.getText().toString();
-				// TODO parse login
 				new LogInTask().execute();
 			}
 		});
@@ -129,6 +131,13 @@ public class InputUsernameAndPassword extends Activity {
 			mTextViewIncorrectLogin.setVisibility(View.INVISIBLE);
 	}
 	
+	public void saveData() {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putString("username",username);
+		editor.putString("pass", password);
+		editor.commit();
+	}
+	
 	//class to do log in in Parse in background
 	public class LogInTask extends AsyncTask<Void, Void, Boolean> {
 		ProgressDialog progressDialog;
@@ -137,7 +146,7 @@ public class InputUsernameAndPassword extends Activity {
 	    protected void onPreExecute() {
 			showIncorrectLoginMessage(false);
 	        progressDialog= ProgressDialog.show(InputUsernameAndPassword.this, "Log in","waiting", true);       
-	    };
+	    }
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -153,8 +162,8 @@ public class InputUsernameAndPassword extends Activity {
 		protected void onPostExecute(final Boolean success) {
 			progressDialog.dismiss();
 			if (success) {
-				//controller.downloadCurrentUser();
-				//controller.getAllLikes();
+				//Save data
+				saveData();
 				goToMainActivity();
 			} 
 			else {

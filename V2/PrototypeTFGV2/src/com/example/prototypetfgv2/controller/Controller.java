@@ -28,6 +28,7 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.parse.ParseException;
 import com.parse.ParseUser;
  
 public class Controller extends Application {
@@ -120,8 +121,8 @@ public class Controller extends Application {
 		return parseFunctions.isLinkedWithTwitter();
 	}
 	
-	public boolean isLinkedWithFacebook(ParseUser user) {
-		return parseFunctions.isLinkedWithFacebook(user);
+	public boolean isLinkedWithFacebook() {
+		return parseFunctions.isLinkedWithFacebook();
 	}
 	
 	public ParseFunctions getParseFunctions() {
@@ -251,16 +252,9 @@ public class Controller extends Application {
 		return false;
 	}
 	
-	public Bitmap getProfilePictureTwitterURL() {
+	public boolean setProfilePictureFromTwitter() {
 		String url = parseFunctions.getProfilePictureTwitterURL();
-		Log.v("prototypev1", "url "+url);
-		//put the image in profile picture parse
-		Bitmap b = Bitmap.createScaledBitmap(getBitmapFromURL(url),80,80, true);
-		Log.v("prototypev1", "bytecount "+b.getByteCount());
-		if(url == null || b == null)
-			return null;
-		parseFunctions.setProfilePicture(b);
-		return b;
+		return parseFunctions.setProfilePictureFromSocialNetworks(url);
 	}
 	
 	public Bitmap getBitmapFromURL(String imageUrl) {
@@ -278,10 +272,10 @@ public class Controller extends Application {
 		}
 	}
 	
-	public void setProfilePictureFromTwitter() {
+	/*public void setProfilePictureFromTwitter() {
 		Bitmap b = getProfilePictureTwitterURL();
 		setProfilePicture(b);
-	}
+	}*/
 	
 	public ArrayList<User> downloadUsersList(ArrayList<String> users) {
 		return parseFunctions.downloadUsersList(users);
@@ -362,6 +356,10 @@ public class Controller extends Application {
 	}
 	
 	//Social Network module
+	public void logInFacebook(Activity activity) {
+		parseFunctions.logInFacebook(activity);
+	}
+	
 	public boolean likePhoto(String idPhoto,String idAlbum) {
 		currentUser.addLike(idPhoto);
 		return parseFunctions.likePhoto(idPhoto,idAlbum);

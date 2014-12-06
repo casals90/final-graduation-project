@@ -1,15 +1,11 @@
 package com.example.prototypetfgv2.view;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,24 +23,21 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.android.Facebook;
-import com.facebook.model.GraphUser;
-import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-import com.parse.ParseUser;
 
 public class InputUsernameActivity extends Activity {
 
+	private static final String MyPREFERENCES = "PhotoCloudData";
+	private SharedPreferences sharedPreferences;
+	
 	private Controller controller;
 	
 	private EditText mEditTextUsername;
 	private ImageButton mImageButtonAccept, mImageButtonRemove;
 	private TextView mTextViewTitleActionBar,mTextViewInocrrectUsername;
 	private String username;
-	private String facebookIdUser;
+	//private String facebookIdUser;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +45,8 @@ public class InputUsernameActivity extends Activity {
 		setContentView(R.layout.activity_input_username);
 		
 		initActionBar();
+		
+		sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		
 		controller = (Controller) getApplicationContext();
 		
@@ -126,6 +121,18 @@ public class InputUsernameActivity extends Activity {
 		});
 	}
 	
+	public void saveData() {
+		Log.v("prototypev1","s'executa save data");
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putString("username",username);
+		if(controller.isLinkedWithFacebook())
+			editor.putBoolean("facebook",true);
+		else if(controller.isLinkedWithTwitter())
+			editor.putBoolean("twitter",true);
+		editor.commit();
+	}
+	
+	
 	public class UpdateUseNameTask extends AsyncTask<Void, Void, Boolean> {
 		ProgressDialog progressDialog;
 		
@@ -142,13 +149,9 @@ public class InputUsernameActivity extends Activity {
 				controller.downloadCurrentUser();
 				controller.getAllLikes();
 				//import profile picture from social network
-				//check if user login with Twitter or facebook
+				//check if user login with Twitter
 				if(controller.isLinkedWithTwitter())
 					controller.setProfilePictureFromTwitter();
-				else {
-					
-				}
-				//facebook
 				return true;
 			}
 			return false;
@@ -158,11 +161,13 @@ public class InputUsernameActivity extends Activity {
 		protected void onPostExecute(final Boolean success) {
 			progressDialog.dismiss();
 			if (success) {
-				Log.v("prototypev1","correcte onPostExecute update user name");
-				Session session = ParseFacebookUtils.getSession();
-			    if (session != null && session.isOpened()) {
-			    	controller.importProfilePhotoFromFacebook();
-			    }
+				if(controller.isLinkedWithFacebook()) {
+					Session session = ParseFacebookUtils.getSession();
+				    if (session != null && session.isOpened())
+				    	controller.importProfilePhotoFromFacebook();
+				}
+			    //Save data
+			    saveData();
 				goToMainActivity();
 			} 
 			else {

@@ -30,6 +30,7 @@ import com.example.prototypetfgv2.model.CurrentUser;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.utils.Utils;
+import com.example.prototypetfgv2.view.DownloadDataUserActivity;
 import com.example.prototypetfgv2.view.InputUsernameActivity;
 import com.example.prototypetfgv2.view.MainActivity;
 import com.facebook.Request;
@@ -217,13 +218,12 @@ public class ParseFunctions {
     }
 	
 	public boolean isLinkedWithTwitter() {
-		ParseUser user = ParseUser.getCurrentUser();
-		return ParseTwitterUtils.isLinked(user);
+		return ParseTwitterUtils.isLinked(ParseUser.getCurrentUser());
 		
 	}
 	
-	public boolean isLinkedWithFacebook(ParseUser user) {
-		return ParseFacebookUtils.isLinked(user);
+	public boolean isLinkedWithFacebook() {
+		return ParseFacebookUtils.isLinked(ParseUser.getCurrentUser());
 	}
 	
 	public boolean setUsername(String username) {
@@ -763,7 +763,7 @@ public class ParseFunctions {
 					}   
 				} 
 				else
-				    goToMainActivity(activity);
+					goToDownloadUserData(activity);
 			}
 		});
 	}
@@ -793,13 +793,19 @@ public class ParseFunctions {
 				}  
 	            } else {
 	                Log.d("prototypev1","User logged in through Facebook!");
-	               // showUserDetailsActivity();
+	                // go to downloads
+	                goToDownloadUserData(activity);
 	            }
 	            if(e != null) {
 	            	Log.d("prototypev1","error facebook "+e);
 	            }
 			}
 	    });
+	}
+	
+	public void goToDownloadUserData(Activity activity) {
+		Intent download = new Intent(activity, DownloadDataUserActivity.class);
+        activity.startActivity(download);
 	}
 	
 	public JSONObject getTwitterData() {

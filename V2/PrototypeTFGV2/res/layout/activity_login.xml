@@ -23,7 +23,8 @@
         android:layout_marginLeft="10dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_login_buttons"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
         android:orientation="vertical"
         android:gravity="center">
         

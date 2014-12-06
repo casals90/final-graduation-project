@@ -140,5 +140,6 @@
     <string name="title_activity_show_full_screen_photo_profile">ShowFullScreenPhotoProfile</string>
     <string name="title_activity_full_screen_photos_current_user">FullScreenPhotosCurrentUser</string>
     <string name="title_activity_input_username_and_password">InputUsernameAndPassword</string>
+    <string name="title_activity_download_data_user">DownloadDataUserActivity</string>
 
 </resources>

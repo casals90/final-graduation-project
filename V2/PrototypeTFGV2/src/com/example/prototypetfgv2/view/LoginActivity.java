@@ -2,7 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,11 +16,11 @@ import com.parse.ParseFacebookUtils;
 
 public class LoginActivity extends Activity implements OnClickListener {
 	
-	//private static final String MyPREFERENCES = "PrototypeTFGV1";
+	//private static final String MyPREFERENCES = "PhotoCloudData";
 	private Controller controller;
 	private Button mLogin,mSignup,mLoginTwitter,mLoginFacebook;
 	
-	SharedPreferences sharedpreferences;
+	//private SharedPreferences sharedpreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 		switch (id) {
 		
 			case R.id.log_in_facebook:
-				logInFacebook();
+				controller.logInFacebook(this);
 				break;
 			
 			case R.id.log_in_twitter:
@@ -81,10 +80,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 			default:
 				break;
 		}
-	}
-	
-	public void logInFacebook() {
-		controller.getParseFunctions().logInFacebook(this); 
 	}
 	
 	@Override
@@ -103,29 +98,4 @@ public class LoginActivity extends Activity implements OnClickListener {
 		Intent signUp = new Intent(this,SignUpActivity.class);
 		startActivity(signUp);
 	}
-	
-	public void goToInputUsername() {
-		Intent inputUsername = new Intent(this,InputUsernameActivity.class);
-		startActivity(inputUsername);
-	}
-	
-	/*public void rememberLogin() {
-		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = sharedpreferences.edit();
-		
-		editor.putBoolean("rememberLogin",true);
-		editor.putString("username",username);
-		editor.putString("password",password);
-		editor.commit();
-	}
-	
-	public void deleteRememberLogin() {
-		sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = sharedpreferences.edit();
-		
-		editor.putBoolean("rememberLogin",false);
-		editor.remove("username");
-		editor.remove("password");
-		editor.commit();
-	}*/
 }

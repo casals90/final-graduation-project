@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,14 +45,12 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
-import com.example.prototypetfgv2.utils.BitmapUtils;
 import com.example.prototypetfgv2.utils.Utils;
-import com.example.prototypetfgv2.view.UploadPhotoActivity.BitmapWorkerTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class FragmentProfile extends Fragment {
 	
-	private static final String MyPREFERENCES = "PrototypeTFGV1";
+	private static final String MyPREFERENCES = "PhotoCloudData";
 	
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final int REQUEST_PICK_IMAGE = 2;
@@ -166,21 +163,17 @@ public class FragmentProfile extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public void deleteSharedPreferences() {
+		getActivity().getApplicationContext().getSharedPreferences(MyPREFERENCES, 0).edit().clear().commit();
+	}
 
 	public void logout() {
 		controller.logout();
-		deleteSharedPReferences();
+		deleteSharedPreferences();
 		Intent login = new Intent(getActivity(), LoginActivity.class);
 		Utils.cleanBackStack(login);
 		startActivity(login);
-	}
-	
-	public void deleteSharedPReferences() {
-		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putBoolean("rememberLogin",false);
-		editor.remove("username");
-		editor.remove("password");
-		editor.commit();
 	}
 
 	@Override
@@ -472,9 +465,9 @@ public class FragmentProfile extends Fragment {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			newProfilePicture = controller.getProfilePictureTwitterURL();
+			/*newProfilePicture = controller.getProfilePictureTwitterURL();
 			if(newProfilePicture == null)
-				return false;
+				return false;*/
 			return true;
 		}
 

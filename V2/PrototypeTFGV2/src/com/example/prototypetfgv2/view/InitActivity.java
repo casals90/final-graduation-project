@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,38 +14,26 @@ import com.example.prototypetfgv2.controller.Controller;
 
 public class InitActivity extends Activity {
 	
-	private static final String MyPREFERENCES = "PrototypeTFGV1";
+	private static final String MyPREFERENCES = "PhotoCloudData";
 	
 	private Controller controller;
 	
 	private SharedPreferences sharedPreferences;
-	
-	private boolean rememberLogin;
-	private String username, password;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_init);
 		
-		controller = (Controller) getApplicationContext();
+		controller = (Controller) getApplication();
 		
 		sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+		//Delete all
+		//getApplicationContext().getSharedPreferences(MyPREFERENCES, 0).edit().clear().commit();
 		
-		if(sharedPreferences.contains("rememberLogin"))
-			rememberLogin = sharedPreferences.getBoolean("rememberLogin",false);
-		
-		if(rememberLogin) {
-			username = sharedPreferences.getString("username","");
-			password = sharedPreferences.getString("password","");
-			
-			if(controller.logIn(username, password)) 
-				goToMainActivity();
-			else
-				goToLoginActivity();
-		}
-		else
-			goToLoginActivity();
+		LoggedUser user = initLoggedUserData();
+		Log.v("prototypev1", "Logged user "+user.username+" pass "+user.password +" facebook "+user.facebook+" twitter "+user.twitter);
+		login(user);
 	}
 
 	@Override
@@ -66,13 +55,49 @@ public class InitActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	public class LoggedUser {
+		String username,password;
+		boolean facebook,twitter;
+	}
+	
+	public LoggedUser initLoggedUserData() {
+		LoggedUser user = new LoggedUser();
+		user.username = sharedPreferences.getString("username",null);
+		user.password = sharedPreferences.getString("pass",null);
+		user.facebook = sharedPreferences.getBoolean("facebook",false);
+		user.twitter = sharedPreferences.getBoolean("twitter",false);
+		return user;
+	}
+	
+	public void login(LoggedUser user) {
+		if(user.username == null && user.password == null)
+			goToLoginActivity();
+		else if(user.username != null && user.password != null) 
+			//Parse login and go to main
+			logIn(user.username, user.password);
+		else if(user.username != null && user.facebook == true) {
+			//Facebook auto login
+			controller.logInFacebook(this);
+			goToDownloadUserData();
+		}	
+		else if(user.username != null && user.twitter == true) {
+			controller.logInTwitter(this);
+			goToDownloadUserData();
+		}	
+	}
+	
+	public void logIn(String username,String password) {
+		if(controller.logIn(username,password))
+			goToDownloadUserData();
+	}
+	
 	public void goToLoginActivity() {
 		Intent login = new Intent(this, LoginActivity.class);
         startActivity(login);
 	}
 	
-	public void goToMainActivity() {
-		Intent main = new Intent(this, MainActivity.class);
-        startActivity(main);
+	public void goToDownloadUserData() {
+		Intent download = new Intent(this, DownloadDataUserActivity.class);
+        startActivity(download);
 	}
 }
