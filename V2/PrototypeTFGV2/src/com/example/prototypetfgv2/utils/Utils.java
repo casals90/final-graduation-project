@@ -3,9 +3,12 @@ package com.example.prototypetfgv2.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -274,6 +277,103 @@ public class Utils {
 		size.add(height);
 		return size;
 	}
+	
+	public static int monthNameToInt(String month) {
+		MonthName monthName = new MonthName();
+		return monthName.getMonthNumber(month);
+	}
+	
+	public static String newDateFormatFromCreatedAt(String createdAt) {
+		String[] separated = createdAt.split(" ");
+		//Month number
+		int m = Utils.monthNameToInt(separated[1]);
+		return separated[2]+"/"+m+"/"+separated[5]+" "+separated[3];
+	}
+	
+	public static String substracDates(String current,String createdAt) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/M/yyyy HH:mm:ss");
+		Date currentDate = null;
+		Date createdAtDate = null;
+		try {
+			currentDate = simpleDateFormat.parse(current);
+		} catch (ParseException e) {
+			Log.v("prototypev1","peta date current");
+			e.printStackTrace();
+		}
+		try {
+			createdAtDate = simpleDateFormat.parse(createdAt);
+		} catch (ParseException e) {
+			Log.v("prototypev1","peta date createdAt");
+			e.printStackTrace();
+		}
+		long different = currentDate.getTime() - createdAtDate.getTime();
+		
+		/*long secondsInMilli = 1000;
+        /*long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+        
+        if(elapsedDays < 1) {
+        	if(elapsedHours < 24 && elapsedHours > 0.9) {
+        		
+        	}
+        }*/
+		long seconds = different / 1000;
+		if(seconds >= 60 ) {
+			long minutes = seconds / 60;
+			if(minutes >= 60 ) {
+				long hours = minutes / 60;
+				if(hours >= 24) {
+					long days = hours / 24;
+					return days+":d";
+				}
+				else
+					return hours+":h";
+			}
+			else
+				return minutes+":m";
+		}
+		//Return seconds
+		else
+			return seconds+":s";
+        
+        //return elapsedMinutes;
+	}
+	
+	/*public static String difference(Date startDate, Date endDate){
+
+        //milliseconds
+        long different = endDate.getTime() - startDate.getTime();
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+
+        return String.valueOf(elapsedMinutes);
+    }*/
 }
 
 	

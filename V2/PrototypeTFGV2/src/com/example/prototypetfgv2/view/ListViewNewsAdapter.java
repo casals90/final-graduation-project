@@ -1,6 +1,8 @@
 package com.example.prototypetfgv2.view;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -44,6 +47,9 @@ public class ListViewNewsAdapter extends BaseAdapter {
 	private Activity activity;
 	private NewsInterface newsInterface;
 	private String idAlbum;
+	//private Date currentDate;
+	private SimpleDateFormat simpleDateFormat;
+	private String currentDate;
 		
 	public ListViewNewsAdapter(Context context,ArrayList<Photo> photos,HashMap<String, String> albums,NewsInterface newsInterface,Activity activity) {
 		super();
@@ -55,7 +61,9 @@ public class ListViewNewsAdapter extends BaseAdapter {
 		this.albums = albums;
 		this.newsInterface = newsInterface;
 		this.activity = activity;
-		//TODO getlikes current user of all photos	
+		//Current date
+		simpleDateFormat = new SimpleDateFormat("dd/M/yyyy HH:mm:ss");
+		currentDate = simpleDateFormat.format(new Date());
 	}
 	
 	public void initDisplayOptions() {
@@ -152,14 +160,18 @@ public class ListViewNewsAdapter extends BaseAdapter {
 				newsInterface.goToAlbum(photo.getOwnerAlbum());
 			}
 		});
-		holder.mTextViewDate.setText(photo.getCreatedAt());
+		
+		
+		String d = Utils.newDateFormatFromCreatedAt(photo.getCreatedAt());
+		String difference = Utils.substracDates(currentDate,d);
+		
+		holder.mTextViewDate.setText(getLabel(difference));
 		
 		holder.mButtonLike.setText(String.valueOf(photo.getLikesNumber()));
 		holder.mButtonComment.setText(String.valueOf(photo.getCommentsNumber()));
 		like = controller.currentUserLikedCurrentPhoto(photo.getId());
 		if(!like) {
 			changeShapeColorBlack(holder.mButtonLike);
-			//Log.v("prototypev1", "dins if like false");
 			holder.mButtonLike.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -186,6 +198,18 @@ public class ListViewNewsAdapter extends BaseAdapter {
 		});
 		
 		return view;
+	}
+	
+	public String getLabel(String d) {
+		String[] t = d.split(":");
+		if(t[1] == "s") 
+			return t[0]+" "+activity.getString(R.string.seconds_ago); 
+		else if(t[1] == "m")
+			return t[0]+" "+activity.getString(R.string.minutes_ago);
+		else if(t[1] == "h")
+			return t[0]+" "+activity.getString(R.string.hours_ago);
+		else
+			return t[0]+" "+activity.getString(R.string.days_ago); 
 	}
 	
 	public void goToCommentsActivity(Photo currentPhoto) {
