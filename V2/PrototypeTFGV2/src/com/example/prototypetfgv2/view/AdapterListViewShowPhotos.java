@@ -1,6 +1,8 @@
 package com.example.prototypetfgv2.view;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -43,6 +46,9 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	private Activity activity;
 	
 	private GoToProfileUserInterface goToProfileUserInterface;
+	//private Date currentDate;
+	private SimpleDateFormat simpleDateFormat;
+	private String currentDate;
 	
 	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos, ImageLoader imageLoader,String idAlbum,Activity activity,GoToProfileUserInterface goToProfileUserInterface) {
 		super();
@@ -54,7 +60,9 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		this.imageLoader = imageLoader;
 		initDisplayOptions();
 		this.goToProfileUserInterface = goToProfileUserInterface;
-		//controller.getLikesPhotosFromAlbum(idAlbum);
+		//Current date
+		simpleDateFormat = new SimpleDateFormat("dd/M/yyyy HH:mm:ss");
+		currentDate = simpleDateFormat.format(new Date());
 	}
 	
 	public void initDisplayOptions() {
@@ -142,10 +150,14 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 			}
 		});
 		
-		//Put time
-		
 		holder.mTextViewUsername.setText(photo.getOwnerUser().getUsername());
 		holder.mTextViewTitle.setText(photo.getTitle());
+		
+		//Put date
+		String d = Utils.newDateFormatFromCreatedAt(photo.getCreatedAt());
+		String difference = Utils.substracDates(currentDate,d);
+		
+		holder.mTextViewDate.setText(getLabel(difference));
 		
 		holder.mButtonLike.setText(String.valueOf(photo.getLikesNumber()));
 		holder.mButtonComment.setText(String.valueOf(photo.getCommentsNumber()));
