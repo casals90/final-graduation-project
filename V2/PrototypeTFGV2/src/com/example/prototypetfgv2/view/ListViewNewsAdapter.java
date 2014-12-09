@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -201,12 +202,13 @@ public class ListViewNewsAdapter extends BaseAdapter {
 	}
 	
 	public String getLabel(String d) {
+		Log.v("prototypev1","getLabel "+d);
 		String[] t = d.split(":");
-		if(t[1] == "s") 
+		if(t[1].compareTo("s") == 0) 
 			return t[0]+" "+activity.getString(R.string.seconds_ago); 
-		else if(t[1] == "m")
+		else if(t[1].compareTo("m") == 0)
 			return t[0]+" "+activity.getString(R.string.minutes_ago);
-		else if(t[1] == "h")
+		else if(t[1].compareTo("h") == 0)
 			return t[0]+" "+activity.getString(R.string.hours_ago);
 		else
 			return t[0]+" "+activity.getString(R.string.days_ago); 
@@ -264,5 +266,4 @@ public class ListViewNewsAdapter extends BaseAdapter {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
-
 }

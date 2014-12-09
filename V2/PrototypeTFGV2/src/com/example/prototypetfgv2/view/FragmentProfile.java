@@ -47,6 +47,7 @@ import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.parse.ParseUser;
 
 public class FragmentProfile extends Fragment {
 	
@@ -80,7 +81,6 @@ public class FragmentProfile extends Fragment {
 		super.onCreate(savedInstanceState);
 		controller = (Controller) this.getActivity().getApplicationContext();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-		
 		
 		//For show menu in action bar
 		setHasOptionsMenu(true);

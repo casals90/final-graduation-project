@@ -19,10 +19,9 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.parse.ParseUser;
 
 public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
-	
-	//private OnSetCurrentAlbum callback;
 
 	private ListView listAlbums;
 	private Controller controller;
@@ -32,16 +31,11 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 	private String currentAlbumId;
 	private int positionCurrentAlbum;
 
-	//Create a callback interface
-	/*public interface OnSetCurrentAlbum {
-        public void onSetCurrentAlbum(String idCurrentAlbum);
-    }*/
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		controller = (Controller)getActivity().getApplicationContext();
-		//callback = (OnSetCurrentAlbum) getTargetFragment();
 		
 		Bundle data = getArguments();
 		currentAlbumId = data.getString("currentAlbumId");
@@ -69,6 +63,7 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 			if(id.compareTo(albums.get(i).getId()) == 0)
 					return i;
 		}
+		Log.v("prototypev1","return -1 ");
 		return -1;
 	}
 
@@ -126,7 +121,12 @@ public class FragmentDialogChooseCurrentAlbum extends DialogFragment {
 			if(success) {
 				mProgressBarDialog.setVisibility(View.INVISIBLE);
 				listAlbums.setVisibility(View.VISIBLE);
-				positionCurrentAlbum = getPositionCurrentAlbum(currentAlbumId);
+				//Only find current album if user assigned one, else the user haven't current album
+				if(currentAlbumId != null)
+					positionCurrentAlbum = getPositionCurrentAlbum(currentAlbumId);
+				else
+					positionCurrentAlbum = -1;
+				
 				Log.v("prototypev1", "pos current album "+positionCurrentAlbum);
 				listAlbums.setAdapter(new ListViewAlbumsAdapter(albums, getActivity().getApplicationContext(),positionCurrentAlbum));
 				listAlbums.setOnItemClickListener(new OnItemClickListener() {

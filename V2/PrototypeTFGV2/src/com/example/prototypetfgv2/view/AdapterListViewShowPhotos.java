@@ -86,7 +86,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		RelativeLayout header;
 		ImageView mImageViewProfilePicture,mImageViewPhoto;
 		ProgressBar mProgressBar;
-		TextView mTextViewUsername,mTextViewTitle;
+		TextView mTextViewUsername,mTextViewTitle,mTextViewDate;
 		Button mButtonLike, mButtonComment;
 	}
 	
@@ -102,6 +102,7 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
             holder.mImageViewProfilePicture = (ImageView) view.findViewById(R.id.profile_picture);
             holder.mTextViewUsername = (TextView) view.findViewById(R.id.username);
             holder.mTextViewTitle = (TextView) view.findViewById(R.id.title);
+            holder.mTextViewDate = (TextView) view.findViewById(R.id.date);
             holder.mImageViewPhoto = (ImageView) view.findViewById(R.id.photo);
             holder.mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
             holder.mButtonLike = (Button) view.findViewById(R.id.button_like);
@@ -137,10 +138,11 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				goToProfileUserInterface.goToProfileUser(photo.getOwnerUser());
 			}
 		});
+		
+		//Put time
 		
 		holder.mTextViewUsername.setText(photo.getOwnerUser().getUsername());
 		holder.mTextViewTitle.setText(photo.getTitle());
@@ -150,7 +152,6 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		like = controller.currentUserLikedCurrentPhoto(photo.getId());
 		if(!like) {
 			changeShapeColorBlack(holder.mButtonLike);
-			//Log.v("prototypev1", "dins if like false");
 			holder.mButtonLike.setOnClickListener(new OnClickListener() {
     			@Override
     			public void onClick(View v) {
@@ -175,6 +176,19 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 			}
 		});
 		return view;
+	}
+	
+	public String getLabel(String d) {
+		//Log.v("prototypev1","getLabel "+d);
+		String[] t = d.split(":");
+		if(t[1].compareTo("s") == 0) 
+			return t[0]+" "+activity.getString(R.string.seconds_ago); 
+		else if(t[1].compareTo("m") == 0)
+			return t[0]+" "+activity.getString(R.string.minutes_ago);
+		else if(t[1].compareTo("h") == 0)
+			return t[0]+" "+activity.getString(R.string.hours_ago);
+		else
+			return t[0]+" "+activity.getString(R.string.days_ago); 
 	}
 	
 	public void goToCommentsActivity(Photo currentPhoto) {

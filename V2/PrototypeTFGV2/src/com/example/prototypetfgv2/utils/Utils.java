@@ -174,13 +174,11 @@ public class Utils {
 	}
 	
 	public static boolean stringIsInArrayList(ArrayList<String> arr,String s) {
-		//Log.v("prototypev1","id  "+s);
 		for(int i = 0; i < arr.size(); i++) {
 			//Log.v("prototypev1","array values "+arr.get(i));
 			if(arr.get(i).compareTo(s) == 0)
 				return true;
 		}
-		//Log.v("prototypev1","false exuist");
 		return false;
 	}
 	
@@ -190,7 +188,6 @@ public class Utils {
 			try {
 				list.add(arr.getString(i));
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
 			}
@@ -216,7 +213,6 @@ public class Utils {
 					list.add(arr.getString(i));
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
 			}
@@ -297,38 +293,17 @@ public class Utils {
 		try {
 			currentDate = simpleDateFormat.parse(current);
 		} catch (ParseException e) {
-			Log.v("prototypev1","peta date current");
+			//Log.v("prototypev1","peta date current");
 			e.printStackTrace();
 		}
 		try {
 			createdAtDate = simpleDateFormat.parse(createdAt);
 		} catch (ParseException e) {
-			Log.v("prototypev1","peta date createdAt");
+			//Log.v("prototypev1","peta date createdAt");
 			e.printStackTrace();
 		}
 		long different = currentDate.getTime() - createdAtDate.getTime();
 		
-		/*long secondsInMilli = 1000;
-        /*long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
-
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
-
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
-
-        long elapsedSeconds = different / secondsInMilli;
-        
-        if(elapsedDays < 1) {
-        	if(elapsedHours < 24 && elapsedHours > 0.9) {
-        		
-        	}
-        }*/
 		long seconds = different / 1000;
 		if(seconds >= 60 ) {
 			long minutes = seconds / 60;
@@ -347,33 +322,7 @@ public class Utils {
 		//Return seconds
 		else
 			return seconds+":s";
-        
-        //return elapsedMinutes;
 	}
-	
-	/*public static String difference(Date startDate, Date endDate){
-
-        //milliseconds
-        long different = endDate.getTime() - startDate.getTime();
-
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
-
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
-
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
-
-        long elapsedSeconds = different / secondsInMilli;
-
-        return String.valueOf(elapsedMinutes);
-    }*/
 }
 
 	
