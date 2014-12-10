@@ -6,7 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -56,12 +60,15 @@ public class FragmentProfileOtherUser extends Fragment {
 		user = data.getParcelable("User");
 		
 		this.isMyFriend = controller.isMyFriend(user.getId());
+		
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
 		//Change action bar title
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActivity().getActionBar().setTitle(user.getUsername());
 	}
 
@@ -117,6 +124,24 @@ public class FragmentProfileOtherUser extends Fragment {
 		}
 		
 		return view;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Log.v("prototypev1","get item id "+item.getItemId());
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				getFragmentManager().popBackStack();
+		        return true;
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	public void buttonIsFriend() {

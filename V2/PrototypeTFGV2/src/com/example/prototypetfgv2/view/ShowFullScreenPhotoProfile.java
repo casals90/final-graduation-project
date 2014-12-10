@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.Photo;
@@ -23,6 +24,7 @@ public class ShowFullScreenPhotoProfile extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_show_full_screen_photo_profile);
 		
 		Intent data = getIntent();
@@ -40,6 +42,14 @@ public class ShowFullScreenPhotoProfile extends Activity {
 		mViewPager.setPageMargin(50);
 		
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.v("prototypev1","OnResum shoFullProfile");
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setTitle(R.string.my_photos);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,8 +64,14 @@ public class ShowFullScreenPhotoProfile extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+			case android.R.id.home:
+				Log.v("prototypev1","home button");
+				finish();
+		        break;
+	
+			default:
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

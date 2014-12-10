@@ -43,6 +43,8 @@ public class FragmentAlbums extends Fragment {
 		super.onCreate(savedInstanceState);
 		controller = (Controller) this.getActivity().getApplication();
 		controller.clearImageLoader();
+		
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -51,7 +53,8 @@ public class FragmentAlbums extends Fragment {
 	public void onResume() {
 		super.onResume();
 		//Change action bar title
-		getActivity().setTitle(R.string.albums);
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		getActivity().getActionBar().setTitle(R.string.albums);
 	}
 
 	@Override

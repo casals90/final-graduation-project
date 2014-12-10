@@ -47,7 +47,6 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.add_new_album);
 		
 		controller = (Controller) getActivity().getApplication();
 		
@@ -65,6 +64,13 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	}
 	
 	@Override
+	public void onResume() {
+		super.onResume();
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActivity().setTitle(R.string.add_new_album);
+	}
+
+	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_new_album, menu);
 	}
@@ -79,7 +85,9 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 					goToNewAlbum();
 				}
 				break;
-				
+			case android.R.id.home:
+				getFragmentManager().popBackStack();
+		        return true;	
 			default:
 				break;
 		}

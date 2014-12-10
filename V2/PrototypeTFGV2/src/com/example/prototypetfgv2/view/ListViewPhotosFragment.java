@@ -10,7 +10,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -67,6 +69,7 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		getActivity().setTitle((album.getAlbumTitle()));
 		controller.clearImageLoader();
 		imageLoader = ImageLoader.getInstance();
+		
 		setHasOptionsMenu(true);
 	}
 	
@@ -77,11 +80,14 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 		mListViewPhotos = (ListView) view.findViewById(R.id.photos);
 		mTextView = (TextView) view.findViewById(R.id.no_photos);
+		
 		return view;
 	}
 	
 	@Override
 	public void onResume() {
+		//show up navigation
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		new DownloadPhotosTask().execute(album.getId());
 		super.onResume();
 	}
@@ -105,6 +111,9 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 			case R.id.add_photo_from_gallery:
 				choosePhotoFromGallery();
 				break;
+			case android.R.id.home:
+				goToFragmentAlbums();
+		        break;
 			default:
 				break;
 		}
@@ -117,6 +126,14 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
 		startActivityForResult(Intent.createChooser(intent,"Select Picture"),REQUEST_PICK_IMAGE);
+	}
+	
+	public void goToFragmentAlbums() {
+		FragmentManager manager = getActivity().getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 	
 	public String searchPhotoSelect(Intent data) {

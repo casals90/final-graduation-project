@@ -303,35 +303,35 @@ public class Utils {
 			e.printStackTrace();
 		}
 		long different = currentDate.getTime() - createdAtDate.getTime();
-		Log.v("prototypev1","---------------------------------- ");
-		Log.v("prototypev1","diff "+different);
+		//Log.v("prototypev1","---------------------------------- ");
+		//Log.v("prototypev1","diff "+different);
 		long seconds = different / 1000;
 		if(seconds >= 60 ) {
-			Log.v("prototypev1","seconds "+seconds);
+			//Log.v("prototypev1","seconds "+seconds);
 			long minutes = seconds / 60;
 			if(minutes >= 60 ) {
-				Log.v("prototypev1","minutes "+minutes);
+				//Log.v("prototypev1","minutes "+minutes);
 				long hours = minutes / 60;
 				if(hours >= 24) {
-					Log.v("prototypev1","hours "+hours);
+					//Log.v("prototypev1","hours "+hours);
 					long days = hours / 24;
-					Log.v("prototypev1","days "+days);
-					Log.v("prototypev1","return days");
+					//Log.v("prototypev1","days "+days);
+					//Log.v("prototypev1","return days");
 					return days+":d";
 				}
 				else {
-					Log.v("prototypev1","return hours");
+					//Log.v("prototypev1","return hours");
 					return hours+":h";
 				}
 			}
 			else {
-				Log.v("prototypev1","return minutes");
+				//Log.v("prototypev1","return minutes");
 				return minutes+":m";
 			}
 		}
 		//Return seconds
 		else {
-			Log.v("prototypev1","return seconds");
+			//Log.v("prototypev1","return seconds");
 			return seconds+":s";
 		}	
 	}

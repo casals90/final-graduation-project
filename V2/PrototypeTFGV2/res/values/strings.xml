@@ -78,11 +78,14 @@
     <string name="album_settings">Album settings</string>
     <string name="no_current_album">You dont have current album. Change in a profile</string>
     <string name="add_photo_from_gallery">Add photo from gallery</string>
+    <string name="my_photos">My photos</string>
+    <string name="add_members_album">ADD MEMBERS IN ALBUM</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>
     <string name="comment">comment</string>
     <string name="date_of_comment">date of comment</string>
+    <string name="likes">likes</string>
 
     <!-- News -->
     <string name="label_add_photo">add photo in</string>

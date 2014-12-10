@@ -2,16 +2,13 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.User;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,6 +17,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.User;
 
 public class FragmentListFriends extends Fragment {
 
@@ -38,12 +39,28 @@ public class FragmentListFriends extends Fragment {
 		super.onCreate(savedInstanceState);
 		
 		controller = (Controller) getActivity().getApplicationContext();
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
 	public void onResume() {
 		super.onResume();
-		getActivity().setTitle(R.string.friends);
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActivity().getActionBar().setTitle(R.id.friends);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		switch (id) {
+			case android.R.id.home:
+				getFragmentManager().popBackStack();
+		        return true;
+	
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

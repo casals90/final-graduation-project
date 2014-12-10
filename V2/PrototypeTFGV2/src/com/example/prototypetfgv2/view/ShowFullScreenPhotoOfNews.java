@@ -128,6 +128,12 @@ public class ShowFullScreenPhotoOfNews extends Activity {
 			}
 		});
 	}
+		
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+	}
 	
 	public void goToCommentsActivity(Photo currentPhoto) {
 		Intent commentsActivity = new Intent(this,CommentsActivity.class);
@@ -221,8 +227,13 @@ public class ShowFullScreenPhotoOfNews extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+			case android.R.id.home:
+				Log.v("prototypev1","home button");
+				finish();
+		        break;
+			default:
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

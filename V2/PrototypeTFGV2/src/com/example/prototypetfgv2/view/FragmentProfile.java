@@ -82,6 +82,7 @@ public class FragmentProfile extends Fragment {
 		controller = (Controller) this.getActivity().getApplicationContext();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -142,7 +143,8 @@ public class FragmentProfile extends Fragment {
 	public void onResume() {
 		super.onResume();
 		Log.v("prototypev1","on resume "+controller.getCurrentUser().getUsername());
-		getActivity().setTitle(controller.getCurrentUser().getUsername());
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		getActivity().getActionBar().setTitle((controller.getCurrentUser().getUsername()));
 		new DownloadPhotosTask().execute();
 	}
 	

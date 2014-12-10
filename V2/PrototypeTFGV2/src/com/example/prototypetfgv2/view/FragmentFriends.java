@@ -57,6 +57,7 @@ public class FragmentFriends extends Fragment {
 	public void onResume() {
 		super.onResume();
 		//Change action bar title
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		getActivity().setTitle(R.string.friends);
 	}
 
@@ -77,13 +78,11 @@ public class FragmentFriends extends Fragment {
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1,
 					int arg2, int arg3) {
-				// TODO Auto-generated method stub	
 			}
 
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 					int arg3) {
-				// TODO Auto-generated method stub	
 			}
 			
 			@Override

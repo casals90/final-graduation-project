@@ -10,13 +10,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -76,6 +79,7 @@ public class FragmentShowPhotosGrid extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 		new DownloadPhotosTask().execute(album.getId());
 		//Put album title in action bar
 		getActivity().setTitle((album.getAlbumTitle()));
@@ -100,6 +104,13 @@ public class FragmentShowPhotosGrid extends Fragment {
 			case R.id.add_photo_from_gallery:
 				choosePhotoFromGallery();
 				break;
+			case android.R.id.home:
+		        //NavUtils.navigateUpFromSameTask(this);
+		        //return true;
+				//getFragmentManager().popBackStack();
+				goToFragmentAlbums();
+				Log.v("prototypev1","home button");
+		        break;
 			default:
 				break;
 		}
@@ -155,6 +166,14 @@ public class FragmentShowPhotosGrid extends Fragment {
 		transaction.replace(R.id.container_fragment_main,listViewPhotos);
 		transaction.addToBackStack(null);
 		transaction.commit();	
+	}
+	
+	public void goToFragmentAlbums() {
+		FragmentManager manager = getActivity().getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 	
 	private class DownloadPhotosTask extends AsyncTask<String, Void, Boolean> {

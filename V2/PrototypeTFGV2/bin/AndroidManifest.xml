@@ -97,8 +97,7 @@
         </activity>
         <activity
             android:name=".view.ShowFullScreenPhotoProfile"
-            android:label="@string/title_activity_show_full_screen_photo_profile"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+            android:label="@string/title_activity_show_full_screen_photo_profile">
         </activity>
         <activity
             android:name=".view.InputUsernameAndPassword"

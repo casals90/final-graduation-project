@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -48,6 +49,7 @@ public class ShowPhotoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_fullscreen_view);
+		
 		initActionBar();
 		
 		initDisplayOptions();
@@ -80,6 +82,12 @@ public class ShowPhotoActivity extends Activity {
 			}
 		});
 		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 	
 	public void updateActionBar(int position) {
@@ -119,10 +127,15 @@ public class ShowPhotoActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+			case android.R.id.home:
+				Log.v("prototypev1","home button");
+				finish();
+		        break;
+	
+			default:
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
 }

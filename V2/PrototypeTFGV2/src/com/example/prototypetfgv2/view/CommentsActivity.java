@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -22,7 +23,7 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.Photo;
 
-public class CommentsActivity extends Activity {
+public class CommentsActivity extends Activity  {
 	
 	private ListView listComments;
 	private EditText mEditTextNewComment;
@@ -52,8 +53,9 @@ public class CommentsActivity extends Activity {
 		
 		//Catch data
 		Intent intent = getIntent();
-		if(intent != null)
+		if(intent != null) {
 			currentPhoto = intent.getParcelableExtra("photo");
+		}
 		
 		listComments = (ListView) findViewById(R.id.list_comments);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -73,6 +75,10 @@ public class CommentsActivity extends Activity {
 					Toast.makeText(getApplicationContext(), "Input comment",Toast.LENGTH_LONG).show();
 			}
 		});
+		
+		//Request focus and show soft keyboard automatically
+		mEditTextNewComment.requestFocus();
+        getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 		
 		new DownloadCommentsTask().execute();
 	}
@@ -167,8 +173,7 @@ public class CommentsActivity extends Activity {
         protected void onPostExecute(final Boolean success) {
         	if(success) {
         		//Adding new comment in a arrayList and send to adapter
-        		comments.add(newComment);
-        		//TODO callback to update the comments number
+        		comments.add(newComment);	        		
         		mProgressBar.setVisibility(View.INVISIBLE);
 	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments,activity);
 	            listComments.setAdapter(adapter);	            
@@ -184,4 +189,6 @@ public class CommentsActivity extends Activity {
 			//Toast.makeText(this,"Error download albums",  Toast.LENGTH_LONG).show();
 		}
     }
+
+	
 }

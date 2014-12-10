@@ -7,14 +7,15 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.prototypetfgv2.view.CommentsActivity" >
-
+    
     <ListView 
         android:id="@+id/list_comments"
         android:layout_height="400dp"
         android:layout_width="match_parent"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/likes_number"
+        
         android:layout_marginBottom="50dp"/>
     
     <ProgressBar
@@ -35,7 +36,9 @@
         android:id="@+id/button_send_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_send_now"
+        android:focusableInTouchMode="true"
+	   	android:singleLine="true"
+        android:src="@drawable/ic_action_send_now_black"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/new_comment"
         android:background="@drawable/selector_icons"

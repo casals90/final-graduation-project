@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -51,6 +50,8 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		this.albums = new HashMap<String, String>();
 		this.newsInterface = this;
 		this.activity = getActivity();
+		
+		controller.clearImageLoader();
 	}
 	
 	@Override
@@ -58,7 +59,8 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		super.onResume();
 		//Change action bar title
 		getActivity().setTitle(R.string.news);
-		//new DownloadNewsTask().execute();
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		new DownloadNewsTask().execute();
 		Log.v("prototypev1", "go back pos = "+pos);
 		//Download new comments numbers of photo
 		//new UpdateCommentsNumberFromPhotoTask().execute();
@@ -72,7 +74,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
 		listNews = (ListView) view.findViewById(R.id.list_news);
 		
-		new DownloadNewsTask().execute();
+		//new DownloadNewsTask().execute();
 		
 		return view;
 	}
@@ -83,6 +85,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	    protected void onPreExecute() {
 	        super.onPreExecute();
 	        mProgressBar.setVisibility(View.VISIBLE);
+	        listNews.setVisibility(View.INVISIBLE);
 	    }
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
@@ -133,12 +136,11 @@ public class FragmentNews extends Fragment implements NewsInterface {
         protected void onPostExecute(final Boolean success) {
         	mProgressBar.setVisibility(View.INVISIBLE);
         	if(success) {
-        		//Log.v("prototypev1", "success");
         		for(int i = 0; i < arrayListAlbums.size(); i++) {
         			Album album = arrayListAlbums.get(i);
         			albums.put(album.getId(),album.getAlbumTitle());
         		}
-        		//Log.v("prototypev1", "albums hashmap "+albums.size());
+        		listNews.setVisibility(View.VISIBLE);
         		listNews.setAdapter(new ListViewNewsAdapter(getActivity().getApplicationContext(), photos, albums,newsInterface,activity));
         		listNews.setOnItemClickListener(new OnItemClickListener() {
 
@@ -162,7 +164,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		}
     }
 	
-	private class UpdateCommentsNumberFromPhotoTask extends AsyncTask<Void, Void, Integer> {
+	/*private class UpdateCommentsNumberFromPhotoTask extends AsyncTask<Void, Void, Integer> {
     	
 		@Override
         protected void onPreExecute() {
@@ -192,7 +194,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 			super.onCancelled();
 			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
 		}
-    }
+    }*/
 	
 	public void goToShowPhotoFullScreen(Photo photo) {
 		Intent showPhoto = new Intent(getActivity(),ShowFullScreenPhotoOfNews.class);
