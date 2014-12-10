@@ -55,9 +55,14 @@ public class FragmentProfileOtherUser extends Fragment {
 		Bundle data = this.getArguments();
 		user = data.getParcelable("User");
 		
-		getActivity().getActionBar().setTitle(user.getUsername());
-		
 		this.isMyFriend = controller.isMyFriend(user.getId());
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		//Change action bar title
+		getActivity().getActionBar().setTitle(user.getUsername());
 	}
 
 	@Override

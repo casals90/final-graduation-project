@@ -54,14 +54,10 @@ public class FragmentShowPhotosGrid extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.news);
 		controller = (Controller) this.getActivity().getApplicationContext();
 		//Fetch data album
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
-		
-		//Put album title in action bar
-		getActivity().setTitle((album.getAlbumTitle()));
 		
 		setHasOptionsMenu(true);
 	}
@@ -79,8 +75,10 @@ public class FragmentShowPhotosGrid extends Fragment {
 	
 	@Override
 	public void onResume() {
-		new DownloadPhotosTask().execute(album.getId());
 		super.onResume();
+		new DownloadPhotosTask().execute(album.getId());
+		//Put album title in action bar
+		getActivity().setTitle((album.getAlbumTitle()));
 	}
 	
 	@Override

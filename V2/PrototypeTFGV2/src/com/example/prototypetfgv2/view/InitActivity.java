@@ -93,11 +93,13 @@ public class InitActivity extends Activity {
 	
 	public void goToLoginActivity() {
 		Intent login = new Intent(this, LoginActivity.class);
+		login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(login);
 	}
 	
 	public void goToDownloadUserData() {
 		Intent download = new Intent(this, DownloadDataUserActivity.class);
+		download.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(download);
 	}
 }

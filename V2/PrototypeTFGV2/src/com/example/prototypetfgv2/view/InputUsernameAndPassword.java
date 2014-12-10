@@ -121,6 +121,7 @@ public class InputUsernameAndPassword extends Activity {
 	
 	public void goToMainActivity() {
 		Intent main = new Intent(this, MainActivity.class);
+		main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(main);
 	}
 	

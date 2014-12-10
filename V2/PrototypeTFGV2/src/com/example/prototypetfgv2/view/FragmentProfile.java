@@ -141,6 +141,7 @@ public class FragmentProfile extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.v("prototypev1","on resume "+controller.getCurrentUser().getUsername());
 		getActivity().setTitle(controller.getCurrentUser().getUsername());
 		new DownloadPhotosTask().execute();
 	}

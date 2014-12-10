@@ -43,11 +43,17 @@ public class FragmentAlbums extends Fragment {
 		super.onCreate(savedInstanceState);
 		controller = (Controller) this.getActivity().getApplication();
 		controller.clearImageLoader();
-		getActivity().setTitle(R.string.albums);
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		//Change action bar title
+		getActivity().setTitle(R.string.albums);
+	}
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_fragment_albums, menu);

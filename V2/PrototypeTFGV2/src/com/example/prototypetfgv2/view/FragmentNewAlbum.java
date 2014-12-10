@@ -48,7 +48,6 @@ public class FragmentNewAlbum extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.newAlbum);
 		
 		controller = (Controller) getActivity().getApplicationContext();
 		
@@ -63,6 +62,13 @@ public class FragmentNewAlbum extends Fragment {
 		Log.v("prototypev1", "albumName ="+albumName);		
 		//For show menu in action bar
 		setHasOptionsMenu(true);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		//Change action bar title
+		getActivity().setTitle(R.string.newAlbum);
 	}
 	
 	@Override

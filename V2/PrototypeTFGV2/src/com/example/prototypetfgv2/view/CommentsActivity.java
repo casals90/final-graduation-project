@@ -25,7 +25,7 @@ import com.example.prototypetfgv2.model.Photo;
 public class CommentsActivity extends Activity {
 	
 	private ListView listComments;
-	private EditText newComment;
+	private EditText mEditTextNewComment;
 	private ImageButton send;
 	private ProgressBar mProgressBar;
 	
@@ -34,6 +34,9 @@ public class CommentsActivity extends Activity {
 	private ArrayList<String> likes;
 	private Controller controller;
 	private Photo currentPhoto;
+	private Activity activity;
+	
+	private Comment newComment;
 	
 	private String text;
 	
@@ -45,6 +48,8 @@ public class CommentsActivity extends Activity {
 		controller = (Controller) getApplication().getApplicationContext();
 		comments = new ArrayList<Comment>();
 		
+		activity = this;
+		
 		//Catch data
 		Intent intent = getIntent();
 		if(intent != null)
@@ -52,16 +57,16 @@ public class CommentsActivity extends Activity {
 		
 		listComments = (ListView) findViewById(R.id.list_comments);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-		newComment = (EditText) findViewById(R.id.new_comment);
+		mEditTextNewComment = (EditText) findViewById(R.id.new_comment);
 		send = (ImageButton) findViewById(R.id.button_send_comment);
 		send.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// Send comment	
-				text = newComment.getText().toString();
+				text = mEditTextNewComment.getText().toString();
 				if(text.length() > 0) {
-					newComment.setText("");
+					mEditTextNewComment.setText("");
 					new SendCommentTask().execute();
 				}
 				else
@@ -115,7 +120,7 @@ public class CommentsActivity extends Activity {
         	Log.v("prototypev1", "onPostExecute success=  "+success);
         	if(success) {
         		mProgressBar.setVisibility(View.INVISIBLE);
-	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments);
+	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments,activity);
 	            Log.v("prototypev1", "success ");
 	            listComments.setAdapter(adapter);	            
         	}
@@ -152,16 +157,20 @@ public class CommentsActivity extends Activity {
  
         @Override
         protected Boolean doInBackground(Void... params) {
-        	return controller.newComment(currentPhoto.getId(), text);
+        	newComment = controller.newComment(currentPhoto.getId(), text);
+        	if(newComment != null)
+        		return true;
+        	return false;
         }
  
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
         		//Adding new comment in a arrayList and send to adapter
-        		comments.add(new Comment(currentPhoto.getOwnerUser(),text,currentPhoto.getCreatedAt()));
+        		comments.add(newComment);
+        		//TODO callback to update the comments number
         		mProgressBar.setVisibility(View.INVISIBLE);
-	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments);
+	            adapter = new ListViewAdapterForComments(getApplicationContext(),comments,activity);
 	            listComments.setAdapter(adapter);	            
         	}
         	else {

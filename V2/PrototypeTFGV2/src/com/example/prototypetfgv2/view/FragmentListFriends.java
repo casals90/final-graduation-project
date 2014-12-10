@@ -36,15 +36,22 @@ public class FragmentListFriends extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.friends);	
 		
 		controller = (Controller) getActivity().getApplicationContext();
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		getActivity().setTitle(R.string.friends);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.layout_listview_friends,container,false);
+		
+		//getActivity().setTitle(R.string.friends);
 		
 		mListView = (ListView) view.findViewById(R.id.listview_friends);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);

@@ -26,7 +26,11 @@ public class MainActivity extends FragmentActivity {
 		transaction.commit();
 		// Track app opens.
 		
-		//ParseAnalytics.trackAppOpened(getIntent());
+		/*FragmentManager fm = this.getSupportFragmentManager();
+		Log.v("prototypev1","count backstack "+fm.getBackStackEntryCount());
+		for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {    
+		    fm.popBackStack();
+		}*/
 	}
 
 	@Override

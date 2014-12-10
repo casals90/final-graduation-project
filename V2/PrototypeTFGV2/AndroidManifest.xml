@@ -37,7 +37,7 @@
             android:name=".view.LoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name=".view.SignUpActivity"
@@ -65,7 +65,6 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        
         <receiver android:name=".controller.PushReceiver" >
             <intent-filter>
                 <action android:name="com.example.prototypetfgv2.controller.UPDATE_STATUS" />
@@ -107,9 +106,13 @@
             android:windowSoftInputMode="stateVisible|adjustResize" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.DownloadDataUserActivity"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:label="@string/app_name">
+            android:name=".view.DownloadDataUserActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.example.prototypetfgv2.view.ShowFullScreenPhotoOfNews"
+            android:label="@string/title_activity_show_full_screen_photo_of_news" >
         </activity>
     </application>
 

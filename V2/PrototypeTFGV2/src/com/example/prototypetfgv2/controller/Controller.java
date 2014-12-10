@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
+import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.CurrentUser;
 import com.example.prototypetfgv2.model.Photo;
@@ -322,6 +323,11 @@ public class Controller extends Application {
 		return null;
 	}
 	
+	public User getCurrentUserToUserModel() {
+		ParseUser user = ParseUser.getCurrentUser();
+		return new User(user.getObjectId(),user.getUsername(),user.getString("profilePictureUrl"),user.getInt("friendsNumber"),user.getInt("photosNumber"),user.getInt("albumsNumber"));
+	}
+	
 	public void setCoverPhotoAlbum(String idAlbum,String idPhoto) {
 		parseFunctions.setCoverPhotoFromAlbum(idAlbum, idPhoto);
 	}
@@ -373,8 +379,9 @@ public class Controller extends Application {
 		currentUser.addLike(idPhoto);
 	}
 	
-	public boolean newComment(String idPhoto,String text) {
-		return parseFunctions.newComment(idPhoto, text);
+	public Comment newComment(String idPhoto,String text) {
+		User user = getCurrentUserToUserModel();
+		return parseFunctions.newComment(idPhoto, text,user);
 	}
 	
 	public int countPhotoLikes(String id) {
@@ -383,5 +390,10 @@ public class Controller extends Application {
 	
 	public int countPhotoComments(String id) {
 		return parseFunctions.countPhotoComments(id);
+	}
+	
+	public int getCommentsNumbersFromPhoto(String id) {
+		Photo p = parseFunctions.downloadPhoto(id);
+		return p.getCommentsNumber();
 	}
 }

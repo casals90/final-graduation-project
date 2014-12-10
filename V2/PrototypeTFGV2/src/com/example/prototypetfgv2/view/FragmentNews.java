@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -33,6 +37,8 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	private NewsInterface newsInterface;
 	private Activity activity;
 	
+	private int pos;
+	
 	public FragmentNews() {
 		super();
 	}
@@ -40,12 +46,22 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.news);
 		
 		this.controller = (Controller) getActivity().getApplication();
 		this.albums = new HashMap<String, String>();
 		this.newsInterface = this;
 		this.activity = getActivity();
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		//Change action bar title
+		getActivity().setTitle(R.string.news);
+		//new DownloadNewsTask().execute();
+		Log.v("prototypev1", "go back pos = "+pos);
+		//Download new comments numbers of photo
+		//new UpdateCommentsNumberFromPhotoTask().execute();
 	}
 
 	@Override
@@ -124,9 +140,17 @@ public class FragmentNews extends Fragment implements NewsInterface {
         		}
         		//Log.v("prototypev1", "albums hashmap "+albums.size());
         		listNews.setAdapter(new ListViewNewsAdapter(getActivity().getApplicationContext(), photos, albums,newsInterface,activity));
+        		listNews.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						pos = position;
+						goToShowPhotoFullScreen(photos.get(position));
+					}
+				});
         	}
         	else {
-        		//No albums
+        		//No photos
         		//TODO no news
         	}
         }
@@ -137,6 +161,44 @@ public class FragmentNews extends Fragment implements NewsInterface {
 			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
 		}
     }
+	
+	private class UpdateCommentsNumberFromPhotoTask extends AsyncTask<Void, Void, Integer> {
+    	
+		@Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	//mProgressBar.setVisibility(View.VISIBLE);
+        }
+ 
+        @Override
+        protected Integer doInBackground(Void... params) {
+        	//arrayListAlbums = controller.getAlbums();
+        	int n = controller.getCommentsNumbersFromPhoto(photos.get(pos).getId());  
+            return n;
+            		
+        }
+ 
+        @Override
+        protected void onPostExecute(final Integer commentsNumber) {
+        	mProgressBar.setVisibility(View.INVISIBLE);
+        	if(commentsNumber > 0) {
+        		photos.get(pos).setCommentsNumber(commentsNumber);
+        	}
+        		
+        }
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
+		}
+    }
+	
+	public void goToShowPhotoFullScreen(Photo photo) {
+		Intent showPhoto = new Intent(getActivity(),ShowFullScreenPhotoOfNews.class);
+		showPhoto.putExtra("photo",photo);
+		startActivity(showPhoto);
+	}
 
 	@Override
 	public void goToProfileUser(User user) {

@@ -1061,18 +1061,19 @@ public class ParseFunctions {
 		}
 	}
 	
-	public boolean newComment(String idPhoto,String text) {
+	public Comment newComment(String idPhoto,String text,User user) {
 		ParseObject comment = new ParseObject("Comment");
 		comment.put("idPhoto",idPhoto);
 		comment.put("idUser",ParseUser.getCurrentUser().getObjectId());
 		comment.put("comment",text);
 		try {
 			comment.save();
+			Comment c = new Comment(user,comment.getString("comment"),comment.getCreatedAt().toString());
 			incrementCommentsNumber(idPhoto);
-			return true;
+			return c;
 		} catch (ParseException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 	

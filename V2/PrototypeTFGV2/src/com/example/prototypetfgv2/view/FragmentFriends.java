@@ -52,6 +52,13 @@ public class FragmentFriends extends Fragment {
 		controller = (Controller) this.getActivity().getApplication();
 		getActivity().setTitle(R.string.friends);
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		//Change action bar title
+		getActivity().setTitle(R.string.friends);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
