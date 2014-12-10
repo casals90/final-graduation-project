@@ -58,7 +58,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	public void onResume() {
 		super.onResume();
 		//Change action bar title
-		getActivity().setTitle(R.string.news);
+		getActivity().getActionBar().setTitle(R.string.news);
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		new DownloadNewsTask().execute();
 		Log.v("prototypev1", "go back pos = "+pos);

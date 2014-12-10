@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -150,30 +149,6 @@ public class FragmentNewAlbum extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-	
-	/*public PopupWindow popupWindowDogs() {
-        // initialize a pop up window type
-        PopupWindow popupWindow = new PopupWindow(this);
- 
-        // the drop down list is a list view
-        ListView listViewDogs = new ListView(this);
-         
-        // set our adapter and pass our pop up window contents
-        listViewDogs.setAdapter(dogsAdapter(popUpContents));
-         
-        // set the item click listener
-        listViewDogs.setOnItemClickListener(new DogsDropdownOnItemClickListener());
- 
-        // some other visual settings
-        popupWindow.setFocusable(true);
-        popupWindow.setWidth(250);
-        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-         
-        // set the list view as pop up window content
-        popupWindow.setContentView(listViewDogs);
- 
-        return popupWindow;
-    }*/
 	
 	public boolean createAlbum() {
 		members = adapter.getMembers();

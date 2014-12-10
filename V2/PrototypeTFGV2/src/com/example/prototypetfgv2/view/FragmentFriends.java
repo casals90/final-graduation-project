@@ -58,7 +58,7 @@ public class FragmentFriends extends Fragment {
 		super.onResume();
 		//Change action bar title
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
-		getActivity().setTitle(R.string.friends);
+		getActivity().getActionBar().setTitle(R.string.friends);
 	}
 
 	@Override
