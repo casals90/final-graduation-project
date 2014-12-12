@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -83,6 +84,7 @@ public class FragmentProfile extends Fragment {
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -102,7 +104,8 @@ public class FragmentProfile extends Fragment {
 		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
 		albumsNumber.setText(controller.getAlbumsNumber());
 		friendsNumber = (TextView) view.findViewById(R.id.friends_number);
-		friendsNumber.setText(controller.getFriendsNumber());
+		//friendsNumber.setText(controller.getFriendsNumber());
+		friendsNumber.setText("a canviar");
 		
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);

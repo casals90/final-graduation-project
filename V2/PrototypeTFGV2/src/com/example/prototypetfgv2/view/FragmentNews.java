@@ -3,6 +3,7 @@ package com.example.prototypetfgv2.view;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -60,6 +61,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		//Change action bar title
 		getActivity().getActionBar().setTitle(R.string.news);
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		new DownloadNewsTask().execute();
 		Log.v("prototypev1", "go back pos = "+pos);
 		//Download new comments numbers of photo

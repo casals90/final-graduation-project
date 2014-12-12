@@ -204,7 +204,7 @@ public class Controller extends Application {
 	}
 	
 	public boolean addFriend(String id) {
-		currentUser.incrementFriendsNumber();
+		//currentUser.incrementFriendsNumber();
 		return parseFunctions.addFriend(id,currentUser);
 	}
 	
@@ -230,7 +230,7 @@ public class Controller extends Application {
 	}
 	
 	public boolean deleteFriend(String id) {
-		currentUser.decrementFriendsNumber();
+		//currentUser.decrementFriendsNumber();
 		return parseFunctions.deleteFriend(id,currentUser);
 	}
 	
@@ -238,8 +238,12 @@ public class Controller extends Application {
 		return String.valueOf(currentUser.getPhotosNumber());
 	}
 	
-	public String getFriendsNumber() {
-		return String.valueOf(currentUser.getFriendsNumber());
+	public String getFollowersNumber() {
+		return String.valueOf(currentUser.getFollowersNumber());
+	}
+	
+	public String getFollowingNumber() {
+		return String.valueOf(currentUser.getFollowingNumber());
 	}
 	
 	public String getAlbumsNumber() {
@@ -299,6 +303,14 @@ public class Controller extends Application {
 	
 	public ArrayList<Album> getAlbums() {
 		return parseFunctions.getAlbums(currentUser);
+	}
+	
+	public ArrayList<User> getFollowers() {
+		return parseFunctions.getFollowers(currentUser.getId());
+	}
+	
+	public ArrayList<User> getFollowing() {
+		return parseFunctions.getFollowing(currentUser.getId());
 	}
 	
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {

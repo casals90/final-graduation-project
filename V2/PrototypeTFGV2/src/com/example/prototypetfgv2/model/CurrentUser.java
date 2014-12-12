@@ -8,27 +8,34 @@ public class CurrentUser {
 	private String username;
 	private String profilePicture;
 	private String currentAlbum;
-	private int friendsNumber;
+	private int followingNumber;
+	private int followersNumber;
 	private int photosNumber;
 	private int albumsNumber;
 	private ArrayList<String> likes;
 	private ArrayList<String> albums;
 	private ArrayList<String> ownerPhotosFromAlbum;
 	private ArrayList<String> albumsAdmin;
+	private ArrayList<String> following;
+	private ArrayList<String> followers;
 	
-	public CurrentUser(String id, String username, String profilePicture,String currentAlbum,int friendsNumber,int photosNumber,int albumsNumber) {
+	public CurrentUser(String id, String username, String profilePicture,String currentAlbum,
+			int followingNumber,int followersNumber,int photosNumber,int albumsNumber,ArrayList<String> followers,ArrayList<String> following) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.profilePicture = profilePicture;
 		this.currentAlbum = currentAlbum;
-		this.friendsNumber = friendsNumber;
+		this.followingNumber = followingNumber;
+		this.followersNumber = followersNumber;
 		this.photosNumber = photosNumber;
 		this.likes = new ArrayList<String>();
 		this.albums = new ArrayList<String>();
 		this.ownerPhotosFromAlbum = new ArrayList<String>();
 		this.albumsAdmin = new ArrayList<String>();
 		this.albumsNumber = albumsNumber;
+		this.followers = followers;
+		this.following = following;
 	}
 
 	/*public CurrentUser(String id, String username, String profilePicture,ArrayList<String> likes,ArrayList<String> albums) {
@@ -106,13 +113,21 @@ public class CurrentUser {
 	public void setAlbumsNumber(int albumsNumber) {
 		this.albumsNumber = albumsNumber;
 	}
-	
-	public int getFriendsNumber() {
-		return friendsNumber;
+
+	public int getFollowingNumber() {
+		return followingNumber;
 	}
 
-	public void setFriendsNumber(int friendsNumber) {
-		this.friendsNumber = friendsNumber;
+	public void setFollowingNumber(int followingNumber) {
+		this.followingNumber = followingNumber;
+	}
+
+	public int getFollowersNumber() {
+		return followersNumber;
+	}
+
+	public void setFollowersNumber(int followersNumber) {
+		this.followersNumber = followersNumber;
 	}
 
 	public int getPhotosNumber() {
@@ -121,6 +136,22 @@ public class CurrentUser {
 
 	public void setPhotosNumber(int photosNumber) {
 		this.photosNumber = photosNumber;
+	}
+	
+	public ArrayList<String> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(ArrayList<String> following) {
+		this.following = following;
+	}
+
+	public ArrayList<String> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(ArrayList<String> followers) {
+		this.followers = followers;
 	}
 	
 	// End getters and setters
@@ -161,15 +192,42 @@ public class CurrentUser {
 		return albumsAdmin.contains(idAlbum);
 	}
 	
-	public void incrementFriendsNumber() {
-		friendsNumber ++;
+	public void incrementFollowersNumber() {
+		followersNumber ++;
 	}
 	
-	public void decrementFriendsNumber() {
-		if(friendsNumber > 0)
-			friendsNumber--;
-		else
-			friendsNumber = 0;
-		
+	public void incrementFollowingNumber() {
+		followingNumber ++;
 	}
+	
+	public void decrementFollowersNumber() {
+		if(followersNumber > 0)
+			followersNumber --;
+		else
+			followersNumber = 0;
+	}
+	
+	public void decrementFollowingNumber() {
+		if(followingNumber > 0)
+			followingNumber --;
+		else
+			followingNumber = 0;
+	}
+	
+	public void addFollower(String idFollower) {
+		followers.add(idFollower);
+	}
+	
+	public void deleteFollower(String idFollower) {
+		followers.remove(idFollower);
+	}
+	
+	public void addFollowing(String idFollowing) {
+		following.add(idFollowing);
+	}
+	
+	public void deleteFollowing(String idFollowing) {
+		following.remove(idFollowing);
+	}
+	
 }

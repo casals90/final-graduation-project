@@ -2,6 +2,7 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -69,6 +70,7 @@ public class FragmentNewAlbum extends Fragment {
 		super.onResume();
 		//Change action bar title
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		getActivity().getActionBar().setTitle(R.string.newAlbum);
 	}
 	

@@ -2,6 +2,7 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class FragmentAlbums extends Fragment {
 		controller.clearImageLoader();
 		
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}

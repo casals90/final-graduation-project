@@ -78,10 +78,10 @@ public class ParseFunctions {
 		parseUser.setUsername(username);
 		parseUser.setPassword(password);
 		parseUser.put("photosNumber",0);
-		parseUser.put("friendsNumber",0);
+		//parseUser.put("friendsNumber",0);
+		parseUser.put("followingNumber",0);
+		parseUser.put("followersNumber",0);
 		parseUser.put("albumsNumber",0);
-		//Add default profile picture
-		//parseUser.put("profilePicture",new ParseFile(null));
 		try {
 			parseUser.signUp();
 			return parseUser;
@@ -751,7 +751,9 @@ public class ParseFunctions {
 				else if (user.isNew()) { 
 					Log.v("prototypev1", "signup twitter new user");
 					user.put("photosNumber",0);
-					user.put("friendsNumber",0);
+					//user.put("friendsNumber",0);
+					user.put("followingNumber",0);
+					user.put("followersNumber",0);
 					user.put("albumsNumber",0);
 					try {
 						user.save();
@@ -780,7 +782,9 @@ public class ParseFunctions {
 	            } else if (user.isNew()) {
 	                Log.d("prototypev1","User signed up and logged in through Facebook!");
 	                user.put("photosNumber",0);
-					user.put("friendsNumber",0);
+					//user.put("friendsNumber",0);
+	                user.put("followingNumber",0);
+					user.put("followersNumber",0);
 					user.put("albumsNumber",0);
 					try {
 						user.save();
@@ -1188,6 +1192,76 @@ public class ParseFunctions {
 		}
 	}
 	
+	public ArrayList<String> getFollowersId(String idUser) {
+		ArrayList<String> followers = new ArrayList<String>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idUser",idUser);
+		try {
+			List<ParseObject> friendships = query.find();
+			for(ParseObject f : friendships) {
+				String idFollower = f.getString("idFriend");
+				followers.add(idFollower);
+			}
+			return followers;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<String> getFollowingId(String idUser) {
+		ArrayList<String> following = new ArrayList<String>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idFriend",idUser);
+		try {
+			List<ParseObject> friendships = query.find();
+			for(ParseObject f : friendships) {
+				String idFollower = f.getString("idUser");
+				following.add(idFollower);
+			}
+			return following;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<User> getFollowers(String idUser) {
+		ArrayList<User> followers = new ArrayList<User>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idUser",idUser);
+		try {
+			List<ParseObject> friendships = query.find();
+			Log.v("prototypev1","followers size "+friendships.size());
+			for(ParseObject f : friendships) {
+				String idFollower = f.getString("idFriend");
+				followers.add(getUser(idFollower));
+				Log.v("prototypev1","end download user");
+			}
+			return followers;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<User> getFollowing(String idUser) {
+		ArrayList<User> following = new ArrayList<User>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idFriend",idUser);
+		try {
+			List<ParseObject> friendships = query.find();
+			for(ParseObject f : friendships) {
+				String idFollower = f.getString("idUser");
+				following.add(getUser(idFollower));
+			}
+			return following;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public CurrentUser getCurrentUser() {
 		ParseUser parseUser = ParseUser.getCurrentUser();
 		JSONObject currentAlbum = parseUser.getJSONObject("currentAlbum");
@@ -1196,7 +1270,9 @@ public class ParseFunctions {
 			try {
 				idAlbum = currentAlbum.getString("id");
 				int albumsNumber = getAlbumsNumber(parseUser.getObjectId());
-				return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),idAlbum,parseUser.getInt("friendsNumber"),parseUser.getInt("photosNumber"),albumsNumber);
+				return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),idAlbum,
+						parseUser.getInt("followingNumber"),parseUser.getInt("followersNumber"),parseUser.getInt("photosNumber"),
+						albumsNumber,getFollowersId(parseUser.getObjectId()),getFollowingId(parseUser.getObjectId()));
 			} catch (JSONException e) {
 				e.printStackTrace();
 				Log.v("prototypev1", "error getCurrentUser"+e);
@@ -1205,7 +1281,9 @@ public class ParseFunctions {
 		}
 		else {
 			int albumsNumber = getAlbumsNumber(parseUser.getObjectId());
-			return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),null,parseUser.getInt("friendsNumber"),parseUser.getInt("photosNumber"),albumsNumber);
+			return new CurrentUser(parseUser.getObjectId(),parseUser.getUsername(),parseUser.getString("profilePictureUrl"),null
+					,parseUser.getInt("followingNumber"),parseUser.getInt("followersNumber"),parseUser.getInt("photosNumber"),
+					albumsNumber,getFollowersId(parseUser.getObjectId()),getFollowingId(parseUser.getObjectId()));
 		}
 	}
 }
