@@ -84,7 +84,7 @@ public class FragmentProfileOtherUser extends Fragment {
 		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
 		albumsNumber.setText(String.valueOf(user.getAlbumsNumber()));
 		friendsNumber = (TextView) view.findViewById(R.id.friends_number);
-		friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
+		//friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
 		
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
@@ -206,8 +206,8 @@ public class FragmentProfileOtherUser extends Fragment {
         	super.onPreExecute();
             //mProgressBar.setVisibility(VISIBLE);
         	//friendsNumber.setText()
-        	user.decrementFriendsNumber();
-        	friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
+        	//user.decrementFriendsNumber();
+        	//friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
         	listCommonAlbums.setVisibility(View.INVISIBLE);
         	buttonAddFriend();
         }
@@ -241,8 +241,8 @@ public class FragmentProfileOtherUser extends Fragment {
         	super.onPreExecute();
           // buttonFriend.setVisibility(INVISIBLE);
            //mProgressBar.setVisibility(VISIBLE);
-	    	user.incrementFriendsNumber();
-	    	friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
+	    	//user.incrementFriendsNumber();
+	    	//friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
 	    	buttonIsFriend();
 	    	listCommonAlbums.setVisibility(View.VISIBLE);
 	    	new DownloadCommonAlbumsTask().execute();

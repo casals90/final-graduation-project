@@ -7,8 +7,11 @@ import com.example.prototypetfgv2.model.User;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +20,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class AdapterForFollowers extends BaseAdapter {
@@ -26,18 +30,30 @@ public class AdapterForFollowers extends BaseAdapter {
 	private DisplayImageOptions options;
 	private Controller controller;
 	private LayoutInflater inflater;
-	
 	private ArrayList<String> following;
 		
 	public AdapterForFollowers(ArrayList<User> followers,Context context) {
 		super();
 		this.followers = followers;
+		
+		Log.v("prototypev1", "followers");
+		for(int i = 0; i < followers.size(); i++) {
+			Log.v("prototypev1", "followers list:" +followers.get(i).getId());
+		}
+		Log.v("prototypev1", "-----------");
+		
 		this.imageLoader = ImageLoader.getInstance();
 		initDisplayOptions();
 		this.inflater = LayoutInflater.from(context);
 		this.controller = (Controller) context.getApplicationContext();
 		
-		following = controller.getCurrentUser().getFollowing(); 
+		//Get following with my followers
+		following = controller.getCurrentUser().getFollowing();
+		Log.v("prototypev1", "following");
+		for(int i = 0; i < following.size(); i++) {
+			Log.v("prototypev1", "following list : "+following.get(i));
+		}
+		Log.v("prototypev1", "-------------------------");
 	}
 	
 	public void initDisplayOptions() {
@@ -71,7 +87,7 @@ public class AdapterForFollowers extends BaseAdapter {
 	public class ViewHolder {
 		ImageView mImageViewProfilePicture;
 		TextView mTextViewUsername;
-		Button mButton;
+		Button mButtonFollowing, mButtonFollow;
 	}
 	
 	@Override
@@ -84,7 +100,8 @@ public class AdapterForFollowers extends BaseAdapter {
             
             holder.mImageViewProfilePicture = (ImageView) view.findViewById(R.id.profile_picture);
             holder.mTextViewUsername = (TextView) view.findViewById(R.id.username);
-            holder.mButton = (Button) view.findViewById(R.id.bFollow);
+            holder.mButtonFollowing = (Button) view.findViewById(R.id.button_following);
+            holder.mButtonFollow = (Button) view.findViewById(R.id.button_follow);
 		}
 		else
 			holder = (ViewHolder) view.getTag();
@@ -94,23 +111,119 @@ public class AdapterForFollowers extends BaseAdapter {
 		imageLoader.displayImage(follower.getProfilePicture(),holder.mImageViewProfilePicture,options);
 		holder.mTextViewUsername.setText(follower.getUsername());
 		
-		holder.mButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-								
-			}
-		});
-		
-		//Check that if i following this follower
+		//Check if I following this follower
 		if(following.contains(follower.getId())) {
-			holder.mButton.setText("Following");
+			showButtonFollowing(holder.mButtonFollowing, holder.mButtonFollow,follower.getId());
 		}
 		else {
-			holder.mButton.setText("No Following");
+			showButtonFollow(holder.mButtonFollowing, holder.mButtonFollow,follower.getId());
 		}
 		
 		return view;
 	}
+	
+	public void showButtonFollowing(final Button following,final Button follow,final String idFollowing) {
+		//Hidde button follow
+		follow.setOnClickListener(null);
+		follow.setVisibility(View.INVISIBLE);
+		//Show button following
+		following.setVisibility(View.VISIBLE);
+		following.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				deleteFollowing(idFollowing);
+				showButtonFollow(following, follow,idFollowing);
+			}
+		});
+	}
+	
+	public void showButtonFollow(final Button following,final Button follow,final String idFollower) {
+		//Hidde button follow
+		following.setOnClickListener(null);
+		following.setVisibility(View.INVISIBLE);
+		//Show button following
+		follow.setVisibility(View.VISIBLE);
+		follow.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				addFollowing(idFollower);
+				showButtonFollowing(following, follow,idFollower);
+			}
+		});
+	}
+	
+	public void deleteFollowing(String idFollowing) {
+		following.remove(idFollowing);
+		//controller.deleteFollower(idFollowing);
+		new DeleteFollowingTask().execute(idFollowing);
+	}
+	
+	public void deleteFollower(String idFollower) {
+		followers.remove(idFollower);
+		//controller.deleteFollower(idFollower);
+		new AddFollowingTask().execute(idFollower);
+	}
+	
+	public void addFollowing(String idFollowing) {
+		following.add(idFollowing);
+		controller.addFollowing(idFollowing);
+	}
+	
+	private class DeleteFollowingTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	String idFollowing = params[0];
+        	return controller.deleteFollowing(idFollowing);
+        }
 
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				//Toast.makeText(activity,"Delete Following!",  Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
+	
+	private class AddFollowingTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	String idFollowing = params[0];
+        	return controller.addFollowing(idFollowing);
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				//Toast.makeText(activity,"Add following!",  Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
 }

@@ -25,18 +25,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/Black"
             android:text="@string/username"/>   
     </LinearLayout>
     
     <Button
-        android:id="@+id/bFollow"
+        android:id="@+id/button_following"
         android:layout_width="110dp"
         android:layout_height="35dp"
         android:textSize="15sp"
-        android:text="@string/follow"
-        android:drawableLeft="@drawable/ic_action_accept_little"
+        android:textColor="@color/White"
+        android:text="@string/following"
+        android:background="@drawable/bg_button_following"
+        android:drawableLeft="@drawable/ic_action_accept_white_following"
         android:layout_alignParentRight="true"/>
-
+    
+    <Button
+        android:id="@+id/button_follow"
+        android:layout_width="110dp"
+        android:layout_height="35dp"
+        android:textSize="15sp"
+        android:textColor="@color/Black"
+        android:text="@string/follow"
+        android:background="@drawable/bg_button_follow"
+        android:drawableLeft="@drawable/ic_action_new_black_follow"
+        android:layout_alignParentRight="true"/>
+    
 </RelativeLayout>

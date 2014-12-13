@@ -38,17 +38,6 @@ public class CurrentUser {
 		this.following = following;
 	}
 
-	/*public CurrentUser(String id, String username, String profilePicture,ArrayList<String> likes,ArrayList<String> albums) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.profilePicture = profilePicture;
-		this.likes = likes;
-		this.albums = albums;
-		this.ownerPhotosFromAlbum = new ArrayList<String>();
-		this.albumsAdmin = new ArrayList<String>();
-	}*/
-
 	public String getId() {
 		return id;
 	}

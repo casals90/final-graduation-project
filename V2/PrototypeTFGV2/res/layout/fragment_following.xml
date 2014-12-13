@@ -6,6 +6,8 @@
     <ListView
         android:id="@+id/list_following"
         android:layout_width="match_parent"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
         android:layout_height="match_parent"/>
     
     <ProgressBar

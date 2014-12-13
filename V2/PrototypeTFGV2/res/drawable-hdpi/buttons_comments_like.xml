@@ -6,7 +6,7 @@
 		   <corners android:radius="8px"></corners>
 	   </shape>
     </item>
-	<item android:state_focused="true">
+	<item android:state_focused="true" android:drawable="@color/cyan">
 	    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
 		   <solid android:color="#33B5E5" ></solid>
 		   <corners android:radius="8px"></corners>
@@ -16,6 +16,6 @@
 	    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
 		   <solid android:color="#CC444444" ></solid>
 		   <corners android:radius="8px"></corners>
-	   </shape> <!-- focused state -->	    
+	   </shape>	    
 	</item> <!-- default state -->
 </selector>

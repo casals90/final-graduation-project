@@ -6,6 +6,9 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,6 +37,9 @@ public class FragmentFriends extends Fragment {
 		getActivity().setTitle(R.string.friends);
 		
 		mActionBar = getActivity().getActionBar();
+		
+		//For show menu in action bar
+		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -71,6 +77,23 @@ public class FragmentFriends extends Fragment {
 	    } 
 	}
 	
+	@Override
+	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+		inflater.inflate(R.menu.menu_friends, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.find_friends:
+				goToFindFriends();
+				break;
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	/*public void goToUserProfile(User user) {
 		Bundle data = new Bundle();
 		data.putParcelable("User",user);
@@ -81,51 +104,13 @@ public class FragmentFriends extends Fragment {
 		transaction.replace(R.id.container_fragment_main,fpou);
 		transaction.addToBackStack(null);
 		transaction.commit();	
-	}*
-	
-	/*
-
-	@Override
-	public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
-		int tabPosition = tab.getPosition();
-		switch (tabPosition) {
-			case 0:
-				if(getFollowingTask != null) 
-					getFollowingTask.cancel(true);
-				getFollowersTask = new GetFollowersTask();
-				getFollowersTask.execute();
-				break;
-			
-			case 1:
-				if(getFollowersTask != null)
-					getFollowersTask.cancel(true);
-				getFollowingTask = new GetFollowingTask();
-				getFollowingTask.execute();
-				break;
-		default:
-			break;
-		}
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
-		int tabPosition = tab.getPosition();
-		switch (tabPosition) {
-			case 0:
-				break;
-			
-			case 1:
-				break;
-		default:
-			break;
-		}
 	}*/
+	
+	public void goToFindFriends() {
+		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentFindFriends());
+		transaction.commit();
+	}
 	
 	public class TabListener implements ActionBar.TabListener {
 		 

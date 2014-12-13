@@ -313,6 +313,25 @@ public class Controller extends Application {
 		return parseFunctions.getFollowing(currentUser.getId());
 	}
 	
+	public boolean deleteFollowing(String idFollowing) {
+		currentUser.getFollowing().remove(idFollowing);
+		return parseFunctions.deleteFollowing(currentUser.getId(), idFollowing);
+	}
+	
+	public boolean deleteFollower(String idFollower) {
+		currentUser.getFollowers().remove(idFollower);
+		return parseFunctions.deleteFollower(currentUser.getId(), idFollower);
+	}
+	
+	public boolean addFollowing(String idFollowing) {
+		currentUser.getFollowing().add(idFollowing);
+		return parseFunctions.addFollowing(currentUser.getId(),idFollowing);
+	}
+	
+	public ArrayList<User> getRecommendedUsers() {
+		return parseFunctions.getUsersRecommended(currentUser.getId(),currentUser.getFollowing());
+	}
+	
 	public boolean setCurrentAlbum(CurrentAlbum currentAlbum) {
 		currentUser.setCurrentAlbum(currentAlbum.getId());
 		return parseFunctions.setCurrentAlbum(currentAlbum);
@@ -337,7 +356,7 @@ public class Controller extends Application {
 	
 	public User getCurrentUserToUserModel() {
 		ParseUser user = ParseUser.getCurrentUser();
-		return new User(user.getObjectId(),user.getUsername(),user.getString("profilePictureUrl"),user.getInt("friendsNumber"),user.getInt("photosNumber"),user.getInt("albumsNumber"));
+		return new User(user.getObjectId(),user.getUsername(),user.getString("profilePictureUrl"),user.getInt("followersNumber"),user.getInt("followingNumber"),user.getInt("photosNumber"),user.getInt("albumsNumber"));
 	}
 	
 	public void setCoverPhotoAlbum(String idAlbum,String idPhoto) {

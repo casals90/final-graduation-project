@@ -14,7 +14,6 @@
 		      android:id="@+id/logout"
 		      android:title="@string/logout"
 		      android:showAsAction="always"/>
-      </menu>
-	    
+      </menu> 
    </item>  
 </menu>

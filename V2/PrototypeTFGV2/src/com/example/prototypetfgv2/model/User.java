@@ -8,16 +8,18 @@ public class User implements Parcelable {
 	String id;
 	String username;
 	String profilePicture;
-	private int friendsNumber;
+	private int followersNumber;
+	private int followingNumber;
 	private int photosNumber;
 	private int albumsNumber;
 	
-	public User(String id, String username, String profilePicture,int friendsNumber,int photosNumber,int albumsNumber) {
+	public User(String id, String username, String profilePicture,int followersNumber,int followingNumber,int photosNumber,int albumsNumber) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.profilePicture = profilePicture;
-		this.friendsNumber = friendsNumber;
+		this.followersNumber = followersNumber;
+		this.followingNumber = followingNumber;
 		this.photosNumber = photosNumber;
 		this.albumsNumber = albumsNumber;
 	}
@@ -64,13 +66,21 @@ public class User implements Parcelable {
 	public int describeContents() {
 		return 0;
 	}
-	
-	public int getFriendsNumber() {
-		return friendsNumber;
+
+	public int getFollowersNumber() {
+		return followersNumber;
 	}
 
-	public void setFriendsNumber(int friendsNumber) {
-		this.friendsNumber = friendsNumber;
+	public void setFollowersNumber(int followersNumber) {
+		this.followersNumber = followersNumber;
+	}
+
+	public int getFollowingNumber() {
+		return followingNumber;
+	}
+
+	public void setFollowingNumber(int followingNumber) {
+		this.followingNumber = followingNumber;
 	}
 
 	public int getPhotosNumber() {
@@ -89,11 +99,15 @@ public class User implements Parcelable {
 		this.albumsNumber = albumsNumber;
 	}
 	
-	public void decrementFriendsNumber() {
-		if(friendsNumber > 0)
-			friendsNumber--;
+	public void incrementFollowersNumber() {
+		followersNumber ++;
+	}
+	
+	public void decrementFollowersNumber() {
+		if(followersNumber > 0)
+			followersNumber --;
 		else
-			friendsNumber = 0;
+			followersNumber = 0;
 	}
 	
 	public void decrementPhotosNumber() {
@@ -110,10 +124,6 @@ public class User implements Parcelable {
 			albumsNumber = 0;
 	}
 	
-	public void incrementFriendsNumber() {
-		friendsNumber++;
-	}
-	
 	public void incrementPhotosNumber() {
 		photosNumber++;
 	}
@@ -127,7 +137,8 @@ public class User implements Parcelable {
 		dest.writeString(id);
 		dest.writeString(username);
 		dest.writeString(profilePicture);
-		dest.writeInt(friendsNumber);
+		dest.writeInt(followersNumber);
+		dest.writeInt(followingNumber);
 		dest.writeInt(albumsNumber);
 		dest.writeInt(photosNumber);
 	}
@@ -136,7 +147,8 @@ public class User implements Parcelable {
         id = in .readString();
         username = in .readString();
         profilePicture = in .readString();
-        friendsNumber = in.readInt();
+        followersNumber = in.readInt();
+        followingNumber = in.readInt();
         albumsNumber = in.readInt();
         photosNumber = in.readInt();
     }

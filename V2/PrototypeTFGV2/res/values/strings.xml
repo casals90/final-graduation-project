@@ -124,6 +124,9 @@
     <string name="followers">followers</string>
     <string name="following">following</string>
     <string name="follow">follow</string>
+    <string name="find_friends">Find Friends</string>
+    <string name="recommended_friends">RECOMMENDED BY PHOTOCLOUD</string>
+    <string name="following_all">follow all recommended</string>
 
     <!-- Menu set current photo -->
     <string name="remove_current_photo">Remove current photo</string>

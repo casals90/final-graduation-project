@@ -369,12 +369,32 @@ public class ParseFunctions {
 			ParseUser u = query.getFirst();
 			String url = u.getString("profilePictureUrl");
 			if(url == null)
-				user = new User(u.getObjectId(),u.getUsername(),null,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber"));
+				user = new User(u.getObjectId(),u.getUsername(),null,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber"));
 			else
-				user = new User(u.getObjectId(),u.getUsername(),url,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber"));
+				user = new User(u.getObjectId(),u.getUsername(),url,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber"));
 			return user;
 		} catch (ParseException e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<User> getUsersRecommended(String idUser,ArrayList<String> following) {
+		ArrayList<User> recommended = new ArrayList<User>();
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereNotContainedIn("objectId",following);
+		query.whereNotEqualTo("objectId",idUser);
+		query.orderByDescending("followersNumber");
+		try {
+			List<ParseUser> parseUsers = query.find();
+			Log.v("prototypev1", "parseUsers size: "+parseUsers.size());
+			for(ParseUser u : parseUsers) {
+				recommended.add(new User(u.getObjectId(), u.getUsername(), u.getString("profilePictureUrl"),u.getInt("followersNumber"),u.getInt("followingNumber"), u.getInt("photosNumber"),u.getInt("albumsNumber")));
+			}
+			return recommended;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error recommended "+e);
 			return null;
 		}
 	}
@@ -546,9 +566,9 @@ public class ParseFunctions {
 				ParseUser user = query.getFirst();
 				String urlProfilePicture = user.getString("profilePictureUrl");
 				if(urlProfilePicture == null)
-					users.add(new User(user.getObjectId(),user.getUsername(), null,user.getInt("friendsNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
+					users.add(new User(user.getObjectId(),user.getUsername(), null,user.getInt("followersNumber"),user.getInt("followingNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
 				else
-					users.add(new User(user.getObjectId(),user.getUsername(),urlProfilePicture,user.getInt("friendsNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
+					users.add(new User(user.getObjectId(),user.getUsername(),urlProfilePicture,user.getInt("followersNumber"),user.getInt("followingNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				return null;
@@ -587,7 +607,7 @@ public class ParseFunctions {
 			List<ParseUser> parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
 				String profilePictureUrl = u.getString("profilePictureUrl");
-				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			}
 			return users;
 		} catch (ParseException e) {
@@ -608,7 +628,7 @@ public class ParseFunctions {
 			parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
 				String profilePictureUrl = u.getString("profilePictureUrl");
-				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			}
 			return users;
 		} catch (ParseException e) {
@@ -908,9 +928,9 @@ public class ParseFunctions {
 				ParseUser u = parseUsers.get(0);
 				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
 				if(profilePicture == null)
-					downloads.add(new User(u.getObjectId(),u.getUsername(), null,u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
+					downloads.add(new User(u.getObjectId(),u.getUsername(), null,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 				else
-					downloads.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),u.getInt("friendsNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
+					downloads.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				return null;
@@ -1195,11 +1215,11 @@ public class ParseFunctions {
 	public ArrayList<String> getFollowersId(String idUser) {
 		ArrayList<String> followers = new ArrayList<String>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
-		query.whereEqualTo("idUser",idUser);
+		query.whereEqualTo("idFriend",idUser);
 		try {
 			List<ParseObject> friendships = query.find();
 			for(ParseObject f : friendships) {
-				String idFollower = f.getString("idFriend");
+				String idFollower = f.getString("idUser");
 				followers.add(idFollower);
 			}
 			return followers;
@@ -1212,11 +1232,11 @@ public class ParseFunctions {
 	public ArrayList<String> getFollowingId(String idUser) {
 		ArrayList<String> following = new ArrayList<String>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
-		query.whereEqualTo("idFriend",idUser);
+		query.whereEqualTo("idUser",idUser);
 		try {
 			List<ParseObject> friendships = query.find();
 			for(ParseObject f : friendships) {
-				String idFollower = f.getString("idUser");
+				String idFollower = f.getString("idFriend");
 				following.add(idFollower);
 			}
 			return following;
@@ -1229,12 +1249,12 @@ public class ParseFunctions {
 	public ArrayList<User> getFollowers(String idUser) {
 		ArrayList<User> followers = new ArrayList<User>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
-		query.whereEqualTo("idUser",idUser);
+		query.whereEqualTo("idFriend",idUser);
 		try {
 			List<ParseObject> friendships = query.find();
 			Log.v("prototypev1","followers size "+friendships.size());
 			for(ParseObject f : friendships) {
-				String idFollower = f.getString("idFriend");
+				String idFollower = f.getString("idUser");
 				followers.add(getUser(idFollower));
 				Log.v("prototypev1","end download user");
 			}
@@ -1248,17 +1268,60 @@ public class ParseFunctions {
 	public ArrayList<User> getFollowing(String idUser) {
 		ArrayList<User> following = new ArrayList<User>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
-		query.whereEqualTo("idFriend",idUser);
+		query.whereEqualTo("idUser",idUser);
 		try {
 			List<ParseObject> friendships = query.find();
 			for(ParseObject f : friendships) {
-				String idFollower = f.getString("idUser");
+				String idFollower = f.getString("idFriend");
 				following.add(getUser(idFollower));
 			}
 			return following;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public boolean deleteFollowing(String idUser,String idFollowing) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idUser",idUser);
+		query.whereEqualTo("idFriend",idFollowing);
+		try {
+			ParseObject following = query.getFirst();
+			following.delete();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean deleteFollower(String idUser,String idFollower) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idUser",idFollower);
+		query.whereEqualTo("idFriend",idUser);
+		try {
+			ParseObject follower = query.getFirst();
+			follower.delete();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error deleteFollowing"+e);
+			return false;
+		}
+	}
+	
+	public boolean addFollowing(String idUser,String idFollowing) {
+		ParseObject following = new ParseObject("Friendship");
+		following.put("idUser",idUser);
+		following.put("idFriend",idFollowing);
+		try {
+			following.save();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error addFollowing"+e);
+			return false;
 		}
 	}
 	
