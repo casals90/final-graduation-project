@@ -24,13 +24,6 @@ public class MainActivity extends FragmentActivity {
 		//transaction.addToBackStack(null);
 		// Commit the transaction
 		transaction.commit();
-		// Track app opens.
-		
-		/*FragmentManager fm = this.getSupportFragmentManager();
-		Log.v("prototypev1","count backstack "+fm.getBackStackEntryCount());
-		for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {    
-		    fm.popBackStack();
-		}*/
 	}
 
 	@Override

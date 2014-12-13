@@ -29,7 +29,6 @@ import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.parse.ParseException;
 import com.parse.ParseUser;
  
 public class Controller extends Application {
@@ -321,6 +320,14 @@ public class Controller extends Application {
 	public boolean deleteFollower(String idFollower) {
 		currentUser.getFollowers().remove(idFollower);
 		return parseFunctions.deleteFollower(currentUser.getId(), idFollower);
+	}
+	
+	public boolean addFollowingAll(ArrayList<String> followings) {
+		for(int i = 0; i < followings.size(); i++) {
+			if(!addFollowing(followings.get(i)))
+				return false;
+		}
+		return true;
 	}
 	
 	public boolean addFollowing(String idFollowing) {

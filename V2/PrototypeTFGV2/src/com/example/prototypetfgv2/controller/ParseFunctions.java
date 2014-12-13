@@ -78,7 +78,6 @@ public class ParseFunctions {
 		parseUser.setUsername(username);
 		parseUser.setPassword(password);
 		parseUser.put("photosNumber",0);
-		//parseUser.put("friendsNumber",0);
 		parseUser.put("followingNumber",0);
 		parseUser.put("followersNumber",0);
 		parseUser.put("albumsNumber",0);

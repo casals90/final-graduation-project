@@ -40,17 +40,19 @@
         android:text="@string/following"
         android:background="@drawable/bg_button_following"
         android:drawableLeft="@drawable/ic_action_accept_white_following"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:visibility="invisible"/>
     
     <Button
         android:id="@+id/button_follow"
         android:layout_width="110dp"
         android:layout_height="35dp"
         android:textSize="15sp"
-        android:textColor="@color/Black"
+        android:textColor="@color/White"
         android:text="@string/follow"
+        android:focusable="false"
         android:background="@drawable/bg_button_follow"
-        android:drawableLeft="@drawable/ic_action_new_black_follow"
-        android:layout_alignParentRight="true"/>
-    
+        android:drawableLeft="@drawable/ic_action_new_follow_white"
+        android:layout_alignParentRight="true"/>    
 </RelativeLayout>

@@ -37,7 +37,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	private NewsInterface newsInterface;
 	private Activity activity;
 	
-	private int pos;
+	//private int pos;
 	
 	public FragmentNews() {
 		super();
@@ -63,9 +63,6 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		new DownloadNewsTask().execute();
-		Log.v("prototypev1", "go back pos = "+pos);
-		//Download new comments numbers of photo
-		//new UpdateCommentsNumberFromPhotoTask().execute();
 	}
 
 	@Override
@@ -148,7 +145,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-						pos = position;
+						//pos = position;
 						goToShowPhotoFullScreen(photos.get(position));
 					}
 				});
@@ -251,5 +248,4 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-	
 }

@@ -1,17 +1,9 @@
 package com.example.prototypetfgv2.view;
 import java.util.ArrayList;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.User;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,7 +12,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.User;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 public class AdapterForFollowers extends BaseAdapter {
@@ -36,12 +33,6 @@ public class AdapterForFollowers extends BaseAdapter {
 		super();
 		this.followers = followers;
 		
-		Log.v("prototypev1", "followers");
-		for(int i = 0; i < followers.size(); i++) {
-			Log.v("prototypev1", "followers list:" +followers.get(i).getId());
-		}
-		Log.v("prototypev1", "-----------");
-		
 		this.imageLoader = ImageLoader.getInstance();
 		initDisplayOptions();
 		this.inflater = LayoutInflater.from(context);
@@ -49,11 +40,6 @@ public class AdapterForFollowers extends BaseAdapter {
 		
 		//Get following with my followers
 		following = controller.getCurrentUser().getFollowing();
-		Log.v("prototypev1", "following");
-		for(int i = 0; i < following.size(); i++) {
-			Log.v("prototypev1", "following list : "+following.get(i));
-		}
-		Log.v("prototypev1", "-------------------------");
 	}
 	
 	public void initDisplayOptions() {

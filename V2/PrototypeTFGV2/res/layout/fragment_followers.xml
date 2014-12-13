@@ -6,6 +6,8 @@
     <ListView
         android:id="@+id/list_followers"
         android:layout_width="match_parent"
+        android:focusable="false"
+        android:listSelector="@android:color/transparent"
         android:layout_height="match_parent"/>
     
     <ProgressBar

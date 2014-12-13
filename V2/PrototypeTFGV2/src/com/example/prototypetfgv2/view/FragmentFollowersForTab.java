@@ -2,19 +2,21 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.User;
-
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.controller.Controller;
+import com.example.prototypetfgv2.model.User;
 
 public class FragmentFollowersForTab extends Fragment {
 
@@ -22,9 +24,11 @@ public class FragmentFollowersForTab extends Fragment {
 	private ProgressBar mProgressBar;
 	private ArrayList<User> followers;
 	private Controller controller;
+	private GoToProfileUserInterface goToProfileUserInterface;
 	
-	public FragmentFollowersForTab() {
+	public FragmentFollowersForTab(GoToProfileUserInterface goToProfileUserInterface) {
 		super();
+		this.goToProfileUserInterface = goToProfileUserInterface;
 	}
 	
 	@Override
@@ -64,6 +68,15 @@ public class FragmentFollowersForTab extends Fragment {
 	        mProgressBar.setVisibility(View.INVISIBLE);
 	        if(result) {
 	        	mListViewFollowers.setAdapter(new AdapterForFollowers(followers, getActivity().getApplicationContext()));
+	        	mListViewFollowers.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						//TODO goToProfileUser
+						goToProfileUserInterface.goToProfileUser(followers.get(position));
+					}
+	        		
+				});
 	        }
 	    }
 	    
@@ -74,5 +87,4 @@ public class FragmentFollowersForTab extends Fragment {
 			Toast.makeText(getActivity(),"Error download followers",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
 }

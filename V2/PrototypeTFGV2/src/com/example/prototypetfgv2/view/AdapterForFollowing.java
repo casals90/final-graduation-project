@@ -24,7 +24,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class AdapterForFollowing extends BaseAdapter {
 
 	private ArrayList<User> following;
-	//private ArrayList<User> deleteFollowings;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 	private Controller controller;
@@ -52,19 +51,16 @@ public class AdapterForFollowing extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return following.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return following.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -141,7 +137,7 @@ public class AdapterForFollowing extends BaseAdapter {
 	public void addFollowing(User followingUser) {
 		//deleteFollowings.remove(followingUser);
 		following.add(followingUser);
-		controller.addFollowing(followingUser.getId());
+		new AddFollowingTask().execute(followingUser.getId());
 	}
 	
 	private class DeleteFollowingTask extends AsyncTask<String, Void, Boolean> {

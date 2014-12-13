@@ -13,18 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.model.User;
 
-public class FragmentFriends extends Fragment {
-	
-	//private Controller controller;
+public class FragmentFriends extends Fragment implements GoToProfileUserInterface {
 	
 	private ActionBar mActionBar;
     
-    
     private FragmentFollowersForTab fragmentFollowers;
     private FragmentFollowingForTab fragmentFollowing;
-    //private GetFollowersTask getFollowersTask;
-   // private GetFollowingTask getFollowingTask;
+    private GoToProfileUserInterface goToProfileUserInterface;
     
 	public FragmentFriends() {
 		super();
@@ -37,7 +34,7 @@ public class FragmentFriends extends Fragment {
 		getActivity().setTitle(R.string.friends);
 		
 		mActionBar = getActivity().getActionBar();
-		
+		goToProfileUserInterface = this;
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -55,8 +52,8 @@ public class FragmentFriends extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_friends,container,false);
 		
-		fragmentFollowers = new FragmentFollowersForTab();
-		fragmentFollowing = new FragmentFollowingForTab();
+		fragmentFollowers = new FragmentFollowersForTab(goToProfileUserInterface);
+		fragmentFollowing = new FragmentFollowingForTab(goToProfileUserInterface);
 		initTabs();
 	    //mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarFriends);
 	   
@@ -109,6 +106,7 @@ public class FragmentFriends extends Fragment {
 	public void goToFindFriends() {
 		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentFindFriends());
+		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 	
@@ -134,5 +132,22 @@ public class FragmentFriends extends Fragment {
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 			ft.remove(fragment);
 		}
+	}
+	
+	public void goToUserProfile(User user) {
+		Bundle data = new Bundle();
+		data.putParcelable("User",user);
+		FragmentProfileOtherUser fpou = new FragmentProfileOtherUser();
+		fpou.setArguments(data);
+		
+		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fpou);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
+
+	@Override
+	public void goToProfileUser(User user) {
+		goToUserProfile(user);		
 	}
 }
