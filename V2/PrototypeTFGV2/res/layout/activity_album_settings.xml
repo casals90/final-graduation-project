@@ -2,7 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/WhiteSmoke">
+    android:background="@color/WhiteSmoke"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
     
     <LinearLayout
 	    android:layout_width="match_parent"
@@ -27,14 +31,28 @@
 	        android:layout_toRightOf="@+id/album_cover"
 	        android:orientation="vertical">
 	        
-	        <TextView
-	            android:id="@+id/album_title"
+	        <LinearLayout
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:textSize="20sp"
-	            android:textColor="@color/Black"
-	            android:text="@string/album_title"
-	            android:layout_marginBottom="5dp"/>
+	            android:orientation="horizontal" >
+
+	            <TextView
+		            android:id="@+id/album_title"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textSize="20sp"
+		            android:textColor="@color/Black"
+		            android:text="@string/album_title"
+		            android:layout_marginBottom="5dp"
+		            android:layout_marginRight="5dp"/>
+	            
+	            <ImageButton
+			        android:id="@+id/button_edit_title"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:src="@drawable/ic_action_edit"
+			        android:background="@drawable/selector_icons"/>
+	        </LinearLayout>
 	        
 	        <TextView
 	            android:id="@+id/createdAt"
@@ -48,7 +66,7 @@
 	            android:text="@string/createdAt"/>
 	        
 	        <TextView
-	            android:id="@+id/members_number"
+	            android:id="@+id/createdBy"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:textColor="@color/Black"
@@ -58,13 +76,6 @@
 	            android:drawablePadding="5dp"
 	            android:text="@string/createdBy"/>
 	    </LinearLayout>
-	    
-	    <ImageButton
-	        android:id="@+id/button_edit_title"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/ic_action_edit"
-	        android:background="@drawable/selector_icons"/>
     </LinearLayout>
     
     <ListView

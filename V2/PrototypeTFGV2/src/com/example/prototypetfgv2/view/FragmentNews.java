@@ -37,8 +37,6 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	private NewsInterface newsInterface;
 	private Activity activity;
 	
-	//private int pos;
-	
 	public FragmentNews() {
 		super();
 	}
@@ -72,8 +70,6 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		
 		mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
 		listNews = (ListView) view.findViewById(R.id.list_news);
-		
-		//new DownloadNewsTask().execute();
 		
 		return view;
 	}
@@ -162,38 +158,6 @@ public class FragmentNews extends Fragment implements NewsInterface {
 			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
 		}
     }
-	
-	/*private class UpdateCommentsNumberFromPhotoTask extends AsyncTask<Void, Void, Integer> {
-    	
-		@Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-        	//mProgressBar.setVisibility(View.VISIBLE);
-        }
- 
-        @Override
-        protected Integer doInBackground(Void... params) {
-        	//arrayListAlbums = controller.getAlbums();
-        	int n = controller.getCommentsNumbersFromPhoto(photos.get(pos).getId());  
-            return n;
-            		
-        }
- 
-        @Override
-        protected void onPostExecute(final Integer commentsNumber) {
-        	mProgressBar.setVisibility(View.INVISIBLE);
-        	if(commentsNumber > 0) {
-        		photos.get(pos).setCommentsNumber(commentsNumber);
-        	}
-        		
-        }
-
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
-		}
-    }*/
 	
 	public void goToShowPhotoFullScreen(Photo photo) {
 		Intent showPhoto = new Intent(getActivity(),ShowFullScreenPhotoOfNews.class);

@@ -80,8 +80,9 @@
     <string name="add_photo_from_gallery">Add photo from gallery</string>
     <string name="my_photos">My photos</string>
     <string name="add_members_album">ADD MEMBERS IN ALBUM</string>
-    <string name="createdAt">created at date</string>
-    <string name="createdBy">created by username</string>
+    <string name="createdAt">created at</string>
+    <string name="createdBy">created by</string>
+    <string name="set_album_title_upper">SET ALBUM TITLE</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>

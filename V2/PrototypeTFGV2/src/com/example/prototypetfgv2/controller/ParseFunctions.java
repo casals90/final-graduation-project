@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.example.prototypetfgv2.R.id;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.CurrentAlbum;
@@ -448,6 +449,32 @@ public class ParseFunctions {
 		}	
 	}
 	
+	public String getUsernameFromIdUser(String idUser) {
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereEqualTo("objectId",idUser);
+		
+		try {
+			ParseUser parseUser = query.getFirst();
+			return parseUser.getUsername();
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Album downloadAlbum(String idAlbum) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
+		query.whereEqualTo("objectId",idAlbum);
+		try {
+			ParseObject a = query.getFirst();
+			String photoURL = getLastPhotoFromAlbum(a.getObjectId());
+			return new Album(a.getObjectId(),photoURL,a.getString("albumTitle"),new ArrayList<String>(),a.getInt("photosNumber"),a.getInt("membersNumber"),a.getString("idAdmin"),a.getCreatedAt().toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public ArrayList<Album> downloadAlbums(ArrayList<String> idAlbums,CurrentUser currentUser) {
 		ArrayList<String> albumsAdmin = new ArrayList<String>();
 		ArrayList<Album> albums = new ArrayList<Album>();
@@ -462,7 +489,7 @@ public class ParseFunctions {
 					albumsAdmin.add(a.getObjectId());
 				int photoNumber = a.getInt("photosNumber");
 				//download members
-				ArrayList<String> members = getMembers(a.getObjectId());
+				//ArrayList<String> members = getMembers(a.getObjectId());
 				if(photoNumber > 0) {
 					//ArrayList<String> idPhotos = getPhotosFromAlbum(a.getObjectId());
 					//int random = Utils.getRandomInt(idPhotos.size());
@@ -471,10 +498,10 @@ public class ParseFunctions {
 					String photoURL = getLastPhotoFromAlbum(a.getObjectId());
 					//albums.add(new Album(a.getObjectId(),photo.getPhoto(),a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
 					//getPhotoMoreLikesInAlbum(a.getObjectId());
-					albums.add(new Album(a.getObjectId(),photoURL,a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
+					albums.add(new Album(a.getObjectId(),photoURL,a.getString("albumTitle"),new ArrayList<String>(),a.getInt("photosNumber"),a.getInt("membersNumber"),a.getString("idAdmin"),a.getCreatedAt().toString()));
 				}
 				else 
-					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"),members,a.getInt("photosNumber"),a.getInt("membersNumber")));
+					albums.add(new Album(a.getObjectId(),null,a.getString("albumTitle"),new ArrayList<String>(),a.getInt("photosNumber"),a.getInt("membersNumber"),a.getString("idAdmin"),a.getCreatedAt().toString()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				Log.v("prototypev1", "error downlaod album "+e);
@@ -501,16 +528,17 @@ public class ParseFunctions {
 	public ArrayList<String> getMembers(String idAlbum) {
 		ArrayList<String> members = new ArrayList<String>();
 		
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMembers");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
 		query.whereEqualTo("idAlbum",idAlbum);
 		try {
 			List<ParseObject> obs = query.find();
-			Log.v("prototypev1", "getMembers size = "+obs.size());
+			
 			for(ParseObject o : obs) {
 				members.add(o.getString("idUser"));
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
+			Log.v("prototypev1","error get members "+e);
 			return null;
 		}
 		return members;

@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +24,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.prototypetfgv2.AlbumSettingsActivity;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
@@ -56,7 +54,6 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().setTitle(R.string.albums);
 		
 		controller = (Controller) this.getActivity().getApplication();
 		
@@ -88,6 +85,7 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	public void onResume() {
 		//show up navigation
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActivity().setTitle(album.getAlbumTitle());
 		new DownloadPhotosTask().execute(album.getId());
 		super.onResume();
 	}
@@ -265,7 +263,7 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	
 	public void goToAlbumSettings() {
 		Intent albumSettings = new Intent(getActivity(),AlbumSettingsActivity.class);
-		albumSettings.putExtra("Album",album);
+		albumSettings.putExtra("idAlbum",album.getId());
 		startActivity(albumSettings);
 	}
 }

@@ -11,17 +11,21 @@ public class Album implements Parcelable {
 	private String albumCover;
 	private String albumTitle;
 	private List<String> members;
+	private String idAdmin;
+	private String createdAt;
 	private int photosNumber;
 	private int membersNumber;
 		
-	public Album(String id,String albumCover, String albumTitle, List<String> members,int photosNumber,int membersNumber) {
+	public Album(String id,String albumCover, String albumTitle, List<String> members,int photosNumber,int membersNumber,String idAdmin,String createdAt) {
 		super();
 		this.id = id;
 		this.albumCover = albumCover;
 		this.albumTitle = albumTitle;
 		this.members = members;
+		this.idAdmin = idAdmin;
 		this.photosNumber = photosNumber;
 		this.membersNumber = membersNumber;
+		this.createdAt = createdAt;
 	}
 	
 	public Album(Parcel in) {
@@ -61,6 +65,14 @@ public class Album implements Parcelable {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
 
 	public void setMembers(List<String> members) {
 		this.members = members;
@@ -68,6 +80,14 @@ public class Album implements Parcelable {
 
 	public List<String> getMembers() {
 		return members;
+	}
+	
+	public String getIdAdmin() {
+		return idAdmin;
+	}
+
+	public void setIdAdmin(String idAdmin) {
+		this.idAdmin = idAdmin;
 	}
 
 	public int getPhotosNumber() {
@@ -98,6 +118,8 @@ public class Album implements Parcelable {
 		dest.writeStringList(members);
 		dest.writeInt(photosNumber);
 		dest.writeInt(membersNumber);
+		dest.writeString(idAdmin);
+		dest.writeString(createdAt);
 	}
 	
 	public void readFromParcel(Parcel in) {
@@ -107,5 +129,7 @@ public class Album implements Parcelable {
 		in.readStringList(members);
 		photosNumber = in.readInt();
 		membersNumber = in.readInt();
+		idAdmin = in.readString();
+		createdAt = in.readString();
 	}
 }

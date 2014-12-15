@@ -13,6 +13,7 @@
 		      android:showAsAction="always"/>
           <item
 		      android:id="@+id/logout"
+		      android:icon="@drawable/ic_action_action_exit_to_app"
 		      android:title="@string/logout"
 		      android:showAsAction="always"/>
       </menu> 

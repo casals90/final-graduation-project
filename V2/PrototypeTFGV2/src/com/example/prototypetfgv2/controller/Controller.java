@@ -141,6 +141,14 @@ public class Controller extends Application {
 		return false;
 	}
 	
+	public String getUsernameFromUserId(String idUser) {
+		return parseFunctions.getUsernameFromIdUser(idUser);
+	}
+	
+	public Album downloadAlbum(String idAlbum) {
+		return parseFunctions.downloadAlbum(idAlbum);
+	}
+	
 	public ArrayList<Photo> downloadMyPhotos(String idUser) {
 		if(idUser == null)
 			return parseFunctions.downloadMyPhotos(currentUser.getId());
@@ -306,6 +314,11 @@ public class Controller extends Application {
 	
 	public ArrayList<Album> getAlbums() {
 		return parseFunctions.getAlbums(currentUser);
+	}
+	
+	public ArrayList<User> downloadMembersFromAlbum(String idAlbum) {
+		ArrayList<String> members = parseFunctions.getMembers(idAlbum);
+		return parseFunctions.downloadUsersList(members);
 	}
 	
 	public ArrayList<User> getFollowers() {
