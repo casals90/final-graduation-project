@@ -78,24 +78,59 @@
 	    </LinearLayout>
     </LinearLayout>
     
-    <ListView
-        android:layout_marginTop="5dp"
-        android:id="@+id/list_view_members"
+    <LinearLayout
+        android:id="@+id/panel_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@+id/header"
-        android:background="@color/White"/>
+        android:layout_marginTop="5dp"
+        android:background="@color/White">
+        
+	    <TextView
+	        android:id="@+id/label_members"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/members_of_album"
+	        android:layout_below="@+id/header"/>
+	   
+	    <View
+	        android:id="@+id/line"
+		    android:layout_width="fill_parent"
+		    android:layout_height="1dp"
+		    android:background="@android:color/darker_gray"/>
+	    
+	    <ListView
+	        android:layout_marginTop="5dp"
+	        android:id="@+id/list_view_members"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/label_members"
+	        android:background="@color/White"/>
+    </LinearLayout>
     
-    <Button
-        android:id="@+id/button_exit_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/list_view_members"/>
-    
+     <Button
+	        android:id="@+id/button_leave_user"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/panel_list"
+	        android:text="@string/leave_album"
+	        android:textColor="@color/White"
+	        android:background="@drawable/bg_button_delete_album"/>
+	    
     <Button
         android:id="@+id/button_delete_album_admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/list_view_members"/>
+        android:layout_below="@+id/panel_list"
+        android:text="@string/delete_and_leave_album"
+        android:textColor="@color/White"
+        android:background="@drawable/bg_button_delete_album"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

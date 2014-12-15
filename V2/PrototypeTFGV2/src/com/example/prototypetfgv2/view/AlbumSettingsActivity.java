@@ -2,6 +2,7 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,8 +10,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,9 +40,14 @@ public class AlbumSettingsActivity extends Activity {
 	private ListView mListView;
 	private TextView mTextViewAlbumTitle;
 	private TextView mTextViewDate;
+	private TextView mTextViewLabel;
+	private View line;
 	private TextView mTextViewAdmin;
 	private ImageView mImageViewCover;
 	private ImageButton mImageButtonEdit;
+	private Button mButtonLeave,mButtonDelete;
+	
+	private LinearLayout mLinearLayoutHeader, mLinearLayoutPanelList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +59,19 @@ public class AlbumSettingsActivity extends Activity {
 		Intent extras = getIntent();
 		idAlbum = extras.getStringExtra("idAlbum");
 	
+		this.imageLoader = ImageLoader.getInstance();
+		
+		this.mLinearLayoutHeader = (LinearLayout) findViewById(R.id.header);
+		this.mLinearLayoutPanelList = (LinearLayout) findViewById(R.id.panel_list);
+		
+		this.mTextViewLabel = (TextView) findViewById(R.id.label_members);
+		this.line = (View) findViewById(R.id.line);
+		this.mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 		this.mTextViewAlbumTitle = (TextView) findViewById(R.id.album_title);
 		this.mTextViewDate = (TextView) findViewById(R.id.createdAt);
 		this.mTextViewAdmin = (TextView) findViewById(R.id.createdBy);
 		this.mImageViewCover = (ImageView) findViewById(R.id.album_cover);	
-		this.imageLoader = ImageLoader.getInstance();
+		this.mListView = (ListView) findViewById(R.id.list_view_members);
 		this.mImageButtonEdit = (ImageButton) findViewById(R.id.button_edit_title);
 		mImageButtonEdit.setOnClickListener(new OnClickListener() {
 
@@ -63,17 +79,50 @@ public class AlbumSettingsActivity extends Activity {
 			public void onClick(View v) {
 				goToSetAlbumTitle();
 			}
-			
 		});
+		
+		mButtonDelete = (Button) findViewById(R.id.button_delete_album_admin);
+		mButtonLeave = (Button) findViewById(R.id.button_leave_user);
+		
+		hiddenAll();
+				
 	}
 	
+	public void hiddenAll() {
+		/*mTextViewAlbumTitle.setVisibility(View.INVISIBLE);
+		mTextViewDate.setVisibility(View.INVISIBLE);
+		mTextViewAdmin.setVisibility(View.INVISIBLE);
+		mImageViewCover.setVisibility(View.INVISIBLE);
+		mTextViewLabel.setVisibility(View.INVISIBLE);
+		line.setVisibility(View.INVISIBLE);
+		mListView.setVisibility(View.INVISIBLE);
+		mImageButtonEdit.setVisibility(View.INVISIBLE);*/
+		mLinearLayoutHeader.setVisibility(View.INVISIBLE);
+		mLinearLayoutPanelList.setVisibility(View.INVISIBLE);
+		mButtonDelete.setVisibility(View.INVISIBLE);
+		mButtonLeave.setVisibility(View.INVISIBLE);
+	}
+	
+	public void showAll() {
+		/*mTextViewAlbumTitle.setVisibility(View.VISIBLE);
+		mTextViewDate.setVisibility(View.VISIBLE);
+		mTextViewAdmin.setVisibility(View.VISIBLE);
+		mImageViewCover.setVisibility(View.VISIBLE);
+		mTextViewLabel.setVisibility(View.VISIBLE);
+		line.setVisibility(View.VISIBLE);
+		mListView.setVisibility(View.VISIBLE);
+		mImageButtonEdit.setVisibility(View.VISIBLE);*/
+		mLinearLayoutHeader.setVisibility(View.VISIBLE);
+		mLinearLayoutPanelList.setVisibility(View.VISIBLE);
+	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		getActionBar().setTitle(R.id.album_settings);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getActionBar().setTitle(R.id.album_settings);
 		
 		new DownloadAlbumTask().execute();
 	}
@@ -127,7 +176,7 @@ public class AlbumSettingsActivity extends Activity {
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
-        	//mProgressBar.setVisibility(View.VISIBLE);
+        	mProgressBar.setVisibility(View.VISIBLE);
         }
  
         @Override
@@ -152,6 +201,63 @@ public class AlbumSettingsActivity extends Activity {
         		
         		mTextViewDate.setText(getString(R.string.createdAt)+" "+album.getCreatedAt());
         		mTextViewAdmin.setText(getString(R.string.createdBy)+" "+usernameAdmin);
+        		
+        		new DownloadMembersTask().execute();
+        	}
+        }
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			Toast.makeText(getApplicationContext(),"Error download albums settings",Toast.LENGTH_LONG).show();
+		}
+    }
+	
+	private class DownloadMembersTask extends AsyncTask<Void, Void, Boolean> {
+    	
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	//mProgressBar.setVisibility(View.VISIBLE);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(Void... params) {
+        	members = controller.downloadMembersFromAlbum(idAlbum);
+            if(members != null) {
+            	return true;
+            }
+            return false;
+            		
+        }
+ 
+        @Override
+        protected void onPostExecute(final Boolean success) {
+        	if(success) {
+        		mProgressBar.setVisibility(View.INVISIBLE);
+        		showAll();
+        		//Check if current user is admin
+        		if(controller.getCurrentUser().getId().compareTo(album.getIdAdmin()) == 0) {
+        			mButtonDelete.setVisibility(View.VISIBLE);
+        			mButtonDelete.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+														
+						}
+					});
+        		}
+        		else {
+        			mButtonLeave.setVisibility(View.VISIBLE);
+        			mButtonLeave.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+														
+						}
+					});
+        		}
+        		mListView.setAdapter(new AdapterForMembersInAlbum(getApplicationContext(),members,album.getIdAdmin()));
         	}
         }
 

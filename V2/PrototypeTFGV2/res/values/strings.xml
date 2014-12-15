@@ -83,6 +83,9 @@
     <string name="createdAt">created at</string>
     <string name="createdBy">created by</string>
     <string name="set_album_title_upper">SET ALBUM TITLE</string>
+    <string name="delete_and_leave_album">Delete and leave album</string>
+    <string name="leave_album">Leave album</string>
+    <string name="admin">admin</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>
