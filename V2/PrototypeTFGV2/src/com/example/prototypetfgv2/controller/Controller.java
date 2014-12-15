@@ -296,6 +296,10 @@ public class Controller extends Application {
 		return parseFunctions.newAlbum(members,albumName,currentUser);
 	}
 	
+	public ArrayList<User> downloadUsersInputSearch(String input){
+		return parseFunctions.downloadUsersInputSearch(input,currentUser.getId());
+	}
+	
 	public ArrayList<User> downloadFriendsInputSearch(String input){
 		return parseFunctions.downloadFriendsInputSearch(input,currentUser);
 	}

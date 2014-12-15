@@ -1,7 +1,6 @@
 package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.User;
-import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{

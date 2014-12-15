@@ -55,9 +55,6 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 		fragmentFollowers = new FragmentFollowersForTab(goToProfileUserInterface);
 		fragmentFollowing = new FragmentFollowingForTab(goToProfileUserInterface);
 		initTabs();
-	    //mProgressBar = (ProgressBar) view.findViewById(R.id.progressBarFriends);
-	   
-	    //mListViewFriends = (ListView) view.findViewById(R.id.list_friends);
 		return view;
 	}
 	
@@ -85,23 +82,15 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 			case R.id.find_friends:
 				goToFindFriends();
 				break;
+			case R.id.find_people:
+				goToUserSearch();
+				break;
 			default:
 				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
-	/*public void goToUserProfile(User user) {
-		Bundle data = new Bundle();
-		data.putParcelable("User",user);
-		FragmentProfileOtherUser fpou = new FragmentProfileOtherUser();
-		fpou.setArguments(data);
-		
-		transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.container_fragment_main,fpou);
-		transaction.addToBackStack(null);
-		transaction.commit();	
-	}*/
 	
 	public void goToFindFriends() {
 		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -142,6 +131,13 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 		
 		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,fpou);
+		transaction.addToBackStack(null);
+		transaction.commit();	
+	}
+	
+	public void goToUserSearch() {
+		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentSearchPeople());
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}

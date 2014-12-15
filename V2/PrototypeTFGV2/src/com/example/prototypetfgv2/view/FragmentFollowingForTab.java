@@ -25,7 +25,7 @@ public class FragmentFollowingForTab extends Fragment {
 	private ProgressBar mProgressBar;
 	private ArrayList<User> following;
 	//ArrayList to save users that I delete but now shows
-	private ArrayList<User> followingDelete;
+	private ArrayList<User> allFollowing;
 	private Controller controller;
 	private GoToProfileUserInterface goToProfileUserInterface;
 	
@@ -61,7 +61,7 @@ public class FragmentFollowingForTab extends Fragment {
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	following = controller.getFollowing();
-	    	followingDelete = (ArrayList<User>) following.clone();
+	    	allFollowing = (ArrayList<User>) following.clone();
 	    	if(following != null)
 	    		return true;
 	    	return false;
@@ -79,9 +79,9 @@ public class FragmentFollowingForTab extends Fragment {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 						//Revisar bug que quant deixo de seguir un usuari al borrar-lo de la llista peta, quant vui tornar al seu perfil
-						Log.v("prototypev1","username to show profile"+followingDelete.get(position).getUsername());
-						Log.v("prototypev1","followingdelete size "+followingDelete.size()+"following size "+following.size());
-						goToProfileUserInterface.goToProfileUser(followingDelete.get(position));
+						Log.v("prototypev1","username to show profile"+allFollowing.get(position).getUsername());
+						Log.v("prototypev1","followingdelete size "+allFollowing.size()+"following size "+following.size());
+						goToProfileUserInterface.goToProfileUser(allFollowing.get(position));
 					}
 				});
 	        }

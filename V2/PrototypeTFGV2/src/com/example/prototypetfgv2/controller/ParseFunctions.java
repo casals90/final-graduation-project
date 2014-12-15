@@ -615,6 +615,26 @@ public class ParseFunctions {
 		}
 	}
 	
+	public ArrayList<User> downloadUsersInputSearch(String input,String idCurrentUser) {
+		ArrayList<User> users = new ArrayList<User>();
+		
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereStartsWith("username",input);
+		query.whereNotEqualTo("objectId", idCurrentUser);
+		query.orderByAscending("username");
+		try {
+			List<ParseUser> parseUsers = query.find();
+			for(ParseUser u : parseUsers) {
+				String profilePictureUrl = u.getString("profilePictureUrl");
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
+			}
+			return users;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	 public ArrayList<User> getUsers(String username,CurrentUser currentUser) {
 		ArrayList<User> users = new ArrayList<User>();
 		List<ParseUser> parseUsers;
