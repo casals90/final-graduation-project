@@ -8,6 +8,7 @@
       <menu>
           <item
 		      android:id="@+id/set_current_album"
+		      android:icon="@drawable/ic_action_settings"
 		      android:title="@string/set_current_album"
 		      android:showAsAction="always"/>
           <item

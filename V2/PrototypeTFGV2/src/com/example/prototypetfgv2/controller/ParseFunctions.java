@@ -505,6 +505,7 @@ public class ParseFunctions {
 		query.whereEqualTo("idAlbum",idAlbum);
 		try {
 			List<ParseObject> obs = query.find();
+			Log.v("prototypev1", "getMembers size = "+obs.size());
 			for(ParseObject o : obs) {
 				members.add(o.getString("idUser"));
 			}

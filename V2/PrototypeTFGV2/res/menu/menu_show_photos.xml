@@ -20,10 +20,12 @@
       <menu>
           <item
 		      android:id="@+id/settings"
+		      android:icon="@drawable/ic_action_settings"
 		      android:title="@string/album_settings"
 		      android:showAsAction="always"/>
           <item
 		      android:id="@+id/add_photo_from_gallery"
+		      android:icon="@drawable/ic_action_new"
 		      android:title="@string/add_photo_from_gallery"
 		      android:showAsAction="always"/>
       </menu>

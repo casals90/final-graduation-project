@@ -97,7 +97,7 @@
         </activity>
         <activity
             android:name=".view.ShowFullScreenPhotoProfile"
-            android:label="@string/title_activity_show_full_screen_photo_profile">
+            android:label="@string/title_activity_show_full_screen_photo_profile" >
         </activity>
         <activity
             android:name=".view.InputUsernameAndPassword"
@@ -110,8 +110,12 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.ShowFullScreenPhotoOfNews"
+            android:name=".view.ShowFullScreenPhotoOfNews"
             android:label="@string/title_activity_show_full_screen_photo_of_news" >
+        </activity>
+        <activity
+            android:name=".AlbumSettingsActivity"
+            android:label="@string/title_activity_album_settings" >
         </activity>
     </application>
 

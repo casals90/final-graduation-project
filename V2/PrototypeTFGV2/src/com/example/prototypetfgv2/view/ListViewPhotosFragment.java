@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +25,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.prototypetfgv2.AlbumSettingsActivity;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
@@ -103,10 +103,8 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 			case R.id.grid_view_mode:
 				goToShowAlbumGridMode(album);
 				break;
-			//Overflow menu options
 			case R.id.settings:
-				//TODO albums settings
-				Log.v("prototypev1","gotoalbums settings");
+				goToAlbumSettings();
 				break;
 			case R.id.add_photo_from_gallery:
 				choosePhotoFromGallery();
@@ -263,5 +261,11 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		transaction.replace(R.id.container_fragment_main,fpou);
 		transaction.addToBackStack(null);
 		transaction.commit();	
+	}
+	
+	public void goToAlbumSettings() {
+		Intent albumSettings = new Intent(getActivity(),AlbumSettingsActivity.class);
+		albumSettings.putExtra("Album",album);
+		startActivity(albumSettings);
 	}
 }

@@ -108,8 +108,4 @@ public class Album implements Parcelable {
 		photosNumber = in.readInt();
 		membersNumber = in.readInt();
 	}
-	
-	
-	
-
 }
