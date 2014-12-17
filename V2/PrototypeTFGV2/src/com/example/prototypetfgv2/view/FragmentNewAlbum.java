@@ -112,7 +112,7 @@ public class FragmentNewAlbum extends Fragment {
 					getActivity().finish();
 				break;
 			case android.R.id.home:
-				getFragmentManager().popBackStack();
+				getActivity().finish();
 		        return true;
 			default:
 				break;
