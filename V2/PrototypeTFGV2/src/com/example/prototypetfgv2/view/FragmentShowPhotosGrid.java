@@ -13,13 +13,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -49,6 +47,8 @@ public class FragmentShowPhotosGrid extends Fragment {
 	
 	private GridViewAdapterForShowPhotos adapter;
 	
+	private boolean goToNews;
+	
 	public FragmentShowPhotosGrid() {
 		super();
 		
@@ -58,9 +58,11 @@ public class FragmentShowPhotosGrid extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		controller = (Controller) this.getActivity().getApplicationContext();
+		
 		//Fetch data album
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
+		goToNews = data.getBoolean("goToNews");	
 		
 		setHasOptionsMenu(true);
 	}
@@ -105,11 +107,10 @@ public class FragmentShowPhotosGrid extends Fragment {
 				choosePhotoFromGallery();
 				break;
 			case android.R.id.home:
-		        //NavUtils.navigateUpFromSameTask(this);
-		        //return true;
-				//getFragmentManager().popBackStack();
-				goToFragmentAlbums();
-				Log.v("prototypev1","home button");
+				if(goToNews)
+					goToShowAlbumListMode(album);
+				else
+					getFragmentManager().popBackStack();
 		        break;
 			default:
 				break;
@@ -159,6 +160,7 @@ public class FragmentShowPhotosGrid extends Fragment {
 	public void goToShowAlbumListMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
+		data.putBoolean("goToNews",goToNews);
 		ListViewPhotosFragment listViewPhotos = new ListViewPhotosFragment();
 		listViewPhotos.setArguments(data);
 		
@@ -223,60 +225,6 @@ public class FragmentShowPhotosGrid extends Fragment {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
-	
-	
-	//Class to download photos
-	/*private class DownloadPhotosTask extends AsyncTask<Void, Void, Boolean> {
-		
-        @Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-            gridView.setVisibility(View.INVISIBLE);
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
- 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-        	photos = controller.downloadPhotosFromAlbum(album.getId());
-        	if(photos != null && photos.size() > 0)
-        		return true;
-        	return false;
-        }
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
-			if(result) {
-				noPhotos.setVisibility(View.INVISIBLE);
-				mProgressBar.setVisibility(View.INVISIBLE);
-				gridView.setVisibility(View.VISIBLE);
-				//adapter
-				// Pass the results into ListViewAdapter.java
-	            adapter = new GridViewAdapterForShowPhotos(getActivity(),photos);
-	            // Binds the Adapter to the ListView
-	            gridView.setAdapter(adapter);
-	            gridView.setOnItemClickListener(new OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-						goToShowPhotoFullScreen(photo,position);
-					}
-				});
-			}
-			else {
-				//Show message no photos
-				noPhotos.setVisibility(View.VISIBLE);
-				mProgressBar.setVisibility(View.INVISIBLE);
-				gridView.setVisibility(View.INVISIBLE);
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			mProgressBar.setVisibility(View.INVISIBLE);
-			Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
-		}	
-    }*/
 
 	public void goToShowPhotoFullScreen(Photo photo,int position) {
 		Intent showPhoto = new Intent(getActivity(),ShowPhotoActivity.class);

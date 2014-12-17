@@ -122,7 +122,7 @@ public class AlbumSettingsActivity extends Activity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		getActionBar().setTitle(R.id.album_settings);
+		getActionBar().setTitle("Album settings");
 		
 		new DownloadAlbumTask().execute();
 	}

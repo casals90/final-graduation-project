@@ -6,42 +6,46 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.prototypetfgv2.view.CommentsActivity" >
-    
+    tools:context="com.example.prototypetfgv2.view.CommentsActivity" >   
+          
     <ListView 
-        android:id="@+id/list_comments"
-        android:layout_height="400dp"
-        android:layout_width="match_parent"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:layout_below="@+id/likes_number"
+	     android:id="@+id/list_comments"
+	     android:layout_height="wrap_content" 
+	     android:layout_width="match_parent"
+	     android:focusable="false"
+	     android:focusableInTouchMode="false"        
+	     android:layout_marginBottom="50dp"/>
         
-        android:layout_marginBottom="50dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:layout_alignParentBottom="true">
+        
+        <EditText
+            android:id="@+id/new_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="99"
+            android:hint="@string/add_your_comment" />
+    
+	    <ImageButton
+	        android:id="@+id/button_send_comment"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:focusableInTouchMode="true"
+		   	android:singleLine="true"
+		   	android:layout_weight="1"
+	        android:src="@drawable/ic_action_send_now_black"
+	        android:background="@drawable/selector_icons"
+	        android:contentDescription="@string/explain"/>
+    </LinearLayout>
     
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
-    
-    <EditText
-        android:id="@+id/new_comment"
-        android:layout_height="wrap_content"
-        android:layout_width="200dp"
-        android:layout_alignParentBottom="true"
-        android:hint="@string/add_your_comment"
-        />
-    
-    <ImageButton
-        android:id="@+id/button_send_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
-	   	android:singleLine="true"
-        android:src="@drawable/ic_action_send_now_black"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/new_comment"
-        android:background="@drawable/selector_icons"
-        android:contentDescription="@string/explain"/>
 
 </RelativeLayout>

@@ -75,7 +75,6 @@
     <string name="list_view_mode">List mode</string>
     <string name="enter_photo_title">Input photo title</string>
     <string name="new_album">New album</string>
-    <string name="album_settings">Album settings</string>
     <string name="no_current_album">You dont have current album. Change in a profile</string>
     <string name="add_photo_from_gallery">Add photo from gallery</string>
     <string name="my_photos">My photos</string>
@@ -86,6 +85,7 @@
     <string name="delete_and_leave_album">Delete and leave album</string>
     <string name="leave_album">Leave album</string>
     <string name="admin">admin</string>
+    <string name="album_settings">Album settings</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>

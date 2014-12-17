@@ -46,6 +46,8 @@ public class CommentsActivity extends Activity  {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_comments);
 		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		controller = (Controller) getApplication().getApplicationContext();
 		comments = new ArrayList<Comment>();
 		
@@ -95,10 +97,12 @@ public class CommentsActivity extends Activity  {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+		    case android.R.id.home:
+		        finish();
+		        return true;
+		    }
 		return super.onOptionsItemSelected(item);
 	}
 	

@@ -154,14 +154,14 @@ public class UploadPhotoActivity extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 			case REQUEST_IMAGE_CAPTURE:
-				if(resultCode == Activity.RESULT_OK) {
+				if(resultCode == Activity.RESULT_OK)
 					new BitmapWorkerTask(mImageView).execute(mCurrentPhotoPath);
-				}
+				else
+					finish();
 				break;
 			case REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM:
-				if(resultCode == Activity.RESULT_OK) {
+				if(resultCode == Activity.RESULT_OK)
 					dispatchTakePictureIntent();
-				}
 				break;
 			default:
 				break;
@@ -171,17 +171,6 @@ public class UploadPhotoActivity extends Activity {
 	public void goToListViewAlbum(String idAlbum) {
 		
 	}
-	
-	/*public void showFragmentDialog(ArrayList<CurrentAlbum> listCurrentAlbums) {
-        FragmentManager manager = getFragmentManager();
-        FragmentDialogChooseCurrentAlbum dialog = new FragmentDialogChooseCurrentAlbum();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("listCurrentAlbums",listCurrentAlbums);
-        dialog.setArguments(bundle);
-        dialog.setTargetFragment(this, REQUEST_DIALOG_CHOOSE_CURRENT_ALBUM);
-        dialog.show(manager,"dialog");
-
-    }*/
 	
 	public void showConfirmDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);

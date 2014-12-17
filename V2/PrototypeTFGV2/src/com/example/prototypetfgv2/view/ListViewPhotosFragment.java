@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,7 +64,10 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		//Fetch album data
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
-		goToNews = data.getBoolean("goToNews");		
+		goToNews = data.getBoolean("goToNews");	
+		
+		Log.v("prototypev1","goToNews "+goToNews);
+		
 		controller.clearImageLoader();
 		imageLoader = ImageLoader.getInstance();
 		
@@ -109,7 +113,8 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 				break;
 			case android.R.id.home:
 				if(goToNews == true) {
-					getFragmentManager().popBackStack();
+					//getFragmentManager().popBackStack();
+					goToNews();
 				}
 				else
 					goToFragmentAlbums();
@@ -152,6 +157,7 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	public void goToShowAlbumGridMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
+		data.putBoolean("goToNews",goToNews);
 		FragmentShowPhotosGrid showAlbum = new FragmentShowPhotosGrid();
 		showAlbum.setArguments(data);
 		
@@ -249,6 +255,13 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	public void goToProfile() {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentProfile());
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
+	
+	public void goToNews() {
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentNews());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
