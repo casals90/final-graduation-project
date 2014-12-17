@@ -34,8 +34,6 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
         	this.members = members;
         else
         	this.members = new ArrayList<String>();
-        
-        Log.v("prototypev1", "Constructor ListViewAdapterChooseUsersNewAlbum "+members);
 	}
 
 	public ArrayList<String> getMembers() {

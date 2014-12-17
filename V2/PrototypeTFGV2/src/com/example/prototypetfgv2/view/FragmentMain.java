@@ -84,7 +84,6 @@ public class FragmentMain extends Fragment implements OnClickListener {
 	public void initTransaction() {
 		manager = getActivity().getSupportFragmentManager();
 		transaction = manager.beginTransaction();
-		//transaction = getFragmentManager().beginTransaction();
 	}
 	
 	// change the fragments 

@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.example.prototypetfgv2.R.id;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.CurrentAlbum;
@@ -582,7 +581,7 @@ public class ParseFunctions {
 		return null;	
 	}
 	
-	public ArrayList<User> downloadFriends(CurrentUser currentUser) {
+	/*public ArrayList<User> downloadFriends(CurrentUser currentUser) {
 		ArrayList<User> users = new ArrayList<User>();
 		ArrayList<String> friends = getFriends(currentUser);
 		
@@ -603,7 +602,7 @@ public class ParseFunctions {
 			}
 		}
 		return users;
-	}
+	}*/
 	
 	public ArrayList<Photo> downloadMyPhotos(String idUser) {
 		ArrayList<Photo> photos = new ArrayList<Photo>();
@@ -625,7 +624,7 @@ public class ParseFunctions {
 	
 	public ArrayList<User> downloadFriendsInputSearch(String input,CurrentUser currentUser) {
 		ArrayList<User> users = new ArrayList<User>();
-		ArrayList<String> friends = getFriends(currentUser);
+		ArrayList<String> friends = getFollowingId(currentUser.getId());
 		
 		ParseQuery<ParseUser> query = ParseUser.getQuery();
 		query.whereStartsWith("username",input);
@@ -683,9 +682,9 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return null;
 		}
-	} 
+	}
 	 
-	public ArrayList<String> getFriends(CurrentUser currentUser) {
+	/*public ArrayList<String> getFollowingIds(CurrentUser currentUser) {
 		ArrayList<String> friends = new ArrayList<String>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
 		query.whereEqualTo("idUser",currentUser.getId());
@@ -699,14 +698,9 @@ public class ParseFunctions {
 			return null;
 		}
 		return friends;
-	}
+	}*/
 	
-	public JSONArray getFriendsRequest() {
-		JSONArray r = ParseUser.getCurrentUser().getJSONArray("friendsRequest");
-		return r;
-	}
-	
-	public boolean addFriend(String idNewFriend,CurrentUser currentUser) {
+	/*public boolean addFriend(String idNewFriend,CurrentUser currentUser) {
 		ParseObject friendship = new ParseObject("Friendship");
 		friendship.put("idUser",currentUser.getId());
 		friendship.put("idFriend",idNewFriend);
@@ -718,7 +712,7 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}*/
 	
 	public void incrementFriendsNumber() {
 		ParseUser currentUser = ParseUser.getCurrentUser();
@@ -770,7 +764,7 @@ public class ParseFunctions {
 		}
 	}
 	
-	public boolean deleteFriend(String id,CurrentUser currentUser) {
+	/*public boolean deleteFriend(String id,CurrentUser currentUser) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
 		query.whereEqualTo("idUser",currentUser.getId());
 		query.whereEqualTo("idFriend",id);
@@ -782,9 +776,9 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}*/
 	
-	public boolean decrementFriendsNumber() {
+	/*public boolean decrementFriendsNumber() {
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		int n = currentUser.getInt("friendsNumber");
 		if(n > 0)
@@ -799,15 +793,15 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}*/
 	
 	public String getPhotosNumber() {
 		return String.valueOf(ParseUser.getCurrentUser().getInt("photosNumber"));
 	}
 	
-	public String getFriendsNumber() {
+	/*public String getFriendsNumber() {
 		return String.valueOf(ParseUser.getCurrentUser().getInt("friendsNumber"));
-	}
+	}*/
 	
 	public void logInTwitter(final Activity activity) {
 		ParseTwitterUtils.logIn(activity, new LogInCallback() {
@@ -819,7 +813,6 @@ public class ParseFunctions {
 				else if (user.isNew()) { 
 					Log.v("prototypev1", "signup twitter new user");
 					user.put("photosNumber",0);
-					//user.put("friendsNumber",0);
 					user.put("followingNumber",0);
 					user.put("followersNumber",0);
 					user.put("albumsNumber",0);
@@ -850,7 +843,6 @@ public class ParseFunctions {
 	            } else if (user.isNew()) {
 	                Log.d("prototypev1","User signed up and logged in through Facebook!");
 	                user.put("photosNumber",0);
-					//user.put("friendsNumber",0);
 	                user.put("followingNumber",0);
 					user.put("followersNumber",0);
 					user.put("albumsNumber",0);
@@ -1118,7 +1110,7 @@ public class ParseFunctions {
 		
 	}*/
 	
-	public boolean unlikePhoto(String id) {
+	/*public boolean unlikePhoto(String id) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
 		query.whereEqualTo("idPhoto",id);
 		query.whereEqualTo("idUser",ParseUser.getCurrentUser().getObjectId());
@@ -1131,7 +1123,7 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}*/
 	
 	public Comment newComment(String idPhoto,String text,User user) {
 		ParseObject comment = new ParseObject("Comment");
@@ -1344,7 +1336,7 @@ public class ParseFunctions {
 		}
 	}
 	
-	public boolean deleteFollower(String idUser,String idFollower) {
+	/*public boolean deleteFollower(String idUser,String idFollower) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
 		query.whereEqualTo("idUser",idFollower);
 		query.whereEqualTo("idFriend",idUser);
@@ -1357,7 +1349,7 @@ public class ParseFunctions {
 			Log.v("prototypev1", "error deleteFollowing"+e);
 			return false;
 		}
-	}
+	}*/
 	
 	public boolean addFollowing(String idUser,String idFollowing) {
 		ParseObject following = new ParseObject("Friendship");

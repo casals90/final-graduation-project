@@ -16,8 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -31,19 +30,20 @@ public class FragmentNewAlbum extends Fragment {
 
 	private Controller controller;
 	
-	private EditText inputAlbum;
-	private ImageButton add;
+	private Button addMember;
 	private ListView listMembers;
 	private ProgressBar progressBar;
 	
 	private ArrayList<User> users;
 	private ArrayList<String> members;
-	private String albumName;
 	
 	private ListViewAdapterForAddMembers adapter;
 	
-	public FragmentNewAlbum() {
+	private String albumTitle;
+	
+	public FragmentNewAlbum(String albumTitle) {
 		super();
+		this.albumTitle = albumTitle;
 	}
 	
 	@Override
@@ -58,9 +58,8 @@ public class FragmentNewAlbum extends Fragment {
 		}
 		else {
 			members = args.getStringArrayList("members");
-			albumName = args.getString("albumName");
 		}
-		Log.v("prototypev1", "albumName ="+albumName);		
+		
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -79,22 +78,20 @@ public class FragmentNewAlbum extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_new_album,container,false);
 		
-		inputAlbum = (EditText) view.findViewById(R.id.album_name);
 		
-		add = (ImageButton) view.findViewById(R.id.add_members);
-		add.setOnClickListener(new OnClickListener() {
+		addMember = (Button) view.findViewById(R.id.add_members);
+		addMember.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public void onClick(View v) {
-				//go to add members
-				albumName = inputAlbum.getText().toString();
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
 				goToAddUsersNewAlbum();
 			}
 		});
+		
 		progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 		listMembers = (ListView) view.findViewById(R.id.list_members);
-		
-		if(albumName != null)
-			inputAlbum.setText(albumName);
+		progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 		
 		new ShowMembersTask().execute();
 		
@@ -110,10 +107,9 @@ public class FragmentNewAlbum extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.create_album:
-				albumName = inputAlbum.getText().toString();
 				//create album in parse
 				if(createAlbum())
-					goToAlbums();
+					getActivity().finish();
 				break;
 			case android.R.id.home:
 				getFragmentManager().popBackStack();
@@ -127,27 +123,15 @@ public class FragmentNewAlbum extends Fragment {
 	public void goToAddUsersNewAlbum() {
 		FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		FragmentAddUsersNewAlbum addUsers = new FragmentAddUsersNewAlbum();
+		FragmentAddUsersNewAlbum addUsers = new FragmentAddUsersNewAlbum(albumTitle);
 		//put data
 		final Bundle data = new Bundle();
 		if(members != null && members.size() > 0 && adapter != null) {
 			members = adapter.getMembers();
 			data.putStringArrayList("members",members);
-			albumName = inputAlbum.getText().toString();
-			if(albumName != null)
-				data.putString("albumName",albumName);
 			addUsers.setArguments(data);
 		}
-		transaction.replace(R.id.container_fragment_main,addUsers);
-		transaction.addToBackStack(null);
-		transaction.commit();
-	}
-	
-	public void goToAlbums() {
-		FragmentManager manager = getActivity().getSupportFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
-		FragmentAlbums albums = new FragmentAlbums();
-		transaction.replace(R.id.container_fragment_main,albums);
+		transaction.replace(R.id.container_new_album,addUsers);
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
@@ -158,13 +142,9 @@ public class FragmentNewAlbum extends Fragment {
 			Toast.makeText(getActivity(),"Minimum adding 1 member",  Toast.LENGTH_LONG).show();
 			return false;
 		}	
-		else if(albumName == null || albumName.length() <= 0) {
-			Toast.makeText(getActivity(),"Input album name",  Toast.LENGTH_LONG).show();
-			return false;
-		}
 		else {
 			Log.v("prototypev1", "create albums"+members.size());
-			controller.newAlbum(members, albumName);
+			controller.newAlbum(members, albumTitle);
 			return true;
 		}
 	}

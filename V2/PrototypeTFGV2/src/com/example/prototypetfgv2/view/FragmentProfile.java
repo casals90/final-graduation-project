@@ -134,7 +134,7 @@ public class FragmentProfile extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				goToFragmentListFriends();
+				//TODO fragmets list friends
 			}
 		});
 		
@@ -365,14 +365,6 @@ public class FragmentProfile extends Fragment {
 		FragmentAlbums fragmentAlbums = new FragmentAlbums();
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,fragmentAlbums);
-		transaction.addToBackStack(null);
-		transaction.commit();	
-	}
-	
-	public void goToFragmentListFriends() {
-		FragmentListFriends fragmentListFriends = new FragmentListFriends();
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.container_fragment_main,fragmentListFriends);
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}

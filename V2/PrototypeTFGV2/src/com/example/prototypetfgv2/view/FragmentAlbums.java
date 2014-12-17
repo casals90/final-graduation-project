@@ -3,10 +3,10 @@ package com.example.prototypetfgv2.view;
 import java.util.ArrayList;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -57,6 +57,7 @@ public class FragmentAlbums extends Fragment {
 		//Change action bar title
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		getActivity().getActionBar().setTitle(R.string.albums);
+		new DownloadAlbumsTask().execute();
 	}
 
 	@Override
@@ -85,16 +86,17 @@ public class FragmentAlbums extends Fragment {
 		mListViewAlbums = (ListView) view.findViewById(R.id.list_albums);
 		mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar_albums);
 		noAlbums = (TextView) view.findViewById(R.id.no_albums);
-		new DownloadAlbumsTask().execute();
 		return view;
 	}
 	
 	public void goToNewAlbum() {
-		FragmentManager manager = getActivity().getSupportFragmentManager();
+		/*FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentNewAlbum());
 		transaction.addToBackStack(null);
-		transaction.commit();
+		transaction.commit();*/
+		Intent inputAlbumTitle = new Intent(getActivity(),InputAlbumTitleActivity.class);
+		startActivity(inputAlbumTitle);
 	}
 
 	private class DownloadAlbumsTask extends AsyncTask<Void, Void, Boolean> {
@@ -103,6 +105,7 @@ public class FragmentAlbums extends Fragment {
         protected void onPreExecute() {
         	super.onPreExecute();
         	mProgressBar.setVisibility(View.VISIBLE);
+        	mListViewAlbums.setVisibility(View.INVISIBLE);
         }
  
         @Override
@@ -119,6 +122,7 @@ public class FragmentAlbums extends Fragment {
         	if(success) {
         		adapter = new ListViewAlbumsAdapter(albums,getActivity().getApplicationContext());
         		mProgressBar.setVisibility(View.INVISIBLE);
+        		mListViewAlbums.setVisibility(View.VISIBLE);
         		mListViewAlbums.setAdapter(adapter);
         		mListViewAlbums.setOnItemClickListener(new OnItemClickListener() {
 

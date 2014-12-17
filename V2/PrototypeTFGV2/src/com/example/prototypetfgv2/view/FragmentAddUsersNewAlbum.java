@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,13 +34,17 @@ public class FragmentAddUsersNewAlbum extends Fragment {
     private ArrayList<User> users;
 	private Controller controller;
 	private ArrayList<String> members;
-	private String albumName;
+	private ArrayList<String> membersOld;
 	private String input;
 	
 	private DownloadFriendsTask download;
     
-	public FragmentAddUsersNewAlbum() {
+	private String albumTitle;
+	
+	public FragmentAddUsersNewAlbum(String albumTitle) {
 		super();
+		
+		this.albumTitle = albumTitle;
 	}
 	
 	@Override
@@ -51,14 +54,11 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 		controller = (Controller) getActivity().getApplication();
 		
 		final Bundle args = this.getArguments();
-		if(args == null) {
+		if(args == null)
 			members = new ArrayList<String>();
-		}
-		else {
+		else 
 			members = args.getStringArrayList("members");
-			albumName = args.getString("albumName");
-		}
-		
+		membersOld = (ArrayList<String>)members.clone();
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -84,9 +84,10 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 					//pass to new Album
 					goToNewAlbum();
 				}
-				break;
+			break;
 			case android.R.id.home:
-				getFragmentManager().popBackStack();
+				//getFragmentManager().popBackStack();
+				goToNewAlbumClear();
 		        return true;	
 			default:
 				break;
@@ -97,10 +98,11 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
 		View view = inflater.inflate(R.layout.fragment_add_users_new_album,container,false);
 		list_friends = (ListView) view.findViewById(R.id.list_friends);
 		progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-		search = (EditText) view.findViewById(R.id.search);
+		search = (EditText) view.findViewById(R.id.search); 
 		search.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -114,7 +116,6 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 			@Override
 			public void afterTextChanged(Editable s) {
 				input = s.toString();
-				Log.v("prototypev1", "input change ");
 				download = new DownloadFriendsTask();
 				download.execute();				
 			}
@@ -134,13 +135,11 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	    }
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
-	    	Log.v("prototypev1", "DownloadFriendsTask input "+input);
 	    	if(input == null)  {
-	    		users = controller.downloadFriends();
-	    		Log.v("prototypev1", "downloadFriends");
+	    		//users = controller.downloadFriends();
+	    		users = controller.getFollowing();
 	    	}
 	    	else {
-	    		Log.v("prototypev1", "downloadFriendsInputSearch(input)");
 	    		users = controller.downloadFriendsInputSearch(input);
 	    	}
 	        if(users != null)
@@ -160,7 +159,6 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	        }
 	        else
 	        	progressBar.setVisibility(View.INVISIBLE);
-	        Log.v("prototypev1", "fi DownloadFriendsTask");
 	    }
 	    
 		@Override
@@ -172,21 +170,30 @@ public class FragmentAddUsersNewAlbum extends Fragment {
 	}
 	
 	public void goToNewAlbum() {
-		//Log.v("prototypev1", "--------------------------------");
 		FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
-		FragmentNewAlbum newAlbum = new FragmentNewAlbum();
+		FragmentNewAlbum newAlbum = new FragmentNewAlbum(albumTitle);
 		//put data
 		final Bundle data = new Bundle();
 		if(members != null && members.size() > 0) {
-			//Log.v("prototypev1", " members != null to send "+members);
 			data.putStringArrayList("members",members);
-			if(albumName != null)
-				data.putString("albumName",albumName);
 			newAlbum.setArguments(data);
 		}
-		transaction.replace(R.id.container_fragment_main,newAlbum);
-		//transaction.addToBackStack(null);
+		transaction.replace(R.id.container_new_album,newAlbum);
+		transaction.commit();
+	}
+	
+	public void goToNewAlbumClear() {
+		FragmentManager manager = getActivity().getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		FragmentNewAlbum newAlbum = new FragmentNewAlbum(albumTitle);
+		//put data
+		final Bundle data = new Bundle();
+		if(membersOld != null && membersOld.size() > 0) {
+			data.putStringArrayList("members",membersOld);
+			newAlbum.setArguments(data);
+		}
+		transaction.replace(R.id.container_new_album,newAlbum);
 		transaction.commit();
 	}
 }

@@ -2,23 +2,19 @@ package com.example.prototypetfgv2.view;
 
 import java.util.List;
 
-import com.example.prototypetfgv2.R;
-import com.example.prototypetfgv2.model.CurrentAlbum;
-import com.example.prototypetfgv2.view.ListViewAdapterChooseUsersNewAlbum.ViewHolder;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.prototypetfgv2.R;
+import com.example.prototypetfgv2.model.CurrentAlbum;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class AdapterForCurrentAlbum extends BaseAdapter {
 
@@ -50,19 +46,16 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return currentAlbums.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return currentAlbums.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 	
@@ -70,7 +63,6 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
         ImageView albumCover;
         TextView albumTitle;
     }
-
 
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {

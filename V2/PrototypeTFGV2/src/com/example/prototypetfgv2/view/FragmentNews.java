@@ -185,6 +185,7 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	public void goToShowAlbumListMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
+		data.putBoolean("goToNews",true);
 		ListViewPhotosFragment listViewPhotos = new ListViewPhotosFragment();
 		listViewPhotos.setArguments(data);
 		

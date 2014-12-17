@@ -54,19 +54,16 @@ public class AdapterForFollowers extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return followers.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return followers.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -146,15 +143,16 @@ public class AdapterForFollowers extends BaseAdapter {
 		new DeleteFollowingTask().execute(idFollowing);
 	}
 	
-	public void deleteFollower(String idFollower) {
+	/*public void deleteFollower(String idFollower) {
 		followers.remove(idFollower);
 		//controller.deleteFollower(idFollower);
 		new AddFollowingTask().execute(idFollower);
-	}
+	}*/
 	
 	public void addFollowing(String idFollowing) {
 		following.add(idFollowing);
-		controller.addFollowing(idFollowing);
+		//controller.addFollowing(idFollowing);
+		new AddFollowingTask().execute();
 	}
 	
 	private class DeleteFollowingTask extends AsyncTask<String, Void, Boolean> {

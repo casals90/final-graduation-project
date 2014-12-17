@@ -46,6 +46,7 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	private ImageLoader imageLoader;
 	private String mCurrentPhotoPath;
 	private GoToProfileUserInterface goToProfileUserInterface;
+	private boolean goToNews;
 	
 	public ListViewPhotosFragment() {
 		super();
@@ -62,8 +63,7 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		//Fetch album data
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
-		//Put album title in action bar
-		getActivity().setTitle((album.getAlbumTitle()));
+		goToNews = data.getBoolean("goToNews");		
 		controller.clearImageLoader();
 		imageLoader = ImageLoader.getInstance();
 		
@@ -85,7 +85,7 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	public void onResume() {
 		//show up navigation
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActivity().setTitle(album.getAlbumTitle());
+		getActivity().getActionBar().setTitle(album.getAlbumTitle());
 		new DownloadPhotosTask().execute(album.getId());
 		super.onResume();
 	}
@@ -108,7 +108,11 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 				choosePhotoFromGallery();
 				break;
 			case android.R.id.home:
-				goToFragmentAlbums();
+				if(goToNews == true) {
+					getFragmentManager().popBackStack();
+				}
+				else
+					goToFragmentAlbums();
 		        break;
 			default:
 				break;

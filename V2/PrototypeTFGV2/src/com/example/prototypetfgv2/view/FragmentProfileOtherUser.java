@@ -40,7 +40,7 @@ public class FragmentProfileOtherUser extends Fragment {
 	private Button buttonFriend;
 	private ProgressBar mProgressBar,mProgressBarDownloadCommonAlbums;
 	private ListView listCommonAlbums;
-	private boolean isMyFriend;
+	private boolean followingThisUser;
 	private User user;
 	private ArrayList<Album> commonAlbums;
 	private ImageLoader imageLoader;
@@ -60,7 +60,8 @@ public class FragmentProfileOtherUser extends Fragment {
 		Bundle data = this.getArguments();
 		user = data.getParcelable("User");
 		
-		this.isMyFriend = controller.isMyFriend(user.getId());
+		//this.isMyFriend = controller.isMyFriend(user.getId());
+		this.followingThisUser = controller.getCurrentUser().getFollowing().contains(user.getId());
 		
 		setHasOptionsMenu(true);
 	}
@@ -104,17 +105,17 @@ public class FragmentProfileOtherUser extends Fragment {
 		buttonFriend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//add in friend list
-				//new AddFriendTask().execute();
-				if(isMyFriend) 
+				//TODO Following follow
+				/*//add in friend list
+				//if(followingThisUser) 
 					new DeleteFriendTask().execute();
 				else
 					new AddFriendTask().execute();
-				isMyFriend = !isMyFriend;
+				followingThisUser = !followingThisUser;*/
 			}
 		});
 		
-		if(isMyFriend) {
+		if(followingThisUser) {
 			//is in friend list
 			new DownloadCommonAlbumsTask().execute();
 			//Change button
@@ -201,76 +202,6 @@ public class FragmentProfileOtherUser extends Fragment {
 		}	
     }
 	
-	private class DeleteFriendTask extends AsyncTask<Void, Void, Boolean> {
-		
-        @Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-            //mProgressBar.setVisibility(VISIBLE);
-        	//friendsNumber.setText()
-        	//user.decrementFriendsNumber();
-        	//friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
-        	listCommonAlbums.setVisibility(View.INVISIBLE);
-        	buttonAddFriend();
-        }
- 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-        	return controller.deleteFriend(user.getId());
-        }
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
-			if(result) {
-				//mProgressBar.setVisibility(INVISIBLE);
-				
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			mProgressBar.setVisibility(INVISIBLE);
-			Toast.makeText(getActivity(),"Error delete friend",  Toast.LENGTH_LONG).show();
-		}	
-    }
-	
-	private class AddFriendTask extends AsyncTask<Void, Void, Boolean> {
-		
-        @Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-          // buttonFriend.setVisibility(INVISIBLE);
-           //mProgressBar.setVisibility(VISIBLE);
-	    	//user.incrementFriendsNumber();
-	    	//friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
-	    	buttonIsFriend();
-	    	listCommonAlbums.setVisibility(View.VISIBLE);
-	    	new DownloadCommonAlbumsTask().execute();
-        }
- 
-        @Override
-        protected  Boolean doInBackground(Void... params) {
-        	return controller.addFriend(user.getId());
-        }
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
-			if(result) {
-				//mProgressBar.setVisibility(INVISIBLE);
-			}
-		}
- 
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			mProgressBar.setVisibility(INVISIBLE);
-			buttonFriend.setVisibility(VISIBLE);
-			Toast.makeText(getActivity(),"Error add friend",  Toast.LENGTH_LONG).show();
-		}	
-    }
 	
 	public void goToShowAlbumListMode(Album album) {
 		Bundle data = new Bundle();

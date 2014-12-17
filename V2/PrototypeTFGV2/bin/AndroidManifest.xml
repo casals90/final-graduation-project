@@ -114,12 +114,20 @@
             android:label="@string/title_activity_show_full_screen_photo_of_news" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.AlbumSettingsActivity"
+            android:name=".view.AlbumSettingsActivity"
             android:label="@string/title_activity_album_settings" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.SetAlbumTitleActivity"
+            android:name=".view.SetAlbumTitleActivity"
             android:label="@string/title_activity_album_settings" >
+        </activity>
+        <activity
+            android:name=".view.InputAlbumTitleActivity"
+            android:label="@string/title_activity_input_album_title" >
+        </activity>
+        <activity
+            android:name="com.example.prototypetfgv2.view.InputAlbumMembersActivity"
+            android:label="@string/title_activity_input_album_members" >
         </activity>
     </application>
 
