@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.User;
 import com.parse.ParseUser;
@@ -334,6 +334,14 @@ public class Utils {
 			//Log.v("prototypev1","return seconds");
 			return seconds+":s";
 		}	
+	}
+	
+	public static ArrayList<String> getAlbumsId(ArrayList<Album> albums) {
+		ArrayList<String> ids = new ArrayList<String>();
+		for(int i = 0; i < albums.size(); i++) {
+			ids.add(albums.get(i).getId());
+		}
+		return ids;
 	}
 }
 

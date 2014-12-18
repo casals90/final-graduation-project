@@ -235,6 +235,11 @@ public class Controller extends Application {
 		return parseFunctions.downloadAllPhotosFromCurrentUser(currentUser);
 	}
 	
+	//Function to update news
+	public ArrayList<Photo> getNewsPhotosFromCreatedAt(String lastPhotoDate,ArrayList<Album> albums) {
+		return parseFunctions.getNewsPhotosFromCreatedAt(lastPhotoDate,currentUser,Utils.getAlbumsId(albums));
+	}
+	
 	public void uploadPhoto(Bitmap photo,String title,Activity activity,String idAlbum) {
 		//Use de current album (only in take photo)
 		if(idAlbum == null) {

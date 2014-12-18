@@ -1,8 +1,10 @@
 package com.example.prototypetfgv2.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.provider.MediaStore.Audio.Albums;
 import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
@@ -286,6 +289,53 @@ public class ParseFunctions {
 		}
 	}
 	
+	public ParseObject downloadPhotoParse(String idPhoto) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereEqualTo("objectId",idPhoto);
+		try {
+			ParseObject p = query.getFirst();
+			return p;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	
+	public ArrayList<Photo> getNewsPhotosFromCreatedAt(String idlastPhotoDate,CurrentUser currentUser,ArrayList<String> albumsId) {
+		
+		ParseObject lastPhoto = downloadPhotoParse(idlastPhotoDate);
+		
+		ArrayList<Photo> photos = new ArrayList<Photo>();
+		HashMap<String, User> ownerUsers = new HashMap<String, User>();
+		User ownerUser;
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereContainedIn("ownerAlbum",albumsId);
+		query.whereGreaterThan("createdAt",lastPhoto.getCreatedAt());
+		query.orderByDescending("createdAt");
+		try {
+			List<ParseObject> parsePhotos = query.find();
+			for(ParseObject o : parsePhotos) {
+				//Log.v("prototypev1", "all photos number "+parsePhotos.size());
+				String idUser = o.getString("ownerUser");
+				if(ownerUsers.containsKey(idUser)) {
+					ownerUser = ownerUsers.get(idUser);
+				}
+				else {
+					//download and put inside the hasmap
+					ownerUser = getUser(o.getString("ownerUser"));
+					ownerUsers.put(idUser, ownerUser);
+				}
+				Photo photo = new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()),ownerUser,o.getInt("likesNumber"),o.getInt("commentsNumber"),o.getString("ownerAlbum"));
+				photos.add(photo);
+			}
+			return photos;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public ArrayList<Photo> downloadAllPhotosFromCurrentUser(CurrentUser currentUser) {
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		ArrayList<String> idAlbums = getAlbumsId(currentUser);
@@ -293,7 +343,6 @@ public class ParseFunctions {
 		User ownerUser;
 		
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
-		//query.whereEqualTo("ownerAlbum", idAlbums);
 		query.whereContainedIn("ownerAlbum", idAlbums);
 		query.orderByDescending("createdAt");
 		try {

@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -263,4 +264,19 @@ public class ListViewNewsAdapter extends BaseAdapter {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
+	
+	public ArrayList<Photo> updateNews(ArrayList<Photo> update) {
+		if(update.size() > 0) {
+			ArrayList<Photo> all = new ArrayList<Photo>();
+			//Join two list
+			all.addAll(update);
+			all.addAll(photos);
+			Log.v("prototypev1", "size update "+update.size());
+			Log.v("prototypev1", "size photos "+photos.size());
+			this.photos = (ArrayList<Photo>) all.clone();
+			Log.v("prototypev1", "size all "+all.size()+" and photos update "+this.photos.size());
+			notifyDataSetChanged();
+		}
+		return photos;
+	}
 }

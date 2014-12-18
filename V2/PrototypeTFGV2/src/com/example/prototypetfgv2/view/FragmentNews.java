@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
@@ -26,9 +27,10 @@ import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
 
-public class FragmentNews extends Fragment implements NewsInterface {
+public class FragmentNews extends Fragment implements NewsInterface, SwipeRefreshLayout.OnRefreshListener {
 
 	private ArrayList<Photo> photos;
+	private ArrayList<Photo> update;
 	private Controller controller;
 	private ProgressBar mProgressBar;
 	private HashMap<String, String> albums;
@@ -36,6 +38,8 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	private ArrayList<Album> arrayListAlbums;
 	private NewsInterface newsInterface;
 	private Activity activity;
+	private SwipeRefreshLayout swipeLayout;
+	private ListViewNewsAdapter adapter;
 	
 	public FragmentNews() {
 		super();
@@ -68,6 +72,14 @@ public class FragmentNews extends Fragment implements NewsInterface {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_news,container,false);
 		
+		swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+		swipeLayout.setOnRefreshListener(this);
+		
+		swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+		android.R.color.holo_green_light,
+		android.R.color.holo_orange_light,
+		android.R.color.holo_red_light);
+		
 		mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
 		listNews = (ListView) view.findViewById(R.id.list_news);
 		
@@ -85,7 +97,8 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	photos = controller.downloadAllPhotosFromCurrentUser();
-	    	if(photos != null)
+	    	arrayListAlbums = controller.getAlbums();
+	    	if(photos != null && arrayListAlbums != null)
 	    		return true;
 	    	return false;
 	    }
@@ -93,9 +106,24 @@ public class FragmentNews extends Fragment implements NewsInterface {
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
-	        //mProgressBar.setVisibility(View.INVISIBLE);
+	        mProgressBar.setVisibility(View.INVISIBLE);
 	        if(result) {
-	        	new DownloadAlbumsTask().execute();
+	        	//new DownloadAlbumsTask().execute();
+	        	for(int i = 0; i < arrayListAlbums.size(); i++) {
+        			Album album = arrayListAlbums.get(i);
+        			albums.put(album.getId(),album.getAlbumTitle());
+        		}
+        		listNews.setVisibility(View.VISIBLE);
+        		//listNews.setAdapter(new ListViewNewsAdapter(getActivity().getApplicationContext(), photos, albums,newsInterface,activity));
+        		adapter = new ListViewNewsAdapter(getActivity().getApplicationContext(), photos, albums,newsInterface,activity);
+        		listNews.setAdapter(adapter);
+        		listNews.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+						goToShowPhotoFullScreen(photos.get(position));
+					}
+				});
 	        }
 	        else {
 	        	Log.v("prototypev1", "error download");
@@ -110,54 +138,42 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		}
 	}
 	
-	private class DownloadAlbumsTask extends AsyncTask<Void, Void, Boolean> {
-    	
-		@Override
-        protected void onPreExecute() {
-        	super.onPreExecute();
-        	//mProgressBar.setVisibility(View.VISIBLE);
-        }
- 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-        	arrayListAlbums = controller.getAlbums();
-            if(arrayListAlbums != null)
-            	return true;
-            return false;
-            		
-        }
- 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-        	mProgressBar.setVisibility(View.INVISIBLE);
-        	if(success) {
-        		for(int i = 0; i < arrayListAlbums.size(); i++) {
-        			Album album = arrayListAlbums.get(i);
-        			albums.put(album.getId(),album.getAlbumTitle());
-        		}
-        		listNews.setVisibility(View.VISIBLE);
-        		listNews.setAdapter(new ListViewNewsAdapter(getActivity().getApplicationContext(), photos, albums,newsInterface,activity));
-        		listNews.setOnItemClickListener(new OnItemClickListener() {
+	private class UpdateNewsTask extends AsyncTask<Void, Void, Boolean> {
+	    @Override
+	    protected void onPreExecute() {
+	        super.onPreExecute();
+	        //mProgressBar.setVisibility(View.VISIBLE);
+	        //listNews.setVisibility(View.INVISIBLE);
+	    }
+	    @Override
+	    protected Boolean doInBackground(Void... params) {
+	    	update = controller.getNewsPhotosFromCreatedAt(photos.get(0).getId(),arrayListAlbums);
+	    	if(update != null)
+	    		return true;
+	    	return false;
+	    }
 
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-						//pos = position;
-						goToShowPhotoFullScreen(photos.get(position));
-					}
-				});
-        	}
-        	else {
-        		//No photos
-        		//TODO no news
-        	}
-        }
-
+	    @Override
+	    protected void onPostExecute(Boolean result) {
+	        super.onPostExecute(result);
+	        //mProgressBar.setVisibility(View.INVISIBLE);
+	        if(result) {
+	        	swipeLayout.setRefreshing(false);
+	        	photos = adapter.updateNews(update);
+	        }
+	        else {
+	        	Log.v("prototypev1", "error download");
+	        }
+	    }
+	    
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
-			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
+			
+			Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}
-    }
+	}
+	
 	
 	public void goToShowPhotoFullScreen(Photo photo) {
 		Intent showPhoto = new Intent(getActivity(),ShowFullScreenPhotoOfNews.class);
@@ -212,5 +228,13 @@ public class FragmentNews extends Fragment implements NewsInterface {
 		transaction.replace(R.id.container_fragment_main,fpou);
 		transaction.addToBackStack(null);
 		transaction.commit();	
+	}
+
+	@Override
+	public void onRefresh() {
+		swipeLayout.setRefreshing(true);
+		//TODO mirar si hi ha news mes noves
+		new UpdateNewsTask().execute();
+		Log.v("prototypev1","on refresh "+photos.get(0).getCreatedAt());
 	}
 }
