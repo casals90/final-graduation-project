@@ -160,6 +160,18 @@ public class Controller extends Application {
 	}
 		
 	//Albums methods
+	public boolean setAlbumTitle(String idAlbum,String newAlbumTitle) {
+		return parseFunctions.setAlbumTitle(idAlbum, newAlbumTitle);
+	}
+	
+	public boolean deleteAlbumMember(String idAlbum,String idUser) {
+		return parseFunctions.deleteMemberOfAlbum(idAlbum, idUser);
+	}
+	
+	public boolean deleteAlbum(String idAlbum) {
+		return parseFunctions.deleteAlbum(idAlbum);
+	}
+	
 	public ArrayList<Album> downloadAlbumsList(ArrayList<String> idAlbums) {
 		return parseFunctions.downloadAlbums(idAlbums, currentUser);
 	}

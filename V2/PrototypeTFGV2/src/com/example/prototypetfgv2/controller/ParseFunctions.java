@@ -157,6 +157,53 @@ public class ParseFunctions {
 		commonAlbums = downloadAlbums(albumsToDownload, currentUser);
     	return commonAlbums;
     }
+
+    public boolean setAlbumTitle(String idAlbum,String newAlbumTitle) {
+    	
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
+    	query.whereEqualTo("objectId",idAlbum);
+    	try {
+			ParseObject parseAlbum = query.getFirst();
+			parseAlbum.put("albumTitle",newAlbumTitle);
+			parseAlbum.save();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
+    
+    public boolean deleteMemberOfAlbum(String idAlbum, String idUser) {
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
+    	query.whereEqualTo("idAlbum",idAlbum);
+    	query.whereEqualTo("idUser",idUser);
+    	try {
+			ParseObject parseMember = query.getFirst();
+			parseMember.delete();
+			decrementMembersNumberFromAlbum(idAlbum);
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
+    
+    public void decrementMembersNumberFromAlbum(String idAlbum) {
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
+    	query.whereEqualTo("objectId",idAlbum);	
+    	try {
+			ParseObject parseAlbum = query.getFirst();
+			int membersNumber = parseAlbum.getInt("membersNumber"); 
+			if( membersNumber > 0)
+				membersNumber --;
+			else
+				membersNumber = 0;
+			parseAlbum.put("membersNumber",membersNumber);
+			parseAlbum.save();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    }
     
     public ArrayList<String> getPhotosFromAlbumLikedCurrentUser(String idUser,String idAlbum) {
     	ArrayList<String> likes = new ArrayList<String>();
@@ -1007,20 +1054,17 @@ public class ParseFunctions {
 	
 	public ArrayList<User> downloadUsersList(ArrayList<String> users) {
 		ArrayList<User> downloads = new ArrayList<User>();
-		List<ParseUser> parseUsers;
 		
 		for(int i = 0; i < users.size(); i ++) {
 			ParseQuery<ParseUser> query = ParseUser.getQuery();
 			query.whereEqualTo("objectId",users.get(i));
 			query.orderByDescending("username");
 			try {
-				parseUsers = query.find();
-				ParseUser u = parseUsers.get(0);
-				ParseFile profilePicture = (ParseFile)u.get("profilePicture");
-				if(profilePicture == null)
+				ParseUser u = query.getFirst();
+				if(u.getString("profilePictureUrl") == null)
 					downloads.add(new User(u.getObjectId(),u.getUsername(), null,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 				else
-					downloads.add(new User(u.getObjectId(),u.getUsername(),profilePicture.getUrl(),u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
+					downloads.add(new User(u.getObjectId(),u.getUsername(),u.getString("profilePictureUrl"),u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				return null;
@@ -1106,6 +1150,49 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public void deleteAllPhotosFromAlbum(String idAlbum) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+		query.whereEqualTo("ownerAlbum",idAlbum);
+		try {
+			List<ParseObject> parseAlbum = query.find();
+			for(ParseObject o : parseAlbum) {
+				o.delete();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteAlbumObject(String idAlbum) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
+		query.whereEqualTo("objectId",idAlbum);
+		try {
+			ParseObject parseAlbum = query.getFirst();
+			parseAlbum.delete();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean deleteAlbum(String idAlbum) {
+		//Delete all album members
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
+		query.whereEqualTo("idAlbum",idAlbum);
+		try {
+			List<ParseObject> parseMembers = query.find();
+			for(ParseObject o : parseMembers) {
+				o.delete();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+		deleteAlbumObject(idAlbum);
+		deleteAllPhotosFromAlbum(idAlbum);
+		return true;
+		
 	}
 
 	//Functions to change activities

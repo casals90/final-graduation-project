@@ -86,6 +86,7 @@
     <string name="leave_album">Leave album</string>
     <string name="admin">admin</string>
     <string name="album_settings">Album settings</string>
+    <string name="you">You</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>

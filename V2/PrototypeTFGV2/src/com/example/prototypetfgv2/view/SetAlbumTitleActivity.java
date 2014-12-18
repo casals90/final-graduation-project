@@ -2,17 +2,17 @@ package com.example.prototypetfgv2.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -24,19 +24,21 @@ public class SetAlbumTitleActivity extends Activity {
 	private Controller controller;
 	
 	private EditText mEditTextAlbumTitle;
-	private ImageButton mImageButtonAccept, mImageButtonRemove;
-
-	private TextView mTextViewTitleActionBar;
+	private String newAlbumTitle ,idAlbum;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_set_album_title);
 		
-		initActionBar();
+		//initActionBar
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getActionBar().setTitle("Album settings");
 		
 		Intent bundle = getIntent();
-		String idAlbum = bundle.getStringExtra("idAlbum");
+		idAlbum = bundle.getStringExtra("idAlbum");
 		String title = bundle.getStringExtra("title");
 		
 		controller = (Controller) getApplicationContext();
@@ -51,7 +53,7 @@ public class SetAlbumTitleActivity extends Activity {
 		        switch(result) {
 			        case EditorInfo.IME_ACTION_DONE:
 			            // done stuff
-			        	//new UpdateUseNameTask().execute();
+			        	new SetAlbumTitleTask().execute();
 			            break;
 			    }
 		        return false;
@@ -66,7 +68,7 @@ public class SetAlbumTitleActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.input_username, menu);
+		getMenuInflater().inflate(R.menu.input_album_title, menu);
 		return true;
 	}
 
@@ -76,61 +78,31 @@ public class SetAlbumTitleActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+			case android.R.id.home:
+				finish();
+		        break;
+			case R.id.accept:
+				new SetAlbumTitleTask().execute();
+				break;
+			default:
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	public void initActionBar() {
-		ActionBar actionBar = getActionBar();
 
-		actionBar.setCustomView(R.layout.custom_action_bar_log_in);
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-		
-		mTextViewTitleActionBar = (TextView) getActionBar().getCustomView().findViewById(R.id.label);
-		mTextViewTitleActionBar.setText(getString(R.string.set_album_title_upper));
-		
-		mImageButtonRemove = (ImageButton) getActionBar().getCustomView().findViewById(R.id.button_back);
-		mImageButtonRemove.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				//Go to login activity
-				controller.logout();
-				finish();
-			}
-		});
-		mImageButtonAccept = (ImageButton) getActionBar().getCustomView().findViewById(R.id.button_accept);
-		mImageButtonAccept.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				//new UpdateUseNameTask().execute();
-			}
-		});
-	}
-	
-	
-	/*public class UpdateUseNameTask extends AsyncTask<Void, Void, Boolean> {
+	public class SetAlbumTitleTask extends AsyncTask<Void, Void, Boolean> {
 		ProgressDialog progressDialog;
 		
 		@Override
 	    protected void onPreExecute() {
-			username = mEditTextAlbumTitle.getText().toString();
-			mTextViewInocrrectUsername.setVisibility(View.INVISIBLE);
-	        progressDialog= ProgressDialog.show(SetAlbumTitleActivity.this, "Set username","waiting", true);       
+			newAlbumTitle = mEditTextAlbumTitle.getText().toString();
+	        progressDialog= ProgressDialog.show(SetAlbumTitleActivity.this, "Set album title","waiting", true);       
 	    };
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			if(controller.setUsername(username)) {
-				controller.downloadCurrentUser();
-				controller.getAllLikes();
-				//import profile picture from social network
-				//check if user login with Twitter
-				if(controller.isLinkedWithTwitter())
-					controller.setProfilePictureFromTwitter();
+			if(controller.setAlbumTitle(idAlbum, newAlbumTitle)) {
 				return true;
 			}
 			return false;
@@ -140,26 +112,17 @@ public class SetAlbumTitleActivity extends Activity {
 		protected void onPostExecute(final Boolean success) {
 			progressDialog.dismiss();
 			if (success) {
-				if(controller.isLinkedWithFacebook()) {
-					Session session = ParseFacebookUtils.getSession();
-				    if (session != null && session.isOpened())
-				    	controller.importProfilePhotoFromFacebook();
-				}
-			    //Save data
-			    saveData();
-				goToMainActivity();
+				finish();
 			} 
 			else {
 				Log.v("prototypev1","incorrecte onPostExecute update username");
-				mTextViewInocrrectUsername.setVisibility(View.VISIBLE);
 			}
 		}
 
 		@Override
 		protected void onCancelled() {
 			progressDialog.dismiss();
-			mTextViewInocrrectUsername.setVisibility(View.VISIBLE);
-			Log.v("prototypev1","log in cancelat 2");
+			Log.v("prototypev1","set album title cancelat 2");
 		}
-	}*/
+	}
 }

@@ -85,7 +85,7 @@ public class AlbumSettingsActivity extends Activity {
 		mButtonDelete = (Button) findViewById(R.id.button_delete_album_admin);
 		mButtonLeave = (Button) findViewById(R.id.button_leave_user);
 		
-		hiddenAll();
+		
 	}
 	
 	public void hiddenAll() {
@@ -176,6 +176,7 @@ public class AlbumSettingsActivity extends Activity {
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
+        	hiddenAll();
         	mProgressBar.setVisibility(View.VISIBLE);
         }
  
@@ -248,7 +249,7 @@ public class AlbumSettingsActivity extends Activity {
 						
 						@Override
 						public void onClick(View v) {
-														
+							new DeleteAlbumTask().execute();
 						}
 					});
         		}
@@ -258,11 +259,13 @@ public class AlbumSettingsActivity extends Activity {
 						
 						@Override
 						public void onClick(View v) {
-														
+							new DeleteAlbumMemberTask().execute(controller.getCurrentUser().getId());
+							//TODO go to albums
+							goToMainActivity();
 						}
 					});
         		}
-        		mListView.setAdapter(new AdapterForMembersInAlbum(getApplicationContext(),members,album.getIdAdmin()));
+        		mListView.setAdapter(new AdapterForMembersInAlbum(getApplicationContext(),members,album.getIdAdmin(),album.getId()));
         	}
         }
 
@@ -271,5 +274,68 @@ public class AlbumSettingsActivity extends Activity {
 			super.onCancelled();
 			Toast.makeText(getApplicationContext(),"Error download albums settings",Toast.LENGTH_LONG).show();
 		}
+    }
+	
+	//Functions to change activities
+	public void goToMainActivity() {
+		Intent main = new Intent(this, MainActivity.class);
+        startActivity(main);
+        finish();
+	}
+	
+	private class DeleteAlbumMemberTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	String idUser = params[0];
+        	return controller.deleteAlbumMember(idAlbum, idUser);
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				//Toast.makeText(activity,"Delete Following!",  Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
+	
+	private class DeleteAlbumTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	return controller.deleteAlbum(idAlbum);
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				//Toast.makeText(activity,"Delete Following!",  Toast.LENGTH_SHORT).show();
+				goToMainActivity();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
     }
 }

@@ -2,6 +2,7 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -31,8 +32,9 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 	private Controller controller;
 	private DisplayImageOptions options;
 	private String idAdmin;
+	private String idAlbum;
 		
-	public AdapterForMembersInAlbum(Context context, ArrayList<User> members,String idAdmin) {
+	public AdapterForMembersInAlbum(Context context, ArrayList<User> members,String idAdmin,String idAlbum) {
 		super();
 		
 		this.inflater = LayoutInflater.from(context);
@@ -42,6 +44,7 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 		this.following = controller.getCurrentUser().getFollowing();
 		this.followers = controller.getCurrentUser().getFollowers();
 		this.idAdmin = idAdmin;
+		this.idAlbum = idAlbum;
 		initDisplayOptions();
 	}
 	
@@ -93,27 +96,41 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 		}
 		else 
 			holder = (ViewHolder) view.getTag();
-		
+		Log.v("prototypev1","user profile photo "+user.getProfilePicture());
 		imageLoader.displayImage(user.getProfilePicture(),holder.mImageViewProfilePicture,options);
-		holder.mTextViewUsername.setText(user.getUsername());
-	
-		if(user.getId().compareTo(idAdmin) == 0)
-			holder.mTextViewLabelAdmin.setVisibility(View.VISIBLE);
-		else
-			holder.mTextViewLabelAdmin.setVisibility(View.INVISIBLE);
 		
-		holder.mImageButtonDelete.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO delete member
-			}
-		});
+		if(user.getId().compareTo(idAdmin) == 0) {
+			Log.v("prototypev1","soc admin");
+			holder.mTextViewLabelAdmin.setVisibility(View.VISIBLE);
+			holder.mImageButtonDelete.setVisibility(View.VISIBLE);
+			holder.mImageButtonDelete.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Log.v("prototypev1","delete user from album");
+					new DeleteAlbumMember().execute(user.getId());
+				}
+			});
+		}
+		else {
+			holder.mTextViewLabelAdmin.setVisibility(View.INVISIBLE);
+			holder.mImageButtonDelete.setVisibility(View.INVISIBLE);
+			holder.mImageButtonDelete.setOnClickListener(null);
+		}
+		
+		if(user.getId().compareTo(controller.getCurrentUser().getId()) == 0) {
+			holder.mTextViewUsername.setText("You");
+			holder.mImageButtonDelete.setVisibility(View.INVISIBLE);
+			holder.mImageButtonDelete.setOnClickListener(null);
+		}
+		else 
+			holder.mTextViewUsername.setText(user.getUsername());
 		
 		return view;
 	}
 		
-	/*private class DeleteFollowingTask extends AsyncTask<String, Void, Boolean> {
+	private class DeleteAlbumMember extends AsyncTask<String, Void, Boolean> {
 		
         @Override
         protected void onPreExecute() {
@@ -122,8 +139,8 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
  
         @Override
         protected Boolean doInBackground(String... params) {
-        	String idFollowing = params[0];
-        	return controller.deleteFollowing(idFollowing);
+        	String idUser = params[0];
+        	return controller.deleteAlbumMember(idAlbum, idUser);
         }
 
 		@Override
@@ -139,5 +156,5 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 			super.onCancelled();
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
-    }*/
+    }
 }

@@ -87,10 +87,8 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 	
 	@Override
 	public void onResume() {
-		//show up navigation
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActivity().getActionBar().setTitle(album.getAlbumTitle());
 		new DownloadPhotosTask().execute(album.getId());
+		
 		super.onResume();
 	}
 	
@@ -216,6 +214,9 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			mProgressBar.setVisibility(View.INVISIBLE);
+			//show up navigation
+			getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActivity().getActionBar().setTitle(album.getAlbumTitle());
 			if(result) {
 				mListViewPhotos.setVisibility(View.VISIBLE);
 	        	mProgressBar.setVisibility(View.INVISIBLE);
