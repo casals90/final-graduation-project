@@ -3,7 +3,6 @@ package com.example.prototypetfgv2.view;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
+public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter {
 
 	private LayoutInflater inflater;
 	private ImageLoader imageLoader;
@@ -79,7 +78,6 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter{
 		
 		holder.username.setText(user.getUsername());
 		imageLoader.displayImage(user.getProfilePicture(),holder.profilePicture);
-		//imageLoader.DisplayImage(users.get(position).getProfilePicture(),holder.profilePicture);
         //Default profile photo
         if(user.getProfilePicture() == null)
         	holder.profilePicture.setImageResource(R.drawable.ic_launcher);

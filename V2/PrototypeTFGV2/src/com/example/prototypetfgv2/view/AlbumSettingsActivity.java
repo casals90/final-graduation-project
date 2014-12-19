@@ -41,12 +41,10 @@ public class AlbumSettingsActivity extends Activity {
 	private ListView mListView;
 	private TextView mTextViewAlbumTitle;
 	private TextView mTextViewDate;
-	private TextView mTextViewLabel;
-	private View line;
 	private TextView mTextViewAdmin;
 	private ImageView mImageViewCover;
 	private ImageButton mImageButtonEdit;
-	private Button mButtonLeave,mButtonDelete;
+	private Button mButtonLeave,mButtonDelete,mButtonAddMembers;
 	
 	private LinearLayout mLinearLayoutHeader, mLinearLayoutPanelList;
 	
@@ -65,14 +63,21 @@ public class AlbumSettingsActivity extends Activity {
 		this.mLinearLayoutHeader = (LinearLayout) findViewById(R.id.header);
 		this.mLinearLayoutPanelList = (LinearLayout) findViewById(R.id.panel_list);
 		
-		this.mTextViewLabel = (TextView) findViewById(R.id.label_members);
-		this.line = (View) findViewById(R.id.line);
 		this.mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 		this.mTextViewAlbumTitle = (TextView) findViewById(R.id.album_title);
 		this.mTextViewDate = (TextView) findViewById(R.id.createdAt);
 		this.mTextViewAdmin = (TextView) findViewById(R.id.createdBy);
 		this.mImageViewCover = (ImageView) findViewById(R.id.album_cover);	
 		this.mListView = (ListView) findViewById(R.id.list_view_members);
+		this.mButtonAddMembers = (Button) findViewById(R.id.add_members);
+		this.mButtonAddMembers.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				goToAddMembers();
+				
+			}
+		});
 		this.mImageButtonEdit = (ImageButton) findViewById(R.id.button_edit_title);
 		mImageButtonEdit.setOnClickListener(new OnClickListener() {
 
@@ -89,14 +94,6 @@ public class AlbumSettingsActivity extends Activity {
 	}
 	
 	public void hiddenAll() {
-		/*mTextViewAlbumTitle.setVisibility(View.INVISIBLE);
-		mTextViewDate.setVisibility(View.INVISIBLE);
-		mTextViewAdmin.setVisibility(View.INVISIBLE);
-		mImageViewCover.setVisibility(View.INVISIBLE);
-		mTextViewLabel.setVisibility(View.INVISIBLE);
-		line.setVisibility(View.INVISIBLE);
-		mListView.setVisibility(View.INVISIBLE);
-		mImageButtonEdit.setVisibility(View.INVISIBLE);*/
 		mLinearLayoutHeader.setVisibility(View.INVISIBLE);
 		mLinearLayoutPanelList.setVisibility(View.INVISIBLE);
 		mButtonDelete.setVisibility(View.INVISIBLE);
@@ -104,16 +101,15 @@ public class AlbumSettingsActivity extends Activity {
 	}
 	
 	public void showAll() {
-		/*mTextViewAlbumTitle.setVisibility(View.VISIBLE);
-		mTextViewDate.setVisibility(View.VISIBLE);
-		mTextViewAdmin.setVisibility(View.VISIBLE);
-		mImageViewCover.setVisibility(View.VISIBLE);
-		mTextViewLabel.setVisibility(View.VISIBLE);
-		line.setVisibility(View.VISIBLE);
-		mListView.setVisibility(View.VISIBLE);
-		mImageButtonEdit.setVisibility(View.VISIBLE);*/
 		mLinearLayoutHeader.setVisibility(View.VISIBLE);
 		mLinearLayoutPanelList.setVisibility(View.VISIBLE);
+	}
+	
+	public void goToAddMembers() {
+		Intent addMembers = new Intent(this,AddMembersInAlbumActivity.class);
+		addMembers.putExtra("members",members);
+		addMembers.putExtra("idAlbum",idAlbum);
+		startActivity(addMembers);
 	}
 	
 	@Override
@@ -260,7 +256,6 @@ public class AlbumSettingsActivity extends Activity {
 						@Override
 						public void onClick(View v) {
 							new DeleteAlbumMemberTask().execute(controller.getCurrentUser().getId());
-							//TODO go to albums
 							goToMainActivity();
 						}
 					});

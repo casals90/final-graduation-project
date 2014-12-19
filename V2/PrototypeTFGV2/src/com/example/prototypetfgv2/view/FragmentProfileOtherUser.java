@@ -136,7 +136,6 @@ public class FragmentProfileOtherUser extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Log.v("prototypev1","get item id "+item.getItemId());
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				getFragmentManager().popBackStack();

@@ -129,9 +129,13 @@
             android:label="@string/title_activity_input_album_title" >
         </activity>
         <activity
-            android:name="com.example.prototypetfgv2.view.InputAlbumMembersActivity"
+            android:name=".view.InputAlbumMembersActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/title_activity_input_album_members" >
+        </activity>
+        <activity
+            android:name="com.example.prototypetfgv2.view.AddMembersInAlbumActivity"
+            android:label="@string/title_activity_add_members_in_album" >
         </activity>
     </application>
 

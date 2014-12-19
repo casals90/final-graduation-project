@@ -108,17 +108,44 @@
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/label_members"
 	        android:background="@color/White"/>
+    
+	   <View
+	       android:id="@+id/line2"
+	       android:layout_width="fill_parent"
+	       android:layout_height="1dp"
+	       android:layout_above="@+id/add_members"
+	       android:background="#c0c0c0"/>
+	   
+	   <Button 
+			android:id="@+id/add_members"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:gravity="center"
+			android:drawableLeft="@drawable/ic_action_add_person"
+			android:text="@string/add_members"
+			android:layout_below="@+id/panel_list"
+			android:contentDescription="@string/explain"
+			android:background="@drawable/selector_icons"/>
+	   
+	   <View
+	       android:id="@+id/line3"
+	       android:layout_width="fill_parent"
+	       android:layout_height="1dp"
+	       android:layout_below="@+id/add_members"
+	       android:layout_marginBottom="5dp"
+	       android:background="#c0c0c0"/>
+     
     </LinearLayout>
     
-     <Button
-	        android:id="@+id/button_leave_user"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/panel_list"
-	        android:text="@string/leave_album"
-	        android:textColor="@color/White"
-	        android:background="@drawable/bg_button_delete_album"/>
-	    
+    <Button
+        android:id="@+id/button_leave_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/panel_list"
+        android:text="@string/leave_album"
+        android:textColor="@color/White"
+        android:background="@drawable/bg_button_delete_album"/>
+    
     <Button
         android:id="@+id/button_delete_album_admin"
         android:layout_width="match_parent"

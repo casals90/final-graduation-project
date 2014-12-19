@@ -168,5 +168,6 @@
     <string name="title_activity_album_settings">AlbumSettingsActivity</string>
     <string name="title_activity_input_album_title">InputAlbumTitleActivity</string>
     <string name="title_activity_input_album_members">InputAlbumMembersActivity</string>
+    <string name="title_activity_add_members_in_album">AddMembersInAlbumActivity</string>
 
 </resources>

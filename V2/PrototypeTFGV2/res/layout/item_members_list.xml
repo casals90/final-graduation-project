@@ -35,6 +35,10 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="2.5dp"
+            android:paddingTop="2.5dp"
+            android:paddingRight="2.5dp"
+            android:paddingBottom="2.5dp"
             android:layout_marginLeft="5dp"
             android:textSize="12sp"
             android:textColor="@color/Green"
@@ -50,5 +54,6 @@
         android:focusable="false"
         android:src="@drawable/ic_action_remove_dark_little"
         android:background="@drawable/selector_icons"
+        android:contentDescription="@string/explain"
         android:layout_alignParentRight="true"/>    
 </RelativeLayout>

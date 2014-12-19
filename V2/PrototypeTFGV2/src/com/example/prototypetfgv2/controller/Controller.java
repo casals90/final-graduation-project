@@ -7,6 +7,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
@@ -162,6 +163,14 @@ public class Controller extends Application {
 	//Albums methods
 	public boolean setAlbumTitle(String idAlbum,String newAlbumTitle) {
 		return parseFunctions.setAlbumTitle(idAlbum, newAlbumTitle);
+	}
+	
+	public ArrayList<User> getFollowingThatNotInAlbum(ArrayList<String> members) {
+		return parseFunctions.getFollowingThatNotInAlbum(currentUser.getId(), members);
+	}
+	
+	public boolean addAlbumMembersFromSettings(ArrayList<String> newMembers, String idAlbum) {
+		return parseFunctions.addMembersInAlbumFromAlbumSettings(newMembers, idAlbum);
 	}
 	
 	public boolean deleteAlbumMember(String idAlbum,String idUser) {

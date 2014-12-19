@@ -2,7 +2,6 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -96,7 +95,7 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 		}
 		else 
 			holder = (ViewHolder) view.getTag();
-		Log.v("prototypev1","user profile photo "+user.getProfilePicture());
+		
 		imageLoader.displayImage(user.getProfilePicture(),holder.mImageViewProfilePicture,options);
 		
 		if(user.getId().compareTo(idAdmin) == 0) {

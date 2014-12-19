@@ -205,6 +205,40 @@ public class ParseFunctions {
 		}
     }
     
+    public boolean addMembersInAlbumFromAlbumSettings(ArrayList<String> newMembers, String idAlbum) {
+    	Log.v("prototypev1","add members ");
+    	for(int i = 0; i < newMembers.size(); i++) {
+    		ParseObject albumMember = new ParseObject("AlbumMember");
+    		albumMember.put("idAlbum",idAlbum);
+    		albumMember.put("idUser",newMembers.get(i));
+    		try {
+				albumMember.save();
+				
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return false;
+			}
+    	}
+    	Log.v("prototypev1","abans increment");
+    	return incrementMembersNumber(newMembers.size(), idAlbum);
+    }
+    
+    public boolean incrementMembersNumber(int newMembers,String idAlbum) {
+    	Log.v("prototypev1","increment");
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
+    	query.whereEqualTo("objectId",idAlbum);
+    	try {
+			ParseObject parseAlbum = query.getFirst();
+			parseAlbum.increment("membersNumber",newMembers);
+			parseAlbum.save();
+			Log.v("prototypev1","return true");
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+    }
+    
     public ArrayList<String> getPhotosFromAlbumLikedCurrentUser(String idUser,String idAlbum) {
     	ArrayList<String> likes = new ArrayList<String>();
     	
@@ -1451,6 +1485,24 @@ public class ParseFunctions {
 			for(ParseObject f : friendships) {
 				String idFollower = f.getString("idFriend");
 				following.add(getUser(idFollower));
+			}
+			return following;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<User> getFollowingThatNotInAlbum(String idUser,ArrayList<String> members) {
+		ArrayList<User> following = new ArrayList<User>();
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
+		query.whereEqualTo("idUser",idUser);
+		try {
+			List<ParseObject> friendships = query.find();
+			for(ParseObject f : friendships) {
+				String idFollower = f.getString("idFriend");
+				if(!members.contains(idFollower))
+					following.add(getUser(idFollower));
 			}
 			return following;
 		} catch (ParseException e) {
