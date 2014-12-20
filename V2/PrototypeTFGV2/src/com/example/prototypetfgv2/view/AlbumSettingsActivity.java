@@ -107,9 +107,17 @@ public class AlbumSettingsActivity extends Activity {
 	
 	public void goToAddMembers() {
 		Intent addMembers = new Intent(this,AddMembersInAlbumActivity.class);
-		addMembers.putExtra("members",members);
+		addMembers.putExtra("members",getMembersId(members));
 		addMembers.putExtra("idAlbum",idAlbum);
 		startActivity(addMembers);
+	}
+	
+	public ArrayList<String> getMembersId(ArrayList<User> members) {
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 0; i < members.size(); i ++) {
+			list.add(members.get(i).getId());
+		}
+		return list;
 	}
 	
 	@Override

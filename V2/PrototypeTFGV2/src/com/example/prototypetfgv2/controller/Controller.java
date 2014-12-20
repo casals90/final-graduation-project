@@ -294,6 +294,10 @@ public class Controller extends Application {
 		return parseFunctions.downloadFriendsInputSearch(input,currentUser);
 	}
 	
+	public ArrayList<User> downloadFriendsInputSearchInAlbumSettings(String input,ArrayList<String> members){
+		return parseFunctions.downloadFriendsInputSearchInAlbumSettings(input,currentUser,members);
+	}
+	
 	//Social Network module
 	public boolean isLinkedWithTwitter() {
 		return parseFunctions.isLinkedWithTwitter();

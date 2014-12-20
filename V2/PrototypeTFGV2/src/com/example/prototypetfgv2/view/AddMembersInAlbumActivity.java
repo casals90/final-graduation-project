@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
@@ -25,6 +26,7 @@ public class AddMembersInAlbumActivity extends Activity {
 	private ListView mListViewFollowing;
 	private ProgressBar mProgressBar;
 	private EditText mEditTextSearch;
+	private TextView mTextViewZeroMatches;
 	
 	private String input;
 	private String idAlbum;
@@ -35,8 +37,6 @@ public class AddMembersInAlbumActivity extends Activity {
 	private ArrayList<String> onlyNewMembers;
 	
 	private Controller controller;
-	
-	private DownloadFriendsTask download;
 	
 	private ListViewAdapterChooseUsersNewAlbum adapter;
 	private Activity activity;
@@ -78,20 +78,12 @@ public class AddMembersInAlbumActivity extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				input = s.toString();
-				if(download != null) {
-					download.cancel(true);
-					download = new DownloadFriendsTask();
-					download.execute();	
-				}
-				else
-					download = new DownloadFriendsTask();
-					download.execute();	
+				new DownloadFriendsTask().execute();
 			}
 		});
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-		
-		download = new DownloadFriendsTask();
-		download.execute();
+		mTextViewZeroMatches = (TextView) findViewById(R.id.zero_matches);
+		new DownloadFriendsTask().execute();
 	}
 
 	@Override
@@ -106,14 +98,9 @@ public class AddMembersInAlbumActivity extends Activity {
 		switch (item.getItemId()) {
 			case R.id.accept:
 				members = adapter.getMembers();
-				Log.v("prototypev1","members "+members.size());
-				Log.v("prototypev1","newsmembers "+membersOld.size());
 				onlyNewMembers = getNewsMembers(membersOld,members);
 				if(onlyNewMembers.size() <= 0) {
 					Toast.makeText(getApplicationContext(),"Don't select any following",  Toast.LENGTH_LONG).show();
-				}
-				else {
-					Log.v("prototypev1"," nous membres "+onlyNewMembers.size());
 				}
 				new AddMembersTask().execute();
 				break;
@@ -132,17 +119,18 @@ public class AddMembersInAlbumActivity extends Activity {
 	        super.onPreExecute();
 	        //this method will be running on UI thread
 	        mListViewFollowing.setVisibility(View.INVISIBLE);
+	        mTextViewZeroMatches.setVisibility(View.INVISIBLE);
 	        mProgressBar.setVisibility(View.VISIBLE);
 	    }
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
-	    	if(input == null)  {
-	    		//users = controller.getFollowing();
+	    	
+	    	if(input == null) 
 	    		users = controller.getFollowingThatNotInAlbum(members);
-	    	}
-	    	else {
-	    		users = controller.downloadFriendsInputSearch(input);
-	    	}
+	    	
+	    	else 
+	    		users = controller.downloadFriendsInputSearchInAlbumSettings(input,membersOld);
+	    	Log.v("prototypev1","users "+users);
 	        if(users != null)
 	        	return true;
 	        return false;
@@ -158,6 +146,8 @@ public class AddMembersInAlbumActivity extends Activity {
 		        // Binds the Adapter to the ListView
 		        mListViewFollowing.setAdapter(adapter);
 	        }
+	    	else
+	    		mTextViewZeroMatches.setVisibility(View.VISIBLE);
 	    }
 	    
 		@Override

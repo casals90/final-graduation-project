@@ -712,29 +712,6 @@ public class ParseFunctions {
 		return null;	
 	}
 	
-	/*public ArrayList<User> downloadFriends(CurrentUser currentUser) {
-		ArrayList<User> users = new ArrayList<User>();
-		ArrayList<String> friends = getFriends(currentUser);
-		
-		for(int i = 0; i < friends.size(); i++) {
-			ParseQuery<ParseUser> query = ParseUser.getQuery();
-			query.whereEqualTo("objectId",friends.get(i));
-			query.orderByAscending("username");
-			try {
-				ParseUser user = query.getFirst();
-				String urlProfilePicture = user.getString("profilePictureUrl");
-				if(urlProfilePicture == null)
-					users.add(new User(user.getObjectId(),user.getUsername(), null,user.getInt("followersNumber"),user.getInt("followingNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
-				else
-					users.add(new User(user.getObjectId(),user.getUsername(),urlProfilePicture,user.getInt("followersNumber"),user.getInt("followingNumber"),user.getInt("photosNumber"),user.getInt("AlbumsNumber")));
-			} catch (ParseException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		return users;
-	}*/
-	
 	public ArrayList<Photo> downloadMyPhotos(String idUser) {
 		ArrayList<Photo> photos = new ArrayList<Photo>();
 		
@@ -767,7 +744,35 @@ public class ParseFunctions {
 				String profilePictureUrl = u.getString("profilePictureUrl");
 				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
 			}
-			return users;
+			if(users.size() > 0)
+				return users;
+			else
+				return null;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ArrayList<User> downloadFriendsInputSearchInAlbumSettings(String input,CurrentUser currentUser,ArrayList<String> members) {
+		ArrayList<User> users = new ArrayList<User>();
+		ArrayList<String> following = getFollowingId(currentUser.getId());
+		
+		ParseQuery<ParseUser> query = ParseUser.getQuery();
+		query.whereStartsWith("username",input);
+		query.whereContainedIn("objectId",following);
+		query.whereNotContainedIn("objectId",members);
+		query.orderByAscending("username");
+		try {
+			List<ParseUser> parseUsers = query.find();
+			for(ParseUser u : parseUsers) {
+				String profilePictureUrl = u.getString("profilePictureUrl");
+				users.add(new User(u.getObjectId(),u.getUsername(),profilePictureUrl,u.getInt("followersNumber"),u.getInt("followingNumber"),u.getInt("photosNumber"),u.getInt("AlbumsNumber")));
+			}
+			if(users.size() > 0)
+				return users;
+			else
+				return null;
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
@@ -1497,12 +1502,12 @@ public class ParseFunctions {
 		ArrayList<User> following = new ArrayList<User>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Friendship");
 		query.whereEqualTo("idUser",idUser);
+		query.whereNotContainedIn("idFriend",members);
 		try {
 			List<ParseObject> friendships = query.find();
 			for(ParseObject f : friendships) {
 				String idFollower = f.getString("idFriend");
-				if(!members.contains(idFollower))
-					following.add(getUser(idFollower));
+				following.add(getUser(idFollower));
 			}
 			return following;
 		} catch (ParseException e) {
