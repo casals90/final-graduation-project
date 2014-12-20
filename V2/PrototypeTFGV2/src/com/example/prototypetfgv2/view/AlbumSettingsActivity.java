@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,7 +20,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnClickListener;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
@@ -28,7 +28,7 @@ import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class AlbumSettingsActivity extends Activity {
+public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFromAlbum {
 
 	private Album album;
 	private ArrayList<User> members;
@@ -45,6 +45,8 @@ public class AlbumSettingsActivity extends Activity {
 	private ImageView mImageViewCover;
 	private ImageButton mImageButtonEdit;
 	private Button mButtonLeave,mButtonDelete,mButtonAddMembers;
+	private Activity activity;
+	private OnDeleteMemberFromAlbum callback;
 	
 	private LinearLayout mLinearLayoutHeader, mLinearLayoutPanelList;
 	
@@ -53,13 +55,13 @@ public class AlbumSettingsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_album_settings);
 		
-		controller = (Controller) getApplication();
-		
+		this.controller = (Controller) getApplication();
+		this.callback = this;
 		Intent extras = getIntent();
 		idAlbum = extras.getStringExtra("idAlbum");
 	
 		this.imageLoader = ImageLoader.getInstance();
-		
+		this.activity = this;
 		this.mLinearLayoutHeader = (LinearLayout) findViewById(R.id.header);
 		this.mLinearLayoutPanelList = (LinearLayout) findViewById(R.id.panel_list);
 		
@@ -268,7 +270,7 @@ public class AlbumSettingsActivity extends Activity {
 						}
 					});
         		}
-        		mListView.setAdapter(new AdapterForMembersInAlbum(getApplicationContext(),members,album.getIdAdmin(),album.getId()));
+        		mListView.setAdapter(new AdapterForMembersInAlbum(getApplicationContext(),members,album.getIdAdmin(),album.getId(),activity,callback));
         	}
         }
 
@@ -341,4 +343,11 @@ public class AlbumSettingsActivity extends Activity {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
+
+	@Override
+	public void onDeleteMember(String idMember) {
+		members.remove(idMember);
+		new DownloadMembersTask().execute();
+		
+	}
 }

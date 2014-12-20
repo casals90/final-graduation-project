@@ -2,10 +2,15 @@ package com.example.prototypetfgv2.view;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,25 +31,30 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 	private LayoutInflater inflater;
 	private ImageLoader imageLoader;
 	private ArrayList<User> members;
-	private ArrayList<String> following;
-	private ArrayList<String> followers;
 	private Controller controller;
 	private DisplayImageOptions options;
 	private String idAdmin;
 	private String idAlbum;
+	private boolean currentUserIdAdmin;
+	private Activity activity;
+	private OnDeleteMemberFromAlbum callback;
 		
-	public AdapterForMembersInAlbum(Context context, ArrayList<User> members,String idAdmin,String idAlbum) {
+	public AdapterForMembersInAlbum(Context context, ArrayList<User> members,String idAdmin,String idAlbum,Activity activity,OnDeleteMemberFromAlbum callback) {
 		super();
 		
+		this.callback = callback;
 		this.inflater = LayoutInflater.from(context);
 		this.imageLoader = ImageLoader.getInstance();
 		this.members = members;
 		this.controller = (Controller) context.getApplicationContext();
-		this.following = controller.getCurrentUser().getFollowing();
-		this.followers = controller.getCurrentUser().getFollowers();
 		this.idAdmin = idAdmin;
 		this.idAlbum = idAlbum;
 		initDisplayOptions();
+		if(controller.getCurrentUser().getId().compareTo(idAdmin) == 0)
+			this.currentUserIdAdmin = true;
+		else
+			this.currentUserIdAdmin = false;
+		this.activity = activity;
 	}
 	
 	public void initDisplayOptions() {
@@ -98,25 +108,26 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 		
 		imageLoader.displayImage(user.getProfilePicture(),holder.mImageViewProfilePicture,options);
 		
-		if(user.getId().compareTo(idAdmin) == 0) {
-			Log.v("prototypev1","soc admin");
-			holder.mTextViewLabelAdmin.setVisibility(View.VISIBLE);
+		if(currentUserIdAdmin) {
 			holder.mImageButtonDelete.setVisibility(View.VISIBLE);
 			holder.mImageButtonDelete.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Log.v("prototypev1","delete user from album");
-					new DeleteAlbumMember().execute(user.getId());
+					DeleteMemberDialogFragment dialog = new DeleteMemberDialogFragment(user.getUsername(),user.getId(),idAlbum,members);
+			        dialog.show(activity.getFragmentManager(), "add_friend_dialog");
 				}
 			});
 		}
 		else {
-			holder.mTextViewLabelAdmin.setVisibility(View.INVISIBLE);
 			holder.mImageButtonDelete.setVisibility(View.INVISIBLE);
 			holder.mImageButtonDelete.setOnClickListener(null);
 		}
+		
+		if(user.getId().compareTo(idAdmin) == 0) 
+			holder.mTextViewLabelAdmin.setVisibility(View.VISIBLE);
+		else
+			holder.mTextViewLabelAdmin.setVisibility(View.INVISIBLE);
 		
 		if(user.getId().compareTo(controller.getCurrentUser().getId()) == 0) {
 			holder.mTextViewUsername.setText("You");
@@ -126,10 +137,19 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 		else 
 			holder.mTextViewUsername.setText(user.getUsername());
 		
+		
+		
 		return view;
 	}
 		
-	private class DeleteAlbumMember extends AsyncTask<String, Void, Boolean> {
+	private class DeleteAlbumMember extends AsyncTask<Void, Void, Boolean> {
+		
+		private String idUser,idAlbum;
+		
+		public DeleteAlbumMember(String idUser,String idAlbum) {
+			this.idUser = idUser;
+			this.idAlbum = idAlbum;
+		}
 		
         @Override
         protected void onPreExecute() {
@@ -137,8 +157,7 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
         }
  
         @Override
-        protected Boolean doInBackground(String... params) {
-        	String idUser = params[0];
+        protected Boolean doInBackground(Void... params) {
         	return controller.deleteAlbumMember(idAlbum, idUser);
         }
 
@@ -146,7 +165,7 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if(result) {
-				//Toast.makeText(activity,"Delete Following!",  Toast.LENGTH_SHORT).show();
+				
 			}
 		}
 
@@ -156,4 +175,39 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
+	
+	public class DeleteMemberDialogFragment extends DialogFragment {
+		
+		private String username,idUser,idAlbum;
+		private ArrayList<User> members;
+		
+		public DeleteMemberDialogFragment(String username, String idUser,String idAlbum,ArrayList<User> members) {
+			this.username = username;
+			this.idUser = idUser;
+			this.idAlbum = idAlbum;
+			this.members = members;
+		}
+		
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setTitle(R.string.delete_user);
+	        //builder.setMessage(R.string.delete_user)
+	        builder.setMessage("Delete "+username)
+	               .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       new DeleteAlbumMember(idUser,idAlbum).execute();
+	                       callback.onDeleteMember(idUser);	                       
+	                   }
+	               })
+	               .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       dialog.dismiss();
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
 }

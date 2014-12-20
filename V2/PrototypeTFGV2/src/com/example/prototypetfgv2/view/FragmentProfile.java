@@ -134,7 +134,6 @@ public class FragmentProfile extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				//TODO fragmets list friends
 			}
 		});
 		
