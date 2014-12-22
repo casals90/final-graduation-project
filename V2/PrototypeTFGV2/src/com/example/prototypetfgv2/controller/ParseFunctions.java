@@ -1,10 +1,8 @@
 package com.example.prototypetfgv2.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.provider.MediaStore.Audio.Albums;
 import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
@@ -49,7 +45,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 public class ParseFunctions {
 	
@@ -336,7 +331,6 @@ public class ParseFunctions {
 	public void logout() {
 		ParseUser.logOut();
 	}
-	
 	
 	public ArrayList<String> getPhotosFromAlbum(String idAlbum) {
 		ArrayList<String> photos = new ArrayList<String>();

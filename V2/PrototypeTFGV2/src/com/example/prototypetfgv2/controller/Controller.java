@@ -7,7 +7,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;

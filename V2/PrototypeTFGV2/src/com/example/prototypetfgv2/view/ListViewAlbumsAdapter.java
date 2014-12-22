@@ -86,5 +86,4 @@ public class ListViewAlbumsAdapter extends BaseAdapter {
 			holder.currentAlbum.setVisibility(View.INVISIBLE);
 		return view;
 	}
-
 }

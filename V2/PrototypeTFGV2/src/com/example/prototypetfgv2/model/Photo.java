@@ -15,14 +15,12 @@ public class Photo implements Parcelable {
     private int commentsNumber;
     
     //Only for download photo from album
-    //Borrar al actutalitzar 
 	public Photo(String id, String title, String photo, String createdAt) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.photo = photo;
 		this.createdAt = createdAt;
-		//this.ownerUser = ownerUser;
 	}
 	
 	public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber) {
@@ -133,7 +131,6 @@ public class Photo implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
 		dest.writeString(id);
 		dest.writeString(title);
 		dest.writeString(photo);
@@ -145,7 +142,6 @@ public class Photo implements Parcelable {
 	}
 	
 	private void readParcel(Parcel in) {
-		// TODO Auto-generated method stub
 		id = in.readString();
 		title = in.readString();
 		photo = in.readString();

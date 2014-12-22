@@ -90,11 +90,6 @@ public class FragmentAlbums extends Fragment {
 	}
 	
 	public void goToNewAlbum() {
-		/*FragmentManager manager = getActivity().getSupportFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
-		transaction.replace(R.id.container_fragment_main,new FragmentNewAlbum());
-		transaction.addToBackStack(null);
-		transaction.commit();*/
 		Intent inputAlbumTitle = new Intent(getActivity(),InputAlbumTitleActivity.class);
 		startActivity(inputAlbumTitle);
 	}

@@ -191,7 +191,6 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	}
 	
 	public String getLabel(String d) {
-		//Log.v("prototypev1","getLabel "+d);
 		String[] t = d.split(":");
 		if(t[1].compareTo("s") == 0) 
 			return t[0]+" "+activity.getString(R.string.seconds_ago); 

@@ -102,5 +102,4 @@ public class GridViewAdapterForShowPhotos extends BaseAdapter {
         });
 		return view;
 	}
-
 }

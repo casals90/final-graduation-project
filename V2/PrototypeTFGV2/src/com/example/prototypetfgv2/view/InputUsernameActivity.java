@@ -35,9 +35,8 @@ public class InputUsernameActivity extends Activity {
 	
 	private EditText mEditTextUsername;
 	private ImageButton mImageButtonAccept, mImageButtonRemove;
-	private TextView mTextViewTitleActionBar,mTextViewInocrrectUsername;
+	private TextView mTextViewTitleActionBar,mTextViewIncorrectUsername;
 	private String username;
-	//private String facebookIdUser;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class InputUsernameActivity extends Activity {
 		controller = (Controller) getApplicationContext();
 		
 		mEditTextUsername = (EditText) findViewById(R.id.username);
-		mTextViewInocrrectUsername = (TextView) findViewById(R.id.incorrect_username);
+		mTextViewIncorrectUsername = (TextView) findViewById(R.id.incorrect_username);
 		
 		mEditTextUsername.setOnEditorActionListener(new OnEditorActionListener() {
 
@@ -139,7 +138,7 @@ public class InputUsernameActivity extends Activity {
 		@Override
 	    protected void onPreExecute() {
 			username = mEditTextUsername.getText().toString();
-			mTextViewInocrrectUsername.setVisibility(View.INVISIBLE);
+			mTextViewIncorrectUsername.setVisibility(View.INVISIBLE);
 	        progressDialog= ProgressDialog.show(InputUsernameActivity.this, "Set username","waiting", true);       
 	    };
 		
@@ -172,14 +171,14 @@ public class InputUsernameActivity extends Activity {
 			} 
 			else {
 				Log.v("prototypev1","incorrecte onPostExecute update username");
-				mTextViewInocrrectUsername.setVisibility(View.VISIBLE);
+				mTextViewIncorrectUsername.setVisibility(View.VISIBLE);
 			}
 		}
 
 		@Override
 		protected void onCancelled() {
 			progressDialog.dismiss();
-			mTextViewInocrrectUsername.setVisibility(View.VISIBLE);
+			mTextViewIncorrectUsername.setVisibility(View.VISIBLE);
 			Log.v("prototypev1","log in cancelat 2");
 		}
 	}

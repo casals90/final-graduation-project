@@ -85,19 +85,7 @@ public class DownloadDataUserActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
-			if (success) {
-				//Save data
-				//ParseUser user = ParseUser.getCurrentUser();
-				/*if(controller.isLinkedWithFacebook())
-					Log.v("prototypev1","facebook user");
-					//save data
-				
-				else if(controller.isLinkedWithTwitter())
-					Log.v("prototypev1","twitter user");
-				else
-					Log.v("prototypev1","re users");
-					
-				*/
+			if(success) {
 				saveDataForAutomaticLogin();
 				goToMainActivity();
 			} 

@@ -15,13 +15,10 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.parse.ParseFacebookUtils;
 
 public class LoginActivity extends Activity implements OnClickListener {
-	
-	//private static final String MyPREFERENCES = "PhotoCloudData";
+
 	private Controller controller;
 	private Button mLogin,mSignup,mLoginTwitter,mLoginFacebook;
 	
-	//private SharedPreferences sharedpreferences;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

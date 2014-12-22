@@ -30,7 +30,6 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//controller = (Controller) this.getActivity().getApplication();
 		getActivity().setTitle(R.string.friends);
 		
 		mActionBar = getActivity().getActionBar();

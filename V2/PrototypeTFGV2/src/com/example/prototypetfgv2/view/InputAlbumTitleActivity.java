@@ -71,5 +71,4 @@ public class InputAlbumTitleActivity extends Activity {
 		startActivity(addMembers);
 		finish();
 	}
-	
 }

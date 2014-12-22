@@ -244,26 +244,6 @@ public class Utils {
 		return r.nextInt(n);
 	}
 	
-	/*
-     * getting screen width
-     
-    public int getScreenWidth() {
-        int columnWidth;
-        WindowManager wm = (WindowManager) _context
-                .getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
- 
-        final Point point = new Point();
-        try {
-            display.getSize(point);
-        } catch (java.lang.NoSuchMethodError ignore) { // Older device
-            point.x = display.getWidth();
-            point.y = display.getHeight();
-        }
-        columnWidth = point.x;
-        return columnWidth;
-    }*/
-	
 	public static ArrayList<Integer> getMetrics(Activity activity) {
 		DisplayMetrics metrics =  activity.getResources().getDisplayMetrics();
 		int width = metrics.widthPixels;

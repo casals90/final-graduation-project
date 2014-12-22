@@ -155,8 +155,6 @@ public class CommentsActivity extends Activity  {
 		super.onBackPressed();
 	}
 	
-	
-	
 	private class SendCommentTask extends AsyncTask<Void, Void, Boolean> {
     	
         @Override
@@ -193,6 +191,4 @@ public class CommentsActivity extends Activity  {
 			//Toast.makeText(this,"Error download albums",  Toast.LENGTH_LONG).show();
 		}
     }
-
-	
 }

@@ -70,7 +70,6 @@ public class CurrentUser {
 		this.albums = albums;
 	}
 	
-	
 	public ArrayList<String> getOwnerPhotosFromAlbum() {
 		return ownerPhotosFromAlbum;
 	}
@@ -218,5 +217,4 @@ public class CurrentUser {
 	public void deleteFollowing(String idFollowing) {
 		following.remove(idFollowing);
 	}
-	
 }

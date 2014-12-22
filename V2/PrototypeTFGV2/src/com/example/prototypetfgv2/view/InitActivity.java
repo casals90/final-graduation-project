@@ -15,9 +15,7 @@ import com.example.prototypetfgv2.controller.Controller;
 public class InitActivity extends Activity {
 	
 	private static final String MyPREFERENCES = "PhotoCloudData";
-	
 	private Controller controller;
-	
 	private SharedPreferences sharedPreferences;
 
 	@Override
