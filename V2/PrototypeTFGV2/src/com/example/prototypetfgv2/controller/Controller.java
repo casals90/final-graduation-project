@@ -7,6 +7,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
@@ -253,6 +254,18 @@ public class Controller extends Application {
 	
 	public ArrayList<Photo> downloadAllPhotosFromCurrentUser() {
 		return parseFunctions.downloadAllPhotosFromCurrentUser(currentUser);
+	}
+	
+	public boolean deletePhoto(Photo photo,String idAlbum) {
+		currentUser.decrementPhotosNumber();
+		currentUser.deleteOwnerPhotos(photo.getId());
+		currentUser.deletePhotoLike(photo.getId());
+		parseFunctions.deletePhotoObject(photo.getId());
+		parseFunctions.decrementPhotosNumberAlbum(idAlbum);
+		parseFunctions.decrementPhotosUser(currentUser.getId());
+		parseFunctions.deleteLikesFromPhoto(photo.getId());
+		parseFunctions.deleteCommentsFromPhoto(photo.getId());
+		return true;
 	}
 	
 	//Function to update news

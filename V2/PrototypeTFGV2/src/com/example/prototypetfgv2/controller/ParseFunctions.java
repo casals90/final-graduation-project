@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.example.prototypetfgv2.R.id;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.CurrentAlbum;
@@ -164,6 +165,113 @@ public class ParseFunctions {
 			return true;
 		} catch (ParseException e) {
 			e.printStackTrace();
+			return false;
+		}
+    }
+    
+    public boolean deletePhotoObject(String idPhoto) {
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+    	query.whereEqualTo("objectId",idPhoto);
+    	try {
+			ParseObject parsePhoto = query.getFirst();
+			String idPhotoFile = parsePhoto.getString("idPhotoFile");
+			parsePhoto.delete();
+			Log.v("prototypev1", "OK delete Photoobbject ");
+			deletePhotoFile(idPhotoFile);
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error delete Photoobbject "+e);
+			return false;
+		}
+    }
+    
+    public boolean deletePhotoFile(String idPhotoFile) {
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("PhotoFile");
+    	query.whereEqualTo("objectId",idPhotoFile);
+    	try {
+			ParseObject parsePhotoFile = query.getFirst();
+			parsePhotoFile.delete();
+			Log.v("prototypev1", "ok delete Photo file ");
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error delete Photo file "+e);
+			return false;
+		}
+    }
+    
+    public boolean decrementPhotosNumberAlbum(String idAlbum) {
+    	Log.v("prototypev1", "id album decrement "+idAlbum);
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
+    	query.whereEqualTo("objectId",idAlbum);
+    	try {
+			ParseObject parseAlbum = query.getFirst();
+			int number = parseAlbum.getInt("photosNumber");
+			number --;
+			if(number >= 0)
+				parseAlbum.put("photosNumber",number);
+			else
+				parseAlbum.put("photosNumber",0);
+			parseAlbum.save();
+			Log.v("prototypev1", "decrement photos number");
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error decrement photos number "+e);
+			return false;
+		}
+    }
+    
+    public boolean decrementPhotosUser(String idUser) {
+    	ParseUser parseUser = ParseUser.getCurrentUser();
+    	int n = parseUser.getInt("photosNumber");
+    	n--;
+    	if(n >= 0)
+    		parseUser.put("photosNumber",n);
+    	else
+    		parseUser.put("photosNumber",0);
+    	try {
+			parseUser.save();
+			Log.v("prototypev1", "decrement photos user");
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error decrement photos user "+e);
+			return false;
+		}
+    }
+    
+    public boolean deleteCommentsFromPhoto(String idPhoto) {
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
+    	query.whereEqualTo("idPhoto",idPhoto);
+    	try {
+			List<ParseObject> list = query.find();
+			for(ParseObject o:list) {
+				o.delete();
+			}
+			Log.v("prototypev1", "delete comments photo");
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", " error decrement photos number "+e);
+			return false;
+		}
+    }
+    
+    public boolean deleteLikesFromPhoto(String idPhoto) {
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("Like");
+    	query.whereEqualTo("idPhoto",idPhoto);
+    	try {
+			List<ParseObject> list = query.find();
+			for(ParseObject o : list) {
+				o.delete();
+			}
+			Log.v("prototypev1", "delete likes ");
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Log.v("prototypev1", "error delete likes "+e);
 			return false;
 		}
     }

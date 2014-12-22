@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,8 +64,6 @@ public class ListViewPhotosFragment extends Fragment implements GoToProfileUserI
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
 		goToNews = data.getBoolean("goToNews");	
-		
-		Log.v("prototypev1","goToNews "+goToNews);
 		
 		controller.clearImageLoader();
 		imageLoader = ImageLoader.getInstance();

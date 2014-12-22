@@ -88,6 +88,9 @@
     <string name="album_settings">Album settings</string>
     <string name="delete_user">Delete member from album</string>
     <string name="you">You</string>
+    <string name="photoSettings">Photo settings</string>
+    <string name="delete_photo">Delete photo</string>
+    <string name="not_delete_photo">Only can delete photo owner user</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>

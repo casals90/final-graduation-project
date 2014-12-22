@@ -12,7 +12,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,7 +32,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-public class FullScreenImageAdapter extends PagerAdapter {
+public class FullScreenImageAdapter extends PagerAdapter{
 	
 	private Activity activity;
 	private ArrayList<Photo> photos;
@@ -45,6 +44,8 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	private String idAlbum;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
+	private OnDeletePhoto callback;
+	private Photo currentPhoto;
 	
 	public FullScreenImageAdapter(Activity activity, ArrayList<Photo> photos, int position,String idAlbum) {
 		super();
@@ -99,6 +100,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup container, final int position) {
 		
 		final Photo photo = photos.get(position);
+		currentPhoto = photo;
 		final int nLikes = photo.getLikesNumber();
         final int nComments = photo.getCommentsNumber();
 		
@@ -167,8 +169,6 @@ public class FullScreenImageAdapter extends PagerAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO hidden or show full screen
-				Log.v("prototypev1","click viewPager ");
 				fullScreen(viewHolder.like,viewHolder.comment);
 			}
 		});
@@ -269,4 +269,9 @@ public class FullScreenImageAdapter extends PagerAdapter {
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
+	
+	public void setPhotos(ArrayList<Photo> photos) {
+		this.photos = photos;
+		notifyDataSetChanged();
+	}
 }

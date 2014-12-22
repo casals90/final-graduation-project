@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,8 +99,7 @@ public class FragmentShowPhotosGrid extends Fragment {
 				break;
 				//Overflow menu options
 			case R.id.settings:
-				//TODO albums settings
-				Log.v("prototypev1","gotoalbums settings");
+				goToAlbumSettings();
 				break;
 			case R.id.add_photo_from_gallery:
 				choosePhotoFromGallery();
@@ -116,6 +114,12 @@ public class FragmentShowPhotosGrid extends Fragment {
 				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void goToAlbumSettings() {
+		Intent albumSettings = new Intent(getActivity(),AlbumSettingsActivity.class);
+		albumSettings.putExtra("idAlbum",album.getId());
+		startActivity(albumSettings);
 	}
 	
 	//Choose from gallery

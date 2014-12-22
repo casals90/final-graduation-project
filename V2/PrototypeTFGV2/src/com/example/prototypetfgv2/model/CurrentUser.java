@@ -217,4 +217,18 @@ public class CurrentUser {
 	public void deleteFollowing(String idFollowing) {
 		following.remove(idFollowing);
 	}
+	
+	public void deletePhotoLike(String id) {
+		likes.remove(id);
+	}
+	
+	public void decrementPhotosNumber() {
+		photosNumber--;
+		if(photosNumber <= 0)
+			photosNumber = 0;
+	}
+	
+	public void deleteOwnerPhotos(String id) {
+		ownerPhotosFromAlbum.remove(id);
+	}
 }
