@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.example.prototypetfgv2.R.id;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.CurrentAlbum;
@@ -35,6 +34,7 @@ import com.example.prototypetfgv2.view.InputUsernameActivity;
 import com.example.prototypetfgv2.view.MainActivity;
 import com.facebook.Request;
 import com.facebook.Response;
+import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
@@ -573,7 +573,7 @@ public class ParseFunctions {
 					ownerUser = getUser(o.getString("ownerUser"));
 					ownerUsers.put(idUser, ownerUser);
 				}
-				Photo photo = new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()),ownerUser,o.getInt("likesNumber"),o.getInt("commentsNumber"));
+				Photo photo = new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()),ownerUser,o.getInt("likesNumber"),o.getInt("commentsNumber"),o.getString("ownerAlbum"));
 				photos.add(photo);
 			}	
 		} catch (ParseException e) {
@@ -792,9 +792,9 @@ public class ParseFunctions {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
 		query.whereEqualTo("objectId",idPhoto);
 		try {
-			ParseObject p = query.getFirst();
-			String url = p.getString("photoFileUrl");
-			Photo photo =  new Photo(p.getObjectId(),p.getString("title"),url,String.valueOf(p.getCreatedAt()));
+			ParseObject o = query.getFirst();
+			String url = o.getString("photoFileUrl");
+			Photo photo =  new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()));
 			return photo;
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -971,11 +971,16 @@ public class ParseFunctions {
 		try {
 			img.save();
 			user.put("profilePictureUrl",img.getUrl());
+			user.save();
 			return true;
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 			return false;
 		}
+	}
+	
+	public String getProfilePictureFromCurrerUser() {
+		return ParseUser.getCurrentUser().getString("profilePictureUrl");
 	}
 	
 	public boolean setProfilePictureFromSocialNetworks(String url) {
@@ -1258,27 +1263,33 @@ public class ParseFunctions {
 	}
 	
 	public void importProfilePhotoFromFacebook() {
-	    Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
-	            new Request.GraphUserCallback() {
-					@Override
-					public void onCompleted(GraphUser user, Response response) {
-						if (user != null) {
-							String facebookIdUser = user.getId();
-							String url = "http://graph.facebook.com/"+facebookIdUser+"/picture?type=large";
-							ParseUser u = ParseUser.getCurrentUser();
-							u.put("profilePictureUrl",url);
-							try {
-								u.save();
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-	    
-	                    } else if (response.getError() != null) {
-	                        // handle error
-	                    }                 
-					}               
-	            });
-	    request.executeAsync();
+		Session session = ParseFacebookUtils.getSession();
+		if (session != null && session.isOpened()) {
+		    Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
+		            new Request.GraphUserCallback() {
+						@Override
+						public void onCompleted(GraphUser user, Response response) {
+							if (user != null) {
+								String facebookIdUser = user.getId();
+								String url = "http://graph.facebook.com/"+facebookIdUser+"/picture?type=large";
+								ParseUser u = ParseUser.getCurrentUser();
+								u.put("profilePictureUrl",url);
+								try {
+									u.save();
+								} catch (ParseException e) {
+									e.printStackTrace();
+									Log.v("prototypev1", "error "+e);
+								}
+		    
+		                    } else if (response.getError() != null) {
+		                        // handle error
+		                    }                 
+						}               
+		            });
+		    request.executeAsync();
+		}
+		else
+			Log.v("prototypev1", "sessio tancada");
 	}
 	
 	public String getUsername(String id) {

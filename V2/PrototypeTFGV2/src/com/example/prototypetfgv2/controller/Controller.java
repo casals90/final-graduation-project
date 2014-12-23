@@ -7,7 +7,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
@@ -124,7 +123,11 @@ public class Controller extends Application {
 	}
 	
 	public boolean setProfilePicture(Bitmap b) {
-		return parseFunctions.setProfilePicture(b);
+		if(parseFunctions.setProfilePicture(b)) {
+			currentUser.setProfilePicture(parseFunctions.getProfilePictureFromCurrerUser());
+			return true;
+		}
+		return false; 
 	}
 	
 	public boolean removeProfilePicture() {
@@ -337,10 +340,13 @@ public class Controller extends Application {
 	
 	public void importProfilePhotoFromFacebook() {
 		parseFunctions.importProfilePhotoFromFacebook();
+		String url = ParseUser.getCurrentUser().getString("profilePictureUrl");
+		currentUser.setProfilePicture(url);
 	}
 	
 	public boolean importProfilePhotoTwitter() {
 		String url = parseFunctions.getProfilePictureTwitterURL();
+		currentUser.setProfilePicture(url);
 		return parseFunctions.setProfilePictureFromSocialNetworks(url);
 	}
 	

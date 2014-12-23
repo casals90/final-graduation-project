@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<item android:id="@+id/take_photo"
+          android:title="@string/take_photo"
+          android:showAsAction="ifRoom"/>
+	
+	<item android:id="@+id/choose_from_library"
+          android:title="@string/choose_from_library"
+          android:showAsAction="ifRoom"/>
+	
+	<item android:id="@+id/import_from_facebook"
+          android:title="@string/import_from_facebook"
+          android:showAsAction="ifRoom"/>
+</menu>

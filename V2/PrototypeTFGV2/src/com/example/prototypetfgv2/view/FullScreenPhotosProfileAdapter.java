@@ -167,6 +167,11 @@ public class FullScreenPhotosProfileAdapter extends PagerAdapter {
 		Button like,comment;
 	}
 	
+	public void setPhotos(ArrayList<Photo> photos) {
+		this.photos = photos;
+		notifyDataSetChanged();
+	}
+	
 	public void incrementLikesNumberInButton(Button button,String idPhoto) {
 		int n = Integer.valueOf(button.getText().toString());
 		n++;

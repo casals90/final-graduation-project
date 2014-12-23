@@ -2,6 +2,11 @@ package com.example.prototypetfgv2.view;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -45,13 +50,14 @@ public class ShowFullScreenPhotoOfNews extends Activity {
 	
 	private boolean like;
 	private boolean fullScreen;
+	private Activity activiy;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_show_full_screen_photo_of_news);
-		
+		activiy = this;
 		fullScreen = false;
 		
 		controller = (Controller) getApplication();
@@ -229,9 +235,11 @@ public class ShowFullScreenPhotoOfNews extends Activity {
 		int id = item.getItemId();
 		switch (id) {
 			case android.R.id.home:
-				Log.v("prototypev1","home button");
 				finish();
 		        break;
+			case R.id.delete_photo:
+				deletePhoto(photo);
+				break;
 			default:
 				break;
 		}
@@ -257,6 +265,84 @@ public class ShowFullScreenPhotoOfNews extends Activity {
 			if(result) {
 				Toast.makeText(getApplication(),"Liked!",  Toast.LENGTH_SHORT).show();
 				like = !like;
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
+	
+	public void deletePhoto(Photo photo) {
+		if(photo.getOwnerUser().getId().compareTo(controller.getCurrentUser().getId()) == 0) 
+			new ConfirmationDeleteDialogFragment().show(getFragmentManager(),"confirm_delete");
+		else 
+			new InformationDialogFragment().show(getFragmentManager(),"no_delete");
+	}
+	
+	public class InformationDialogFragment extends DialogFragment {
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setMessage(R.string.not_delete_photo)
+	               .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // FIRE ZE MISSILES!
+	                	   dismiss();
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
+	
+	public class ConfirmationDeleteDialogFragment extends DialogFragment {
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setMessage(R.string.confirm_delete_photo)
+	               .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   dismiss();
+	                	   new DeletePhotosTask().execute();
+	                   }
+	               })
+	               .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       // User cancelled the dialog
+                	   dismiss();
+                   }
+               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
+
+	private class DeletePhotosTask extends AsyncTask<Void, Void, Boolean> {
+		
+		private ProgressDialog mProgressDialog;
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	mProgressDialog = ProgressDialog.show(activiy,"Delete Photo","waiting", true);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(Void... params) {
+        	return controller.deletePhoto(photo,idAlbum);
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+					mProgressDialog.dismiss();
+					finish();
 			}
 		}
 

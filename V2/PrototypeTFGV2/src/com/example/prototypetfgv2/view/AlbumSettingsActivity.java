@@ -202,10 +202,10 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
         protected void onPostExecute(final Boolean success) {
         	if(success) {
         		
-        		if(controller.getCurrentUser().getId().equals(album.getIdAdmin()))
+        		/*if(controller.getCurrentUser().getId().equals(album.getIdAdmin()))
         			Log.v("prototypev1","admin");
         		else
-        			Log.v("prototypev1","noAdmin");
+        			Log.v("prototypev1","noAdmin");*/
         		
         		imageLoader.displayImage(album.getAlbumCover(),mImageViewCover);
         		

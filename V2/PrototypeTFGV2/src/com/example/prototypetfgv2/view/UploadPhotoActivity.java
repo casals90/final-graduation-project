@@ -168,9 +168,9 @@ public class UploadPhotoActivity extends Activity {
 		}
 	}
 	
-	public void goToListViewAlbum(String idAlbum) {
+	/*public void goToListViewAlbum(String idAlbum) {
 		
-	}
+	}*/
 	
 	public void showConfirmDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);

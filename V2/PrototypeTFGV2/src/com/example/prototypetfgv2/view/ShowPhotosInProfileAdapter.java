@@ -127,7 +127,6 @@ public class ShowPhotosInProfileAdapter extends BaseAdapter {
 		});
         
         like = controller.currentUserLikedCurrentPhoto(photo.getId());
-        Log.v("prototypev1", "like = "+like);
 		if(!like) {
 			changeShapeColorBlack(holder.mButtonLike);
 			holder.mButtonLike.setOnClickListener(new OnClickListener() {

@@ -15,22 +15,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Photo;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 public class ShowPhotoActivity extends Activity {
 	
@@ -145,7 +140,7 @@ public class ShowPhotoActivity extends Activity {
 			case android.R.id.home:
 				finish();
 		        break;
-			case R.id.delete_Photo:
+			case R.id.delete_photo:
 				deletePhoto(photos.get(currentPosition));
 			default:
 				break;
@@ -154,13 +149,10 @@ public class ShowPhotoActivity extends Activity {
 	}
 	
 	public void deletePhoto(Photo photo) {
-		if(photo.getOwnerUser().getId().compareTo(controller.getCurrentUser().getId()) == 0) {
-			new DeletePhotosTask().execute();
-		}
-		else {
-			//TODO dialog not delete photo
-			new InformationDialogFragment().show(getFragmentManager(),"");
-		}
+		if(photo.getOwnerUser().getId().compareTo(controller.getCurrentUser().getId()) == 0) 
+			new ConfirmationDeleteDialogFragment().show(getFragmentManager(),"confirm_delete");
+		else 
+			new InformationDialogFragment().show(getFragmentManager(),"no_delete");
 	}
 	
 	public class InformationDialogFragment extends DialogFragment {
@@ -171,10 +163,33 @@ public class ShowPhotoActivity extends Activity {
 	        builder.setMessage(R.string.not_delete_photo)
 	               .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                       // FIRE ZE MISSILES!
 	                	   dismiss();
 	                   }
 	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
+	
+	public class ConfirmationDeleteDialogFragment extends DialogFragment {
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setMessage(R.string.confirm_delete_photo)
+	               .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // FIRE ZE MISSILES!
+	                	   dismiss();
+	                	   new DeletePhotosTask().execute();
+	                   }
+	               })
+	               .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       // User cancelled the dialog
+                	   dismiss();
+                   }
+               });
 	        // Create the AlertDialog object and return it
 	        return builder.create();
 	    }
@@ -200,9 +215,12 @@ public class ShowPhotoActivity extends Activity {
 			super.onPostExecute(result);
 			if(result) {
 				photos.remove(currentPosition);
-				fullScreenAdapter.setPhotos(photos);
-				mProgressDialog.dismiss();
-				finish();
+				if(photos.size() > 0) {
+					mViewPager.setAdapter(new FullScreenImageAdapter(activity, photos,currentPosition,idAlbum));
+					mProgressDialog.dismiss();
+				}
+				else
+					finish();
 			}
 		}
 

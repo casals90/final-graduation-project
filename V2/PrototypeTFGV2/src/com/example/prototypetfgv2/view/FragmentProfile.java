@@ -46,6 +46,7 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
+import com.example.prototypetfgv2.utils.BitmapUtils;
 import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -79,7 +80,7 @@ public class FragmentProfile extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		controller = (Controller) this.getActivity().getApplicationContext();
+		controller = (Controller) this.getActivity().getApplication();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
@@ -183,38 +184,45 @@ public class FragmentProfile extends Fragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		getActivity().getMenuInflater().inflate(R.menu.set_profile_picture, menu);
+		if(controller.isLinkedWithFacebook()) {
+			getActivity().getMenuInflater().inflate(R.menu.set_profile_picture_facebook, menu);
+		}
+		else if(controller.isLinkedWithTwitter())
+			getActivity().getMenuInflater().inflate(R.menu.set_profile_picture_twitter, menu);
+		else
+			getActivity().getMenuInflater().inflate(R.menu.set_profile_picture, menu);
 		menu.setHeaderTitle("Set a profile picture");
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
-		case R.id.remove_current_photo:
-			removeProfilePicture();
-			break;
-		case R.id.take_photo:
-			dispatchTakePictureIntent();
-			break;
-		case R.id.choose_from_library:
-			choosePhotoFromGallery();
-			break;
-		case R.id.import_from_facebook:
-			Log.v("prototypev1","face");
-			break;
-		case R.id.import_from_twitter:
-			importPhotoFromTwitter();
-			break;
-
-		default:
-			break;
+			case R.id.take_photo:
+				dispatchTakePictureIntent();
+				break;
+			case R.id.choose_from_library:
+				choosePhotoFromGallery();
+				break;
+			case R.id.import_from_facebook:
+				importPhotoFromFacebook();
+				break;
+			case R.id.import_from_twitter:
+				importPhotoFromTwitter();
+				break;
+	
+			default:
+				break;
 		}
 		return true;
 	}
 	
 	public void importPhotoFromTwitter() {
 		new ImportProfilePictureFromTwitterTask().execute();
+	}
+	
+	public void importPhotoFromFacebook() {
+		new ImportProfilePictureFromFacebookTask().execute();
+		//controller.importProfilePhotoFromFacebook();
 	}
 	
 	public void showDialogChooseCurrentAlbum() {
@@ -317,7 +325,7 @@ public class FragmentProfile extends Fragment {
 		    Uri contentUri = Uri.fromFile(f);
 		    mediaScanIntent.setData(contentUri);
 		    this.getActivity().sendBroadcast(mediaScanIntent);
-		}
+	}
 	
 	// Task to change and upload profile picture
 	public class SetProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
@@ -352,12 +360,6 @@ public class FragmentProfile extends Fragment {
 		}
 	}
 	
-	//Remove
-	public void removeProfilePicture() {
-		//default profile picture
-		profilePicture.setImageResource(R.drawable.ic_launcher);
-		new RemoveProfilePictureTask().execute();
-	}
 	
 	public void goToAlbums() {
 		FragmentAlbums fragmentAlbums = new FragmentAlbums();
@@ -372,40 +374,6 @@ public class FragmentProfile extends Fragment {
 		showPhoto.putParcelableArrayListExtra("photos",photos);
 		showPhoto.putExtra("currentPosition",position);
 		startActivity(showPhoto);
-	}
-	
-	// Task to remove profile picture
-	public class RemoveProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
-		
-		@Override
-	    protected void onPreExecute() {
-			mProgressBar.setVisibility(View.VISIBLE);
-			profilePicture.setVisibility(View.INVISIBLE);      
-	    };
-		
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			return controller.removeProfilePicture();
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mProgressBar.setVisibility(View.INVISIBLE);
-			profilePicture.setVisibility(View.VISIBLE);
-			if (success) {
-				Log.v("prototypev1","correcte set profile picture");
-			} else {
-				Log.v("prototypev1","set profile picture cancelat");
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			mProgressBar.setVisibility(View.INVISIBLE);
-			profilePicture.setVisibility(View.VISIBLE);
-			Log.v("prototypev1","set profile picture cancelat ");
-			Toast.makeText(getActivity(),"Error remove profile picture",  Toast.LENGTH_LONG).show();
-		}
 	}
 	
 	public class DownloadPhotosTask extends AsyncTask<Void, Void, ArrayList<Photo>> {
@@ -461,10 +429,7 @@ public class FragmentProfile extends Fragment {
 		
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			/*newProfilePicture = controller.getProfilePictureTwitterURL();
-			if(newProfilePicture == null)
-				return false;*/
-			return true;
+			return controller.importProfilePhotoTwitter();
 		}
 
 		@Override
@@ -474,7 +439,8 @@ public class FragmentProfile extends Fragment {
 			if (success) {
 				Log.v("prototypev1","correcte set profile picture twitter");
 				//Change photo in a view
-				profilePicture.setImageBitmap(newProfilePicture);
+				//profilePicture.setImageBitmap(newProfilePicture);
+				ImageLoader.getInstance().displayImage(controller.getCurrentUser().getProfilePicture(),profilePicture);
 			} else {
 				Toast.makeText(getActivity(),"Error set profile picture twitter",  Toast.LENGTH_LONG).show();
 			}
@@ -483,7 +449,43 @@ public class FragmentProfile extends Fragment {
 		@Override
 		protected void onCancelled() {
 			mProgressBar.setVisibility(View.VISIBLE);
+			profilePicture.setVisibility(View.VISIBLE);
+			Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	public class ImportProfilePictureFromFacebookTask extends AsyncTask<Void, Void, Boolean> {
+		
+		@Override
+	    protected void onPreExecute() {
+			mProgressBar.setVisibility(View.VISIBLE);
 			profilePicture.setVisibility(View.INVISIBLE);
+	    };
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			controller.importProfilePhotoFromFacebook();
+			mProgressBar.setVisibility(View.INVISIBLE);
+			profilePicture.setVisibility(View.VISIBLE);
+			if (success) {
+				Log.v("prototypev1","correcte set profile picture twitter");
+				//Change photo in a view
+				//profilePicture.setImageBitmap(newProfilePicture);
+				ImageLoader.getInstance().displayImage(controller.getProfilePictureUrl(),profilePicture);
+			} else {
+				Toast.makeText(getActivity(),"Error set profile picture twitter",  Toast.LENGTH_LONG).show();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			mProgressBar.setVisibility(View.VISIBLE);
+			profilePicture.setVisibility(View.VISIBLE);
 			Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 		}
 	}
@@ -507,7 +509,8 @@ public class FragmentProfile extends Fragment {
 	    protected Bitmap doInBackground(String... params) {
 	        String filePath = params[0];
 	        File file = new File(filePath);
-	        return BitmapFactory.decodeFile(file.getAbsolutePath());
+	        //return BitmapFactory.decodeFile(file.getAbsolutePath());
+	        return BitmapUtils.decodeFileForDisplay(file,getActivity());
 	    }
 
 	    // Once complete, see if ImageView is still around and set bitmap.
@@ -522,6 +525,7 @@ public class FragmentProfile extends Fragment {
 	            	Bitmap b = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
 	            	//mImageView.setVisibility(View.VISIBLE);
 	                imageView.setImageBitmap(b);
+	                controller.setProfilePicture(b);
 	            }
 	        }
 	    }

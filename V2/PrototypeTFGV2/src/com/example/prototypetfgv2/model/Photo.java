@@ -23,7 +23,7 @@ public class Photo implements Parcelable {
 		this.createdAt = createdAt;
 	}
 	
-	public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber) {
+	/*public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -32,7 +32,7 @@ public class Photo implements Parcelable {
 		this.ownerUser = ownerUser;
 		this.likesNumber = likesNumber;
 		this.commentsNumber = commentNumber;
-	}
+	}*/
 	
 	public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber,String idAlbum) {
 		super();

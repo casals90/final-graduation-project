@@ -62,7 +62,7 @@ public class FragmentShowPhotosGrid extends Fragment {
 		Bundle data = this.getArguments();
 		album = data.getParcelable("Album");
 		goToNews = data.getBoolean("goToNews");	
-		
+		controller.clearImageLoader();
 		setHasOptionsMenu(true);
 	}
 
