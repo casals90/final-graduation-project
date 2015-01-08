@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +36,8 @@ public class FragmentProfileOtherUser extends Fragment {
 	private final int INVISIBLE = View.INVISIBLE;
 	
 	private ImageView profilePicture;
-	private TextView photosNumber,albumsNumber,friendsNumber,commonAlbumsLabel;
-	private Button buttonFriend;
+	private TextView albumsNumber,followersNumber,followingNumber,no_watch_profile;
+	private Button buttonFollowing,buttonFollow;
 	private ProgressBar mProgressBar,mProgressBarDownloadCommonAlbums;
 	private ListView listCommonAlbums;
 	private boolean followingThisUser;
@@ -45,6 +45,7 @@ public class FragmentProfileOtherUser extends Fragment {
 	private ArrayList<Album> commonAlbums;
 	private ImageLoader imageLoader;
 	private Controller controller;
+	private RelativeLayout container;
 	
 	public FragmentProfileOtherUser() {
 		super();
@@ -80,14 +81,18 @@ public class FragmentProfileOtherUser extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile_other_user,container,false);
 		
-		commonAlbumsLabel = (TextView) view.findViewById(R.id.common_albums);
+		//commonAlbumsLabel = (TextView) view.findViewById(R.id.common_albums);
 		
-		photosNumber = (TextView) view.findViewById(R.id.photos_number);
-		photosNumber.setText(String.valueOf(user.getPhotosNumber()));
 		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
 		albumsNumber.setText(String.valueOf(user.getAlbumsNumber()));
-		friendsNumber = (TextView) view.findViewById(R.id.friends_number);
-		//friendsNumber.setText(String.valueOf(user.getFriendsNumber()));
+		
+		followersNumber = (TextView) view.findViewById(R.id.followers_number);
+		followersNumber.setText(String.valueOf(user.getFollowersNumber()));
+		
+		followingNumber = (TextView) view.findViewById(R.id.following_number);
+		followingNumber.setText(String.valueOf(user.getFollowingNumber()));
+		
+		no_watch_profile = (TextView) view.findViewById(R.id.no_watch);
 		
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
@@ -100,32 +105,16 @@ public class FragmentProfileOtherUser extends Fragment {
 		
 		listCommonAlbums = (ListView) view.findViewById(R.id.list_albums);
 		
-		buttonFriend = (Button) view.findViewById(R.id.button_friend);
-		
-		buttonFriend.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//TODO Following follow
-				/*//add in friend list
-				//if(followingThisUser) 
-					new DeleteFriendTask().execute();
-				else
-					new AddFriendTask().execute();
-				followingThisUser = !followingThisUser;*/
-			}
-		});
+		buttonFollow = (Button) view.findViewById(R.id.button_follow);
+		buttonFollowing = (Button) view.findViewById(R.id.button_following);
 		
 		if(followingThisUser) {
-			//is in friend list
 			new DownloadCommonAlbumsTask().execute();
-			//Change button
-			buttonIsFriend();
+			showButtonFollowing();
+			no_watch_profile.setVisibility(View.INVISIBLE);
 		}
-		else {
-			//no is in friends list
-			buttonAddFriend();
-		}
-		
+		else
+			showButtonFollow();
 		return view;
 	}
 	
@@ -146,17 +135,48 @@ public class FragmentProfileOtherUser extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void buttonIsFriend() {
-		buttonFriend.setText(getString(R.string.friend));
-		int imgResource = R.drawable.ic_action_good;
-		buttonFriend.setCompoundDrawablesWithIntrinsicBounds(imgResource, 0, 0, 0);
+	public void showButtonFollowing() {
+		//Hidde button follow
+		buttonFollow.setOnClickListener(null);
+		buttonFollow.setVisibility(View.INVISIBLE);
+		//Show button following
+		buttonFollowing.setVisibility(View.VISIBLE);
+		buttonFollowing.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				deleteFollowing();
+				showButtonFollow();
+			}
+		});
 	}
 	
-	public void buttonAddFriend() {
-		buttonFriend.setText(getString(R.string.add_friend));
-		int imgResource = R.drawable.ic_action_new;
-		buttonFriend.setCompoundDrawablesWithIntrinsicBounds(imgResource, 0, 0, 0);
-		commonAlbumsLabel.setText(getString(R.string.private_albums));
+	public void showButtonFollow() {
+		//Hidde button follow
+		buttonFollowing.setOnClickListener(null);
+		buttonFollowing.setVisibility(View.INVISIBLE);
+		//Show button following
+		buttonFollow.setVisibility(View.VISIBLE);
+		buttonFollow.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				addFollowing();
+				showButtonFollowing();
+			}
+		});
+	}
+	
+	public void deleteFollowing() {
+		controller.getCurrentUser().deleteFollowing(user.getId());
+		user.decrementFollowersNumber();
+		new DeleteFollowingTask().execute(user.getId());
+	}
+	
+	public void addFollowing() {
+		controller.getCurrentUser().addFollowing(user.getId());
+		user.incrementFollowersNumber();
+		new AddFollowingTask().execute(user.getId());
 	}
 	
 	private class DownloadCommonAlbumsTask extends AsyncTask<Void, Void, Boolean> {
@@ -213,5 +233,65 @@ public class FragmentProfileOtherUser extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
+	
+	private class DeleteFollowingTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	listCommonAlbums.setVisibility(View.INVISIBLE);
+			no_watch_profile.setVisibility(View.VISIBLE);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	String idFollowing = params[0];
+        	return controller.deleteFollowing(idFollowing);
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				followersNumber.setText(String.valueOf(user.getFollowersNumber()));
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
+	
+	private class AddFollowingTask extends AsyncTask<String, Void, Boolean> {
+		
+        @Override
+        protected void onPreExecute() {
+        	super.onPreExecute();
+        	no_watch_profile.setVisibility(View.INVISIBLE);
+        }
+ 
+        @Override
+        protected Boolean doInBackground(String... params) {
+        	String idFollowing = params[0];
+        	return controller.addFollowing(idFollowing);
+        }
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if(result) {
+				followersNumber.setText(String.valueOf(user.getFollowersNumber()));
+				new DownloadCommonAlbumsTask().execute();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
+		}	
+    }
 
 }

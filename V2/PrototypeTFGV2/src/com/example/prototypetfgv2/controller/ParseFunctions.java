@@ -1636,7 +1636,7 @@ public class ParseFunctions {
 		try {
 			ParseObject following = query.getFirst();
 			following.delete();
-			return true;
+			return decrementFollowingNumber();
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return false;
@@ -1664,10 +1664,39 @@ public class ParseFunctions {
 		following.put("idFriend",idFollowing);
 		try {
 			following.save();
-			return true;
+			return incrementFollowingNumber();
 		} catch (ParseException e) {
 			e.printStackTrace();
 			Log.v("prototypev1", "error addFollowing"+e);
+			return false;
+		}
+	}
+	
+	public boolean incrementFollowingNumber() {
+		ParseUser user = ParseUser.getCurrentUser();
+		user.increment("followingNumber");
+		try {
+			user.save();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean decrementFollowingNumber() {
+		ParseUser user = ParseUser.getCurrentUser();
+		int followingNumber = user.getInt("followingNumber");
+		if(followingNumber > 0) 
+			followingNumber --;
+		else
+			followingNumber = 0;
+		user.put("followingNumber",followingNumber);
+		try {
+			user.save();
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

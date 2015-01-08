@@ -32,7 +32,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-public class FullScreenImageAdapter extends PagerAdapter{
+public class FullScreenImageAdapter extends PagerAdapter {
 	
 	private Activity activity;
 	private ArrayList<Photo> photos;

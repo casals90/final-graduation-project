@@ -29,34 +29,9 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/profilePicture"
         android:orientation="horizontal"
-        android:layout_centerInParent="true"
-        >
+        android:layout_centerInParent="true">
     
-	    <LinearLayout
-	        android:id="@+id/photos"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:gravity="center"
-	        android:layout_marginRight="10dp"
-	        android:clickable="true">
-	        
-	        <TextView
-	            android:id="@+id/photos_number"
-	            android:textSize="15sp"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/zero"/>
-	        
-	        <TextView
-	            android:id="@+id/label_photos_number"
-	            android:textSize="15sp"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/label_photos"/>      
-		</LinearLayout>
-		
-	    <LinearLayout
+	     <LinearLayout
 	        android:id="@+id/albums"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -64,7 +39,7 @@
 	        android:gravity="center"
 	        android:layout_marginRight="10dp"
 	        android:clickable="true">
-	      
+	        
 	        <TextView
 	            android:id="@+id/albums_number"
 	            android:textSize="15sp"
@@ -77,11 +52,35 @@
 	            android:textSize="15sp"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/label_albums"/>   
+	            android:text="@string/label_albums"/>      
 		</LinearLayout>
 		
 	    <LinearLayout
-	        android:id="@+id/friends"
+	        android:id="@+id/followers"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:layout_marginRight="10dp"
+	        android:clickable="true">
+	      
+	        <TextView
+	            android:id="@+id/followers_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/zero"/>
+	        
+	        <TextView
+	            android:id="@+id/label_followers_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/followers"/>   
+		</LinearLayout>
+		
+	    <LinearLayout
+	        android:id="@+id/following"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
@@ -89,30 +88,49 @@
 	        android:clickable="true">
 	      
 	        <TextView
-	            android:id="@+id/friends_number"
+	            android:id="@+id/following_number"
 	            android:textSize="15sp"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/zero"/>
 	        
 	        <TextView
-	            android:id="@+id/label_friends_number"
+	            android:id="@+id/label_following_number"
 	            android:textSize="15sp"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/friends"/>     
+	            android:text="@string/following"/>     
 		</LinearLayout>
 	</LinearLayout>
     
     <Button
-        android:id="@+id/button_friend" 
+        android:id="@+id/button_following"
+        android:layout_width="110dp"
+        android:layout_height="35dp"
+        android:textSize="15sp"
+        android:textColor="@color/White"
+        android:text="@string/following"
+        android:focusable="false"
+        android:background="@drawable/bg_button_following"
+        android:drawableLeft="@drawable/ic_action_accept_white_following"
         android:layout_below="@+id/profile_information"
-        android:layout_width="match_parent"
         android:layout_toRightOf="@+id/profilePicture"
-        android:drawableLeft="@drawable/ic_action_accept_dark"
-        android:layout_height="40dp"
-        android:text="@string/friend"
-        android:layout_marginTop="5dp"/>   
+        android:layout_alignParentRight="true"
+        android:visibility="visible"/>
+    
+    <Button
+        android:id="@+id/button_follow"
+        android:layout_width="110dp"
+        android:layout_height="35dp"
+        android:textSize="15sp"
+        android:textColor="@color/White"
+        android:text="@string/follow"
+        android:focusable="false"
+        android:background="@drawable/bg_button_follow"
+        android:drawableLeft="@drawable/ic_action_new_follow_white"
+        android:layout_below="@+id/profile_information"
+        android:layout_toRightOf="@+id/profilePicture"
+        android:layout_alignParentRight="true"/>      
         
     <ProgressBar
         android:id="@+id/progressBarOtherProfile"
@@ -123,16 +141,32 @@
         
     <TextView
         android:id="@+id/common_albums"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button_friend"
+        android:layout_below="@+id/button_follow"
         android:text="@string/common_albums"/>
     
+     <View
+		android:id="@+id/line"
+		android:layout_width="fill_parent"
+		android:layout_height="1dp"
+		android:layout_below="@+id/common_albums"
+		android:background="@android:color/darker_gray"/>
+    
+    <TextView
+        android:id="@+id/no_watch"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line"
+        android:text="@string/no_profile"/> 
+     
     <ListView
         android:id="@+id/list_albums"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/common_albums"/>
+        android:layout_below="@+id/line"/>
     
      <ProgressBar
          android:id="@+id/progressBarCommonAlbums"

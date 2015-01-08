@@ -7,6 +7,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Comment;
@@ -396,6 +397,7 @@ public class Controller extends Application {
 	
 	public boolean deleteFollowing(String idFollowing) {
 		currentUser.getFollowing().remove(idFollowing);
+		currentUser.decrementFollowingNumber();
 		return parseFunctions.deleteFollowing(currentUser.getId(), idFollowing);
 	}
 	
@@ -413,7 +415,10 @@ public class Controller extends Application {
 	}
 	
 	public boolean addFollowing(String idFollowing) {
+		Log.v("prototypev1", "add following "+currentUser.getFollowingNumber());
 		currentUser.getFollowing().add(idFollowing);
+		currentUser.incrementFollowingNumber();
+		Log.v("prototypev1", "despres "+currentUser.getFollowingNumber());
 		return parseFunctions.addFollowing(currentUser.getId(),idFollowing);
 	}
 	

@@ -53,7 +53,6 @@ public class InputAlbumTitleActivity extends Activity {
 		        finish();
 		        return true;
 		    case R.id.accept:
-		    	//TODO go Activity to add members
 		    	albumTitle = mEditTextAlbumTitle.getText().toString();
 		    	if(albumTitle.length() < 1) {
 		    		Toast.makeText(this,R.string.input_album_title,  Toast.LENGTH_LONG).show();

@@ -35,30 +35,6 @@
         android:layout_marginTop="10dp">
     
 	    <LinearLayout
-	        android:id="@+id/photos"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:gravity="center"
-	        android:layout_marginRight="10dp"
-	        android:clickable="true">
-	        
-	        <TextView
-	            android:id="@+id/photos_number"
-	            android:textSize="15sp"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/zero"/>
-	        
-	        <TextView
-	            android:id="@+id/label_photos_number"
-	            android:textSize="15sp"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="@string/label_photos"/>      
-		</LinearLayout>
-		
-	    <LinearLayout
 	        android:id="@+id/albums"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -66,7 +42,7 @@
 	        android:gravity="center"
 	        android:layout_marginRight="10dp"
 	        android:clickable="true">
-	      
+	        
 	        <TextView
 	            android:id="@+id/albums_number"
 	            android:textSize="15sp"
@@ -79,11 +55,35 @@
 	            android:textSize="15sp"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/label_albums"/>   
+	            android:text="@string/label_albums"/>      
 		</LinearLayout>
 		
 	    <LinearLayout
-	        android:id="@+id/friends"
+	        android:id="@+id/followers"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:gravity="center"
+	        android:layout_marginRight="10dp"
+	        android:clickable="true">
+	      
+	        <TextView
+	            android:id="@+id/followers_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/zero"/>
+	        
+	        <TextView
+	            android:id="@+id/label_followers_number"
+	            android:textSize="15sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="@string/followers"/>   
+		</LinearLayout>
+		
+	    <LinearLayout
+	        android:id="@+id/following"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
@@ -91,18 +91,18 @@
 	        android:clickable="true">
 	      
 	        <TextView
-	            android:id="@+id/friends_number"
+	            android:id="@+id/following_number"
 	            android:textSize="15sp"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:text="@string/zero"/>
 	        
 	        <TextView
-	            android:id="@+id/label_friends_number"
+	            android:id="@+id/label_following_number"
 	            android:textSize="15sp"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="@string/friends"/>     
+	            android:text="@string/following"/>     
 		</LinearLayout>
 	</LinearLayout>
     

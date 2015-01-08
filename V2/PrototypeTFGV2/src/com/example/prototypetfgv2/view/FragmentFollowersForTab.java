@@ -56,8 +56,10 @@ public class FragmentFollowersForTab extends Fragment {
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	followers = controller.getFollowers();
-	    	if(followers != null)
-	    		return true;
+	    	if(followers != null) {
+	    		if(followers.size() > 0)
+	    			return true;
+	    	}
 	    	return false;
 	    }
 
@@ -72,7 +74,6 @@ public class FragmentFollowersForTab extends Fragment {
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-						//TODO goToProfileUser
 						goToProfileUserInterface.goToProfileUser(followers.get(position));
 					}
 	        		

@@ -119,6 +119,7 @@
     <string name="common_albums">Common albums:</string>
     <string name="private_albums">Private albums</string>
     <string name="friend">Friend</string>
+    <string name="no_profile">You cant watch profile</string>
 
     <!-- Delete photo dialog -->
     <string name="dialog_delete_photo">Delete photo</string>

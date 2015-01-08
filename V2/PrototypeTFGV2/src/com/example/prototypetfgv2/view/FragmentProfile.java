@@ -44,7 +44,6 @@ import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.utils.BitmapUtils;
 import com.example.prototypetfgv2.utils.Utils;
@@ -57,12 +56,12 @@ public class FragmentProfile extends Fragment {
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final int REQUEST_PICK_IMAGE = 2;
 	
-	private ImageView profilePicture,currentAlbumCover;
-	private TextView username, photosNumber,albumsNumber,friendsNumber,noPhotos,currentAlbumName;
+	private ImageView profilePicture;//currentAlbumCover;
+	private TextView albumsNumber,followersNumber,followingNumber,noPhotos; //username currentAlbumName photosNumber
 	private ProgressBar mProgressBar,mProgressBarListPhotos;
 	private ListView mListView;
 	
-	private CurrentAlbum currentAlbum;
+	//private CurrentAlbum currentAlbum;
 	private String currentAlbumId;
 	private ArrayList<Photo> photos;
 	
@@ -99,13 +98,16 @@ public class FragmentProfile extends Fragment {
 		mProgressBarListPhotos = (ProgressBar) view.findViewById(R.id.progressBarListPhotos);
 		mListView = (ListView) view.findViewById(R.id.list_my_photos);
 		
-		photosNumber = (TextView) view.findViewById(R.id.photos_number);
-		photosNumber.setText(controller.getPhotosNumber());
+		//photosNumber = (TextView) view.findViewById(R.id.photos_number);
+		//photosNumber.setText(controller.getPhotosNumber());
 		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
 		albumsNumber.setText(controller.getAlbumsNumber());
-		friendsNumber = (TextView) view.findViewById(R.id.friends_number);
-		//friendsNumber.setText(controller.getFriendsNumber());
-		friendsNumber.setText("a canviar");
+		
+		followersNumber = (TextView) view.findViewById(R.id.followers_number);
+		followersNumber.setText(controller.getFollowersNumber());
+		
+		followingNumber = (TextView) view.findViewById(R.id.following_number);
+		followingNumber.setText(controller.getFollowingNumber());
 		
 		//profile picture
 		profilePicture = (ImageView) view.findViewById(R.id.profilePicture);
@@ -121,8 +123,6 @@ public class FragmentProfile extends Fragment {
 		
 		//Listeners to click info panel
 		LinearLayout albums = (LinearLayout) view.findViewById(R.id.albums);
-		//LinearLayout photos = (LinearLayout) view.findViewById(R.id.photos);
-		LinearLayout friends = (LinearLayout) view.findViewById(R.id.friends);
 		albums.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -130,12 +130,12 @@ public class FragmentProfile extends Fragment {
 				goToAlbums();			
 			}
 		});
-		friends.setOnClickListener(new OnClickListener() {
+		/*friends.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 			}
-		});
+		});*/
 		
 		noPhotos = (TextView) view.findViewById(R.id.no_photos);
 		return view;

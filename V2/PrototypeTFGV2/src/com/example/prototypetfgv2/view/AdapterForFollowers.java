@@ -152,7 +152,7 @@ public class AdapterForFollowers extends BaseAdapter {
 	public void addFollowing(String idFollowing) {
 		following.add(idFollowing);
 		//controller.addFollowing(idFollowing);
-		new AddFollowingTask().execute();
+		new AddFollowingTask().execute(idFollowing);
 	}
 	
 	private class DeleteFollowingTask extends AsyncTask<String, Void, Boolean> {

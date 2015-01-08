@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -201,12 +200,7 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
-        		
-        		/*if(controller.getCurrentUser().getId().equals(album.getIdAdmin()))
-        			Log.v("prototypev1","admin");
-        		else
-        			Log.v("prototypev1","noAdmin");*/
-        		
+        		        		
         		imageLoader.displayImage(album.getAlbumCover(),mImageViewCover);
         		
         		mTextViewAlbumTitle.setText(album.getAlbumTitle());

@@ -179,8 +179,6 @@ public class UploadPhotoActivity extends Activity {
 		       .setTitle(getString(R.string.title_info_dialog))
 		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
-		                //do things
-		        	    //goToAlbums();
 		        	   finish();
 		           }
 		       });
