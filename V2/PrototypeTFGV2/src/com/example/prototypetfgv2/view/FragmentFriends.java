@@ -5,6 +5,7 @@ import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,9 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
     private FragmentFollowingForTab fragmentFollowing;
     private GoToProfileUserInterface goToProfileUserInterface;
     
+    private boolean fromProfile;
+    private int selectedTab;
+    
 	public FragmentFriends() {
 		super();
 	}
@@ -32,8 +36,19 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 		super.onCreate(savedInstanceState);
 		getActivity().setTitle(R.string.friends);
 		
+		fromProfile = false;
+		selectedTab = 0;
+		
+		Bundle data = this.getArguments();
+		if(data != null) {
+			fromProfile = data.getBoolean("fromProfile",false);
+			selectedTab = data.getInt("initTab",0);
+		}
+		Log.v("prototypev1","tab init "+selectedTab);
+		
 		mActionBar = getActivity().getActionBar();
 		goToProfileUserInterface = this;
+		
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -42,7 +57,6 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 	public void onResume() {
 		super.onResume();
 		//Change action bar title
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		getActivity().getActionBar().setTitle(R.string.friends);
 	}
 
@@ -51,28 +65,58 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_friends,container,false);
 		
+		clearTabs();
+		
 		fragmentFollowers = new FragmentFollowersForTab(goToProfileUserInterface);
 		fragmentFollowing = new FragmentFollowingForTab(goToProfileUserInterface);
 		initTabs();
+		
+		if(fromProfile)
+			//For show menu in action bar
+			getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+		else 
+			getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		
 		return view;
 	}
 	
+	public void clearTabs() {
+		mActionBar.removeAllTabs();
+	}
+	
 	public void initTabs() {
-		mActionBar.setHomeButtonEnabled(false);
+		Log.v("prototypev1","tab init initTabs");
+		//mActionBar.setHomeButtonEnabled(false);
 	    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 	    if(mActionBar.getTabCount() < 2) {
 	    	Tab tFollowers = mActionBar.newTab().setText(R.string.followers).setTabListener(new TabListener(fragmentFollowers));
 		    Tab tFollowing = mActionBar.newTab().setText(R.string.following).setTabListener(new TabListener(fragmentFollowing));
-		    mActionBar.addTab(tFollowers);
-		    mActionBar.addTab(tFollowing);
-			//End configure tabs
-	    } 
+		    
+		    switch (selectedTab) {
+				case 0:
+					 mActionBar.addTab(tFollowers,true);
+					 mActionBar.addTab(tFollowing,false);
+					break;
+				case 1:
+					 mActionBar.addTab(tFollowers,false);
+					 mActionBar.addTab(tFollowing,true);
+					break;
+	
+				default:
+					break;
+			    }
+	    }
+	    
 	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
-		inflater.inflate(R.menu.menu_friends, menu);
+		if(fromProfile)
+			inflater.inflate(R.menu.no_menu, menu);
+		else
+			inflater.inflate(R.menu.menu_friends, menu);
+		//inflater.inflate(R.menu.menu_friends, menu);
 	}
 	
 	@Override
@@ -84,6 +128,9 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 			case R.id.find_people:
 				goToUserSearch();
 				break;
+			case android.R.id.home:
+				goToProfile();
+		        break;
 			default:
 				break;
 		}
@@ -94,6 +141,13 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 	public void goToFindFriends() {
 		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentFindFriends());
+		transaction.addToBackStack(null);
+		transaction.commit();
+	}
+	
+	public void goToProfile() {
+		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,new FragmentProfile());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}

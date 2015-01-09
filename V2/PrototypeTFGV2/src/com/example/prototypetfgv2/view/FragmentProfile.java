@@ -57,11 +57,10 @@ public class FragmentProfile extends Fragment {
 	private static final int REQUEST_PICK_IMAGE = 2;
 	
 	private ImageView profilePicture;//currentAlbumCover;
-	private TextView albumsNumber,followersNumber,followingNumber,noPhotos; //username currentAlbumName photosNumber
+	private TextView albumsNumber,followersNumber,followingNumber,noPhotos;
 	private ProgressBar mProgressBar,mProgressBarListPhotos;
 	private ListView mListView;
 	
-	//private CurrentAlbum currentAlbum;
 	private String currentAlbumId;
 	private ArrayList<Photo> photos;
 	
@@ -82,8 +81,6 @@ public class FragmentProfile extends Fragment {
 		controller = (Controller) this.getActivity().getApplication();
 		sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 		
-		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
-		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
@@ -93,7 +90,8 @@ public class FragmentProfile extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile,container,false);
 		
-		
+		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
+		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		
 		mProgressBarListPhotos = (ProgressBar) view.findViewById(R.id.progressBarListPhotos);
 		mListView = (ListView) view.findViewById(R.id.list_my_photos);
@@ -130,12 +128,22 @@ public class FragmentProfile extends Fragment {
 				goToAlbums();			
 			}
 		});
-		/*friends.setOnClickListener(new OnClickListener() {
+		LinearLayout followers = (LinearLayout) view.findViewById(R.id.followers);
+		followers.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				goToFragmentFriends(0);				
 			}
-		});*/
+		});
+		LinearLayout following = (LinearLayout) view.findViewById(R.id.following);
+		following.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				goToFragmentFriends(1);				
+			}
+		});
 		
 		noPhotos = (TextView) view.findViewById(R.id.no_photos);
 		return view;
@@ -144,7 +152,6 @@ public class FragmentProfile extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.v("prototypev1","on resume "+controller.getCurrentUser().getUsername());
 		getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
 		getActivity().getActionBar().setTitle((controller.getCurrentUser().getUsername()));
 		new DownloadPhotosTask().execute();
@@ -222,7 +229,6 @@ public class FragmentProfile extends Fragment {
 	
 	public void importPhotoFromFacebook() {
 		new ImportProfilePictureFromFacebookTask().execute();
-		//controller.importProfilePhotoFromFacebook();
 	}
 	
 	public void showDialogChooseCurrentAlbum() {
@@ -374,6 +380,18 @@ public class FragmentProfile extends Fragment {
 		showPhoto.putParcelableArrayListExtra("photos",photos);
 		showPhoto.putExtra("currentPosition",position);
 		startActivity(showPhoto);
+	}
+	
+	public void goToFragmentFriends(int tab) {
+		FragmentFriends fragmentFriends = new FragmentFriends();
+		Bundle data = new Bundle();
+		data.putBoolean("fromProfile",true);
+		data.putInt("initTab", tab);
+		fragmentFriends.setArguments(data);
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.container_fragment_main,fragmentFriends);
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 	
 	public class DownloadPhotosTask extends AsyncTask<Void, Void, ArrayList<Photo>> {

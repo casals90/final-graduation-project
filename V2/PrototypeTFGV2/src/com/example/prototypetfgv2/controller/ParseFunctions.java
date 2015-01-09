@@ -43,6 +43,7 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
@@ -134,6 +135,7 @@ public class ParseFunctions {
 			e.printStackTrace();
 			return null;
 		}
+		
 		//Download idAlbums from friend user
 		ParseQuery<ParseObject> queryFriend = ParseQuery.getQuery("AlbumMember");
 		queryFriend.whereEqualTo("idUser",idFriend);
