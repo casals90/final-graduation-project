@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
@@ -168,10 +169,6 @@ public class UploadPhotoActivity extends Activity {
 		}
 	}
 	
-	/*public void goToListViewAlbum(String idAlbum) {
-		
-	}*/
-	
 	public void showConfirmDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(getString(R.string.no_current_album))
@@ -229,8 +226,12 @@ public class UploadPhotoActivity extends Activity {
 	        					mEditText.setText("");
 	        					controller.uploadPhoto(photo, title,activity,idAlbum);
 	        					galleryAddPic();
+	        					finish();
 	        				}
-	        				finish();
+	        				else {
+	        					Toast.makeText(getApplication(),"Input title",  Toast.LENGTH_SHORT).show();
+	        				}
+	        				
 	        			}
 	        		});
 	                cancel.setOnClickListener(new OnClickListener() {
