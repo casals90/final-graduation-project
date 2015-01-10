@@ -35,7 +35,7 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 	private ImageLoader imageLoader;
 	private String idAlbum;
 	private String usernameAdmin;
-	
+	private View line2,line3;
 	private ProgressBar mProgressBar;
 	private ListView mListView;
 	private TextView mTextViewAlbumTitle;
@@ -46,6 +46,7 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 	private Button mButtonLeave,mButtonDelete,mButtonAddMembers;
 	private Activity activity;
 	private OnDeleteMemberFromAlbum callback;
+	private LinearLayout panel_list;
 	
 	private LinearLayout mLinearLayoutHeader, mLinearLayoutPanelList;
 	
@@ -70,15 +71,14 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 		this.mTextViewAdmin = (TextView) findViewById(R.id.createdBy);
 		this.mImageViewCover = (ImageView) findViewById(R.id.album_cover);	
 		this.mListView = (ListView) findViewById(R.id.list_view_members);
+		
+		this.mButtonDelete = (Button) findViewById(R.id.button_delete_album_admin);
+		this.mButtonLeave = (Button) findViewById(R.id.button_leave_user);
+		this.line2 = (View) findViewById(R.id.line2);
+		this.line3 = (View) findViewById(R.id.line3);
+		
 		this.mButtonAddMembers = (Button) findViewById(R.id.add_members);
-		this.mButtonAddMembers.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				goToAddMembers();
-				
-			}
-		});
+		
 		this.mImageButtonEdit = (ImageButton) findViewById(R.id.button_edit_title);
 		mImageButtonEdit.setOnClickListener(new OnClickListener() {
 
@@ -86,12 +86,7 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 			public void onClick(View v) {
 				goToSetAlbumTitle();
 			}
-		});
-		
-		mButtonDelete = (Button) findViewById(R.id.button_delete_album_admin);
-		mButtonLeave = (Button) findViewById(R.id.button_leave_user);
-		
-		
+		});		
 	}
 	
 	public void hiddenAll() {
@@ -202,11 +197,27 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
         	if(success) {
         		        		
         		imageLoader.displayImage(album.getAlbumCover(),mImageViewCover);
-        		
         		mTextViewAlbumTitle.setText(album.getAlbumTitle());
-        		
         		mTextViewDate.setText(getString(R.string.createdAt)+" "+album.getCreatedAt());
         		mTextViewAdmin.setText(getString(R.string.createdBy)+" "+usernameAdmin);
+        		
+        		//is admin
+        		if(controller.getCurrentUser().getId().compareTo(album.getIdAdmin()) == 0) {
+        			mButtonAddMembers.setOnClickListener(new OnClickListener() {
+        				@Override
+        				public void onClick(View arg0) {
+        					goToAddMembers();
+        				}
+        			});
+        		}
+        		//not admin
+        		else {
+        			mButtonAddMembers.setVisibility(View.INVISIBLE);
+        			panel_list = (LinearLayout) findViewById(R.id.panel_list);
+        			panel_list.removeView(line2);
+        			panel_list.removeView(mButtonAddMembers);
+        			panel_list.removeView(line3);
+        		}
         		
         		new DownloadMembersTask().execute();
         	}

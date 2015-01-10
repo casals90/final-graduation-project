@@ -43,27 +43,12 @@ import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 
 public class ParseFunctions {
-	
-	// All customs ParseObjects TODO
-	//Album
-	private final String ALBUM = "Album";
-	private final String ALBUMPHOTO = "idPhotos";
-	//Photo
-	private final String PHOTO = "SimpleImage";
-	//User
-	private final String PHOTOS = "photos";
-	private final String FRIENDS = "friends";
-	private final String ALBUMS = "albums";
-	private final String PHOTOSNUMBER = "photosNumber";
-	private final String FRIENDSNUMBER = "friendsNumber";
-	
-	
+		
 	public ParseFunctions(Context context) {
 		super();
 	}
@@ -620,8 +605,8 @@ public class ParseFunctions {
 		query.whereNotEqualTo("objectId",idUser);
 		query.orderByDescending("followersNumber");
 		try {
+			query.setLimit(10);
 			List<ParseUser> parseUsers = query.find();
-			Log.v("prototypev1", "parseUsers size: "+parseUsers.size());
 			for(ParseUser u : parseUsers) {
 				recommended.add(new User(u.getObjectId(), u.getUsername(), u.getString("profilePictureUrl"),u.getInt("followersNumber"),u.getInt("followingNumber"), u.getInt("photosNumber"),u.getInt("albumsNumber")));
 			}
@@ -716,7 +701,7 @@ public class ParseFunctions {
 		
 		for(int i = 0; i < idAlbums.size(); i++) {
 			//Log.v("prototypev1", "downlaod album "+i);
-			ParseQuery<ParseObject> query = ParseQuery.getQuery(ALBUM);
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("Album");
 			query.whereEqualTo("objectId",idAlbums.get(i));
 			try {
 				ParseObject a = query.getFirst();
@@ -796,7 +781,7 @@ public class ParseFunctions {
 		query.whereEqualTo("objectId",idPhoto);
 		try {
 			ParseObject o = query.getFirst();
-			String url = o.getString("photoFileUrl");
+			//String url = o.getString("photoFileUrl");
 			Photo photo =  new Photo(o.getObjectId(),o.getString("title"),o.getString("photoFileUrl"),String.valueOf(o.getCreatedAt()));
 			return photo;
 		} catch (ParseException e) {
@@ -1180,7 +1165,7 @@ public class ParseFunctions {
 	}
 	
 	public boolean newAlbum(ArrayList<String> members,String albumName,CurrentUser currentUser) {
-		ParseObject newAlbum = new ParseObject(ALBUM);
+		ParseObject newAlbum = new ParseObject("Album");
 		//Admin is current user
 		newAlbum.put("idAdmin",currentUser.getId());
 		//Put current user in members

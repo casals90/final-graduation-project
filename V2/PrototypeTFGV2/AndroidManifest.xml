@@ -42,7 +42,7 @@
         <activity
             android:name=".view.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:noHistory="true" >
+            android:noHistory="true">
         </activity>
         <activity
             android:name=".view.MainActivity"

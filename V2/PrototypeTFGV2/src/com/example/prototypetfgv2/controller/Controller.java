@@ -32,12 +32,7 @@ public class Controller extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		//Parse.initialize(this, "Pz2ope2OFVDLDypgpdFMpeZiXhnPjm62tDv40b35", "ISRt37kcr6frHkhzvJ3Y9cxhvZxyocO7bP795y4c");
-        //ParseTwitterUtils.initialize("1LRilPY6fB23EKrqq6LkD6DPN", "oOsUsmOcRihiBpdy8ILSvjX4lcKTyb2Dnqaz9ChaQado7ZFyFj");
-        
-        //PushService.setDefaultPushCallback(this, InitActivity.class);
-        //ParseInstallation.getCurrentInstallation().saveInBackground();
-        
+		        
         parseFunctions = new ParseFunctions(getApplicationContext());
         parseFunctions.initParse(getApplicationContext());
         

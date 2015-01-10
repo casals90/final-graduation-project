@@ -133,8 +133,7 @@
 	       android:layout_height="1dp"
 	       android:layout_below="@+id/add_members"
 	       android:layout_marginBottom="5dp"
-	       android:background="#c0c0c0"/>
-     
+	       android:background="#c0c0c0"/> 
     </LinearLayout>
     
     <Button

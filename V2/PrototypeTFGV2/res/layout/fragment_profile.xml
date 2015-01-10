@@ -106,6 +106,21 @@
 		</LinearLayout>
 	</LinearLayout>
     
+    <TextView
+        android:id="@+id/my_photos"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profilePicture"
+        android:text="@string/my_photos"/>
+    
+     <View
+		android:id="@+id/line"
+		android:layout_width="fill_parent"
+		android:layout_height="1dp"
+		android:layout_below="@+id/my_photos"
+		android:background="@android:color/darker_gray"/>
+    
     <ListView
         android:id="@+id/list_my_photos"
         android:layout_width="match_parent"
@@ -115,15 +130,15 @@
         android:dividerHeight="2.5dp"
         android:layout_marginTop="10dp"
         android:listSelector="@android:color/transparent"
-        android:layout_below="@+id/profilePicture"/>
+        android:layout_below="@+id/line"/>
         
      <TextView
         android:id="@+id/no_photos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:visibility="invisible"
-        android:layout_below="@+id/profilePicture"
+        android:visibility="visible"
+        android:layout_below="@+id/line"
         android:text="@string/user_not_photos"/>
 
     <ProgressBar

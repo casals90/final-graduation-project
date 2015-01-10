@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Prototype v1</string>
+    <string name="app_name">PhotoCloud</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -11,7 +11,6 @@
     <string name="facebook_app_id">496776443798396</string>
 
     <!-- Strings for Login and Sign up activities -->
-    <string name="app_tittle">Prototype v1</string>
     <string name="username">username</string>
     <string name="password">password</string>
     <string name="repeat_password">repeat password</string>
