@@ -238,7 +238,10 @@ public class UploadPhotoActivity extends Activity {
 	        			
 	        			@Override
 	        			public void onClick(View v) {
-	        				dispatchTakePictureIntent();
+	        				if(comeFromTakePhoto)
+	        					dispatchTakePictureIntent();
+	        				else
+	        					finish();
 	        			}
 	        		});
 	            }

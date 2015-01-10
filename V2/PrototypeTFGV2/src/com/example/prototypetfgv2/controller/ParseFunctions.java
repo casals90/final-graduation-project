@@ -646,6 +646,7 @@ public class ParseFunctions {
 	public ArrayList<String> getAlbumsId(CurrentUser currentUser) {
 		ArrayList<String> albumsId = new ArrayList<String>();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("AlbumMember");
+		Log.v("prototypev1", "null pojter excepction current user id "+currentUser.getId());
 		query.whereEqualTo("idUser",currentUser.getId());
 		query.orderByDescending("createdAt");
 		try {

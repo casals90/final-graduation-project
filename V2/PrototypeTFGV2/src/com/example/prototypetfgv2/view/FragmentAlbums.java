@@ -67,7 +67,6 @@ public class FragmentAlbums extends Fragment {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 			case R.id.new_album:
 				goToNewAlbum();

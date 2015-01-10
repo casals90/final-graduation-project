@@ -1,5 +1,6 @@
 package com.example.prototypetfgv2.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Parcel;
@@ -126,6 +127,7 @@ public class Album implements Parcelable {
 		id = in.readString();
 		albumCover = in.readString();
 		albumTitle = in.readString();
+		members = new ArrayList<String>();
 		in.readStringList(members);
 		photosNumber = in.readInt();
 		membersNumber = in.readInt();
