@@ -142,8 +142,6 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	    @Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
-	        //mProgressBar.setVisibility(View.VISIBLE);
-	        //listNews.setVisibility(View.INVISIBLE);
 	    }
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
@@ -156,7 +154,6 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
-	        //mProgressBar.setVisibility(View.INVISIBLE);
 	        if(result) {
 	        	swipeLayout.setRefreshing(false);
 	        	photos = adapter.updateNews(update);
@@ -233,8 +230,6 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	@Override
 	public void onRefresh() {
 		swipeLayout.setRefreshing(true);
-		//TODO mirar si hi ha news mes noves
 		new UpdateNewsTask().execute();
-		Log.v("prototypev1","on refresh "+photos.get(0).getCreatedAt());
 	}
 }

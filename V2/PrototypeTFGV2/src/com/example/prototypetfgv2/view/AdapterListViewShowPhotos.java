@@ -31,7 +31,11 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
+/**
+ * class that provides adapter for show photos in a Listview
+ * @author jordi
+ *
+ */
 public class AdapterListViewShowPhotos extends BaseAdapter {
 
 	private ArrayList<Photo> photos;
@@ -49,7 +53,15 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 	//private Date currentDate;
 	private SimpleDateFormat simpleDateFormat;
 	private String currentDate;
-	
+	/**
+	 * constructor of adapter
+	 * @param context context of app
+	 * @param photos list of photos to show
+	 * @param imageLoader instance of object that show photos
+	 * @param idAlbum id album from photos 
+	 * @param activity activity that execute this adapter
+	 * @param goToProfileUserInterface interface that provides to go profile user when click username
+	 */
 	public AdapterListViewShowPhotos(Context context,ArrayList<Photo> photos, ImageLoader imageLoader,String idAlbum,Activity activity,GoToProfileUserInterface goToProfileUserInterface) {
 		super();
 		this.photos = photos;
@@ -64,7 +76,9 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		simpleDateFormat = new SimpleDateFormat("dd/M/yyyy HH:mm:ss");
 		currentDate = simpleDateFormat.format(new Date());
 	}
-	
+	/**
+	 * method that init Universal Image Loader
+	 */
 	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
         .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
@@ -74,22 +88,35 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
         .bitmapConfig(Bitmap.Config.RGB_565)
         .build();
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getCount()
+	 */
 	@Override
 	public int getCount() {
 		return photos.size();
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getItem(int)
+	 */
 	@Override
 	public Object getItem(int position) {
 		return photos.get(position);
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getItemId(int)
+	 */
 	@Override
 	public long getItemId(int position) {
 		return position;
 	}
-
+	/**
+	 * class that contains the views of each row
+	 * @author jordi
+	 *
+	 */
 	public class ViewHolder {
 		RelativeLayout header;
 		ImageView mImageViewProfilePicture,mImageViewPhoto;
@@ -97,7 +124,10 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		TextView mTextViewUsername,mTextViewTitle,mTextViewDate;
 		Button mButtonLike, mButtonComment;
 	}
-	
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@Override
 	public View getView(final int position, View view, ViewGroup parenmt) {
 		final ViewHolder holder;
@@ -189,7 +219,11 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		});
 		return view;
 	}
-	
+	/**
+	 * method to show label depending the time
+	 * @param d date of object
+	 * @return specify format from data
+	 */
 	public String getLabel(String d) {
 		String[] t = d.split(":");
 		if(t[1].compareTo("s") == 0) 
@@ -201,13 +235,20 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		else
 			return t[0]+" "+activity.getString(R.string.days_ago); 
 	}
-	
+	/**
+	 * method to change current activity to CommentsActivity
+	 * @param currentPhoto
+	 */
 	public void goToCommentsActivity(Photo currentPhoto) {
 		Intent commentsActivity = new Intent(activity,CommentsActivity.class);
 		commentsActivity.putExtra("photo",currentPhoto);
 		activity.startActivity(commentsActivity);
 	}
-	
+	/**
+	 * method that increment button like number
+	 * @param button button to increment label
+	 * @param idPhoto id from photo
+	 */
 	public void incrementLikesNumberInButton(Button button,String idPhoto) {
 		int n = Integer.valueOf(button.getText().toString());
 		n++;
@@ -215,30 +256,49 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 		controller.addLikePhotoCurrentUser(idPhoto);
 		changeShapeColorCyan(button);
 	}
-	
+	/**
+	 * method to change background color to cyan of button
+	 * @param button button changed
+	 */
 	public void changeShapeColorCyan(Button button) {
 		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
 		bgShape.setColor(Color.rgb(51,181,229));
 	}
-	
+	/**
+	 * method to change background color to black of button
+	 * @param button button changed
+	 */
 	public void changeShapeColorBlack(Button button) {
 		GradientDrawable bgShape = (GradientDrawable)button.getBackground();
 		bgShape.setColor(Color.argb(204,44,44,44));
 	}
-
+	/**
+	 * class to created liked from photo
+	 * @author jordi
+	 *
+	 */
 	private class LikePhotoTask extends AsyncTask<String, Void, Boolean> {
-		
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         }
- 
+        /*
+         * create like in database
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(String... params) {
         	String idPhoto = params[0];
         	return controller.likePhoto(idPhoto,idAlbum);
         }
-
+        /*
+         * (non-Javadoc)
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
@@ -247,7 +307,10 @@ public class AdapterListViewShowPhotos extends BaseAdapter {
 				like = !like;
 			}
 		}
-
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onCancelled()
+		 */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();

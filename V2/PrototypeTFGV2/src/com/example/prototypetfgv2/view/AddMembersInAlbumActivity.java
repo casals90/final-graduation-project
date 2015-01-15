@@ -20,7 +20,11 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
-
+/**
+ * Activity class for add members in album
+ * @author jordi
+ *
+ */
 public class AddMembersInAlbumActivity extends Activity {
 
 	private ListView mListViewFollowing;
@@ -40,7 +44,10 @@ public class AddMembersInAlbumActivity extends Activity {
 	
 	private ListViewAdapterChooseUsersNewAlbum adapter;
 	private Activity activity;
-	
+	/*
+	 * method to init the view
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,14 +92,20 @@ public class AddMembersInAlbumActivity extends Activity {
 		mTextViewZeroMatches = (TextView) findViewById(R.id.zero_matches);
 		new DownloadFriendsTask().execute();
 	}
-
+	/*
+	 * method to create menu with specific options
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.add_members_in_album, menu);
 		return true;
 	}
-
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -112,8 +125,16 @@ public class AddMembersInAlbumActivity extends Activity {
 	}
 		return super.onOptionsItemSelected(item);
 	}
-	
+	/**
+	 * class to download friends of user
+	 * @author jordi
+	 *
+	 */
 	private class DownloadFriendsTask extends AsyncTask<Void, Void, Boolean> { 
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
@@ -122,6 +143,10 @@ public class AddMembersInAlbumActivity extends Activity {
 	        mTextViewZeroMatches.setVisibility(View.INVISIBLE);
 	        mProgressBar.setVisibility(View.VISIBLE);
 	    }
+		/*
+		 * method to download friends
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	
@@ -135,7 +160,10 @@ public class AddMembersInAlbumActivity extends Activity {
 	        	return true;
 	        return false;
 	    }
-
+	    /*
+	     * method to update the view 
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(final Boolean success) {
 	    	mProgressBar.setVisibility(View.INVISIBLE);
@@ -149,23 +177,39 @@ public class AddMembersInAlbumActivity extends Activity {
 	    	else
 	    		mTextViewZeroMatches.setVisibility(View.VISIBLE);
 	    }
-	    
+	    /*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			mProgressBar.setVisibility(View.INVISIBLE);
-			Toast.makeText(getApplicationContext(),"Error search people",  Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(),"Error download following",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
+	/**
+	 * get method that return new members of album 
+	 * @param membersOld list of old members of album
+	 * @param members list of new members of album
+	 * @return
+	 */
 	public ArrayList<String> getNewsMembers(ArrayList<String> membersOld,ArrayList<String> members) {
 		for(int i = 0; i < membersOld.size(); i++) {
 			members.remove(membersOld.get(i));
 		}
 		return members;
 	}
-	
+	/**
+	 * class that adding members in album
+	 * @author jordi
+	 *
+	 */
 	private class AddMembersTask extends AsyncTask<Void, Void, Boolean> { 
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
@@ -173,12 +217,18 @@ public class AddMembersInAlbumActivity extends Activity {
 	        //mListViewFollowing.setVisibility(View.INVISIBLE);
 	        //mProgressBar.setVisibility(View.VISIBLE);
 	    }
+		/*
+		 * method adding members in album
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
-	    	Log.v("prototypev1","controller "+controller);
 	    	return controller.addAlbumMembersFromSettings(onlyNewMembers, idAlbum);
 	    }
-
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(final Boolean success) {
 	    	//mProgressBar.setVisibility(View.INVISIBLE);
@@ -191,7 +241,10 @@ public class AddMembersInAlbumActivity extends Activity {
 	    		finish();
 	        }
 	    }
-	    
+	    /*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();

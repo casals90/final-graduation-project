@@ -16,6 +16,11 @@ import com.example.prototypetfgv2.model.CurrentAlbum;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+/**
+ * Class that provides adapter for current album list
+ * @author jordi
+ *
+ */
 public class AdapterForCurrentAlbum extends BaseAdapter {
 
 	private LayoutInflater inflater;
@@ -24,6 +29,11 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
     
 	List<CurrentAlbum> currentAlbums;
 	
+	/**
+	 * Constructor of adapter
+	 * @param context contex of app
+	 * @param currentAlbums list of current albums
+	 */
 	public AdapterForCurrentAlbum(Context context,List<CurrentAlbum> currentAlbums) {
 		super();
 		this.inflater = LayoutInflater.from(context);
@@ -33,6 +43,9 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
 		initDisplayOptions();
 	}
 	
+	/**
+	 * method that init Universal Image Loader
+	 */
 	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
         .showImageOnLoading(R.drawable.ic_launcher) // resource or drawable
@@ -44,26 +57,45 @@ public class AdapterForCurrentAlbum extends BaseAdapter {
         .build();
 	}
 
+	/*
+	 * (non-Javadoc) 
+	 * @see android.widget.Adapter#getCount()
+	 */
 	@Override
 	public int getCount() {
 		return currentAlbums.size();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getItem(int)
+	 */
 	@Override
 	public Object getItem(int position) {
 		return currentAlbums.get(position);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getItemId(int)
+	 */
 	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 	
+	/*
+	 * class that contains the views of each row
+	 */
 	public class ViewHolder {
         ImageView albumCover;
         TextView albumTitle;
     }
 
+	/*
+	 * 
+	 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 		final ViewHolder holder;

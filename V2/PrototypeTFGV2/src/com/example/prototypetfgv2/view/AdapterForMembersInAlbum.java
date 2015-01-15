@@ -25,7 +25,11 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+/**
+ * Class that provides adapter for members in album
+ * @author jordi
+ *
+ */
 public class AdapterForMembersInAlbum extends BaseAdapter {
 
 	private LayoutInflater inflater;
@@ -38,7 +42,15 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 	private boolean currentUserIdAdmin;
 	private Activity activity;
 	private OnDeleteMemberFromAlbum callback;
-		
+	/**
+	 * Constructor of adapter	
+	 * @param context context of app
+	 * @param members list of members
+	 * @param idAdmin id admin of album
+	 * @param idAlbum id of album
+	 * @param activity current activity
+	 * @param callback callback of interface
+	 */
 	public AdapterForMembersInAlbum(Context context, ArrayList<User> members,String idAdmin,String idAlbum,Activity activity,OnDeleteMemberFromAlbum callback) {
 		super();
 		
@@ -56,7 +68,9 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 			this.currentUserIdAdmin = false;
 		this.activity = activity;
 	}
-	
+	/**
+	 * method that init Universal Image Loader
+	 */
 	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
         .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
@@ -66,28 +80,42 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
         .bitmapConfig(Bitmap.Config.RGB_565)
         .build();
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getCount()
+	 */
 	@Override
 	public int getCount() {
 		return members.size();
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getItem(int)
+	 */
 	@Override
 	public Object getItem(int position) {
 		return members.get(position);
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getItemId(int)
+	 */
 	@Override
 	public long getItemId(int position) {
 		return position;
 	}
-
+	/**
+	 * class that contains the views of each row
+	 */
 	public class ViewHolder {
 		ImageView mImageViewProfilePicture;
 		TextView mTextViewUsername,mTextViewLabelAdmin;
 		ImageButton mImageButtonDelete;
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@Override
 	public View getView(final int position, View view, ViewGroup parent) {
 		final ViewHolder holder;
@@ -141,26 +169,43 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 		
 		return view;
 	}
-		
+	/**
+	 * Class that delete member of album	
+	 * @author jordi
+	 *
+	 */
 	private class DeleteAlbumMember extends AsyncTask<Void, Void, Boolean> {
 		
 		private String idUser,idAlbum;
-		
+		/**
+		 * Constructor 
+		 * @param idUser id user to delete
+		 * @param idAlbum id album
+		 */
 		public DeleteAlbumMember(String idUser,String idAlbum) {
 			this.idUser = idUser;
 			this.idAlbum = idAlbum;
 		}
-		
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         }
- 
+        /*
+         * delete member
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
         	return controller.deleteAlbumMember(idAlbum, idUser);
         }
-
+        /*
+         * (non-Javadoc)
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
@@ -168,26 +213,42 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 				
 			}
 		}
-
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onCancelled()
+		 */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
-	
+	/**
+	 * Class that is a Dialog to confirm delete
+	 * @author jordi
+	 *
+	 */
 	public class DeleteMemberDialogFragment extends DialogFragment {
 		
 		private String username,idUser,idAlbum;
 		private ArrayList<User> members;
-		
+		/**
+		 * Constructor of Dialog
+		 * @param username username of user that will be delete
+		 * @param idUser id of user that will be delte
+		 * @param idAlbum id of album
+		 * @param members list of members
+		 */
 		public DeleteMemberDialogFragment(String username, String idUser,String idAlbum,ArrayList<User> members) {
 			this.username = username;
 			this.idUser = idUser;
 			this.idAlbum = idAlbum;
 			this.members = members;
 		}
-		
+		/*
+		 * Create a Dialog with own features
+		 * @see android.app.DialogFragment#onCreateDialog(android.os.Bundle)
+		 */
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction

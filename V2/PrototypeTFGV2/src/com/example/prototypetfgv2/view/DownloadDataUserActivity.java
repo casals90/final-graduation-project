@@ -13,7 +13,11 @@ import android.view.MenuItem;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
-
+/**
+ * class 
+ * @author jordi
+ *
+ */
 public class DownloadDataUserActivity extends Activity {
 
 	private static final String MyPREFERENCES = "PhotoCloudData";

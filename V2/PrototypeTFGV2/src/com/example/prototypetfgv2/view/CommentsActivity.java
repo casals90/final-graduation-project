@@ -22,7 +22,11 @@ import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Comment;
 import com.example.prototypetfgv2.model.Photo;
-
+/**
+ * Activity class for comments
+ * @author jordi
+ *
+ */
 public class CommentsActivity extends Activity  {
 	
 	private ListView listComments;
@@ -40,7 +44,10 @@ public class CommentsActivity extends Activity  {
 	private Comment newComment;
 	
 	private String text;
-	
+	/*
+	 * method to init the view
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,14 +91,20 @@ public class CommentsActivity extends Activity  {
 		
 		new DownloadCommentsTask().execute();
 	}
-
+	/*
+	 * method to create menu with specific options
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.comments, menu);
 		return true;
 	}
-
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -105,15 +118,25 @@ public class CommentsActivity extends Activity  {
 		    }
 		return super.onOptionsItemSelected(item);
 	}
-	
+	/**
+	 * class to download comments from photo
+	 * @author jordi
+	 *
+	 */
 	private class DownloadCommentsTask extends AsyncTask<Void, Void, Boolean> {
-    	
+    	/*
+    	 * (non-Javadoc)
+    	 * @see android.os.AsyncTask#onPreExecute()
+    	 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         	mProgressBar.setVisibility(View.VISIBLE);
         }
- 
+        /*
+         * method to download comments
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
         	comments = controller.getParseFunctions().getCommentsFromPhoto(currentPhoto.getId());
@@ -124,7 +147,10 @@ public class CommentsActivity extends Activity  {
         	}
         	return false;		
         }
-  
+        /*
+         * method to update the view
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
         	Log.v("prototypev1", "onPostExecute success=  "+success);
@@ -139,7 +165,10 @@ public class CommentsActivity extends Activity  {
         		Log.v("prototypev1", "no comments ");
         	}	
         }
-
+        /*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
@@ -154,15 +183,25 @@ public class CommentsActivity extends Activity  {
 		Log.v("prototypev1", "press back button");
 		super.onBackPressed();
 	}
-	
+	/**
+	 * class to create new comment
+	 * @author jordi
+	 *
+	 */
 	private class SendCommentTask extends AsyncTask<Void, Void, Boolean> {
-    	
+    	/*
+    	 * (non-Javadoc)
+    	 * @see android.os.AsyncTask#onPreExecute()
+    	 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         	mProgressBar.setVisibility(View.VISIBLE);
         }
- 
+        /*
+         * method to create new comment
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
         	newComment = controller.newComment(currentPhoto.getId(), text);
@@ -170,7 +209,10 @@ public class CommentsActivity extends Activity  {
         		return true;
         	return false;
         }
- 
+        /*
+         * method to update the view
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
@@ -184,7 +226,10 @@ public class CommentsActivity extends Activity  {
         		mProgressBar.setVisibility(View.INVISIBLE);
         	}	
         }
-
+        /*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();

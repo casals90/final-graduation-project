@@ -26,7 +26,11 @@ import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+/**
+ * Activity class for album settings
+ * @author jordi
+ *
+ */
 public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFromAlbum {
 
 	private Album album;
@@ -49,7 +53,10 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 	private LinearLayout panel_list;
 	
 	private LinearLayout mLinearLayoutHeader, mLinearLayoutPanelList;
-	
+	/*
+	 * method to init the view
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,26 +95,36 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 			}
 		});		
 	}
-	
+	/**
+	 * method to hide all view
+	 */
 	public void hiddenAll() {
 		mLinearLayoutHeader.setVisibility(View.INVISIBLE);
 		mLinearLayoutPanelList.setVisibility(View.INVISIBLE);
 		mButtonDelete.setVisibility(View.INVISIBLE);
 		mButtonLeave.setVisibility(View.INVISIBLE);
 	}
-	
+	/**
+	 * method to show all view
+	 */
 	public void showAll() {
 		mLinearLayoutHeader.setVisibility(View.VISIBLE);
 		mLinearLayoutPanelList.setVisibility(View.VISIBLE);
 	}
-	
+	/**
+	 * method to change current Activity to AddMembersInAlbumActivity
+	 */
 	public void goToAddMembers() {
 		Intent addMembers = new Intent(this,AddMembersInAlbumActivity.class);
 		addMembers.putExtra("members",getMembersId(members));
 		addMembers.putExtra("idAlbum",idAlbum);
 		startActivity(addMembers);
 	}
-	
+	/**
+	 * get method that return id from members users 
+	 * @param members list of album members
+	 * @return id list from members
+	 */
 	public ArrayList<String> getMembersId(ArrayList<User> members) {
 		ArrayList<String> list = new ArrayList<String>();
 		for(int i = 0; i < members.size(); i ++) {
@@ -115,7 +132,10 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 		}
 		return list;
 	}
-	
+	/*
+	 * method to update view
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -126,14 +146,20 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 		
 		new DownloadAlbumTask().execute();
 	}
-
+	/*
+	 * method to create menu with specific options
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.album_settings, menu);
 		return true;
 	}
-
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -149,7 +175,11 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+	/**
+	 * method to create custom format date
+	 * @param createdAt date
+	 * @return custom format date
+	 */
 	public String createdAtDate(String createdAt) {
 		String[] split = createdAt.split(" ");
 		String month = split[1];
@@ -163,23 +193,35 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 		//dd/M/yyyy HH:mm
 		return day+"/"+monthNumber+"/"+year+" "+hours+":"+minuts;
 	}
-	
+	/**
+	 * method to change current Activity to SetAlbumTitleActivity
+	 */
 	public void goToSetAlbumTitle() {
 		Intent setTitle = new Intent(this,SetAlbumTitleActivity.class);
 		setTitle.putExtra("idAlbum",album.getId());
 		setTitle.putExtra("title",album.getAlbumTitle());
 		startActivity(setTitle);
 	}
-	
+	/**
+	 * class to download album
+	 * @author jordi
+	 *
+	 */
 	private class DownloadAlbumTask extends AsyncTask<Void, Void, Boolean> {
-    	
+    	/*
+    	 * (non-Javadoc)
+    	 * @see android.os.AsyncTask#onPreExecute()
+    	 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         	hiddenAll();
         	mProgressBar.setVisibility(View.VISIBLE);
         }
- 
+        /*
+         * method to download album
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
         	album = controller.downloadAlbum(idAlbum);
@@ -191,7 +233,10 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
             return false;
             		
         }
- 
+        /*
+         * method to update the view
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
@@ -222,22 +267,35 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
         		new DownloadMembersTask().execute();
         	}
         }
-
+        /*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			Toast.makeText(getApplicationContext(),"Error download albums settings",Toast.LENGTH_LONG).show();
 		}
     }
-	
+	/**
+	 * class to download members of album
+	 * @author jordi
+	 *
+	 */
 	private class DownloadMembersTask extends AsyncTask<Void, Void, Boolean> {
-    	
+    	/*
+    	 * (non-Javadoc)
+    	 * @see android.os.AsyncTask#onPreExecute()
+    	 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         	//mProgressBar.setVisibility(View.VISIBLE);
         }
- 
+        /*
+         * method to download members
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
         	members = controller.downloadMembersFromAlbum(idAlbum);
@@ -247,7 +305,10 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
             return false;
             		
         }
- 
+        /*
+         * (non-Javadoc)
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
@@ -278,7 +339,10 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
         		mListView.setAdapter(new AdapterForMembersInAlbum(getApplicationContext(),members,album.getIdAdmin(),album.getId(),activity,callback));
         	}
         }
-
+        /*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
@@ -286,26 +350,41 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 		}
     }
 	
-	//Functions to change activities
+	/**
+	 * method to change current Activity to MainActivity
+	 */
 	public void goToMainActivity() {
 		Intent main = new Intent(this, MainActivity.class);
         startActivity(main);
         finish();
 	}
-	
+	/**
+	 * class to delete member from album
+	 * @author jordi
+	 *
+	 */
 	private class DeleteAlbumMemberTask extends AsyncTask<String, Void, Boolean> {
-		
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         }
- 
+        /*
+         * method to delete member
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(String... params) {
         	String idUser = params[0];
         	return controller.deleteAlbumMember(idAlbum, idUser);
         }
-
+        /*
+         * (non-Javadoc)
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
@@ -313,26 +392,42 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 				//Toast.makeText(activity,"Delete Following!",  Toast.LENGTH_SHORT).show();
 			}
 		}
-
+		/*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
-	
+	/**
+	 * class that delete album
+	 * @author jordi
+	 *
+	 */
 	private class DeleteAlbumTask extends AsyncTask<String, Void, Boolean> {
-		
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         }
- 
+        /*
+         * method to delete album
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(String... params) {
         	return controller.deleteAlbum(idAlbum);
         }
-
+        /*
+         * (non-Javadoc)
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
@@ -341,18 +436,23 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 				goToMainActivity();
 			}
 		}
-
+		/*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			//Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}	
     }
-
+	/*
+	 * method that delete member of album 
+	 * @see com.example.prototypetfgv2.view.OnDeleteMemberFromAlbum#onDeleteMember(java.lang.String)
+	 */
 	@Override
 	public void onDeleteMember(String idMember) {
 		members.remove(idMember);
 		new DownloadMembersTask().execute();
-		
 	}
 }

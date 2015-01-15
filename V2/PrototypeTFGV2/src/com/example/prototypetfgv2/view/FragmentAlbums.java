@@ -24,7 +24,11 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
-
+/**
+ * Fragment class for albums
+ * @author jordi
+ *
+ */
 public class FragmentAlbums extends Fragment {
 	
 	private Controller controller;
@@ -38,7 +42,10 @@ public class FragmentAlbums extends Fragment {
 	public FragmentAlbums() {
 		super();
 	}
-	
+	/*
+	 * method to init Fragment params
+	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,7 +57,10 @@ public class FragmentAlbums extends Fragment {
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
-	
+	/*
+	 * method to update view
+	 * @see android.support.v4.app.Fragment#onResume()
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -59,12 +69,18 @@ public class FragmentAlbums extends Fragment {
 		getActivity().getActionBar().setTitle(R.string.albums);
 		new DownloadAlbumsTask().execute();
 	}
-
+	/*
+	 * method to create menu with specific options
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_fragment_albums, menu);
 	}
-	
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -76,7 +92,10 @@ public class FragmentAlbums extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	/*
+	 * method to init view
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -87,21 +106,33 @@ public class FragmentAlbums extends Fragment {
 		noAlbums = (TextView) view.findViewById(R.id.no_albums);
 		return view;
 	}
-	
+	/**
+	 * method to chnage current Activity for InputAlbumTitleActivity
+	 */
 	public void goToNewAlbum() {
 		Intent inputAlbumTitle = new Intent(getActivity(),InputAlbumTitleActivity.class);
 		startActivity(inputAlbumTitle);
 	}
-
+	/**
+	 * class to donwload albums from user
+	 * @author jordi
+	 *
+	 */
 	private class DownloadAlbumsTask extends AsyncTask<Void, Void, Boolean> {
-    	
+    	/*
+    	 * method init view
+    	 * @see android.os.AsyncTask#onPreExecute()
+    	 */
         @Override
         protected void onPreExecute() {
         	super.onPreExecute();
         	mProgressBar.setVisibility(View.VISIBLE);
         	mListViewAlbums.setVisibility(View.INVISIBLE);
         }
- 
+        /*
+         * method to download albums
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
         	albums = controller.getAlbums();
@@ -110,7 +141,10 @@ public class FragmentAlbums extends Fragment {
             return false;
             		
         }
- 
+        /*
+	     * method to update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
         @Override
         protected void onPostExecute(final Boolean success) {
         	if(success) {
@@ -131,14 +165,20 @@ public class FragmentAlbums extends Fragment {
         		mProgressBar.setVisibility(View.INVISIBLE);
         	}
         }
-
+        /*
+	     * method that execute if the thread is cancel
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
 			Toast.makeText(getActivity(),"Error download albums",Toast.LENGTH_LONG).show();
 		}
     }
-	
+	/**
+	 * method to change current Fragment for ListViewPhotosFragment 
+	 * @param album album to show
+	 */
 	public void goToShowAlbumListMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
@@ -150,7 +190,10 @@ public class FragmentAlbums extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-   
+	/**
+	 * method to change current Fragment for FragmentShowPhotosGrid 
+	 * @param album album to show
+	 */
    public void goToShowAlbumGridMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
