@@ -10,7 +10,7 @@
         android:layout_height="100dp"
         android:scaleType="center"
         android:contentDescription="@string/explain"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/ic_launcher_test"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dp"/>
     

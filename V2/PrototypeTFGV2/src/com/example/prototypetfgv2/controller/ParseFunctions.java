@@ -605,7 +605,7 @@ public class ParseFunctions {
 		query.whereNotEqualTo("objectId",idUser);
 		query.orderByDescending("followersNumber");
 		try {
-			query.setLimit(10);
+			query.setLimit(5);
 			List<ParseUser> parseUsers = query.find();
 			for(ParseUser u : parseUsers) {
 				recommended.add(new User(u.getObjectId(), u.getUsername(), u.getString("profilePictureUrl"),u.getInt("followersNumber"),u.getInt("followingNumber"), u.getInt("photosNumber"),u.getInt("albumsNumber")));

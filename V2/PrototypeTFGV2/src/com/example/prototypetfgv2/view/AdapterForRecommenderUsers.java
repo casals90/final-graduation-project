@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,8 +59,8 @@ public class AdapterForRecommenderUsers extends BaseAdapter {
 	 */
 	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
-        .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
-        .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
+        .showImageForEmptyUri(R.drawable.ic_launcher_test) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher_test) // resource or drawable
         .resetViewBeforeLoading(true) 
         .considerExifParams(true)
         .bitmapConfig(Bitmap.Config.RGB_565)
@@ -121,6 +122,8 @@ public class AdapterForRecommenderUsers extends BaseAdapter {
 			holder = (ViewHolder) view.getTag();
 		
 		rocommendedUser = recommenders.get(position);
+		Log.v("prototypev1","position "+position);
+		Log.v("prototypev1","rocommendedUser "+rocommendedUser.getUsername());
 		
 		imageLoader.displayImage(rocommendedUser.getProfilePicture(),holder.mImageViewProfilePicture,options);
 		holder.mTextViewUsername.setText(rocommendedUser.getUsername());

@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.widget.SwipeRefreshLayout;
 
@@ -40,6 +41,7 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	private Activity activity;
 	private SwipeRefreshLayout swipeLayout;
 	private ListViewNewsAdapter adapter;
+	private TextView no_news;
 	
 	public FragmentNews() {
 		super();
@@ -82,6 +84,7 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		
 		mProgressBar = (ProgressBar)view.findViewById(R.id.progressBar);
 		listNews = (ListView) view.findViewById(R.id.list_news);
+		no_news = (TextView) view.findViewById(R.id.no_news);
 		
 		return view;
 	}
@@ -108,7 +111,11 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	        super.onPostExecute(result);
 	        mProgressBar.setVisibility(View.INVISIBLE);
 	        if(result) {
-	        	//new DownloadAlbumsTask().execute();
+	        	if(arrayListAlbums.size() == 0)
+	        		no_news.setVisibility(View.VISIBLE);
+	        	else
+	        		no_news.setVisibility(View.INVISIBLE);
+	        		
 	        	for(int i = 0; i < arrayListAlbums.size(); i++) {
         			Album album = arrayListAlbums.get(i);
         			albums.put(album.getId(),album.getAlbumTitle());
@@ -127,6 +134,7 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	        }
 	        else {
 	        	Log.v("prototypev1", "error download");
+	        	no_news.setVisibility(View.VISIBLE);
 	        }
 	    }
 	    

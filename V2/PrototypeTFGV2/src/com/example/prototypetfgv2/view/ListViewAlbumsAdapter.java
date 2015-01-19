@@ -75,7 +75,7 @@ public class ListViewAlbumsAdapter extends BaseAdapter {
 		
 		imageLoader.displayImage(album.getAlbumCover(),holder.mImageView);
 		if(album.getAlbumCover() == null)
-			holder.mImageView.setImageResource(R.drawable.ic_launcher);
+			holder.mImageView.setImageResource(R.drawable.ic_launcher_test);
 		
 		holder.mTextViewTitle.setText(album.getAlbumTitle());
 		holder.mTextViewPhotosNumber.setText(String.valueOf(album.getPhotosNumber()));
