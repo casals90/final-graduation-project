@@ -50,8 +50,8 @@ public class AdapterForFollowing extends BaseAdapter {
 	 */
 	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
-        .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
-        .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
+        .showImageForEmptyUri(R.drawable.ic_launcher_test) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher_test) // resource or drawable
         .resetViewBeforeLoading(true) 
         .considerExifParams(true)
         .bitmapConfig(Bitmap.Config.RGB_565)
@@ -105,6 +105,7 @@ public class AdapterForFollowing extends BaseAdapter {
             holder.mTextViewUsername = (TextView) view.findViewById(R.id.username);
             holder.mButtonFollowing = (Button) view.findViewById(R.id.button_following);
             holder.mButtonFollow = (Button) view.findViewById(R.id.button_follow);
+            view.setTag(holder);
 		}
 		else
 			holder = (ViewHolder) view.getTag();

@@ -117,6 +117,7 @@ public class AdapterForRecommenderUsers extends BaseAdapter {
             holder.mTextViewUsername = (TextView) view.findViewById(R.id.username);
             holder.mButtonFollowing = (Button) view.findViewById(R.id.button_following);
             holder.mButtonFollow = (Button) view.findViewById(R.id.button_follow);
+            view.setTag(holder);
 		}
 		else
 			holder = (ViewHolder) view.getTag();

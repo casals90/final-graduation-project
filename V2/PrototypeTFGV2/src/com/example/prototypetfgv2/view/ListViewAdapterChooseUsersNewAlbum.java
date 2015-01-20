@@ -80,7 +80,7 @@ public class ListViewAdapterChooseUsersNewAlbum extends BaseAdapter {
 		imageLoader.displayImage(user.getProfilePicture(),holder.profilePicture);
         //Default profile photo
         if(user.getProfilePicture() == null)
-        	holder.profilePicture.setImageResource(R.drawable.ic_launcher);
+        	holder.profilePicture.setImageResource(R.drawable.ic_launcher_test);
         
         if(members.contains(user.getId()))
         	holder.checkbox.setChecked(true);

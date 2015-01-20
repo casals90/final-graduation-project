@@ -91,6 +91,8 @@
     <string name="delete_photo">Delete photo</string>
     <string name="not_delete_photo">Only can delete photo owner user</string>
     <string name="confirm_delete_photo">Are you sure that delete photo?</string>
+    <string name="input_members">Input members</string>
+    <string name="set_album_title">Set album title</string>
 
     <!-- Comments and likes -->
     <string name="add_your_comment">Add your comment</string>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.User;
 import com.example.prototypetfgv2.utils.Utils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 /**
  * Activity class for album settings
@@ -53,6 +55,7 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 	private LinearLayout panel_list;
 	
 	private LinearLayout mLinearLayoutHeader, mLinearLayoutPanelList;
+	private DisplayImageOptions options;
 	/*
 	 * method to init the view
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -94,6 +97,8 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 				goToSetAlbumTitle();
 			}
 		});		
+		
+		initDisplayOptions();
 	}
 	/**
 	 * method to hide all view
@@ -110,6 +115,18 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
 	public void showAll() {
 		mLinearLayoutHeader.setVisibility(View.VISIBLE);
 		mLinearLayoutPanelList.setVisibility(View.VISIBLE);
+	}
+	/**
+	 * method that init Universal Image Loader
+	 */
+	public void initDisplayOptions() {
+		options = new DisplayImageOptions.Builder()
+        .showImageForEmptyUri(R.drawable.ic_launcher_test) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher_test) // resource or drawable
+        .resetViewBeforeLoading(true) 
+        .considerExifParams(true)
+        .bitmapConfig(Bitmap.Config.RGB_565)
+        .build();
 	}
 	/**
 	 * method to change current Activity to AddMembersInAlbumActivity
@@ -241,7 +258,7 @@ public class AlbumSettingsActivity extends Activity implements OnDeleteMemberFro
         protected void onPostExecute(final Boolean success) {
         	if(success) {
         		        		
-        		imageLoader.displayImage(album.getAlbumCover(),mImageViewCover);
+        		imageLoader.displayImage(album.getAlbumCover(),mImageViewCover,options);
         		mTextViewAlbumTitle.setText(album.getAlbumTitle());
         		mTextViewDate.setText(getString(R.string.createdAt)+" "+album.getCreatedAt());
         		mTextViewAdmin.setText(getString(R.string.createdBy)+" "+usernameAdmin);

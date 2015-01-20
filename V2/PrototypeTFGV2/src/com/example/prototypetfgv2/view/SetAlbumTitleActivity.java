@@ -35,7 +35,6 @@ public class SetAlbumTitleActivity extends Activity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		getActionBar().setTitle("Album settings");
 		
 		Intent bundle = getIntent();
 		idAlbum = bundle.getStringExtra("idAlbum");

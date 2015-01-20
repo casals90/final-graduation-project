@@ -121,7 +121,7 @@
         <activity
             android:name=".view.SetAlbumTitleActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/title_activity_album_settings" >
+            android:label="@string/set_album_title">
         </activity>
         <activity
             android:name=".view.InputAlbumTitleActivity"
@@ -131,11 +131,11 @@
         <activity
             android:name=".view.InputAlbumMembersActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/title_activity_input_album_members" >
+            android:label="@string/input_members" >
         </activity>
         <activity
             android:name="com.example.prototypetfgv2.view.AddMembersInAlbumActivity"
-            android:label="@string/title_activity_add_members_in_album" >
+            android:label="@string/input_members" >
         </activity>
     </application>
 

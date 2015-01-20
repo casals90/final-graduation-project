@@ -105,7 +105,7 @@
 	        android:id="@+id/list_view_members"
 	        android:layout_width="match_parent"
 	        android:listSelector="@android:color/transparent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="325dp"
 	        android:layout_below="@+id/label_members"
 	        android:background="@color/White"/>
     

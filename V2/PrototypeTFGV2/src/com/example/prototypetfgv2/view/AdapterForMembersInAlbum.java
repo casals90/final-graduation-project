@@ -73,8 +73,8 @@ public class AdapterForMembersInAlbum extends BaseAdapter {
 	 */
 	public void initDisplayOptions() {
 		options = new DisplayImageOptions.Builder()
-        .showImageForEmptyUri(R.drawable.ic_launcher) // resource or drawable
-        .showImageOnFail(R.drawable.ic_launcher) // resource or drawable
+        .showImageForEmptyUri(R.drawable.ic_launcher_test) // resource or drawable
+        .showImageOnFail(R.drawable.ic_launcher_test) // resource or drawable
         .resetViewBeforeLoading(true) 
         .considerExifParams(true)
         .bitmapConfig(Bitmap.Config.RGB_565)
