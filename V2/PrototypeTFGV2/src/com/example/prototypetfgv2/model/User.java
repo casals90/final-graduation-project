@@ -2,7 +2,11 @@ package com.example.prototypetfgv2.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+/**
+ * Class that define a user in application
+ * @author jordi
+ *
+ */
 public class User implements Parcelable {
 	
 	String id;
@@ -12,7 +16,16 @@ public class User implements Parcelable {
 	private int followingNumber;
 	private int photosNumber;
 	private int albumsNumber;
-	
+	/**
+	 * Constructor of User
+	 * @param id id of user
+	 * @param username username of user
+	 * @param profilePicture purl profile picture of user
+	 * @param followersNumber followers number of user
+	 * @param followingNumber following number of user
+	 * @param photosNumber photos number of user
+	 * @param albumsNumber albums number of user
+	 */
 	public User(String id, String username, String profilePicture,int followersNumber,int followingNumber,int photosNumber,int albumsNumber) {
 		super();
 		this.id = id;
@@ -23,7 +36,10 @@ public class User implements Parcelable {
 		this.photosNumber = photosNumber;
 		this.albumsNumber = albumsNumber;
 	}
-	
+	/**
+	 * Parcel constructor
+	 * @param in parcel data
+	 */
 	public User(Parcel in) {
 		readFromParcel(in);
 	}
@@ -61,7 +77,10 @@ public class User implements Parcelable {
 	public void setProfilePicture(String profilePicture) {
 		this.profilePicture = profilePicture;
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.os.Parcelable#describeContents()
+	 */
 	@Override
 	public int describeContents() {
 		return 0;
@@ -131,7 +150,10 @@ public class User implements Parcelable {
 	public void incrementAlbumsNumber() {
 		albumsNumber++;
 	}
-
+	/*
+	 * Method that write date that after recupered to Parcel interface
+	 * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(id);
@@ -142,7 +164,10 @@ public class User implements Parcelable {
 		dest.writeInt(albumsNumber);
 		dest.writeInt(photosNumber);
 	}
-	
+	/**
+	 * Method that read Parcel data
+	 * @param in param to read data
+	 */
 	private void readFromParcel(Parcel in) {
         id = in .readString();
         username = in .readString();

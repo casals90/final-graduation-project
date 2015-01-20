@@ -2,21 +2,32 @@ package com.example.prototypetfgv2.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-
+/**
+ * Class that define a comment
+ * @author jordi
+ *
+ */
 public class Comment implements Parcelable {
 	
 	private User user;
 	private String comment;
 	private String date;
-	
+	/**
+	 * Constructor of comment
+	 * @param user user that he has wrote comment
+	 * @param comment comment text
+	 * @param date date of created comment
+	 */
 	public Comment(User user, String comment, String date) {
 		super();
 		this.user = user;
 		this.comment = comment;
 		this.date = date;
 	}
-	
+	/**
+	 * Parcel constructor
+	 * @param in parcel data
+	 */
 	public Comment(Parcel in) {
 		readToParcel(in);
 	}
@@ -54,19 +65,27 @@ public class Comment implements Parcelable {
 	public void setDate(String date) {
 		this.date = date;
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.os.Parcelable#describeContents()
+	 */
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+	/**
+	 * Method that read Parcel data
+	 * @param in param to read data
+	 */
 	public void readToParcel(Parcel in) {
 		user = in.readParcelable(User.class.getClassLoader());
 		comment = in.readString();
 		date = in.readString();
 	}
-
+	/*
+	 * Method that write date that after recupered to Parcel interface
+	 * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeParcelable(user,flags);

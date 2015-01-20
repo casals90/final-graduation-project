@@ -5,20 +5,32 @@ import org.json.JSONObject;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+/**
+ * Class that define current album of application
+ * @author jordi
+ *
+ */
 public class CurrentAlbum implements Parcelable {
 	
 	private String id;
 	private String title;
 	private String coverPhoto;
-	
+	/**
+	 * Constructor of current album
+	 * @param id id of current album
+	 * @param title title of current album
+	 * @param coverPhoto url of current album cover
+	 */
 	public CurrentAlbum(String id, String title, String coverPhoto) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.coverPhoto = coverPhoto;
 	}
-	
+	/**
+	 * Parcel constructor
+	 * @param in parcel data
+	 */
 	public CurrentAlbum(Parcel in) {
 		this.id = in.readString();
 		this.title = in.readString();
@@ -33,7 +45,10 @@ public class CurrentAlbum implements Parcelable {
 		    return new CurrentAlbum[size];
 		}
 	};
-
+	/**
+	 * Method that split atributes of JSONObject that downlaod of database
+	 * @param currentAlbum
+	 */
 	public CurrentAlbum(JSONObject currentAlbum) {
 		try {
 			this.id = currentAlbum.getString("id");
@@ -66,7 +81,10 @@ public class CurrentAlbum implements Parcelable {
 	public void setCoverPhoto(String coverPhoto) {
 		this.coverPhoto = coverPhoto;
 	}
-
+	/**
+	 * Method that join atributes of JSONObject to save to database
+	 * @return
+	 */
 	public JSONObject getCurrentAlbum() {
 		JSONObject currentAlbum = new JSONObject();
 		try {
@@ -78,12 +96,18 @@ public class CurrentAlbum implements Parcelable {
 		}
 		return currentAlbum;
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.os.Parcelable#describeContents()
+	 */
 	@Override
 	public int describeContents() {
 		return 0;
 	}
-
+	/*
+	 * Method that read Parcel data
+	 * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(this.id);

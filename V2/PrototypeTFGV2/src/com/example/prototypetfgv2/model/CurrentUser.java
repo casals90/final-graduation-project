@@ -1,7 +1,11 @@
 package com.example.prototypetfgv2.model;
 
 import java.util.ArrayList;
-
+/**
+ * Class to store current user date in application
+ * @author jordi
+ *
+ */
 public class CurrentUser {
 	
 	private String id;
@@ -18,7 +22,19 @@ public class CurrentUser {
 	private ArrayList<String> albumsAdmin;
 	private ArrayList<String> following;
 	private ArrayList<String> followers;
-	
+	/**
+	 * Constructor of current user
+	 * @param id id of current user
+	 * @param username username of current user
+	 * @param profilePicture profile picture of current user
+	 * @param currentAlbum current album of current user
+	 * @param followingNumber followingNumber of current user
+	 * @param followersNumber followersNumber of current user
+	 * @param photosNumber photosNumber of current user
+	 * @param albumsNumber albumsNumber of current user
+	 * @param followers followers of current user
+	 * @param following following of current user
+	 */
 	public CurrentUser(String id, String username, String profilePicture,String currentAlbum,
 			int followingNumber,int followersNumber,int photosNumber,int albumsNumber,ArrayList<String> followers,ArrayList<String> following) {
 		super();
@@ -143,35 +159,62 @@ public class CurrentUser {
 	}
 	
 	// End getters and setters
-
+	/**
+	 * Method to adding a new photo like
+	 * @param idPhoto id of photo
+	 */
 	public void addLike(String idPhoto) {
 		likes.add(idPhoto);
 	}
-	
+	/**
+	 * Method to adding a new album
+	 * @param idAlbum id of new album
+	 */
 	public void addAlbum(String idAlbum) {
 		albums.add(idAlbum);
 	}
-	
+	/**
+	 * Method to delete album
+	 * @param id album to delete
+	 */
 	public void deleteAlbum(String idAlbum) {
 		albums.remove(idAlbum);
 	}
-	
+	/**
+	 * Method that if current user like current photo
+	 * @param idPhoto id of photo
+	 * @return true is yes else false
+	 */
 	public boolean isUserLikedCurrentPhoto(String idPhoto) {
 		return likes.contains(idPhoto);
 	}
-	
+	/**
+	 * Method that if current user is admin of album 
+	 * @param idAlbum id of album
+	 * @return true is yes else false
+	 */
 	public boolean isUserAdmin(String idAlbum) {
 		return albums.contains(idAlbum);
 	}
-	
+	/**
+	 * Method that adding owner photos in a list
+	 * @param idPhoto id of photo
+	 */
 	public void addOwnerPhotosFromAlbum(String idPhoto) {
 		ownerPhotosFromAlbum.add(idPhoto);
 	}
-	
+	/**
+	 * Method that if current photo if from user 
+	 * @param idPhoto
+	 * @return true yes else false
+	 */
 	public boolean isOwnerUserCurrentUser(String idPhoto) {
 		return ownerPhotosFromAlbum.contains(idPhoto);
 	}
-	
+	/**
+	 * Method that adding albums that current user is admin
+	 * @param idAlbum
+	 */
 	public void addAlbumAdmin(String idAlbum) {
 		albumsAdmin.add(idAlbum);
 	}

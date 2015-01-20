@@ -2,7 +2,11 @@ package com.example.prototypetfgv2.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+/**
+ * Class that define a photo in application
+ * @author jordi
+ *
+ */
 public class Photo implements Parcelable {
 	
 	private String id;
@@ -14,7 +18,13 @@ public class Photo implements Parcelable {
     private int likesNumber;
     private int commentsNumber;
     
-    //Only for download photo from album
+    /**
+     * Constructor of Photo
+     * @param id id of photo
+     * @param title title of photo
+     * @param photo url of photo
+     * @param createdAt date of created photo
+     */
 	public Photo(String id, String title, String photo, String createdAt) {
 		super();
 		this.id = id;
@@ -22,18 +32,17 @@ public class Photo implements Parcelable {
 		this.photo = photo;
 		this.createdAt = createdAt;
 	}
-	
-	/*public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.photo = photo;
-		this.createdAt = createdAt;
-		this.ownerUser = ownerUser;
-		this.likesNumber = likesNumber;
-		this.commentsNumber = commentNumber;
-	}*/
-	
+	/**
+	 * Constructor of Photo
+	 * @param id id of photo
+	 * @param title title of photo
+	 * @param photo url of photo
+	 * @param createdAt date of created photo
+	 * @param ownerUser owneruser of photo
+	 * @param likesNumber likes number of photo
+	 * @param commentNumber comments number of photo
+	 * @param idAlbum id of owner album
+	 */
 	public Photo(String id, String title, String photo, String createdAt,User ownerUser,int likesNumber,int commentNumber,String idAlbum) {
 		super();
 		this.id = id;
@@ -45,7 +54,10 @@ public class Photo implements Parcelable {
 		this.commentsNumber = commentNumber;
 		this.ownerAlbum = idAlbum;
 	}
-	
+	/**
+	 * PArcel constructor
+	 * @param in parcel data
+	 */
 	public Photo(Parcel in) {
 		readParcel(in);
 	}
@@ -115,7 +127,10 @@ public class Photo implements Parcelable {
 	public void setCommentsNumber(int commentsNumber) {
 		this.commentsNumber = commentsNumber;
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.os.Parcelable#describeContents()
+	 */
 	@Override
 	public int describeContents() {
 		return 0;
@@ -128,7 +143,10 @@ public class Photo implements Parcelable {
 	public void setOwnerAlbum(String ownerAlbum) {
 		this.ownerAlbum = ownerAlbum;
 	}
-
+	/*
+	 * Method that write date that after recupered to Parcel interface
+	 * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(id);
@@ -140,7 +158,10 @@ public class Photo implements Parcelable {
 		dest.writeInt(likesNumber);
 		dest.writeInt(commentsNumber);
 	}
-	
+	/**
+	 * Method that read Parcel data
+	 * @param in param to read data
+	 */
 	private void readParcel(Parcel in) {
 		id = in.readString();
 		title = in.readString();
