@@ -18,7 +18,11 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
-
+/**
+ * Class to show following users from current user
+ * @author jordi
+ *
+ */
 public class FragmentFollowingForTab extends Fragment {
 
 	private ListView mListViewFollowing;
@@ -28,12 +32,18 @@ public class FragmentFollowingForTab extends Fragment {
 	private ArrayList<User> allFollowing;
 	private Controller controller;
 	private GoToProfileUserInterface goToProfileUserInterface;
-	
+	/**
+	 * Constructor for Fragment
+	 * @param goToProfileUserInterface
+	 */
 	public FragmentFollowingForTab(GoToProfileUserInterface goToProfileUserInterface) {
 		super();
 		this.goToProfileUserInterface = goToProfileUserInterface;
 	}
-	
+	/*
+	 * Method that init view
+	 * @see android.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -48,16 +58,26 @@ public class FragmentFollowingForTab extends Fragment {
         
         return rootView;
     }
-
+	/**
+	 * Class to download following for current user
+	 * @author jordi
+	 *
+	 */
 	private class GetFollowingTask extends AsyncTask<Void, Void, Boolean> {
-	    @Override
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onPreExecute()
+	     */
+		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
 	        //this method will be running on UI thread
 	        mProgressBar.setVisibility(View.VISIBLE);
-	       // mListViewFriends.setAdapter(null);
-	        
 	    }
+		/*
+		 * Method to download following users
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	following = controller.getFollowing();
@@ -66,7 +86,10 @@ public class FragmentFollowingForTab extends Fragment {
 	    		return true;
 	    	return false;
 	    }
-
+	    /*
+	     * Method that update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
@@ -86,7 +109,10 @@ public class FragmentFollowingForTab extends Fragment {
 				});
 	        }
 	    }
-	    
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();

@@ -27,7 +27,11 @@ import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.Album;
 import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.model.User;
-
+/**
+ * Class to show news of application
+ * @author jordi
+ *
+ */
 public class FragmentNews extends Fragment implements NewsInterface, SwipeRefreshLayout.OnRefreshListener {
 
 	private ArrayList<Photo> photos;
@@ -42,11 +46,16 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	private SwipeRefreshLayout swipeLayout;
 	private ListViewNewsAdapter adapter;
 	private TextView no_news;
-	
+	/**
+	 * Constructor of Fragment
+	 */
 	public FragmentNews() {
 		super();
 	}
-	
+	/*
+	 * Method that init params
+	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,7 +67,10 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		
 		controller.clearImageLoader();
 	}
-	
+	/*
+	 * Method that update view
+	 * @see android.support.v4.app.Fragment#onResume()
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -68,7 +80,10 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		new DownloadNewsTask().execute();
 	}
-
+	/*
+	 * Method that init view
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -88,15 +103,26 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		
 		return view;
 	}
-
-
+	/**
+	 * Class to download news
+	 * @author jordi
+	 *
+	 */
 	private class DownloadNewsTask extends AsyncTask<Void, Void, Boolean> {
-	    @Override
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onPreExecute()
+	     */
+		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
 	        mProgressBar.setVisibility(View.VISIBLE);
 	        listNews.setVisibility(View.INVISIBLE);
 	    }
+		/*
+		 * Method that download news
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	photos = controller.downloadAllPhotosFromCurrentUser();
@@ -105,7 +131,10 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	    		return true;
 	    	return false;
 	    }
-
+	    /*
+	     * Method that update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
@@ -133,7 +162,6 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 				});
 	        }
 	        else {
-	        	Log.v("prototypev1", "error download");
 	        	no_news.setVisibility(View.VISIBLE);
 	        }
 	    }
@@ -145,12 +173,24 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 			Toast.makeText(getActivity(),"Error download photos",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
+	/**
+	 * Class that refresh news
+	 * @author jordi
+	 *
+	 */
 	private class UpdateNewsTask extends AsyncTask<Void, Void, Boolean> {
-	    @Override
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onPreExecute()
+	     */
+		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
 	    }
+		/*
+		 * Method that find a news more new than actual niws list
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	update = controller.getNewsPhotosFromCreatedAt(photos.get(0).getId(),arrayListAlbums);
@@ -158,7 +198,10 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	    		return true;
 	    	return false;
 	    }
-
+	    /*
+	     * Method that update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
@@ -170,7 +213,10 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 	        	Log.v("prototypev1", "error download");
 	        }
 	    }
-	    
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
@@ -179,13 +225,18 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		}
 	}
 	
-	
+	/**
+	 * Method that change current Activity for ShowFullScreenPhotoOfNews
+	 * @param photo current photo
+	 */
 	public void goToShowPhotoFullScreen(Photo photo) {
 		Intent showPhoto = new Intent(getActivity(),ShowFullScreenPhotoOfNews.class);
 		showPhoto.putExtra("photo",photo);
 		startActivity(showPhoto);
 	}
-
+	/**
+	 * Method that that go to profile user 
+	 */
 	@Override
 	public void goToProfileUser(User user) {
 		if(user.getId().compareTo(controller.getCurrentUser().getId())== 0)
@@ -193,7 +244,9 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		else
 			goToUserProfile(user);
 	}
-
+	/**
+	 * Method that download album and change current Fragment for FragmentAlbumListMode
+	 */
 	@Override
 	public void goToAlbum(String idAlbum) {
 		ArrayList<String> idAlbums = new ArrayList<String>();
@@ -202,7 +255,10 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 
 		goToShowAlbumListMode(albums.get(0));
 	}
-	
+	/**
+	 * Method that change current Fragment for ListViewPhotosFragment 
+	 * @param album
+	 */
 	public void goToShowAlbumListMode(Album album) {
 		Bundle data = new Bundle();
 		data.putParcelable("Album",album);
@@ -215,14 +271,18 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-	
+	/**
+	 * Method that change current Fragment for FragmentProfile 
+	 */
 	public void goToProfile() {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentProfile());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-	
+	/**
+	 * Method that change current Fragment for FragmentProfileOtherUser 
+	 */
 	public void goToUserProfile(User user) {
 		Bundle data = new Bundle();
 		data.putParcelable("User",user);
@@ -234,7 +294,10 @@ public class FragmentNews extends Fragment implements NewsInterface, SwipeRefres
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-
+	/*
+	 * Method that execute when refresh list and search new news
+	 * @see android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener#onRefresh()
+	 */
 	@Override
 	public void onRefresh() {
 		swipeLayout.setRefreshing(true);

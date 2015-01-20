@@ -17,7 +17,11 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
-
+/**
+ * Class that show followers users from current user
+ * @author jordi
+ *
+ */
 public class FragmentFollowersForTab extends Fragment {
 
 	private ListView mListViewFollowers;
@@ -25,12 +29,18 @@ public class FragmentFollowersForTab extends Fragment {
 	private ArrayList<User> followers;
 	private Controller controller;
 	private GoToProfileUserInterface goToProfileUserInterface;
-	
+	/**
+	 * Constructor for Fragment
+	 * @param goToProfileUserInterface
+	 */
 	public FragmentFollowersForTab(GoToProfileUserInterface goToProfileUserInterface) {
 		super();
 		this.goToProfileUserInterface = goToProfileUserInterface;
 	}
-	
+	/*
+	 * Method that init view
+	 * @see android.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -45,14 +55,26 @@ public class FragmentFollowersForTab extends Fragment {
         
         return rootView;
     }
-
+	/**
+	 * Class that download followers for current user
+	 * @author jordi
+	 *
+	 */
 	private class GetFollowersTask extends AsyncTask<Void, Void, Boolean> {
-	    @Override
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onPreExecute()
+	     */
+		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
 	        //this method will be running on UI thread
 	        mProgressBar.setVisibility(View.VISIBLE);
 	    }
+		/*
+		 * Method to download followers
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	followers = controller.getFollowers();
@@ -62,7 +84,10 @@ public class FragmentFollowersForTab extends Fragment {
 	    	}
 	    	return false;
 	    }
-
+	    /*
+	     * Method to update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
@@ -80,7 +105,10 @@ public class FragmentFollowersForTab extends Fragment {
 				});
 	        }
 	    }
-	    
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();

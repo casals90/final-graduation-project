@@ -25,7 +25,11 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
-
+/**
+ * Class that allow user find friends from recommendation
+ * @author jordi
+ *
+ */
 public class FragmentFindFriends extends Fragment {
 
 	private ArrayList<User> recommended;
@@ -35,11 +39,16 @@ public class FragmentFindFriends extends Fragment {
 	private ListView mListView;
 	private ProgressBar mProgressBar;
 	private AdapterForRecommenderUsers adapter;
-	
+	/**
+	 * Constructor of Fragment
+	 */
 	public FragmentFindFriends() {
 		super();
 	}
-	
+	/*
+	 * Method that init params
+	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
@@ -49,7 +58,10 @@ public class FragmentFindFriends extends Fragment {
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
-	
+	/*
+	 * Method that update the view
+	 * @see android.support.v4.app.Fragment#onResume()
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -59,7 +71,10 @@ public class FragmentFindFriends extends Fragment {
 		
 		new DownloadRecommendedUsersTask().execute();
 	}
-
+	/*
+	 * Method that init the view
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -72,12 +87,18 @@ public class FragmentFindFriends extends Fragment {
 		
 		return view;
 	}
-	
+	/*
+	 * method to create menu with specific options
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_find_friends, menu);
 	}
-	
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -91,14 +112,26 @@ public class FragmentFindFriends extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+	/**
+	 * Class that download users from recommendation
+	 * @author jordi
+	 *
+	 */
 	private class DownloadRecommendedUsersTask extends AsyncTask<Void, Void, Boolean> {
-	    @Override
+	    /*
+	     * Method that init view
+	     * @see android.os.AsyncTask#onPreExecute()
+	     */
+		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
 	        //this method will be running on UI thread
 	        mProgressBar.setVisibility(View.VISIBLE);
 	    }
+		/*
+		 * Method that download recommender users
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	recommended = controller.getRecommendedUsers();
@@ -106,7 +139,10 @@ public class FragmentFindFriends extends Fragment {
 	    		return true;
 	    	return false;
 	    }
-
+	    /*
+	     * Method that update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
@@ -135,7 +171,10 @@ public class FragmentFindFriends extends Fragment {
 				});
 	        }
 	    }
-	    
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
@@ -143,18 +182,33 @@ public class FragmentFindFriends extends Fragment {
 			Toast.makeText(getActivity(),"Error download followers",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
+	/**
+	 * Class that user allow all users from recommendation
+	 * @author jordi
+	 *
+	 */
 	private class FollowingAllTask extends AsyncTask<Void, Void, Boolean> {
-	    @Override
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onPreExecute()
+	     */
+		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
 	        //this method will be running on UI thread
 	    }
+		/*
+		 * Method that adding all users
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	return controller.addFollowingAll(getIdFromAllRecommended(recommended));
 	    }
-
+	    /*
+	     * Method that update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(Boolean result) {
 	        super.onPostExecute(result);
@@ -170,7 +224,10 @@ public class FragmentFindFriends extends Fragment {
 				});
 	        }
 	    }
-	    
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
@@ -178,14 +235,18 @@ public class FragmentFindFriends extends Fragment {
 			Toast.makeText(getActivity(),"Error download followers",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
+	/**
+	 * method to chnage current Fragment for FragmentFriends
+	 */
 	public void goToFriends() {
 		FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentFriends());
 		transaction.commit();
 	}
-	
+	/**
+	 * method to chnage current Fragment for ProfileOtherUser
+	 */
 	public void goToUserProfile(User user) {
 		Bundle data = new Bundle();
 		data.putParcelable("User",user);
@@ -197,7 +258,11 @@ public class FragmentFindFriends extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-	
+	/**
+	 * Method that adding all users recommender id
+	 * @param recommended
+	 * @return
+	 */
 	public ArrayList<String> getIdFromAllRecommended(ArrayList<User> recommended) {
 		ArrayList<String> idRecommended = new ArrayList<String>();
 		for(int i = 0; i < recommended.size(); i++) {

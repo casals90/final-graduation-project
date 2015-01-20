@@ -48,7 +48,11 @@ import com.example.prototypetfgv2.model.Photo;
 import com.example.prototypetfgv2.utils.BitmapUtils;
 import com.example.prototypetfgv2.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+/**
+ * Class to show user profile
+ * @author jordi
+ *
+ */
 public class FragmentProfile extends Fragment {
 	
 	private static final String MyPREFERENCES = "PhotoCloudData";
@@ -74,7 +78,10 @@ public class FragmentProfile extends Fragment {
 	public FragmentProfile() {
 		super();
 	}
-	
+	/*
+	 * Method that init params
+	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,7 +91,10 @@ public class FragmentProfile extends Fragment {
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
-
+	/*
+	 * Method that init view
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -148,7 +158,10 @@ public class FragmentProfile extends Fragment {
 		noPhotos = (TextView) view.findViewById(R.id.no_photos);
 		return view;
 	}	
-	
+	/*
+	 * Method update view
+	 * @see android.support.v4.app.Fragment#onResume()
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -156,12 +169,18 @@ public class FragmentProfile extends Fragment {
 		getActivity().getActionBar().setTitle((controller.getCurrentUser().getUsername()));
 		new DownloadPhotosTask().execute();
 	}
-	
+	/*
+	 * method to create menu with specific options
+	 * @see android.support.v4.app.Fragment#onCreateOptionsMenu(android.view.Menu, android.view.MenuInflater)
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_profile, menu);
 	}
-	
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.support.v4.app.Fragment#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -175,11 +194,15 @@ public class FragmentProfile extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+	/**
+	 * Method to delete user data
+	 */
 	public void deleteSharedPreferences() {
 		getActivity().getApplicationContext().getSharedPreferences(MyPREFERENCES, 0).edit().clear().commit();
 	}
-
+    /**
+     * Method to logout current session
+     */
 	public void logout() {
 		controller.logout();
 		deleteSharedPreferences();
@@ -187,7 +210,10 @@ public class FragmentProfile extends Fragment {
 		Utils.cleanBackStack(login);
 		startActivity(login);
 	}
-
+	/*
+	 * Method to create a context menu for set profile picture
+	 * @see android.support.v4.app.Fragment#onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo)
+	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
@@ -200,7 +226,10 @@ public class FragmentProfile extends Fragment {
 			getActivity().getMenuInflater().inflate(R.menu.set_profile_picture, menu);
 		menu.setHeaderTitle("Set a profile picture");
 	}
-
+	/*
+	 * Method that specify what to do when user click contextmenu option
+	 * @see android.support.v4.app.Fragment#onContextItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -222,15 +251,21 @@ public class FragmentProfile extends Fragment {
 		}
 		return true;
 	}
-	
+	/**
+	 * Method that import photo from Twitter
+	 */
 	public void importPhotoFromTwitter() {
 		new ImportProfilePictureFromTwitterTask().execute();
 	}
-	
+	/**
+	 * Method that import photo from Facebook
+	 */
 	public void importPhotoFromFacebook() {
 		new ImportProfilePictureFromFacebookTask().execute();
 	}
-	
+	/**
+	 * Method that show Dialog for choose current album
+	 */
 	public void showDialogChooseCurrentAlbum() {
 		FragmentManager fm = getActivity().getSupportFragmentManager();
 		Bundle data = new Bundle();
@@ -242,13 +277,20 @@ public class FragmentProfile extends Fragment {
 	}
 
 	//Choose from gallery
+	/**
+	 * Method that choose image from gallery
+	 */
 	public void choosePhotoFromGallery() {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_GET_CONTENT);
 		startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_PICK_IMAGE);
 	}
-	
+	/**
+	 * Method that find image in gallery
+	 * @param data photo selected
+	 * @return a bitmap is selected photo
+	 */
 	public Bitmap searchPhotoSelect(Intent data) {
 		Uri selectedImage = data.getData();
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -263,6 +305,10 @@ public class FragmentProfile extends Fragment {
 	}
 	
 	//Result from choose image from gallery and take photo
+	/*
+	 * Method that show photo that take and show photo that select of gallery
+	 * @see android.support.v4.app.Fragment#onActivityResult(int, int, android.content.Intent)
+	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
@@ -290,6 +336,9 @@ public class FragmentProfile extends Fragment {
 	
 	//Take photo
 	//Functions to take photo
+	/**
+	 * Method to take photo
+	 */
 	private void dispatchTakePictureIntent() {
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    // Ensure that there's a camera activity to handle the intent
@@ -308,7 +357,11 @@ public class FragmentProfile extends Fragment {
 	        }
 		}
 	}
-		
+	/**
+	 * Method that create image file	
+	 * @return file
+	 * @throws IOException
+	 */
 	private File createImageFile() throws IOException {
 	    // Create an image file name
 	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -324,7 +377,9 @@ public class FragmentProfile extends Fragment {
 	    mCurrentPhotoPath = image.getAbsolutePath();
 	    return image;
 	}
-		
+	/**
+	 * Method that adding pic on gallery	
+	 */
 	private void galleryAddPic() {
 		    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 		    File f = new File(mCurrentPhotoPath);
@@ -334,19 +389,33 @@ public class FragmentProfile extends Fragment {
 	}
 	
 	// Task to change and upload profile picture
+	/**
+	 * Class to set profile picture
+	 * @author jordi
+	 *
+	 */
 	public class SetProfilePictureTask extends AsyncTask<Void, Void, Boolean> {
-		
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
 		@Override
 	    protected void onPreExecute() {
 			mProgressBar.setVisibility(View.VISIBLE);
 			profilePicture.setVisibility(View.INVISIBLE);
 	    };
-		
+		/*
+		 * Method that set profile picture
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			return controller.setProfilePicture(newProfilePicture);
 		}
-
+		/*
+		 * Method that update view
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			mProgressBar.setVisibility(View.INVISIBLE);
@@ -357,7 +426,10 @@ public class FragmentProfile extends Fragment {
 				Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 			}
 		}
-
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onCancelled()
+		 */
 		@Override
 		protected void onCancelled() {
 			mProgressBar.setVisibility(View.VISIBLE);
@@ -365,8 +437,9 @@ public class FragmentProfile extends Fragment {
 			Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
-	
+	/**
+	 * Method that change current Fragment for FragmentAlbums
+	 */
 	public void goToAlbums() {
 		FragmentAlbums fragmentAlbums = new FragmentAlbums();
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -374,14 +447,18 @@ public class FragmentProfile extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-	
+	/**
+	 * Method that change current Activity for ShowFullScreenPhotoProfile
+	 */
 	public void goToShowPhotoFullScreen(Photo photo,int position) {
 		Intent showPhoto = new Intent(getActivity(),ShowFullScreenPhotoProfile.class);
 		showPhoto.putParcelableArrayListExtra("photos",photos);
 		showPhoto.putExtra("currentPosition",position);
 		startActivity(showPhoto);
 	}
-	
+	/**
+	 * Method that change current Fragment for FragmentFriends
+	 */
 	public void goToFragmentFriends(int tab) {
 		FragmentFriends fragmentFriends = new FragmentFriends();
 		Bundle data = new Bundle();
@@ -393,21 +470,34 @@ public class FragmentProfile extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-	
+	/**
+	 * Class to download photos of user
+	 * @author jordi
+	 *
+	 */
 	public class DownloadPhotosTask extends AsyncTask<Void, Void, ArrayList<Photo>> {
-		
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
 		@Override
 	    protected void onPreExecute() {
 			mProgressBarListPhotos.setVisibility(View.VISIBLE);
 			mListView.setVisibility(View.INVISIBLE);
 			noPhotos.setVisibility(View.INVISIBLE);
 	    };
-		
+		/*
+		 * Method that download photos
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 		@Override
 		protected ArrayList<Photo> doInBackground(Void... params) {
 			return controller.downloadMyPhotos(null);
 		}
-
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(final ArrayList<Photo> photosUser) {
 			mProgressBarListPhotos.setVisibility(View.INVISIBLE);
@@ -428,7 +518,10 @@ public class FragmentProfile extends Fragment {
 			}
 			
 		}
-
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onCancelled()
+		 */
 		@Override
 		protected void onCancelled() {
 			mProgressBarListPhotos.setVisibility(View.INVISIBLE);
@@ -436,20 +529,33 @@ public class FragmentProfile extends Fragment {
 			Toast.makeText(getActivity(),"Error download photos",Toast.LENGTH_LONG).show();
 		}
 	}
-	
+	/**
+	 * Class to import profile picture from Twitter
+	 * @author jordi
+	 *
+	 */
 	public class ImportProfilePictureFromTwitterTask extends AsyncTask<Void, Void, Boolean> {
-		
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
 		@Override
 	    protected void onPreExecute() {
 			mProgressBar.setVisibility(View.VISIBLE);
 			profilePicture.setVisibility(View.INVISIBLE);
 	    };
-		
+		/*
+		 * Method that import profile picture from Twitter
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			return controller.importProfilePhotoTwitter();
 		}
-
+		/*
+		 * Method that update view
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			mProgressBar.setVisibility(View.INVISIBLE);
@@ -463,7 +569,10 @@ public class FragmentProfile extends Fragment {
 				Toast.makeText(getActivity(),"Error set profile picture twitter",  Toast.LENGTH_LONG).show();
 			}
 		}
-
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onCancelled()
+		 */
 		@Override
 		protected void onCancelled() {
 			mProgressBar.setVisibility(View.VISIBLE);
@@ -507,15 +616,25 @@ public class FragmentProfile extends Fragment {
 			Toast.makeText(getActivity(),"Error set profile picture",  Toast.LENGTH_LONG).show();
 		}
 	}
-	
+	/**
+	 * Class to show photo that had been taken
+	 * @author jordi
+	 *
+	 */
 	class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 	    private final WeakReference<ImageView> imageViewReference;
-
+	    /**
+	     * Constructor of class
+	     * @param imageView imagview to show photo
+	     */
 	    public BitmapWorkerTask(ImageView imageView) {
 	        // Use a WeakReference to ensure the ImageView can be garbage collected
 	        imageViewReference = new WeakReference<ImageView>(imageView);
 	    }
-	    
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onPreExecute()
+	     */
 	    @Override
         protected void onPreExecute() {
         	super.onPreExecute();
@@ -523,6 +642,10 @@ public class FragmentProfile extends Fragment {
         }
 
 	    // Decode image in background.
+	    /*
+	     * Method that fetch image file and convert a bitmap
+	     * @see android.os.AsyncTask#doInBackground(Params[])
+	     */
 	    @Override
 	    protected Bitmap doInBackground(String... params) {
 	        String filePath = params[0];
@@ -532,6 +655,10 @@ public class FragmentProfile extends Fragment {
 	    }
 
 	    // Once complete, see if ImageView is still around and set bitmap.
+	    /*
+	     * Method that update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(Bitmap bitmap) {
 	        if (imageViewReference != null && bitmap != null) {

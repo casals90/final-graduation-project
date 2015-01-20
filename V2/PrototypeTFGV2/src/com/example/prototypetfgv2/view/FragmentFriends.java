@@ -15,7 +15,11 @@ import android.view.ViewGroup;
 
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.model.User;
-
+/**
+ * Class to show friends 
+ * @author jordi
+ *
+ */
 public class FragmentFriends extends Fragment implements GoToProfileUserInterface {
 	
 	private ActionBar mActionBar;
@@ -26,11 +30,16 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
     
     private boolean fromProfile;
     private int selectedTab;
-    
+    /**
+     * Constructor for Fragment
+     */
 	public FragmentFriends() {
 		super();
 	}
-	
+	/*
+	 * method to init Fragment params
+	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,14 +61,20 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
-	
+	/*
+	 * method to update view
+	 * @see android.support.v4.app.Fragment#onResume()
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
 		//Change action bar title
 		getActivity().getActionBar().setTitle(R.string.friends);
 	}
-
+	/*
+	 * method to init view
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -79,14 +94,16 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 		
 		return view;
 	}
-	
+	/**
+	 * Method that remove all tabs
+	 */
 	public void clearTabs() {
 		mActionBar.removeAllTabs();
 	}
-	
+	/**
+	 * Method that init tabs
+	 */
 	public void initTabs() {
-		Log.v("prototypev1","tab init initTabs");
-		//mActionBar.setHomeButtonEnabled(false);
 	    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 	    if(mActionBar.getTabCount() < 2) {
@@ -109,16 +126,21 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 	    }
 	    
 	}
-	
+	/*
+	 * method to create menu with specific options
+	 * @see android.support.v4.app.Fragment#onCreateOptionsMenu(android.view.Menu, android.view.MenuInflater)
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
 		if(fromProfile)
 			inflater.inflate(R.menu.no_menu, menu);
 		else
 			inflater.inflate(R.menu.menu_friends, menu);
-		//inflater.inflate(R.menu.menu_friends, menu);
 	}
-	
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.support.v4.app.Fragment#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -136,46 +158,67 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
+	/**
+	 * method to chnage current Fragment for FragmentFindFriends
+	 */
 	public void goToFindFriends() {
 		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentFindFriends());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-	
+	/**
+	 * method to chnage current Fragment for FragmentProfile
+	 */
 	public void goToProfile() {
 		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentProfile());
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-	
+	/**
+	 * Class Listener for change tab
+	 * @author jordi
+	 *
+	 */
 	public class TabListener implements ActionBar.TabListener {
 		 
 		android.app.Fragment fragment;
-	 
+		/**
+		 * Constructor of class
+		 * @param fragment fragment
+		 */
 		public TabListener(android.app.Fragment fragment) {
 			this.fragment = fragment;
 		}
-
+		/*
+		 * (non-Javadoc)
+		 * @see android.app.ActionBar.TabListener#onTabReselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+		 */
 		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
 						
 		}
-
+		/*
+		 * Method that change fragment
+		 * @see android.app.ActionBar.TabListener#onTabSelected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+		 */
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
 			ft.replace(R.id.fragment_container, fragment);
 		}
-
+		/*
+		 * Method that remove fragment
+		 * @see android.app.ActionBar.TabListener#onTabUnselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+		 */
 		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 			ft.remove(fragment);
 		}
 	}
-	
+	/**
+	 * method to chnage current Fragment for InputAlbumTitleActivity
+	 */
 	public void goToUserProfile(User user) {
 		Bundle data = new Bundle();
 		data.putParcelable("User",user);
@@ -187,14 +230,19 @@ public class FragmentFriends extends Fragment implements GoToProfileUserInterfac
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-	
+	/**
+	 * method to chnage current Fragment for FragmentSearchPeople
+	 */
 	public void goToUserSearch() {
 		android.support.v4.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.container_fragment_main,new FragmentSearchPeople());
 		transaction.addToBackStack(null);
 		transaction.commit();	
 	}
-
+	/*
+	 * Method to go to user profile
+	 * @see com.example.prototypetfgv2.view.GoToProfileUserInterface#goToProfileUser(com.example.prototypetfgv2.model.User)
+	 */
 	@Override
 	public void goToProfileUser(User user) {
 		goToUserProfile(user);		

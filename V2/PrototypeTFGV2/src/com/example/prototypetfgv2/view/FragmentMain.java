@@ -12,22 +12,34 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.prototypetfgv2.R;
-
+/**
+ * Class that provide the structure for main screen
+ * @author jordi
+ *
+ */
 public class FragmentMain extends Fragment implements OnClickListener {
 	
 	private ImageButton ibAlbums,ibNews,ibTakePhoto,ibFriends,ibProfile;
 	private FragmentTransaction transaction;
 	private FragmentManager manager;
-	
+	/**
+	 * Constructor for Fragment
+	 */
 	public FragmentMain() {
 		super();
 	}
-
+	/*
+	 * (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
+	/*
+	 * Method that init view
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -50,7 +62,10 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		goToNews();
 		return view;
 	}
-	
+	/*
+	 * Method to change Fragment when click the menu option
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@Override
 	public void onClick(View v) {
 		initTransaction();
@@ -80,39 +95,56 @@ public class FragmentMain extends Fragment implements OnClickListener {
 		}
 	}
 	
-	// init transaction variable to change the fragment 
+	// init transaction variable to change the fragment
+	/**
+	 * Method that init FragmentManager
+	 */
 	public void initTransaction() {
 		manager = getActivity().getSupportFragmentManager();
 		transaction = manager.beginTransaction();
 	}
 	
 	// change the fragments 
+	/**
+	 * Method that change fragment container for FragmentAlbums
+	 */
 	public void goToAlbums() {
 		transaction.replace(R.id.container_fragment_main,new FragmentAlbums());
 		changeFragment();
 	}
-	
+	/**
+	 * Method that change fragment container for FragmentNews
+	 */
 	public void goToNews() {
 		transaction.replace(R.id.container_fragment_main,new FragmentNews());
 		changeFragment();
 	}
-			
+	/**
+	 * Method that change fragment container for FragmentFriends
+	 */		
 	public void goToFriends() {
 		transaction.replace(R.id.container_fragment_main,new FragmentFriends());
 		changeFragment();
 	}
-	
+	/**
+	 * Method that change fragment container for FragmentProfile
+	 */
 	public void goToProfile() {
 		transaction.replace(R.id.container_fragment_main,new FragmentProfile());
 		changeFragment();
 	}
 	
 	// accept the change fragment
+	/**
+	 * Method that accept the change fragment
+	 */
 	public void changeFragment() {
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-	
+	/**
+	 * Method that change current Activity for UploadPhotoActivity 
+	 */
 	public void goToUploadPhoto() {
 		Intent uploadPhoto = new Intent(getActivity().getApplicationContext(),UploadPhotoActivity.class);
 		startActivity(uploadPhoto);

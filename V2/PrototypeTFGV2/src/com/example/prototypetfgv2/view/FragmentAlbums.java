@@ -71,7 +71,7 @@ public class FragmentAlbums extends Fragment {
 	}
 	/*
 	 * method to create menu with specific options
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 * @see android.support.v4.app.Fragment#onCreateOptionsMenu(android.view.Menu, android.view.MenuInflater)
 	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
@@ -79,7 +79,7 @@ public class FragmentAlbums extends Fragment {
 	}
 	/*
 	 * method that specify what to do when user click menu option
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 * @see android.support.v4.app.Fragment#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

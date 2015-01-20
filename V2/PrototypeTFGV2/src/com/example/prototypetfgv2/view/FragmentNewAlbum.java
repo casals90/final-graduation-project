@@ -24,8 +24,11 @@ import android.widget.Toast;
 import com.example.prototypetfgv2.R;
 import com.example.prototypetfgv2.controller.Controller;
 import com.example.prototypetfgv2.model.User;
-
-
+/**
+ * Class that provides create a new Album
+ * @author jordi
+ *
+ */
 public class FragmentNewAlbum extends Fragment {
 
 	private Controller controller;
@@ -40,12 +43,18 @@ public class FragmentNewAlbum extends Fragment {
 	private ListViewAdapterForAddMembers adapter;
 	
 	private String albumTitle;
-	
+	/**
+	 * Constructor for Fragment
+	 * @param albumTitle
+	 */
 	public FragmentNewAlbum(String albumTitle) {
 		super();
 		this.albumTitle = albumTitle;
 	}
-	
+	/*
+	 * Method that init params
+	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,7 +72,10 @@ public class FragmentNewAlbum extends Fragment {
 		//For show menu in action bar
 		setHasOptionsMenu(true);
 	}
-	
+	/*
+	 * Method that update view
+	 * @see android.support.v4.app.Fragment#onResume()
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -72,19 +84,20 @@ public class FragmentNewAlbum extends Fragment {
 		getActivity().getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		getActivity().getActionBar().setTitle(R.string.newAlbum);
 	}
-	
+	/*
+	 * Method that init view
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_new_album,container,false);
-		
 		
 		addMember = (Button) view.findViewById(R.id.add_members);
 		addMember.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				goToAddUsersNewAlbum();
 			}
 		});
@@ -97,12 +110,18 @@ public class FragmentNewAlbum extends Fragment {
 		
 		return view;
 	}
-	
+	/*
+	 * Method to create menu with specific options
+	 * @see android.support.v4.app.Fragment#onCreateOptionsMenu(android.view.Menu, android.view.MenuInflater)
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_new_album, menu);
 	}
-	
+	/*
+	 * method that specify what to do when user click menu option
+	 * @see android.support.v4.app.Fragment#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -119,7 +138,9 @@ public class FragmentNewAlbum extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+	/**
+	 * Method that change current Fragment for FragmentAddUsersNewAlbum
+	 */
 	public void goToAddUsersNewAlbum() {
 		FragmentManager manager = getActivity().getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
@@ -135,7 +156,10 @@ public class FragmentNewAlbum extends Fragment {
 		transaction.addToBackStack(null);
 		transaction.commit();
 	}
-	
+	/**
+	 * Method that create album
+	 * @return true fine else false
+	 */
 	public boolean createAlbum() {
 		members = adapter.getMembers();
 		if(members == null || members.size() <= 0) {
@@ -143,13 +167,20 @@ public class FragmentNewAlbum extends Fragment {
 			return false;
 		}	
 		else {
-			Log.v("prototypev1", "create albums"+members.size());
 			controller.newAlbum(members, albumTitle);
 			return true;
 		}
 	}
-	
+	/**
+	 * Class to download members of albums
+	 * @author jordi
+	 *
+	 */
 	private class ShowMembersTask extends AsyncTask<Void, Void, Boolean> { 
+		/*
+		 * (non-Javadoc)
+		 * @see android.os.AsyncTask#onPreExecute()
+		 */
 		@Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
@@ -157,6 +188,10 @@ public class FragmentNewAlbum extends Fragment {
 	        listMembers.setVisibility(View.INVISIBLE);
 	        progressBar.setVisibility(View.VISIBLE);
 	    }
+		/*
+		 * Method to download members of album
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 	    @Override
 	    protected Boolean doInBackground(Void... params) {
 	    	users = controller.downloadUsersList(members);
@@ -164,7 +199,10 @@ public class FragmentNewAlbum extends Fragment {
 	        	return true;
 	        return false;
 	    }
-
+	    /*
+	     * Method that update view
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+	     */
 	    @Override
 	    protected void onPostExecute(final Boolean success) {
 	        if(success) {
@@ -180,7 +218,10 @@ public class FragmentNewAlbum extends Fragment {
 	        else
 	        	progressBar.setVisibility(View.INVISIBLE);
 	    }
-	    
+	    /*
+	     * (non-Javadoc)
+	     * @see android.os.AsyncTask#onCancelled()
+	     */
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
