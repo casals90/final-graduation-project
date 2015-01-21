@@ -81,8 +81,6 @@ public class FragmentProfileOtherUser extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile_other_user,container,false);
 		
-		//commonAlbumsLabel = (TextView) view.findViewById(R.id.common_albums);
-		
 		albumsNumber = (TextView) view.findViewById(R.id.albums_number);
 		albumsNumber.setText(String.valueOf(user.getAlbumsNumber()));
 		
